@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>截取照片</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 重置样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f5f5f5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            /* PC端适配样式 */
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* 移动端适配 */
+        @media screen and (max-width: 768px) {
+            html {
+                font-size: 14px;
+            }
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            display: flex;
+            align-items: center;
+            height: 56px;
+            padding: 0 16px;
+            background-color: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 100;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .back-btn:active {
+            opacity: 0.7;
+        }
+
+        .header-title {
+            flex: 1;
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            margin-right: 40px;
+        }
+
+        /* 图片容器 */
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 176px);
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .crop-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .crop-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+
+        .crop-box {
+            position: absolute;
+            border: 2px solid #ff4d4f;
+            background: transparent;
+            pointer-events: all;
+            cursor: move;
+        }
+
+        .crop-handle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #ff4d4f;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            pointer-events: all;
+        }
+
+        .crop-handle.top-left {
+            top: -10px;
+            left: -10px;
+            cursor: nwse-resize;
+        }
+
+        .crop-handle.top {
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: ns-resize;
+        }
+
+        .crop-handle.top-right {
+            top: -10px;
+            right: -10px;
+            cursor: nesw-resize;
+        }
+
+        .crop-handle.left {
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: ew-resize;
+        }
+
+        .crop-handle.right {
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: ew-resize;
+        }
+
+        .crop-handle.bottom-left {
+            bottom: -10px;
+            left: -10px;
+            cursor: nesw-resize;
+        }
+
+        .crop-handle.bottom {
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: ns-resize;
+        }
+
+        .crop-handle.bottom-right {
+            bottom: -10px;
+            right: -10px;
+            cursor: nwse-resize;
+        }
+
+        /* 底部操作栏 */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background-color: #fff;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 99;
+        }
+
+        .footer-actions {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            padding: 0 40px;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            padding: 8px;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .action-btn i {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .action-btn.confirm {
+            color: #ff4d4f;
+        }
+
+        .action-btn:hover {
+            opacity: 0.8;
+        }
+
+        .action-btn:active {
+            opacity: 0.6;
+        }
+
+        /* 提示信息 */
+        .tip {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 101;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .footer {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        /* 响应式设计 */
+        @media screen and (max-width: 375px) {
+            .header {
+                height: 52px;
+                padding: 0 14px;
+            }
+
+            .header-title {
+                font-size: 17px;
+            }
+
+            .image-container {
+                height: calc(100vh - 168px);
+            }
+
+            .footer {
+                height: 116px;
+            }
+
+            .action-btn i {
+                font-size: 20px;
+            }
+
+            .action-btn span {
+                font-size: 12px;
+            }
+        }
+
+        @media screen and (max-width: 320px) {
+            .header {
+                height: 48px;
+                padding: 0 12px;
+            }
+
+            .header-title {
+                font-size: 16px;
+            }
+
+            .image-container {
+                height: calc(100vh - 156px);
+            }
+
+            .footer {
+                height: 108px;
+            }
+
+            .action-btn i {
+                font-size: 18px;
+            }
+
+            .action-btn span {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div style="flex: 1;"></div>
+        <div style="width: 40px;"></div>
+    </header>
+
+
+
+    <!-- 图片容器 -->
+    <div class="image-container">
+        <img class="crop-image" id="cropImage" src="" alt="待截取图片">
+        <div class="crop-overlay"></div>
+        <div class="crop-box" id="cropBox">
+            <div class="crop-handle top-left"></div>
+            <div class="crop-handle top"></div>
+            <div class="crop-handle top-right"></div>
+            <div class="crop-handle left"></div>
+            <div class="crop-handle right"></div>
+            <div class="crop-handle bottom-left"></div>
+            <div class="crop-handle bottom"></div>
+            <div class="crop-handle bottom-right"></div>
+        </div>
+    </div>
+
+    <!-- 底部操作栏 -->
+    <footer class="footer">
+        <div class="footer-actions">
+            <button class="action-btn confirm" id="confirmBtn">
+                <i class="fas fa-check"></i>
+                <span>确认</span>
+            </button>
+            <button class="action-btn" id="rotateBtn">
+                <i class="fas fa-undo"></i>
+                <span>旋转</span>
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        // DOM元素获取
+        const backBtn = document.querySelector('.back-btn');
+        const cropImage = document.getElementById('cropImage');
+        const cropBox = document.getElementById('cropBox');
+        const rotateBtn = document.getElementById('rotateBtn');
+        const confirmBtn = document.getElementById('confirmBtn');
+
+        // 从localStorage获取图片URL
+        function getImageUrlFromLocalStorage() {
+            return localStorage.getItem('cropImageUrl');
+        }
+
+        // 初始化图片
+        function initImage() {
+            try {
+                const imageUrl = getImageUrlFromLocalStorage();
+                console.log('从localStorage获取到的图片URL长度:', imageUrl ? imageUrl.length : 0);
+                if (imageUrl) {
+                    cropImage.src = imageUrl;
+                    // 图片加载完成后初始化截取框
+                    cropImage.onload = function() {
+                        try {
+                            initCropBox();
+                        } catch (error) {
+                            console.error('初始化截取框失败:', error);
+                            alert('初始化截取框失败');
+                        }
+                    };
+                    // 图片加载失败处理
+                    cropImage.onerror = function() {
+                        console.error('图片加载失败');
+                        alert('图片加载失败');
+                        // 跳回拍错题页面
+                        window.location.href = 'paicuoti.html';
+                    };
+                } else {
+                    console.error('没有找到图片URL');
+                    alert('没有找到图片URL');
+                    // 跳回拍错题页面
+                    window.location.href = 'paicuoti.html';
+                }
+            } catch (error) {
+                console.error('初始化图片失败:', error);
+                alert('初始化图片失败');
+                // 跳回拍错题页面
+                window.location.href = 'paicuoti.html';
+            }
+        }
+
+        // 初始化截取框
+        function initCropBox() {
+            try {
+                const imageRect = cropImage.getBoundingClientRect();
+                const containerRect = document.querySelector('.image-container').getBoundingClientRect();
+                
+                console.log('图片尺寸:', imageRect.width, 'x', imageRect.height);
+                console.log('容器尺寸:', containerRect.width, 'x', containerRect.height);
+                
+                // 计算截取框的初始位置和大小
+                const boxWidth = imageRect.width * 0.8;
+                const boxHeight = imageRect.height * 0.8;
+                const boxLeft = (imageRect.width - boxWidth) / 2;
+                const boxTop = (imageRect.height - boxHeight) / 2;
+                
+                console.log('截取框尺寸:', boxWidth, 'x', boxHeight);
+                console.log('截取框位置:', boxLeft, ',', boxTop);
+                
+                // 设置截取框的位置和大小
+                cropBox.style.left = boxLeft + 'px';
+                cropBox.style.top = boxTop + 'px';
+                cropBox.style.width = boxWidth + 'px';
+                cropBox.style.height = boxHeight + 'px';
+            } catch (error) {
+                console.error('初始化截取框失败:', error);
+                throw error;
+            }
+        }
+
+        // 截取图片
+        function cropImageFunc() {
+            try {
+                const imageRect = cropImage.getBoundingClientRect();
+                const boxRect = cropBox.getBoundingClientRect();
+                const containerRect = document.querySelector('.image-container').getBoundingClientRect();
+                
+                console.log('图片尺寸:', imageRect.width, 'x', imageRect.height);
+                console.log('截取框尺寸:', boxRect.width, 'x', boxRect.height);
+                console.log('图片自然尺寸:', cropImage.naturalWidth, 'x', cropImage.naturalHeight);
+                
+                // 计算截取区域的相对位置
+                const scaleX = cropImage.naturalWidth / imageRect.width;
+                const scaleY = cropImage.naturalHeight / imageRect.height;
+                
+                console.log('缩放比例:', scaleX, ',', scaleY);
+                
+                const x = (boxRect.left - imageRect.left) * scaleX;
+                const y = (boxRect.top - imageRect.top) * scaleY;
+                const width = boxRect.width * scaleX;
+                const height = boxRect.height * scaleY;
+                
+                console.log('截取区域:', x, ',', y, ',', width, ',', height);
+                
+                // 检查截取区域是否有效
+                if (width <= 0 || height <= 0) {
+                    console.error('截取区域无效');
+                    alert('截取区域无效');
+                    return;
+                }
+                
+                // 创建一个canvas元素
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                
+                // 在canvas上绘制截取区域
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(
+                    cropImage, 
+                    x, y, width, height, 
+                    0, 0, width, height
+                );
+                
+                // 将canvas转换为图片URL
+                const croppedImageUrl = canvas.toDataURL('image/jpeg');
+                
+                console.log('截取成功:', croppedImageUrl.length, 'bytes');
+                
+                // 这里可以将截取后的图片保存到本地或上传到服务器
+                // 然后跳转到拍错题查看页面
+                alert('截取成功！');
+                window.location.href = 'paizhao_cuoti_chakan.html';
+            } catch (error) {
+                console.error('截取图片失败:', error);
+                alert('截取图片失败');
+            }
+        }
+
+        // 返回按钮功能
+        backBtn.addEventListener('click', () => {
+            console.log('返回');
+            // 返回上一页
+            window.history.back();
+        });
+
+        // 触摸事件（移动端优化）
+        backBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            backBtn.click();
+        }, { passive: false });
+
+        // 旋转按钮功能
+        let rotation = 0;
+        rotateBtn.addEventListener('click', () => {
+            console.log('旋转');
+            rotation += 90;
+            cropImage.style.transform = `rotate(${rotation}deg)`;
+        });
+
+        // 触摸事件（移动端优化）
+        rotateBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            rotateBtn.click();
+        }, { passive: false });
+
+        // 确认按钮功能
+        confirmBtn.addEventListener('click', () => {
+            console.log('确认');
+            cropImageFunc();
+        });
+
+        // 触摸事件（移动端优化）
+        confirmBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            confirmBtn.click();
+        }, { passive: false });
+
+        // 截取框拖拽功能
+        let isDragging = false;
+        let startX, startY;
+        let startLeft, startTop;
+
+        cropBox.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startLeft = parseInt(cropBox.style.left) || 0;
+            startTop = parseInt(cropBox.style.top) || 0;
+            e.preventDefault();
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                cropBox.style.left = (startLeft + deltaX) + 'px';
+                cropBox.style.top = (startTop + deltaY) + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        // 触摸事件（移动端优化）
+        cropBox.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            startLeft = parseInt(cropBox.style.left) || 0;
+            startTop = parseInt(cropBox.style.top) || 0;
+            e.preventDefault();
+        }, { passive: false });
+
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                const deltaX = e.touches[0].clientX - startX;
+                const deltaY = e.touches[0].clientY - startY;
+                cropBox.style.left = (startLeft + deltaX) + 'px';
+                cropBox.style.top = (startTop + deltaY) + 'px';
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+
+        // 页面加载完成后初始化
+        window.addEventListener('load', () => {
+            console.log('页面加载完成');
+            initImage();
+        });
+
+        // 触摸事件优化（移动端）
+        document.addEventListener('touchstart', function() {}, { passive: true });
+        document.addEventListener('touchmove', function() {}, { passive: true });
+        document.addEventListener('touchend', function() {}, { passive: true });
+
+        // 禁止双击缩放
+        document.addEventListener('dblclick', function(event) {
+            event.preventDefault();
+        });
+    </script>
+</body>
+</html>

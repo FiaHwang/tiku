@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>试卷详情 - 库课网校</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            padding-bottom: 80px;
+        }
+
+        /* 顶部导航 */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            height: 56px;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            z-index: 1000;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        /* 顶部信息区域 */
+        .top-info {
+            margin-top: 56px;
+            background: linear-gradient(135deg, #ff4d4f 0%, #f5222d 100%);
+            padding: 24px 16px 60px;
+            text-align: center;
+            position: relative;
+        }
+
+        .paper-title {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .stats-card {
+            background-color: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            left: 16px;
+            right: 16px;
+            bottom: -40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .stat-value span {
+            font-size: 12px;
+            font-weight: normal;
+            color: #999;
+            margin-left: 2px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #999;
+        }
+
+        /* 内容区域 */
+        .main-content {
+            margin-top: 60px;
+            padding: 0 16px;
+        }
+
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #000;
+        }
+
+        /* 答题模式 */
+        .mode-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .mode-card {
+            background-color: #f5f6f8;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .mode-card.active {
+            background-color: #fff;
+            border-color: #f5222d;
+            box-shadow: 0 4px 12px rgba(245, 34, 45, 0.1);
+        }
+
+        .mode-card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        .mode-card.active .mode-card-title {
+            color: #f5222d;
+        }
+
+        .mode-card-desc {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .mode-card.active .mode-card-desc {
+            color: #f5222d;
+            opacity: 0.8;
+        }
+
+        /* 动画开关 */
+        .animation-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .toggle-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #f5222d;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        /* 题型介绍 */
+        .intro-box {
+            background-color: #f5f6f8;
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .intro-text {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* 底部固定按钮 */
+        .footer-action {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background-color: #fff;
+            padding: 12px 16px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+        }
+
+        .start-btn {
+            width: 100%;
+            height: 50px;
+            background-color: #f5222d;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(245, 34, 45, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-btn" onclick="history.back()">
+            <i class="fas fa-chevron-left"></i>
+        </div>
+        <div class="header-title">真题试卷</div>
+        <div class="header-btn">
+            <i class="fas fa-share-nodes"></i>
+        </div>
+    </header>
+
+    <div class="page-container" style="max-width: 480px; margin: 0 auto; background-color: #f8f8f8; min-height: 100vh; overflow-x: hidden;">
+        <div class="top-info">
+            <div class="paper-title">2024河南专升本英语试题</div>
+            <div class="stats-card">
+                <div class="stat-item">
+                    <div class="stat-value">150<span>分</span></div>
+                    <div class="stat-label">总分</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">71<span>道</span></div>
+                    <div class="stat-label">题量</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">150<span>分钟</span></div>
+                    <div class="stat-label">作答时长</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="section">
+                <div class="section-header">答题模式</div>
+                <div class="mode-grid">
+                    <div class="mode-card" data-mode="practice">
+                        <div class="mode-card-title">练习模式</div>
+                        <div class="mode-card-desc">答题后直接显示答案</div>
+                    </div>
+                    <div class="mode-card" data-mode="exam_timer">
+                        <div class="mode-card-title">考试计时模式</div>
+                        <div class="mode-card-desc">不限时间，交卷后显示答案</div>
+                    </div>
+                    <div class="mode-card active" data-mode="exam_countdown">
+                        <div class="mode-card-title">考试倒计时模式</div>
+                        <div class="mode-card-desc">限定时间，交卷后显示答案</div>
+                    </div>
+                    <div class="mode-card" data-mode="quick">
+                        <div class="mode-card-title">快答模式</div>
+                        <div class="mode-card-desc">答题错误后显示答案</div>
+                    </div>
+                    <div class="mode-card" data-mode="back">
+                        <div class="mode-card-title">背题模式</div>
+                        <div class="mode-card-desc">直接显示答案</div>
+                    </div>
+                </div>
+
+                <!-- 动画开关 -->
+                <div class="animation-toggle">
+                    <div class="toggle-label">动画开关</div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="animation-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">题型介绍</div>
+                <div class="intro-box">
+                    <div class="intro-text">
+                        一、阅读理解（共4题，每题10分，共40分，Directions: There are 4 passages in this part. Each passage is followed by five questions...）
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-action">
+        <button class="start-btn" onclick="window.location.href='dati_yemian.html'">开始答题</button>
+    </div>
+
+    <script>
+        // 模式切换逻辑
+        const modeCards = document.querySelectorAll('.mode-card');
+        const animationToggleContainer = document.querySelector('.animation-toggle');
+        
+        // 初始化显示状态
+        function updateAnimationToggle() {
+            const activeMode = document.querySelector('.mode-card.active');
+            if (activeMode && activeMode.querySelector('.mode-card-title').innerText.trim() === '练习模式') {
+                animationToggleContainer.style.display = 'flex';
+            } else {
+                animationToggleContainer.style.display = 'none';
+            }
+        }
+        
+        updateAnimationToggle();
+
+        modeCards.forEach(card => {
+            card.addEventListener('click', () => {
+                modeCards.forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                updateAnimationToggle();
+            });
+        });
+    </script>
+</body>
+</html>

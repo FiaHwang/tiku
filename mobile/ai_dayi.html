@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>AI答疑</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 重置样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f5f5f5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            /* PC端适配样式 */
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* 移动端适配 */
+        @media screen and (max-width: 768px) {
+            html {
+                font-size: 14px;
+            }
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            display: flex;
+            align-items: center;
+            height: 56px;
+            padding: 0 16px;
+            background-color: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 100;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .back-btn:active {
+            opacity: 0.7;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .header-generated {
+            font-size: 12px;
+            color: #999;
+            font-style: italic;
+            margin-left: 8px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        /* 答疑容器 */
+        .ai-container {
+            padding: 16px;
+            background-color: #f5f5f5;
+            min-height: calc(100vh - 56px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 对话容器 */
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 16px;
+        }
+
+        /* 聊天消息 */
+        .chat-message {
+            display: flex;
+            margin-bottom: 20px;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        /* 用户消息 */
+        .user-message {
+            justify-content: flex-end;
+        }
+
+        /* AI消息 */
+        .ai-message {
+            justify-content: flex-start;
+        }
+
+        /* 消息头像 */
+        .message-avatar {
+            margin-right: 12px;
+        }
+
+        /* 消息内容 */
+        .message-content {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            position: relative;
+        }
+
+        /* 用户消息内容 */
+        .user-message .message-content {
+            background-color: #1890ff;
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+
+        /* AI消息内容 */
+        .ai-message .message-content {
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #e8e8e8;
+            border-bottom-left-radius: 4px;
+        }
+
+        /* 消息头部 */
+        .message-header {
+            margin-bottom: 8px;
+        }
+
+        /* 题干内容 */
+        .question-stem {
+            font-size: 16px;
+            line-height: 1.5;
+            color: inherit;
+        }
+
+        .blank {
+            display: inline-block;
+            width: 60px;
+            height: 24px;
+            border-bottom: 1px solid currentColor;
+            margin: 0 8px;
+            vertical-align: middle;
+        }
+
+        /* AI图标 */
+        .ai-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e6f7ff;
+            color: #1890ff;
+            font-size: 20px;
+        }
+
+        /* AI标题 */
+        .ai-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* AI生成标识 */
+        .ai-generated {
+            margin-left: 8px;
+            font-size: 12px;
+            color: #999;
+            font-style: italic;
+        }
+
+        /* AI内容 */
+        .ai-content {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .ai-content p {
+            margin-bottom: 12px;
+        }
+
+        .ai-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 停止响应按钮 */
+        .stop-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 25%;
+            padding: 6px 12px;
+            background-color: #fff;
+            border: 1px solid #ff4d4f;
+            border-radius: 20px;
+            color: #ff4d4f;
+            font-size: 12px;
+            cursor: pointer;
+            margin: 0 auto 12px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .stop-btn:active {
+            opacity: 0.8;
+        }
+
+        /* 输入容器 */
+        .input-container {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background-color: #fff;
+            border-top: 1px solid #e8e8e8;
+            border-radius: 8px;
+            margin-top: 0;
+        }
+
+        /* 输入框 */
+        .input-field {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #d9d9d9;
+            border-radius: 20px;
+            font-size: 14px;
+            outline: none;
+            resize: none;
+            margin-right: 10px;
+        }
+
+        .input-field:focus {
+            border-color: #1890ff;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+
+        /* 发送按钮 */
+        .send-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background-color: #1890ff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .send-btn:active {
+            opacity: 0.8;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ai-container {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .chat-message {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .user-message {
+            animation-delay: 0.1s;
+        }
+
+        .ai-message {
+            animation-delay: 0.2s;
+        }
+
+        /* 响应式设计 */
+        @media screen and (max-width: 375px) {
+            .header {
+                height: 52px;
+                padding: 0 14px;
+            }
+
+            .header-title {
+                font-size: 17px;
+            }
+
+            .ai-container {
+                padding: 14px;
+            }
+
+            .message-content {
+                max-width: 85%;
+                padding: 10px 14px;
+            }
+
+            .input-container {
+                padding: 10px;
+            }
+
+            .input-field {
+                padding: 10px 14px;
+            }
+
+            .send-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+        }
+
+        @media screen and (max-width: 320px) {
+            .header {
+                height: 48px;
+                padding: 0 12px;
+            }
+
+            .header-title {
+                font-size: 16px;
+            }
+
+            .ai-container {
+                padding: 12px;
+            }
+
+            .message-content {
+                max-width: 90%;
+                padding: 8px 12px;
+            }
+
+            .input-container {
+                padding: 8px;
+            }
+
+            .input-field {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+
+            .send-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="header-left">
+            <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
+        </div>
+        <div class="header-title">AI答疑 <span class="header-generated">(内容由AI生成)</span></div>
+        <div class="header-right">
+        </div>
+    </header>
+
+    <!-- 答疑容器 -->
+    <div class="ai-container">
+        <!-- 对话内容 -->
+        <div class="chat-container">
+            <!-- 用户问题 -->
+            <div class="chat-message user-message">
+                <div class="message-content">
+                    <div class="question-stem">
+                        31、题干内容题干内容题干内容题干内容题干内容题干内容题干内容题干内容<span class="blank"></span>题干内容题干内容<span class="blank"></span>题干内容
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI回答 -->
+            <div class="chat-message ai-message">
+
+                <div class="message-content">
+
+                    <div class="ai-content">
+                        <p>本题考查的是填空题的相关知识点，需要根据题干内容填写正确的答案。</p>
+                        <p>首先，我们需要分析题干的结构和内容，理解题目要求我们填写的是什么信息。题干中提到了两个空白处，我们需要分别分析每个空白处应该填写的内容。</p>
+                        <p>对于第一个空白处，根据题干上下文，我们可以推断出这里应该填写的是与前面内容相关的关键词。根据常见的知识点，这里可能填写的是某个概念或术语。</p>
+                        <p>对于第二个空白处，同样需要根据上下文来推断。这里可能填写的是与后面内容相关的信息，可能是某个结论或结果。</p>
+                        <p>综合以上分析，第一个空白处应该填写"示例答案1"，第二个空白处应该填写"示例答案2"。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 停止响应按钮 -->
+        <button class="stop-btn"><i class="fas fa-stop"></i> 停止响应</button>
+
+        <!-- 输入区域 -->
+        <div class="input-container">
+            <input type="text" class="input-field" placeholder="请输入您的问题">
+            <button class="send-btn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+
+
+    <script>
+        // DOM元素获取
+        const backBtn = document.querySelector('.back-btn');
+        const inputField = document.querySelector('.input-field');
+        const sendBtn = document.querySelector('.send-btn');
+        const stopBtn = document.querySelector('.stop-btn');
+        const chatContainer = document.querySelector('.chat-container');
+
+        // 返回按钮功能
+        backBtn.addEventListener('click', () => {
+            console.log('返回');
+            // 返回上一页
+            window.history.back();
+        });
+
+        // 触摸事件（移动端优化）
+        backBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            backBtn.click();
+        }, { passive: false });
+
+        // 发送按钮功能
+        function sendMessage() {
+            const message = inputField.value.trim();
+            if (message) {
+                // 添加用户消息
+                addUserMessage(message);
+                // 清空输入框
+                inputField.value = '';
+                // 模拟AI回复
+                setTimeout(() => {
+                    addAIMessage('感谢您的追问。这是一个模拟的AI回复，实际应用中会根据您的问题提供详细的解答。');
+                }, 1000);
+            }
+        }
+
+        // 添加用户消息
+        function addUserMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message user-message';
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    <p>${text}</p>
+                </div>
+            `;
+            chatContainer.appendChild(messageDiv);
+            // 滚动到底部
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // 添加AI消息
+        function addAIMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message ai-message';
+            messageDiv.innerHTML = `
+                <div class="message-avatar">
+                    <div class="ai-icon"><i class="fas fa-robot"></i></div>
+                </div>
+                <div class="message-content">
+                    <div class="message-header">
+                        <div class="ai-title">AI答疑 <span class="ai-generated">(内容由AI生成)</span></div>
+                    </div>
+                    <div class="ai-content">
+                        <p>${text}</p>
+                    </div>
+                </div>
+            `;
+            chatContainer.appendChild(messageDiv);
+            // 滚动到底部
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // 发送按钮点击事件
+        sendBtn.addEventListener('click', sendMessage);
+
+        // 输入框回车事件
+        inputField.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // 触摸事件（移动端优化）
+        sendBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            sendBtn.click();
+        }, { passive: false });
+
+        // 页面加载完成后执行
+        window.addEventListener('load', () => {
+            console.log('页面加载完成');
+        });
+
+        // 触摸事件优化（移动端）
+        document.addEventListener('touchstart', function() {}, { passive: true });
+        document.addEventListener('touchmove', function() {}, { passive: true });
+        document.addEventListener('touchend', function() {}, { passive: true });
+
+        // 停止响应按钮功能
+        stopBtn.addEventListener('click', () => {
+            console.log('停止响应');
+            // 实际应用中，这里应该取消正在进行的AI请求
+            alert('已停止AI响应');
+        });
+
+        // 触摸事件（移动端优化）
+        stopBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            stopBtn.click();
+        }, { passive: false });
+
+        // 禁止双击缩放
+        document.addEventListener('dblclick', function(event) {
+            event.preventDefault();
+        });
+    </script>
+</body>
+</html>

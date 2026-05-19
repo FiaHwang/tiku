@@ -1,0 +1,2212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>试题解析页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 重置样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f5f5f5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            /* PC端适配样式 */
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* 移动端适配 */
+        @media screen and (max-width: 768px) {
+            html {
+                font-size: 14px;
+            }
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            display: flex;
+            align-items: center;
+            height: 56px;
+            padding: 0 16px;
+            background-color: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            z-index: 1000;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .back-btn:active {
+            opacity: 0.7;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            color: #666;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .header-btn:active {
+            opacity: 0.7;
+        }
+
+        /* 主内容区域 */
+        .main-container {
+            padding: 16px;
+            padding-top: 72px; /* 56px header + 16px spacing */
+            padding-bottom: 72px; /* 56px footer + 16px spacing */
+            min-height: 100vh;
+            background-color: #fff;
+        }
+
+        /* 章节名称和做题进度容器 */
+        .chapter-progress-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        /* 章节名称 */
+        .chapter-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        /* 做题进度 */
+        .progress-text {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        /* 试题题型 */
+        .question-type {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e8e8e8;
+        }
+
+        /* 省份科目信息 */
+        .province-subject {
+            font-size: 14px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            color: #666;
+        }
+
+        /* 错题详情 */
+        .error-detail {
+            background-color: #fff;
+            padding: 16px 8px;
+            margin-bottom: 16px;
+        }
+
+        /* 题目头部 */
+        .question-header {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        .question-number {
+            font-weight: 500;
+        }
+
+        .question-content {
+            font-weight: 400;
+        }
+
+        /* 选项 */
+        .question-options {
+            margin-bottom: 20px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background-color: #f0f0f0;
+        }
+
+        .option.correct {
+            background-color: #f6ffed;
+            border-left: 4px solid #52c41a;
+        }
+
+        .option.wrong {
+            background-color: #fff1f0;
+            border-left: 4px solid #ff4d4f;
+        }
+
+        .option-label {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .multi-option .option-label {
+            border-radius: 4px;
+        }
+
+        .option.correct .option-label {
+            background-color: #52c41a;
+            color: #fff;
+        }
+
+        .option.wrong .option-label {
+            background-color: #ff4d4f;
+            color: #fff;
+        }
+
+        .option-content {
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* 题目操作 */
+        .question-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 12px;
+            background-color: #fafafa;
+            border-radius: 4px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #666;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .action-btn:active {
+            opacity: 0.7;
+        }
+
+        .action-btn:hover {
+            border-color: #ff4d4f;
+            color: #ff4d4f;
+        }
+
+        /* 答案和解析 */
+        .answer-analysis {
+            margin-bottom: 20px;
+            padding: 12px;
+            background-color: #fafafa;
+            border-radius: 4px;
+        }
+
+        .answer-info {
+            margin-bottom: 12px;
+        }
+
+        .answer-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #ff4d4f;
+            margin-bottom: 8px;
+        }
+
+        .answer-detail {
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .answer-detail span {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .analysis-section {
+            padding-top: 12px;
+        }
+
+        .analysis-header {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        /* 统计容器 */
+        .stats-container {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        /* 统计项 */
+        .stat-item {
+            flex: 1;
+            min-width: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        /* 移动端适配 */
+        @media screen and (max-width: 375px) {
+            .stats-container {
+                gap: 8px;
+                padding: 8px;
+            }
+            
+            .stat-item {
+                min-width: 55px;
+            }
+        }
+
+        @media screen and (max-width: 320px) {
+            .stats-container {
+                gap: 6px;
+                padding: 6px;
+            }
+            
+            .stat-item {
+                min-width: 50px;
+            }
+        }
+
+        /* 统计标签 */
+        .stat-label {
+            font-size: 11px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* 统计数值 */
+        .stat-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* 移动端适配 */
+        @media screen and (max-width: 375px) {
+            .stat-label {
+                font-size: 10px;
+            }
+            
+            .stat-value {
+                font-size: 12px;
+            }
+        }
+
+        @media screen and (max-width: 320px) {
+            .stat-label {
+                font-size: 9px;
+            }
+            
+            .stat-value {
+                font-size: 11px;
+            }
+        }
+
+        /* 不同统计项的数值颜色 */
+        .stat-item:nth-child(1) .stat-value {
+            color: #52c41a;
+        }
+
+        .stat-item:nth-child(2) .stat-value {
+            color: #ff4d4f;
+        }
+
+        .stat-item:nth-child(3) .stat-value {
+            color: #1890ff;
+        }
+
+        .stat-item:nth-child(4) .stat-value {
+            color: #722ed1;
+        }
+
+        .analysis-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .analysis-content p {
+            margin-bottom: 8px;
+        }
+
+        .video-analysis {
+            margin-bottom: 12px;
+            padding: 12px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border-left: 4px solid #1890ff;
+        }
+
+        .video-analysis div {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .video-analysis i {
+            font-size: 24px;
+            color: #1890ff;
+            margin-right: 12px;
+        }
+
+        .video-analysis span {
+            font-weight: 500;
+        }
+
+        /* 上下题导航 */
+        .question-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .nav-btn:active {
+            opacity: 0.7;
+        }
+
+        .nav-btn:hover {
+            border-color: #ff4d4f;
+            color: #ff4d4f;
+        }
+
+        /* 底部操作栏 */
+        .footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px;
+            padding: 0 16px;
+            background-color: #fff;
+            box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            z-index: 1000;
+        }
+
+        .prev-btn, .next-btn {
+            padding: 8px 20px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fff;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .prev-btn:active, .next-btn:active {
+            opacity: 0.7;
+        }
+
+        .help-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .help-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .help-btn:active {
+            opacity: 0.8;
+        }
+
+        .help-btn i {
+            margin-right: 6px;
+            font-size: 14px;
+        }
+
+        .ai-btn {
+            background-color: #1890ff;
+        }
+
+        .human-btn {
+            background-color: #52c41a;
+        }
+
+        /* 答题卡 */
+        .answer-card {
+            background-color: #fff;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .answer-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background-color: #fafafa;
+        }
+
+        .answer-card-header span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .collapse-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: transparent;
+            border: none;
+            font-size: 12px;
+            color: #999;
+            cursor: pointer;
+            padding: 4px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .collapse-btn:active {
+            opacity: 0.7;
+        }
+
+        /* 答题卡内容 */
+        .answer-card-content {
+            padding: 16px;
+        }
+
+        .answer-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .answer-item {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .answer-item:active {
+            opacity: 0.7;
+        }
+
+        .answer-item:hover {
+            background-color: #e0e0e0;
+        }
+
+        .answer-item.wrong {
+            background-color: #ff4d4f;
+            color: #fff;
+        }
+
+        .answer-item.correct {
+            background-color: #52c41a;
+            color: #fff;
+        }
+
+        .answer-item.half-correct {
+            background: linear-gradient(to right, #52c41a 50%, #fff 50%);
+            color: #333;
+            border: 1px solid #d9d9d9;
+        }
+
+        .answer-item.answered {
+            background-color: #fa8c16;
+            color: #fff;
+        }
+
+        .answer-item.unanswered {
+            background-color: #f0f0f0;
+            color: #666;
+            border: 1px solid #d9d9d9;
+        }
+
+        /* 答题卡统计 */
+        .answer-card-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .stat-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .stat-dot.wrong {
+            background-color: #ff4d4f;
+        }
+
+        .stat-dot.correct {
+            background-color: #52c41a;
+        }
+
+        .stat-dot.half-correct {
+            background: linear-gradient(to right, #52c41a 50%, #fff 50%);
+            border: 1px solid #d9d9d9;
+        }
+
+        .stat-dot.answered {
+            background-color: #fa8c16;
+        }
+
+        .stat-dot.unanswered {
+            background-color: #f0f0f0;
+            border: 1px solid #d9d9d9;
+        }
+
+        /* 功能按钮 */
+        .function-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .function-btn {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .function-btn:active {
+            opacity: 0.7;
+        }
+
+        .function-btn.primary {
+            background-color: #ff4d4f;
+            color: #fff;
+            border-color: #ff4d4f;
+        }
+
+        .function-btn:hover {
+            border-color: #ff4d4f;
+            color: #ff4d4f;
+        }
+
+        .function-btn.primary:hover {
+            background-color: #ff7875;
+        }
+
+        /* AI答疑弹窗 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            border-radius: 8px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        /* 底部弹窗样式 */
+        .modal.bottom-drawer {
+            align-items: flex-end;
+        }
+
+        .modal.bottom-drawer .modal-content {
+            width: 100%;
+            max-width: 480px;
+            border-radius: 16px 16px 0 0;
+            transform: translateY(100%);
+            height: calc(100vh - 44px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal.bottom-drawer.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .modal-close:active {
+            opacity: 0.7;
+        }
+
+        .modal-body {
+            padding: 16px;
+        }
+
+        .modal-footer {
+            padding: 16px;
+            border-top: 1px solid #e8e8e8;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* 答疑分类 */
+        .qa-category {
+            font-size: 14px;
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        /* 输入区域 */
+        .input-area {
+            margin-bottom: 16px;
+        }
+
+        .input-area input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .input-area input:focus {
+            outline: none;
+            border-color: #ff4d4f;
+            box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+        }
+
+        /* 上传图片按钮 */
+        .upload-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .upload-btn:active {
+            opacity: 0.7;
+        }
+
+        /* 对话框 */
+        .dialog {
+            margin-bottom: 16px;
+        }
+
+        .dialog-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .dialog-role {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .dialog-time {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .dialog-content {
+            padding: 12px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn:active {
+            opacity: 0.7;
+        }
+
+        .btn.primary {
+            background-color: #ff4d4f;
+            color: #fff;
+            border-color: #ff4d4f;
+        }
+
+        .btn:hover {
+            border-color: #ff4d4f;
+            color: #ff4d4f;
+        }
+
+        .btn.primary:hover {
+            background-color: #ff7875;
+        }
+
+        /* 视频解析弹窗 */
+        .video-modal .modal-content {
+            width: 100%;
+            max-width: 480px;
+            border-radius: 0;
+            background-color: #000;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background-color: #000;
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .start-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            z-index: 10;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .start-overlay.active {
+            display: flex;
+        }
+
+        .trial-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            z-index: 10;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .trial-overlay.active {
+            display: flex;
+        }
+
+        .trial-overlay h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .trial-overlay p {
+            font-size: 14px;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .trial-overlay .btn {
+            background-color: #ff4d4f;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 20px;
+            font-size: 16px;
+        }
+
+        .video-modal-info {
+            padding: 16px;
+            background-color: #fff;
+        }
+
+        .video-modal-info h2 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .video-modal-info p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-detail {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        /* 响应式设计 */
+        @media screen and (max-width: 375px) {
+            .header {
+                height: 52px;
+                padding: 0 14px;
+            }
+
+            .header-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+
+            .main-container {
+                padding: 14px;
+                min-height: calc(100vh - 104px);
+            }
+
+            .footer {
+                height: 52px;
+                padding: 0 14px;
+            }
+
+            .prev-btn, .next-btn {
+                padding: 6px 16px;
+                font-size: 13px;
+            }
+
+            .answer-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+
+            .answer-item {
+                width: 36px;
+                height: 36px;
+                font-size: 12px;
+            }
+
+            .question-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .question-actions > div {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .action-btn {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+
+        @media screen and (max-width: 320px) {
+            .header {
+                height: 48px;
+                padding: 0 12px;
+            }
+
+            .header-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+
+            .main-container {
+                padding: 12px;
+                min-height: calc(100vh - 96px);
+            }
+
+            .footer {
+                height: 48px;
+                padding: 0 12px;
+            }
+
+            .prev-btn, .next-btn {
+                padding: 5px 12px;
+                font-size: 12px;
+            }
+
+            .answer-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 6px;
+            }
+
+            .answer-item {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+
+            .help-buttons {
+                gap: 6px;
+            }
+
+            .help-btn {
+                padding: 4px 8px;
+                font-size: 10px;
+            }
+
+            .help-btn i {
+                font-size: 12px;
+                margin-right: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="header-left">
+            <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
+        </div>
+        <div class="header-right">
+            <button class="header-btn" title="分享"><i class="fas fa-share-alt"></i></button>
+            <button class="header-btn" title="纠错"><i class="fas fa-exclamation-circle"></i></button>
+            <button class="header-btn" title="收藏"><i class="fas fa-star"></i></button>
+            <button class="header-btn" title="答题卡"><i class="fas fa-list"></i></button>
+        </div>
+    </header>
+
+    <!-- 主内容区域 -->
+    <div class="main-container">
+
+        <!-- 章节名称和做题进度 -->
+        <div class="chapter-progress-container">
+            <div class="chapter-name">郑伯克段于鄢 《左传》</div>
+            <div class="progress-text">1/15</div>
+        </div>
+        
+        <!-- 试题题型 -->
+        <div class="question-type">单选题</div>
+
+        <!-- 错题详情 -->
+        <div class="error-detail">
+            <!-- 题目编号和内容 -->
+            <div class="question-header">
+                <span class="question-content">1、成语"多行不义必自毙"出自下列哪部著作 ( )</span>
+            </div>
+
+            <!-- 选项 -->
+            <div class="question-options">
+                <div class="option">
+                    <span class="option-label">A</span>
+                    <span class="option-content">《尚书》</span>
+                </div>
+                <div class="option">
+                    <span class="option-label">B</span>
+                    <span class="option-content">《论语》</span>
+                </div>
+                <div class="option correct">
+                    <span class="option-label">C</span>
+                    <span class="option-content">《左传》</span>
+                </div>
+                <div class="option wrong">
+                    <span class="option-label">D</span>
+                    <span class="option-content">《战国策》</span>
+                </div>
+            </div>
+
+            <!-- 答案和解析 -->
+            <div class="answer-analysis">
+                <div class="answer-info">
+                    <div class="answer-label">
+                        <i class="fas fa-times-circle"></i>
+                        <span>回答错误</span>
+                    </div>
+                    <div class="answer-detail">
+                        <span>参考答案：C</span>
+                        <span>你的答案：D</span>
+                    </div>
+                </div>
+
+                <div class="analysis-section">
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <div class="stat-label">正确率</div>
+                            <div class="stat-value">63.3%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">易错项</div>
+                            <div class="stat-value">D</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">作答次数</div>
+                            <div class="stat-value">112次</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">作答时长</div>
+                            <div class="stat-value">2秒</div>
+                        </div>
+                    </div>
+                    <div class="analysis-content">
+                        <div class="video-analysis" style="display:flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <i class="fas fa-play-circle"></i>
+                                <span>视频解析<span style="font-size: 10px; color: #999; margin-left: 4px; font-weight: normal;">（内容由AI生成）</span></span>
+                            </div>
+                            <div style="display: flex; gap: 6px;">
+                                <span style="font-size: 10px; padding: 2px 6px; background-color: #fff1f0; color: #f5222d; border-radius: 10px; border: 1px solid #ffa39e;">会员专享</span>
+                                <span style="font-size: 10px; padding: 2px 6px; background-color: #e6f7ff; color: #1890ff; border-radius: 10px; border: 1px solid #91d5ff;">支持试看</span>
+                            </div>
+                        </div>
+                        <p><strong>文字解析：</strong>"多行不义必自毙"出自《左传·郑伯克段于鄢》，是郑庄公评价共叔段的话。</p>
+                        <p><strong>知识点：</strong>成语出处、古代文学、春秋左传</p>
+                        <p><strong>试题来源：</strong>2023年河南考生回忆版</p>
+                        <p><strong>试题难度：</strong>中</p>
+                        <p><strong>试题类型：</strong>2019河南</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 多选题解析 -->
+        <div class="error-detail" style="display: none;">
+            <div class="question-header">
+                <span class="question-content">2、下列属于《左传》中的人物有 ( )</span>
+            </div>
+            <div class="question-options">
+                <div class="option multi-option correct">
+                    <span class="option-label">A</span>
+                    <span class="option-content">郑庄公</span>
+                </div>
+                <div class="option multi-option correct">
+                    <span class="option-label">B</span>
+                    <span class="option-content">共叔段</span>
+                </div>
+                <div class="option multi-option">
+                    <span class="option-label">C</span>
+                    <span class="option-content">孔子</span>
+                </div>
+                <div class="option multi-option wrong">
+                    <span class="option-label">D</span>
+                    <span class="option-content">孟子</span>
+                </div>
+            </div>
+            <div class="answer-analysis">
+                <div class="answer-info">
+                    <div class="answer-label">
+                        <i class="fas fa-times-circle"></i>
+                        <span>回答错误</span>
+                    </div>
+                    <div class="answer-detail">
+                        <span>参考答案：A、B</span>
+                        <span>你的答案：A、D</span>
+                    </div>
+                </div>
+                <div class="analysis-section">
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <div class="stat-label">正确率</div>
+                            <div class="stat-value">45.2%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">作答次数</div>
+                            <div class="stat-value">98次</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">作答时长</div>
+                            <div class="stat-value">5秒</div>
+                        </div>
+                    </div>
+                    <div class="analysis-content">
+                        <div class="video-analysis" style="display:flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <i class="fas fa-play-circle"></i>
+                                <span>视频解析<span style="font-size: 10px; color: #999; margin-left: 4px; font-weight: normal;">（内容由AI生成）</span></span>
+                            </div>
+                            <div style="display: flex; gap: 6px;">
+                                <span style="font-size: 10px; padding: 2px 6px; background-color: #fff1f0; color: #f5222d; border-radius: 10px; border: 1px solid #ffa39e;">会员专享</span>
+                                <span style="font-size: 10px; padding: 2px 6px; background-color: #e6f7ff; color: #1890ff; border-radius: 10px; border: 1px solid #91d5ff;">支持试看</span>
+                            </div>
+                        </div>
+                        <p><strong>文字解析：</strong>郑庄公和共叔段是《左传·郑伯克段于鄢》中的主要人物，孔子和孟子是儒家学派的代表人物，不是《左传》中的主要人物。</p>
+                        <p><strong>知识点：</strong>《左传》人物、古代文学</p>
+                        <p><strong>试题来源：</strong>2023年河南考生回忆版</p>
+                        <p><strong>试题难度：</strong>中</p>
+                        <p><strong>试题类型：</strong>2019河南</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 不定项选择题解析 -->
+        <div class="error-detail" style="display: none;">
+            <div class="question-header">
+                <span class="question-content">3、下列关于《郑伯克段于鄢》的说法正确的是 ( )</span>
+            </div>
+            <div class="question-options">
+                <div class="option multi-option correct">
+                    <span class="option-label">A</span>
+                    <span class="option-content">选自《左传》</span>
+                </div>
+                <div class="option multi-option correct">
+                    <span class="option-label">B</span>
+                    <span class="option-content">讲述了郑庄公和共叔段的故事</span>
+                </div>
+                <div class="option multi-option correct">
+                    <span class="option-label">C</span>
+                    <span class="option-content">体现了春秋时期的政治斗争</span>
+                </div>
+                <div class="option multi-option">
+                    <span class="option-label">D</span>
+                    <span class="option-content">作者是孔子</span>
+                </div>
+            </div>
+            <div class="answer-analysis">
+                <div class="answer-info">
+                    <div class="answer-label">
+                        <i class="fas fa-check-circle" style="color: #52c41a;"></i>
+                        <span>回答正确</span>
+                    </div>
+                    <div class="answer-detail">
+                        <span>参考答案：A、B、C</span>
+                        <span>你的答案：A、B、C</span>
+                    </div>
+                </div>
+                <div class="analysis-section">
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <div class="stat-label">正确率</div>
+                            <div class="stat-value">72.5%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">作答次数</div>
+                            <div class="stat-value">85次</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">作答时长</div>
+                            <div class="stat-value">8秒</div>
+                        </div>
+                    </div>
+                    <div class="analysis-content">
+                        <div class="video-analysis" style="display:flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <i class="fas fa-play-circle"></i>
+                                <span>视频解析<span style="font-size: 10px; color: #999; margin-left: 4px; font-weight: normal;">（内容由AI生成）</span></span>
+                            </div>
+                            <div style="display: flex; gap: 6px;">
+                                <span style="font-size: 10px; padding: 2px 6px; background-color: #fff1f0; color: #f5222d; border-radius: 10px; border: 1px solid #ffa39e;">会员专享</span>
+                                <span style="font-size: 10px; padding: 2px 6px; background-color: #e6f7ff; color: #1890ff; border-radius: 10px; border: 1px solid #91d5ff;">支持试看</span>
+                            </div>
+                        </div>
+                        <p><strong>文字解析：</strong>《郑伯克段于鄢》选自《左传》，讲述了郑庄公和共叔段的权力斗争，体现了春秋时期的政治斗争。《左传》的作者一般认为是左丘明，不是孔子。</p>
+                        <p><strong>知识点：</strong>《左传》内容、古代文学</p>
+                        <p><strong>试题来源：</strong>2023年河南考生回忆版</p>
+                        <p><strong>试题难度：</strong>中</p>
+                        <p><strong>试题类型：</strong>2019河南</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 填空题解析 -->
+        <div class="error-detail" style="display: none;">
+            <div class="question-header">
+                <span class="question-content">4、《郑伯克段于鄢》中，郑庄公说："多行不义必自毙，__________________"。颍考叔通过__________________的方式劝说郑庄公与母亲和好。</span>
+            </div>
+            <div class="answer-analysis">
+                <div style="margin-top: 16px; margin-bottom: 16px;">
+                    <div style="font-size: 14px; font-weight: 500; color: #333; margin-bottom: 12px;">你的答案</div>
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-size: 14px; color: #666; margin-bottom: 8px;">(1) 答案回显</div>
+                        <div style="width: 100%; padding: 12px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fafafa; font-size: 14px; color: #333; margin-bottom: 12px;">拭目以待</div>
+                        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                            <div style="width: 80px; height: 80px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-image" style="font-size: 24px; color: #999;"></i>
+                            </div>
+                            <div style="width: 80px; height: 80px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-image" style="font-size: 24px; color: #999;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-size: 14px; color: #666; margin-bottom: 8px;">(2) 未答</div>
+                        <div style="width: 100%; padding: 12px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fafafa; font-size: 14px; color: #999; margin-bottom: 12px;">未答</div>
+                        <div style="display: flex; gap: 12px;">
+                            <div style="width: 80px; height: 80px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-image" style="font-size: 24px; color: #999;"></i>
+                            </div>
+                            <div style="width: 80px; height: 80px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-image" style="font-size: 24px; color: #999;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 16px; margin-bottom: 16px;">
+                        <div style="font-size: 14px; font-weight: 500; color: #333; margin-bottom: 12px;">老师批改：10分</div>
+                        <div style="width: 100%; padding: 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; color: #333; line-height: 1.5;">老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语...</div>
+                    </div>
+                    <div style="margin-top: 16px;">
+                        <div style="font-size: 14px; font-weight: 500; color: #333; margin-bottom: 12px;">参考答案</div>
+                        <div style="width: 100%; padding: 12px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #f0f0f0; font-size: 14px; color: #333;">(1) 子姑待之 (2) 隧而相见</div>
+                    </div>
+                </div>
+                <div class="analysis-section">
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <div class="stat-label">正确率</div>
+                            <div class="stat-value">38.7%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">作答次数</div>
+                            <div class="stat-value">102次</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">作答时长</div>
+                            <div class="stat-value">10秒</div>
+                        </div>
+                    </div>
+                    <div class="analysis-content">
+                        <div class="video-analysis" style="display:flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <i class="fas fa-play-circle"></i>
+                                <span>视频解析<span style="font-size: 10px; color: #999; margin-left: 4px; font-weight: normal;">（内容由AI生成）</span></span>
+                            </div>
+                            <div style="display: flex; gap: 6px;">
+                                <span style="font-size: 10px; padding: 2px 6px; background-color: #fff1f0; color: #f5222d; border-radius: 10px; border: 1px solid #ffa39e;">会员专享</span>
+                                <span style="font-size: 10px; padding: 2px 6px; background-color: #e6f7ff; color: #1890ff; border-radius: 10px; border: 1px solid #91d5ff;">支持试看</span>
+                            </div>
+                        </div>
+                        <p><strong>文字解析：</strong>"多行不义必自毙，子姑待之"是郑庄公对共叔段的评价，意思是做多了不义的事情一定会自取灭亡，你姑且等着看。</p>
+                        <p><strong>知识点：</strong>《左传》名句、古代文学</p>
+                        <p><strong>试题来源：</strong>2023年河南考生回忆版</p>
+                        <p><strong>试题难度：</strong>难</p>
+                        <p><strong>试题类型：</strong>2019河南</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 判断题解析 -->
+        <div class="error-detail" style="display: none;">
+            <div class="question-header">
+                <span class="question-content">5、《郑伯克段于鄢》讲述的是春秋时期的历史故事。</span>
+            </div>
+            <div class="question-options">
+                <div class="option correct">
+                    <span class="option-label">A</span>
+                    <span class="option-content">正确</span>
+                </div>
+                <div class="option wrong">
+                    <span class="option-label">B</span>
+                    <span class="option-content">错误</span>
+                </div>
+            </div>
+            <div class="answer-analysis">
+                <div class="answer-info">
+                    <div class="answer-label">
+                        <i class="fas fa-check-circle" style="color: #52c41a;"></i>
+                        <span>回答正确</span>
+                    </div>
+                    <div class="answer-detail">
+                        <span>参考答案：A</span>
+                        <span>你的答案：A</span>
+                    </div>
+                </div>
+                <div class="analysis-section">
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <div class="stat-label">正确率</div>
+                            <div class="stat-value">92.1%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">作答次数</div>
+                            <div class="stat-value">120次</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">作答时长</div>
+                            <div class="stat-value">1秒</div>
+                        </div>
+                    </div>
+                    <div class="analysis-content">
+                        <div class="video-analysis" style="display:flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <i class="fas fa-play-circle"></i>
+                                <span>视频解析<span style="font-size: 10px; color: #999; margin-left: 4px; font-weight: normal;">（内容由AI生成）</span></span>
+                            </div>
+                            <div style="display: flex; gap: 6px;">
+                                <span style="font-size: 10px; padding: 2px 6px; background-color: #fff1f0; color: #f5222d; border-radius: 10px; border: 1px solid #ffa39e;">会员专享</span>
+                                <span style="font-size: 10px; padding: 2px 6px; background-color: #e6f7ff; color: #1890ff; border-radius: 10px; border: 1px solid #91d5ff;">支持试看</span>
+                            </div>
+                        </div>
+                        <p><strong>文字解析：</strong>《郑伯克段于鄢》选自《左传》，讲述的是春秋时期郑国的历史故事，反映了当时的政治斗争。</p>
+                        <p><strong>知识点：</strong>《左传》背景、古代文学</p>
+                        <p><strong>试题来源：</strong>2023年河南考生回忆版</p>
+                        <p><strong>试题难度：</strong>易</p>
+                        <p><strong>试题类型：</strong>2019河南</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 问答题解析 -->
+        <div class="error-detail" style="display: none;">
+            <div class="question-header">
+                <span class="question-content">6、请分析《郑伯克段于鄢》中郑庄公的人物形象。</span>
+            </div>
+            <div class="answer-analysis">
+                <div style="margin-top: 16px; margin-bottom: 16px;">
+                    <div style="font-size: 14px; font-weight: 500; color: #333; margin-bottom: 12px;">你的答案</div>
+                    <div style="width: 100%; padding: 12px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fafafa; font-size: 14px; color: #333; margin-bottom: 12px; min-height: 100px;">郑庄公是一个好国君，他平定了弟弟的叛乱。</div>
+                    <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                        <div style="width: 80px; height: 80px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-image" style="font-size: 24px; color: #999;"></i>
+                        </div>
+                        <div style="width: 80px; height: 80px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-image" style="font-size: 24px; color: #999;"></i>
+                        </div>
+                    </div>
+                    <div style="margin-top: 16px; margin-bottom: 16px;">
+                        <div style="font-size: 14px; font-weight: 500; color: #333; margin-bottom: 12px;">AI批改：10%得分率 <span style="font-size: 12px; font-weight: normal; color: #999;">(内容由AI生成，分数仅供参考)</span></div>
+                        <div style="width: 100%; padding: 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; color: #333; line-height: 1.5;">老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语...</div>
+                    </div>
+                    <div style="margin-top: 16px;">
+                        <div style="font-size: 14px; font-weight: 500; color: #333; margin-bottom: 12px;">参考答案</div>
+                        <div style="width: 100%; padding: 12px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #f0f0f0; font-size: 14px; color: #333; min-height: 100px;">郑庄公是一个工于心计、阴险狠毒的统治者形象。他明知共叔段的野心，却故意纵容他，等到共叔段准备叛乱时才一举消灭他，显示了他的权谋和手段。</div>
+                    </div>
+                </div>
+                <div class="analysis-section">
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <div class="stat-label">作答次数</div>
+                            <div class="stat-value">78次</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">作答时长</div>
+                            <div class="stat-value">60秒</div>
+                        </div>
+                    </div>
+                    <div class="analysis-content">
+                        <div class="video-analysis" style="display:flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <i class="fas fa-play-circle"></i>
+                                <span>视频解析<span style="font-size: 10px; color: #999; margin-left: 4px; font-weight: normal;">（内容由AI生成）</span></span>
+                            </div>
+                            <div style="display: flex; gap: 6px;">
+                                <span style="font-size: 10px; padding: 2px 6px; background-color: #fff1f0; color: #f5222d; border-radius: 10px; border: 1px solid #ffa39e;">会员专享</span>
+                                <span style="font-size: 10px; padding: 2px 6px; background-color: #e6f7ff; color: #1890ff; border-radius: 10px; border: 1px solid #91d5ff;">支持试看</span>
+                            </div>
+                        </div>
+                        <p><strong>文字解析：</strong>郑庄公是《郑伯克段于鄢》中的主要人物，他的形象复杂多面。他工于心计，明知共叔段的野心却故意纵容，等到共叔段准备叛乱时才一举消灭他，显示了他的权谋和手段。同时，他在母亲姜氏与共叔段勾结后，曾发誓"不及黄泉，无相见也"，但后来在颍考叔的劝说下，又通过"隧而相见"的方式与母亲和好，显示了他的孝道。</p>
+                        <p><strong>知识点：</strong>人物形象分析、《左传》</p>
+                        <p><strong>试题来源：</strong>2023年河南考生回忆版</p>
+                        <p><strong>试题难度：</strong>难</p>
+                        <p><strong>试题类型：</strong>2019河南</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 材料题解析 -->
+        <div class="error-detail" style="display: none;">
+
+            <div style="margin-bottom: 20px; padding: 12px; background-color: #f9f9f9; border-radius: 4px;">
+                <p>颍考叔为颍谷封人，闻之，有献于公。公赐之食，食舍肉。公问之。对曰："小人有母，皆尝小人之食矣，未尝君之羹，请以遗之。"公曰："尔有母遗，繄我独无!"颍考叔曰："敢问何谓也?"公语之故，且告之悔。对曰："君何患焉?若阙地及泉，隧而相见，其谁曰不然?"公从之。公入而赋："大隧之中，其乐也融融!"姜出而赋："大隧之外，其乐也泄泄!"遂为母子如初。</p>
+            </div>
+            <div class="question-type" style="display: flex; justify-content: space-between; align-items: center;">问答题<span style="font-size: 14px; font-weight: normal; color: #666;">1/5</span></div>
+            <div class="question-header">
+                <span class="question-content">7、颍考叔为什么要"食舍肉"？</span>
+            </div>
+            <div class="answer-analysis">
+                <div style="margin-top: 16px; margin-bottom: 16px;">
+                    <div style="font-size: 14px; font-weight: 500; color: #333; margin-bottom: 12px;">你的答案</div>
+                    <div style="width: 100%; padding: 12px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fafafa; font-size: 14px; color: #333; margin-bottom: 12px; min-height: 100px;">颍考叔不喜欢吃肉。</div>
+                    <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                        <div style="width: 80px; height: 80px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-image" style="font-size: 24px; color: #999;"></i>
+                        </div>
+                        <div style="width: 80px; height: 80px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-image" style="font-size: 24px; color: #999;"></i>
+                        </div>
+                    </div>
+                    <div style="margin-top: 16px; margin-bottom: 16px;">
+                        <div style="font-size: 14px; font-weight: 500; color: #333; margin-bottom: 12px;">AI批改：10%得分率 <span style="font-size: 12px; font-weight: normal; color: #999;">(内容由AI生成，分数仅供参考)</span></div>
+                        <div style="width: 100%; padding: 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; color: #333; line-height: 1.5;">老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语老师评语...</div>
+                    </div>
+                    <div style="margin-top: 16px;">
+                        <div style="font-size: 14px; font-weight: 500; color: #333; margin-bottom: 12px;">参考答案</div>
+                        <div style="width: 100%; padding: 12px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #f0f0f0; font-size: 14px; color: #333; min-height: 100px;">颍考叔"食舍肉"是为了引起郑庄公的注意，进而劝说郑庄公与母亲和好。</div>
+                    </div>
+                </div>
+                <div class="analysis-section">
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <div class="stat-label">作答次数</div>
+                            <div class="stat-value">89次</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">作答时长</div>
+                            <div class="stat-value">45秒</div>
+                        </div>
+                    </div>
+                    <div class="analysis-content">
+                        <div class="video-analysis" style="display:flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <i class="fas fa-play-circle"></i>
+                                <span>视频解析<span style="font-size: 10px; color: #999; margin-left: 4px; font-weight: normal;">（内容由AI生成）</span></span>
+                            </div>
+                            <div style="display: flex; gap: 6px;">
+                                <span style="font-size: 10px; padding: 2px 6px; background-color: #fff1f0; color: #f5222d; border-radius: 10px; border: 1px solid #ffa39e;">会员专享</span>
+                                <span style="font-size: 10px; padding: 2px 6px; background-color: #e6f7ff; color: #1890ff; border-radius: 10px; border: 1px solid #91d5ff;">支持试看</span>
+                            </div>
+                        </div>
+                        <p><strong>文字解析：</strong>颍考叔"食舍肉"是一种策略，他通过这种方式引起郑庄公的注意，进而借机劝说郑庄公与母亲和好。他的行为体现了他的孝顺和智慧。</p>
+                        <p><strong>知识点：</strong>《左传》内容、人物分析</p>
+                        <p><strong>试题来源：</strong>2023年河南考生回忆版</p>
+                        <p><strong>试题难度：</strong>中</p>
+                        <p><strong>试题类型：</strong>2019河南</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 底部操作栏 -->
+    <footer class="footer">
+        <button class="prev-btn">上一题</button>
+        <div class="help-buttons">
+            <button class="help-btn ai-btn" title="AI答疑">
+                <i class="fas fa-robot"></i>
+                <span>AI答疑</span>
+            </button>
+            <button class="help-btn human-btn" title="人工答疑">
+                <i class="fas fa-user"></i>
+                <span>人工答疑</span>
+            </button>
+        </div>
+        <button class="next-btn">下一题</button>
+    </footer>
+
+    <!-- 视频解析弹窗 -->
+    <div class="modal video-modal">
+        <div class="modal-content" style="background: transparent;">
+            <div class="video-container" style="border-radius: 8px; overflow: hidden;">
+                <!-- 在视频区域右上角添加关闭按钮 -->
+                <button class="modal-close" style="position: absolute; top: 12px; right: 12px; z-index: 20; width: 32px; height: 32px; background: rgba(0,0,0,0.5); border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; border: none; outline: none; cursor: pointer;">
+                    <i class="fas fa-times"></i>
+                </button>
+                <video id="analysis-video" controls playsinline poster="https://img.freepik.com/free-photo/educational-background-with-books-microscope_23-2148753235.jpg">
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                    您的浏览器不支持 HTML5 视频。
+                </video>
+                <div class="start-overlay" id="start-overlay">
+                    <h3 style="color: #f5222d; margin-bottom: 8px;">会员专享</h3>
+                    <p style="margin-bottom: 20px;">支持试看</p>
+                    <button id="start-trial-btn" style="background: transparent; border: none; cursor: pointer; outline: none; padding: 0;">
+                        <i class="fas fa-play-circle" style="font-size: 48px; color: #1890ff; background: #fff; border-radius: 50%;"></i>
+                    </button>
+                </div>
+                <div class="trial-overlay" id="trial-overlay">
+                    <h3>试看已结束</h3>
+                    <p>观看完整版视频解析，请开通会员</p>
+                    <button class="btn" onclick="alert('跳转到开通会员页面')">立即开通会员</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI答疑弹窗 -->
+    <div class="modal ai-modal bottom-drawer">
+        <div class="modal-content" style="display: flex; flex-direction: column;">
+            <div class="modal-header" style="justify-content: center; position: relative; height: 56px; border-bottom: 1px solid #eee;">
+                <button class="modal-close" style="position: absolute; left: 16px; top: 12px; font-size: 18px; color: #333;">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="modal-title" style="display: flex; align-items: center; font-size: 17px; font-weight: 600;">
+                    AI答疑 <span style="font-size: 12px; color: #999; font-weight: normal; margin-left: 6px; font-style: italic;">(内容由AI生成)</span>
+                </div>
+            </div>
+            <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 16px; background-color: #f5f5f5;">
+                <div class="chat-container-modal" style="display: flex; flex-direction: column; gap: 20px;">
+                    <!-- 试题解析开始 -->
+                </div>
+                
+                <!-- 停止响应按钮 -->
+                <div class="stop-respond-container" style="display: flex; justify-content: center; padding: 20px 0;">
+                    <button style="display: flex; align-items: center; gap: 8px; padding: 8px 20px; border: 1px solid #ff4d4f; border-radius: 20px; background-color: #fff; color: #ff4d4f; font-size: 14px; cursor: pointer; outline: none;">
+                        <i class="fas fa-stop" style="font-size: 12px;"></i> 停止响应
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 12px 16px; border-top: 1px solid #e8e8e8; background-color: #f8f8f8;">
+                <div class="input-container-modal" style="display: flex; align-items: center; gap: 12px; width: 100%; box-sizing: border-box;">
+                    <div style="flex: 1; background-color: #fff; border-radius: 24px; padding: 2px 16px; border: 1px solid #ddd;">
+                        <input type="text" class="modal-input" placeholder="请输入您的问题" style="width: 100%; height: 40px; border: none; outline: none; font-size: 15px; background: transparent;">
+                    </div>
+                    <button class="modal-send-btn" style="width: 44px; height: 44px; border-radius: 50%; border: none; background-color: #1890ff; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; box-shadow: 0 2px 6px rgba(24, 144, 255, 0.3);">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 人工答疑弹窗 -->
+    <div class="modal human-modal bottom-drawer">
+        <div class="modal-content" style="display: flex; flex-direction: column;">
+            <div class="modal-header">
+                <div class="modal-title">王老师</div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <button class="modal-close" style="background: transparent; border: none; font-size: 16px; color: #666; cursor: pointer;">
+                        <i class="fas fa-question-circle"></i>
+                    </button>
+                    <button class="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 0; background-color: #f5f5f5;">
+                <!-- 提示信息 -->
+                <div style="background-color: #f0f9ff; border-bottom: 1px solid #e6f7ff; padding: 12px 16px;">
+                    <div style="display: flex; align-items: center; background-color: #e6f7ff; border-radius: 8px; padding: 12px;">
+                        <div style="background-color: #1890ff; color: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 12px;">
+                            <i class="fas fa-question"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 14px; font-weight: 500; color: #333; margin-bottom: 4px;">专升本-河南省-高数</div>
+                            <div style="font-size: 12px; color: #666; line-height: 1.4;">若想更快得到老师的回复，请务必查看右上角老师答疑时间；建议每次只问一道题哦</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-container-human" style="display: flex; flex-direction: column; gap: 20px; padding: 16px;">
+                    <!-- 消息时间 -->
+                    <div style="text-align: center; font-size: 12px; color: #999; margin: 10px 0;">2026-02-11 13:03</div>
+                    
+                    <!-- 人工老师初始消息 -->
+                    <div class="chat-message human-message" style="display: flex; justify-content: flex-start; align-items: flex-start;">
+                        <div style="width: 36px; height: 36px; border-radius: 50%; overflow: hidden; margin-right: 10px; flex-shrink: 0;">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=teacher%20avatar%20portrait&image_size=square" alt="老师头像" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="message-content" style="max-width: 75%; padding: 12px 16px; border-radius: 18px; background-color: #ff4d4f; color: #fff; border-bottom-left-radius: 4px; font-size: 14px;">
+                            您好！我是人工答疑老师，有什么问题可以随时问我，我会在24小时内回复您。
+                        </div>
+                    </div>
+
+                    <!-- 解决状态提示 -->
+                    <div class="status-container" style="margin-top: 30px; margin-bottom: 20px; padding: 16px; background-color: #f0f0f0; border-radius: 8px;">
+                        <div style="font-size: 14px; color: #666; margin-bottom: 12px; text-align: center;">问题是否解决？</div>
+                        <div style="display: flex; justify-content: center; gap: 20px;">
+                            <button class="status-btn active" style="padding: 8px 20px; border: 1px solid #52c41a; border-radius: 16px; background-color: #52c41a; font-size: 14px; color: #fff; cursor: pointer;"><i class="fas fa-check"></i> 已解决</button>
+                            <button class="status-btn" style="padding: 8px 20px; border: 1px solid #d9d9d9; border-radius: 16px; background-color: #fff; font-size: 14px; color: #666; cursor: pointer;"><i class="fas fa-times"></i> 未解决</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 12px 16px; background-color: #fff; border-top: 1px solid #e8e8e8;">
+                <div style="display: flex; align-items: center; background-color: #f5f5f5; border-radius: 20px; padding: 8px 12px; width: 100%; box-sizing: border-box;">
+                    <div style="display: flex; gap: 12px; margin-right: 12px;">
+                        <button style="background: transparent; border: none; font-size: 18px; color: #666; cursor: pointer;"><i class="fas fa-microphone"></i></button>
+                        <button style="background: transparent; border: none; font-size: 18px; color: #666; cursor: pointer;"><i class="fas fa-image"></i></button>
+                    </div>
+                    <input type="text" class="modal-human-input" placeholder="不懂的知识随时提问哦～" style="flex: 1; width: 0; border: none; background: transparent; font-size: 14px; color: #333; outline: none;">
+                    <button class="modal-human-send-btn" style="padding: 6px 16px; border: none; border-radius: 16px; background-color: #ff4d4f; font-size: 14px; color: #fff; cursor: pointer; margin-left: 12px;">发送</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM元素获取
+        const backBtn = document.querySelector('.back-btn');
+        // AI答疑弹窗聊天功能
+        const modalInput = document.querySelector('.modal-input');
+        const modalSendBtn = document.querySelector('.modal-send-btn');
+        const chatContainerModal = document.querySelector('.chat-container-modal');
+
+        function addModalMessage(text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.style.display = 'flex';
+            messageDiv.style.marginBottom = '20px';
+            messageDiv.style.justifyContent = type === 'user' ? 'flex-end' : 'flex-start';
+            messageDiv.style.alignItems = 'flex-start';
+            
+            if (type === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="message-content" style="max-width: 85%; padding: 15px 20px; border-radius: 16px; background-color: #1890ff; color: #fff; font-size: 15px; line-height: 1.6;">
+                        ${text}
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="message-content" style="width: 90%; padding: 20px; border-radius: 16px; background-color: #fff; color: #333; border: 1px solid #e8e8e8; font-size: 15px; line-height: 1.8;">
+                        <div class="ai-content">
+                            ${text}
+                        </div>
+                    </div>
+                `;
+            }
+            chatContainerModal.appendChild(messageDiv);
+            
+            // 确保停止响应按钮始终在内容底部
+            const stopBtnContainer = document.querySelector('.stop-respond-container');
+            if (stopBtnContainer) {
+                chatContainerModal.parentElement.appendChild(stopBtnContainer);
+            }
+            
+            chatContainerModal.parentElement.scrollTop = chatContainerModal.parentElement.scrollHeight;
+        }
+
+        function handleModalSend() {
+            const text = modalInput.value.trim();
+            if (text) {
+                addModalMessage(text, 'user');
+                modalInput.value = '';
+                
+                // 模拟AI回复
+                setTimeout(() => {
+                    addModalMessage('这是一个模拟的AI回复。实际应用中，我会根据您对本题的具体疑问进行详细解答。', 'ai');
+                }, 1000);
+            }
+        }
+
+        modalSendBtn.addEventListener('click', handleModalSend);
+        modalInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleModalSend();
+            }
+        });
+
+        // 页面预置变量
+        const headerBtns = document.querySelectorAll('.header-btn');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        const aiBtn = document.querySelector('.ai-btn');
+        const humanBtn = document.querySelector('.human-btn');
+        const aiModal = document.querySelector('.ai-modal');
+        const humanModal = document.querySelector('.human-modal');
+        const modalCloseBtns = document.querySelectorAll('.modal-close');
+
+        // 返回按钮功能
+        backBtn.addEventListener('click', () => {
+            console.log('返回');
+            // 返回上一页
+            window.history.back();
+        });
+
+        // 触摸事件（移动端优化）
+        backBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            backBtn.click();
+        }, { passive: false });
+
+        // 顶部按钮功能
+        headerBtns.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                const actions = ['分享', '纠错', '收藏', '答题卡'];
+                const action = actions[index];
+                console.log(action);
+                if (action === '分享') {
+                    alert('分享');
+                } else if (action === '纠错') {
+                    alert('纠错');
+                } else if (action === '收藏') {
+                    alert('收藏');
+                } else if (action === '答题卡') {
+                    alert('答题卡');
+                }
+            });
+
+            // 触摸事件（移动端优化）
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                btn.click();
+            }, { passive: false });
+        });
+
+        // 上一题按钮功能
+        prevBtn.addEventListener('click', () => {
+            console.log('上一题');
+        });
+
+        // 触摸事件（移动端优化）
+        prevBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            prevBtn.click();
+        }, { passive: false });
+
+        // 下一题按钮功能
+        nextBtn.addEventListener('click', () => {
+            console.log('下一题');
+        });
+
+        // 触摸事件（移动端优化）
+        nextBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            nextBtn.click();
+        }, { passive: false });
+
+        // AI答疑按钮功能
+        aiBtn.addEventListener('click', () => {
+            console.log('AI答疑');
+            // 显示AI答疑弹窗
+            aiModal.classList.add('active');
+            
+            // 自动发送试题信息并开始解析
+            if (chatContainerModal.children.length === 0) {
+                const currentQuestion = errorDetails[currentQuestionIndex];
+                const questionText = currentQuestion.querySelector('.question-content').innerText;
+                
+                setTimeout(() => {
+                    addModalMessage(`[试题信息]：${questionText}`, 'user');
+                    
+                    setTimeout(() => {
+                        addModalMessage('解析：该题主要考察对《左传》中经典成语"多行不义必自毙"的识记。该成语出自《郑伯克段于鄢》，是郑庄公对共叔段野心扩张的评价，寓意作恶多端终将自食其果。', 'ai');
+                    }, 500);
+                }, 300);
+            }
+        });
+
+        // 触摸事件（移动端优化）
+        aiBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            aiBtn.click();
+        }, { passive: false });
+
+        // 人工答疑按钮功能
+        humanBtn.addEventListener('click', () => {
+            console.log('人工答疑');
+            // 显示人工答疑弹窗
+            humanModal.classList.add('active');
+        });
+
+        // 人工答疑聊天功能
+        const humanModalInput = document.querySelector('.modal-human-input');
+        const humanModalSendBtn = document.querySelector('.modal-human-send-btn');
+        const chatContainerHuman = document.querySelector('.chat-container-human');
+
+        function addHumanMessage(text, type) {
+            // 创建消息时间
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const timeString = `${year}-${month}-${day} ${hours}:${minutes}`;
+
+            // 添加时间元素
+            const timeDiv = document.createElement('div');
+            timeDiv.style.textAlign = 'center';
+            timeDiv.style.fontSize = '12px';
+            timeDiv.style.color = '#999';
+            timeDiv.style.margin = '10px 0';
+            timeDiv.textContent = timeString;
+            chatContainerHuman.appendChild(timeDiv);
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${type}-message`;
+            messageDiv.style.display = 'flex';
+            messageDiv.style.justifyContent = type === 'user' ? 'flex-end' : 'flex-start';
+            messageDiv.style.alignItems = 'flex-start';
+            messageDiv.style.marginBottom = '20px';
+            
+            if (type === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="message-content" style="max-width: 75%; padding: 12px 16px; border-radius: 18px; background-color: #fff; color: #333; border: 1px solid #e8e8e8; border-bottom-right-radius: 4px; font-size: 14px;">
+                        ${text}
+                    </div>
+                    <div class="message-avatar" style="width: 36px; height: 36px; border-radius: 50%; overflow: hidden; margin-left: 10px; flex-shrink: 0;">
+                        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=student%20avatar%20portrait&image_size=square" alt="用户头像" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="message-avatar" style="width: 36px; height: 36px; border-radius: 50%; overflow: hidden; margin-right: 10px; flex-shrink: 0;">
+                        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=teacher%20avatar%20portrait&image_size=square" alt="老师头像" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="message-content" style="max-width: 75%; padding: 12px 16px; border-radius: 18px; background-color: #ff4d4f; color: #fff; border-bottom-left-radius: 4px; font-size: 14px;">
+                        ${text}
+                    </div>
+                `;
+            }
+            chatContainerHuman.appendChild(messageDiv);
+            chatContainerHuman.parentElement.scrollTop = chatContainerHuman.parentElement.scrollHeight;
+        }
+
+        function handleHumanSend() {
+            const text = humanModalInput.value.trim();
+            if (text) {
+                addHumanMessage(text, 'user');
+                humanModalInput.value = '';
+                
+                // 模拟自动回复
+                setTimeout(() => {
+                    addHumanMessage('您好，您的问题已收到，人工老师会尽快为您解答。', 'human');
+                }, 1000);
+            }
+        }
+
+        humanModalSendBtn.addEventListener('click', handleHumanSend);
+        humanModalInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleHumanSend();
+            }
+        });
+
+        // 触摸事件（移动端优化）
+        humanBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            humanBtn.click();
+        }, { passive: false });
+
+        // 视频解析点击事件
+        const videoModal = document.querySelector('.video-modal');
+        const videoElement = document.getElementById('analysis-video');
+        const trialOverlay = document.getElementById('trial-overlay');
+        const trialLimit = 5; // 试看5秒
+
+        const videoAnalysisElements = document.querySelectorAll('.video-analysis');
+        videoAnalysisElements.forEach(el => {
+            el.addEventListener('click', () => {
+                console.log('显示视频解析');
+                videoModal.classList.add('active');
+                trialOverlay.classList.remove('active');
+                videoElement.currentTime = 0;
+                // 显示开始试看遮罩
+                const startOverlay = document.getElementById('start-overlay');
+                if (startOverlay) {
+                    startOverlay.classList.add('active');
+                }
+                videoElement.pause();
+            });
+
+            // 触摸事件（移动端优化）
+            el.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                el.click();
+            }, { passive: false });
+        });
+
+        // 试看按钮点击事件
+        const startTrialBtn = document.getElementById('start-trial-btn');
+        if (startTrialBtn) {
+            startTrialBtn.addEventListener('click', () => {
+                const startOverlay = document.getElementById('start-overlay');
+                if (startOverlay) {
+                    startOverlay.classList.remove('active');
+                }
+                videoElement.play();
+            });
+        }
+        
+        // 视频播放进度监控 (试看逻辑)
+        if (videoElement) {
+            videoElement.addEventListener('timeupdate', () => {
+                if (videoElement.currentTime >= trialLimit) {
+                    videoElement.pause();
+                    videoElement.currentTime = trialLimit;
+                    trialOverlay.classList.add('active');
+                    // 退出全屏（如果支持）
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    }
+                }
+            });
+        }
+
+        // 修改关闭弹窗逻辑，增加视频暂停处理
+        modalCloseBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const modal = btn.closest('.modal');
+                modal.classList.remove('active');
+                // 如果是视频弹窗，暂停视频
+                if (modal.classList.contains('video-modal') && videoElement) {
+                    videoElement.pause();
+                }
+            });
+
+            // 触摸事件（移动端优化）
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                btn.click();
+            }, { passive: false });
+        });
+
+        // 点击弹窗外部关闭弹窗
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+                // 如果是视频弹窗，暂停视频
+                if (e.target.classList.contains('video-modal') && videoElement) {
+                    videoElement.pause();
+                }
+            }
+        });
+
+        // 页面加载完成后执行
+        window.addEventListener('load', () => {
+            console.log('页面加载完成');
+        });
+
+        // 触摸事件优化（移动端）
+        document.addEventListener('touchstart', function() {}, { passive: true });
+        document.addEventListener('touchmove', function() {}, { passive: true });
+        document.addEventListener('touchend', function() {}, { passive: true });
+
+        // 禁止双击缩放
+        document.addEventListener('dblclick', function(event) {
+            event.preventDefault();
+        });
+
+        // 题型切换功能
+        let currentQuestionIndex = 0;
+        const questionTypes = ['单选题', '多选题', '不定项选择题', '填空题', '判断题', '问答题', '材料题'];
+        const errorDetails = document.querySelectorAll('.error-detail');
+        const questionTypeElement = document.querySelector('.question-type');
+        const progressTextElement = document.querySelector('.progress-text');
+
+        // 显示当前题目
+        function showCurrentQuestion() {
+            errorDetails.forEach((detail, index) => {
+                detail.style.display = index === currentQuestionIndex ? 'block' : 'none';
+            });
+            questionTypeElement.textContent = questionTypes[currentQuestionIndex];
+            progressTextElement.textContent = `${currentQuestionIndex + 1}/15`;
+        }
+
+        // 上一题按钮功能
+        prevBtn.addEventListener('click', () => {
+            currentQuestionIndex--;
+            if (currentQuestionIndex < 0) {
+                currentQuestionIndex = errorDetails.length - 1;
+            }
+            showCurrentQuestion();
+        });
+
+        // 下一题按钮功能
+        nextBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex >= errorDetails.length) {
+                currentQuestionIndex = 0;
+            }
+            showCurrentQuestion();
+        });
+
+        // 初始化显示第一题
+        showCurrentQuestion();
+    </script>
+</body>
+</html>

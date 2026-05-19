@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>错题本试题查看</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 重置样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f5f5f5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            /* PC端适配样式 */
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* 移动端适配 */
+        @media screen and (max-width: 768px) {
+            html {
+                font-size: 14px;
+            }
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            display: flex;
+            align-items: center;
+            height: 56px;
+            padding: 0 16px;
+            background-color: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 100;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .back-btn:active {
+            opacity: 0.7;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            color: #666;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .header-btn:active {
+            opacity: 0.7;
+        }
+
+        /* 主内容区域 */
+        .main-container {
+            padding: 16px;
+            min-height: calc(100vh - 112px);
+        }
+
+        /* 章节名称和做题进度容器 */
+        .chapter-progress-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        /* 章节名称 */
+        .chapter-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        /* 做题进度 */
+        .progress-text {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        /* 试题题型 */
+        .question-type {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e8e8e8;
+        }
+
+        /* 省份科目信息 */
+        .province-subject {
+            font-size: 14px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            color: #666;
+        }
+
+        /* 错题详情 */
+        .error-detail {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        /* 题目头部 */
+        .question-header {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        .question-number {
+            font-weight: 500;
+        }
+
+        .question-content {
+            font-weight: 400;
+        }
+
+        /* 选项 */
+        .question-options {
+            margin-bottom: 20px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background-color: #f0f0f0;
+        }
+
+        .option.correct {
+            background-color: #f6ffed;
+            border-left: 4px solid #52c41a;
+        }
+
+        .option.wrong {
+            background-color: #fff1f0;
+            border-left: 4px solid #ff4d4f;
+        }
+
+        .option-label {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .option.correct .option-label {
+            background-color: #52c41a;
+            color: #fff;
+        }
+
+        .option.wrong .option-label {
+            background-color: #ff4d4f;
+            color: #fff;
+        }
+
+        .option-content {
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* 题目操作 */
+        .question-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 12px;
+            background-color: #fafafa;
+            border-radius: 4px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #666;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .action-btn:active {
+            opacity: 0.7;
+        }
+
+        .action-btn:hover {
+            border-color: #ff4d4f;
+            color: #ff4d4f;
+        }
+
+        /* 答案和解析 */
+        .answer-analysis {
+            margin-bottom: 20px;
+            padding: 12px;
+            background-color: #fafafa;
+            border-radius: 4px;
+        }
+
+        .answer-info {
+            margin-bottom: 12px;
+        }
+
+        .answer-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #ff4d4f;
+            margin-bottom: 8px;
+        }
+
+        .answer-detail {
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .answer-detail span {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .analysis-section {
+            border-top: 1px solid #e8e8e8;
+            padding-top: 12px;
+        }
+
+        .analysis-header {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        /* 统计容器 */
+        .stats-container {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        /* 统计项 */
+        .stat-item {
+            flex: 1;
+            min-width: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        /* 移动端适配 */
+        @media screen and (max-width: 375px) {
+            .stats-container {
+                gap: 8px;
+                padding: 8px;
+            }
+            
+            .stat-item {
+                min-width: 55px;
+            }
+        }
+
+        @media screen and (max-width: 320px) {
+            .stats-container {
+                gap: 6px;
+                padding: 6px;
+            }
+            
+            .stat-item {
+                min-width: 50px;
+            }
+        }
+
+        /* 统计标签 */
+        .stat-label {
+            font-size: 11px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* 统计数值 */
+        .stat-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* 移动端适配 */
+        @media screen and (max-width: 375px) {
+            .stat-label {
+                font-size: 10px;
+            }
+            
+            .stat-value {
+                font-size: 12px;
+            }
+        }
+
+        @media screen and (max-width: 320px) {
+            .stat-label {
+                font-size: 9px;
+            }
+            
+            .stat-value {
+                font-size: 11px;
+            }
+        }
+
+        /* 不同统计项的数值颜色 */
+        .stat-item:nth-child(1) .stat-value {
+            color: #52c41a;
+        }
+
+        .stat-item:nth-child(2) .stat-value {
+            color: #ff4d4f;
+        }
+
+        .stat-item:nth-child(3) .stat-value {
+            color: #1890ff;
+        }
+
+        .stat-item:nth-child(4) .stat-value {
+            color: #722ed1;
+        }
+
+        .analysis-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .analysis-content p {
+            margin-bottom: 8px;
+        }
+
+        .video-analysis {
+            margin-bottom: 12px;
+            padding: 12px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border-left: 4px solid #1890ff;
+        }
+
+        .video-analysis div {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .video-analysis i {
+            font-size: 24px;
+            color: #1890ff;
+            margin-right: 12px;
+        }
+
+        .video-analysis span {
+            font-weight: 500;
+        }
+
+        /* 上下题导航 */
+        .question-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid #e8e8e8;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .nav-btn:active {
+            opacity: 0.7;
+        }
+
+        .nav-btn:hover {
+            border-color: #ff4d4f;
+            color: #ff4d4f;
+        }
+
+        /* 底部操作栏 */
+        .footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px;
+            padding: 0 16px;
+            background-color: #fff;
+            box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 99;
+        }
+
+        .prev-btn, .next-btn {
+            padding: 8px 20px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fff;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .prev-btn:active, .next-btn:active {
+            opacity: 0.7;
+        }
+
+        .help-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .help-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .help-btn:active {
+            opacity: 0.8;
+        }
+
+        .help-btn i {
+            margin-right: 6px;
+            font-size: 14px;
+        }
+
+        .ai-btn {
+            background-color: #1890ff;
+        }
+
+        .human-btn {
+            background-color: #52c41a;
+        }
+
+        /* 答题卡 */
+        .answer-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .answer-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background-color: #fafafa;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .answer-card-header span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .collapse-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: transparent;
+            border: none;
+            font-size: 12px;
+            color: #999;
+            cursor: pointer;
+            padding: 4px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .collapse-btn:active {
+            opacity: 0.7;
+        }
+
+        /* 答题卡内容 */
+        .answer-card-content {
+            padding: 16px;
+        }
+
+        .answer-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .answer-item {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .answer-item:active {
+            opacity: 0.7;
+        }
+
+        .answer-item:hover {
+            background-color: #e0e0e0;
+        }
+
+        .answer-item.wrong {
+            background-color: #ff4d4f;
+            color: #fff;
+        }
+
+        .answer-item.correct {
+            background-color: #52c41a;
+            color: #fff;
+        }
+
+        .answer-item.half-correct {
+            background: linear-gradient(to right, #52c41a 50%, #fff 50%);
+            color: #333;
+            border: 1px solid #d9d9d9;
+        }
+
+        .answer-item.answered {
+            background-color: #fa8c16;
+            color: #fff;
+        }
+
+        .answer-item.unanswered {
+            background-color: #f0f0f0;
+            color: #666;
+            border: 1px solid #d9d9d9;
+        }
+
+        /* 答题卡统计 */
+        .answer-card-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .stat-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .stat-dot.wrong {
+            background-color: #ff4d4f;
+        }
+
+        .stat-dot.correct {
+            background-color: #52c41a;
+        }
+
+        .stat-dot.half-correct {
+            background: linear-gradient(to right, #52c41a 50%, #fff 50%);
+            border: 1px solid #d9d9d9;
+        }
+
+        .stat-dot.answered {
+            background-color: #fa8c16;
+        }
+
+        .stat-dot.unanswered {
+            background-color: #f0f0f0;
+            border: 1px solid #d9d9d9;
+        }
+
+        /* 功能按钮 */
+        .function-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .function-btn {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .function-btn:active {
+            opacity: 0.7;
+        }
+
+        .function-btn.primary {
+            background-color: #ff4d4f;
+            color: #fff;
+            border-color: #ff4d4f;
+        }
+
+        .function-btn:hover {
+            border-color: #ff4d4f;
+            color: #ff4d4f;
+        }
+
+        .function-btn.primary:hover {
+            background-color: #ff7875;
+        }
+
+        /* AI答疑弹窗 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            border-radius: 8px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .modal-close:active {
+            opacity: 0.7;
+        }
+
+        .modal-body {
+            padding: 16px;
+        }
+
+        .modal-footer {
+            padding: 16px;
+            border-top: 1px solid #e8e8e8;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* 答疑分类 */
+        .qa-category {
+            font-size: 14px;
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        /* 输入区域 */
+        .input-area {
+            margin-bottom: 16px;
+        }
+
+        .input-area input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .input-area input:focus {
+            outline: none;
+            border-color: #ff4d4f;
+            box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+        }
+
+        /* 上传图片按钮 */
+        .upload-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .upload-btn:active {
+            opacity: 0.7;
+        }
+
+        /* 对话框 */
+        .dialog {
+            margin-bottom: 16px;
+        }
+
+        .dialog-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .dialog-role {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .dialog-time {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .dialog-content {
+            padding: 12px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn:active {
+            opacity: 0.7;
+        }
+
+        .btn.primary {
+            background-color: #ff4d4f;
+            color: #fff;
+            border-color: #ff4d4f;
+        }
+
+        .btn:hover {
+            border-color: #ff4d4f;
+            color: #ff4d4f;
+        }
+
+        .btn.primary:hover {
+            background-color: #ff7875;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-detail {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        /* 响应式设计 */
+        @media screen and (max-width: 375px) {
+            .header {
+                height: 52px;
+                padding: 0 14px;
+            }
+
+            .header-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+
+            .main-container {
+                padding: 14px;
+                min-height: calc(100vh - 104px);
+            }
+
+            .footer {
+                height: 52px;
+                padding: 0 14px;
+            }
+
+            .prev-btn, .next-btn {
+                padding: 6px 16px;
+                font-size: 13px;
+            }
+
+            .answer-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+
+            .answer-item {
+                width: 36px;
+                height: 36px;
+                font-size: 12px;
+            }
+
+            .question-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .question-actions > div {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .action-btn {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+
+        @media screen and (max-width: 320px) {
+            .header {
+                height: 48px;
+                padding: 0 12px;
+            }
+
+            .header-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+
+            .main-container {
+                padding: 12px;
+                min-height: calc(100vh - 96px);
+            }
+
+            .footer {
+                height: 48px;
+                padding: 0 12px;
+            }
+
+            .prev-btn, .next-btn {
+                padding: 5px 12px;
+                font-size: 12px;
+            }
+
+            .answer-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 6px;
+            }
+
+            .answer-item {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+
+            .help-buttons {
+                gap: 6px;
+            }
+
+            .help-btn {
+                padding: 4px 8px;
+                font-size: 10px;
+            }
+
+            .help-btn i {
+                font-size: 12px;
+                margin-right: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="header-left">
+            <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
+        </div>
+        <div class="header-right">
+            <button class="header-btn" title="移除"><i class="fas fa-trash"></i></button>
+            <button class="header-btn" title="重做"><i class="fas fa-redo"></i></button>
+            <button class="header-btn" title="分享"><i class="fas fa-share-alt"></i></button>
+            <button class="header-btn" title="纠错"><i class="fas fa-exclamation-circle"></i></button>
+            <button class="header-btn" title="收藏"><i class="fas fa-star"></i></button>
+            <button class="header-btn" title="答题卡"><i class="fas fa-list"></i></button>
+        </div>
+    </header>
+
+    <!-- 主内容区域 -->
+    <div class="main-container">
+
+        <!-- 章节名称和做题进度 -->
+        <div class="chapter-progress-container">
+            <div class="chapter-name">郑伯克段于鄢 《左传》</div>
+            <div class="progress-text">1/15</div>
+        </div>
+        
+        <!-- 试题题型 -->
+        <div class="question-type">单选题</div>
+
+        <!-- 错题详情 -->
+        <div class="error-detail">
+            <!-- 题目编号和内容 -->
+            <div class="question-header">
+                <span class="question-number">1、</span>
+                <span class="question-content">成语"多行不义必自毙"出自下列哪部著作 ( )</span>
+            </div>
+
+            <!-- 选项 -->
+            <div class="question-options">
+                <div class="option">
+                    <span class="option-label">A</span>
+                    <span class="option-content">《尚书》</span>
+                </div>
+                <div class="option">
+                    <span class="option-label">B</span>
+                    <span class="option-content">《论语》</span>
+                </div>
+                <div class="option correct">
+                    <span class="option-label">C</span>
+                    <span class="option-content">《左传》</span>
+                </div>
+                <div class="option wrong">
+                    <span class="option-label">D</span>
+                    <span class="option-content">《战国策》</span>
+                </div>
+            </div>
+
+
+
+            <!-- 答案和解析 -->
+            <div class="answer-analysis">
+                <div class="answer-info">
+                    <div class="answer-label">
+                        <i class="fas fa-times-circle"></i>
+                        <span>回答错误</span>
+                    </div>
+                    <div class="answer-detail">
+                        <span>参考答案：C</span>
+                        <span>你的答案：D</span>
+                    </div>
+                </div>
+
+                <div class="analysis-section">
+
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <div class="stat-label">正确率</div>
+                            <div class="stat-value">63.3%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">易错项</div>
+                            <div class="stat-value">D</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">作答次数</div>
+                            <div class="stat-value">112次</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">作答时长</div>
+                            <div class="stat-value">2秒</div>
+                        </div>
+                    </div>
+                    <div class="analysis-content">
+                        <div class="video-analysis" style="display:flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <i class="fas fa-play-circle"></i>
+                                <span>视频解析</span>
+                            </div>
+                            <div style="display: flex; gap: 6px;">
+                                <span style="font-size: 10px; padding: 2px 6px; background-color: #fff1f0; color: #f5222d; border-radius: 10px; border: 1px solid #ffa39e;">会员专享</span>
+                                <span style="font-size: 10px; padding: 2px 6px; background-color: #e6f7ff; color: #1890ff; border-radius: 10px; border: 1px solid #91d5ff;">支持试看</span>
+                            </div>
+                        </div>
+                        <p><strong>文字解析：</strong>"多行不义必自毙"出自《左传·郑伯克段于鄢》，是郑庄公评价共叔段的话。</p>
+                        <p><strong>知识点：</strong>成语出处、古代文学、春秋左传</p>
+                        <p><strong>试题来源：</strong>2023年河南考生回忆版</p>
+                        <p><strong>试题难度：</strong>中</p>
+                        <p><strong>试题类型：</strong>2019河南</p>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+    <!-- 底部操作栏 -->
+    <footer class="footer">
+        <button class="prev-btn">上一题</button>
+        <div class="help-buttons">
+            <button class="help-btn ai-btn" title="AI答疑">
+                <i class="fas fa-robot"></i>
+                <span>AI答疑</span>
+            </button>
+            <button class="help-btn human-btn" title="人工答疑">
+                <i class="fas fa-user"></i>
+                <span>人工答疑</span>
+            </button>
+        </div>
+        <button class="next-btn">下一题</button>
+    </footer>
+
+    <!-- AI答疑弹窗 -->
+    <div class="modal ai-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">AI答疑</div>
+                <button class="modal-close">
+                    <i class="fas fa-question-circle"></i>
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="qa-category">答疑分类：专升本-河南省-高数</div>
+                <div class="input-area">
+                    <input type="text" placeholder="请输入您的问题">
+                    <button class="upload-btn">
+                        <i class="fas fa-image"></i>
+                        <span>上传图片</span>
+                    </button>
+                </div>
+                <div class="dialog">
+                    <div class="dialog-header">
+                        <div class="dialog-role">AI老师</div>
+                        <div class="dialog-time">2026-02-11 15:30:00</div>
+                    </div>
+                    <div class="dialog-content">
+                        您好！我是AI答疑老师，有什么问题可以随时问我。
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn">取消</button>
+                <button class="btn primary">发送</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 人工答疑弹窗 -->
+    <div class="modal human-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">人工答疑</div>
+                <button class="modal-close">
+                    <i class="fas fa-question-circle"></i>
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="qa-category">答疑分类：专升本-河南省-高数</div>
+                <div style="margin-bottom: 16px; font-size: 14px; color: #999;">* 人工答疑将在24小时内回复，请耐心等待</div>
+                <div class="input-area">
+                    <input type="text" placeholder="请输入您的问题">
+                    <button class="upload-btn">
+                        <i class="fas fa-image"></i>
+                        <span>上传图片</span>
+                    </button>
+                </div>
+                <div class="dialog">
+                    <div class="dialog-header">
+                        <div class="dialog-role">人工老师</div>
+                        <div class="dialog-time">2026-02-11 15:30:00</div>
+                    </div>
+                    <div class="dialog-content">
+                        您好！我是人工答疑老师，有什么问题可以随时问我，我会在24小时内回复您。
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn">取消</button>
+                <button class="btn primary">发送</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM元素获取
+        const backBtn = document.querySelector('.back-btn');
+        const headerBtns = document.querySelectorAll('.header-btn');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        const aiBtn = document.querySelector('.ai-btn');
+        const humanBtn = document.querySelector('.human-btn');
+        const aiModal = document.querySelector('.ai-modal');
+        const humanModal = document.querySelector('.human-modal');
+        const modalCloseBtns = document.querySelectorAll('.modal-close');
+
+        // 返回按钮功能
+        backBtn.addEventListener('click', () => {
+            console.log('返回');
+            // 返回上一页
+            window.history.back();
+        });
+
+        // 触摸事件（移动端优化）
+        backBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            backBtn.click();
+        }, { passive: false });
+
+        // 顶部按钮功能
+        headerBtns.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                const actions = ['移除', '重做', '分享', '纠错', '收藏', '答题卡'];
+                const action = actions[index];
+                console.log(action);
+                if (action === '移除') {
+                    alert('移除');
+                } else if (action === '重做') {
+                    alert('重做');
+                } else if (action === '分享') {
+                    alert('分享');
+                } else if (action === '纠错') {
+                    alert('纠错');
+                } else if (action === '收藏') {
+                    alert('收藏');
+                } else if (action === '答题卡') {
+                    alert('答题卡');
+                }
+            });
+
+            // 触摸事件（移动端优化）
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                btn.click();
+            }, { passive: false });
+        });
+
+        // 上一题按钮功能
+        prevBtn.addEventListener('click', () => {
+            console.log('上一题');
+            alert('上一题');
+        });
+
+        // 触摸事件（移动端优化）
+        prevBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            prevBtn.click();
+        }, { passive: false });
+
+        // 下一题按钮功能
+        nextBtn.addEventListener('click', () => {
+            console.log('下一题');
+            alert('下一题');
+        });
+
+        // 触摸事件（移动端优化）
+        nextBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            nextBtn.click();
+        }, { passive: false });
+
+        // AI答疑按钮功能
+        aiBtn.addEventListener('click', () => {
+            console.log('AI答疑');
+            // 跳转到AI答疑页面
+            window.location.href = 'ai_dayi.html';
+        });
+
+        // 触摸事件（移动端优化）
+        aiBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            aiBtn.click();
+        }, { passive: false });
+
+        // 人工答疑按钮功能
+        humanBtn.addEventListener('click', () => {
+            console.log('人工答疑');
+            // 跳转到人工答疑页面
+            window.location.href = 'rengong_dayi.html';
+        });
+
+        // 触摸事件（移动端优化）
+        humanBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            humanBtn.click();
+        }, { passive: false });
+
+        // 关闭弹窗
+        modalCloseBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const modal = btn.closest('.modal');
+                modal.classList.remove('active');
+            });
+
+            // 触摸事件（移动端优化）
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                btn.click();
+            }, { passive: false });
+        });
+
+        // 点击弹窗外部关闭弹窗
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+
+
+
+
+
+
+
+
+
+        // 视频解析点击事件
+        const videoAnalysis = document.querySelector('.video-analysis');
+        if (videoAnalysis) {
+            videoAnalysis.addEventListener('click', () => {
+                console.log('视频解析');
+                alert('视频解析');
+            });
+
+            // 触摸事件（移动端优化）
+            videoAnalysis.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                videoAnalysis.click();
+            }, { passive: false });
+        }
+
+        // 页面加载完成后执行
+        window.addEventListener('load', () => {
+            console.log('页面加载完成');
+        });
+
+        // 触摸事件优化（移动端）
+        document.addEventListener('touchstart', function() {}, { passive: true });
+        document.addEventListener('touchmove', function() {}, { passive: true });
+        document.addEventListener('touchend', function() {}, { passive: true });
+
+        // 禁止双击缩放
+        document.addEventListener('dblclick', function(event) {
+            event.preventDefault();
+        });
+    </script>
+</body>
+</html>

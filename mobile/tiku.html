@@ -1,0 +1,2623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>题库</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // 清理 URL 中的 origin 参数，保持地址栏整洁
+        (function() {
+            const url = new URL(window.location.href);
+            if (url.searchParams.has('origin')) {
+                url.searchParams.delete('origin');
+                const newUrl = url.pathname + url.search + url.hash;
+                window.history.replaceState({}, '', newUrl);
+            }
+        })();
+    </script>
+    <style>
+        /* 重置样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f5f5f5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            /* PC端适配样式 */
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding-bottom: 56px;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            display: flex;
+            flex-direction: column;
+            padding: 12px 16px;
+            background-color: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 100;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .province-selector {
+            font-size: 13px;
+            color: #666;
+            background-color: #f5f5f5;
+            padding: 4px 10px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .action-btn {
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: transparent;
+            font-size: 18px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 科目横向导航 */
+        .subject-nav {
+            display: flex;
+            overflow-x: auto;
+            gap: 24px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: 4px 0;
+        }
+
+        .subject-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .subject-item {
+            font-size: 15px;
+            color: #666;
+            white-space: nowrap;
+            position: relative;
+            padding-bottom: 6px;
+        }
+
+        .subject-item.active {
+            color: #ff4d4f;
+            font-weight: 600;
+        }
+
+        .subject-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 3px;
+            background-color: #ff4d4f;
+            border-radius: 2px;
+        }
+
+        /* 金刚区 */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 12px;
+            background-color: #fff;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .quick-actions .quick-mode {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .quick-actions .practice-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+            margin-bottom: 4px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quick-actions .practice-label {
+            font-size: 9px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .quick-actions .quick-mode:nth-child(1) .practice-icon {
+            background-color: #fff1f0;
+            color: #ff4d4f;
+        }
+
+        .quick-actions .quick-mode:nth-child(2) .practice-icon {
+            background-color: #f6ffed;
+            color: #52c41a;
+        }
+
+        .quick-actions .quick-mode:nth-child(3) .practice-icon {
+            background-color: #e6f7ff;
+            color: #1890ff;
+        }
+
+        .quick-actions .quick-mode:nth-child(4) .practice-icon {
+            background-color: #f9f0ff;
+            color: #722ed1;
+        }
+
+        .quick-actions .quick-mode:nth-child(5) .practice-icon {
+            background-color: #fff7e6;
+            color: #fa8c16;
+        }
+
+        /* 统计信息 */
+        .stats-container {
+            display: flex;
+            padding: 12px;
+            background-color: #fff;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-item {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e6f7ff;
+            color: #1890ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .stat-item:nth-child(2) .stat-icon {
+            background-color: #fff7e6;
+            color: #fa8c16;
+        }
+
+        .stat-content {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-left: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-rank {
+            font-size: 12px;
+            color: #52c41a;
+        }
+
+        /* 功能标签 */
+        .feature-tabs {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 12px;
+            background-color: #fff;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .feature-tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 6px;
+        }
+
+        .feature-tab:nth-child(1) .feature-icon {
+            background-color: #fff1f0;
+            color: #ff4d4f;
+        }
+
+        .feature-tab:nth-child(2) .feature-icon {
+            background-color: #f6ffed;
+            color: #52c41a;
+        }
+
+        .feature-tab:nth-child(3) .feature-icon {
+            background-color: #e6f7ff;
+            color: #1890ff;
+        }
+
+        .feature-tab:nth-child(4) .feature-icon {
+            background-color: #f9f0ff;
+            color: #722ed1;
+        }
+
+        .feature-tab:nth-child(5) .feature-icon {
+            background-color: #fff7e6;
+            color: #fa8c16;
+        }
+
+        .feature-label {
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+        }
+
+        /* 练习模式 */
+        .practice-modes {
+            display: flex;
+            padding: 12px;
+            background-color: #fff;
+            margin-bottom: 12px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            width: 100%;
+            margin-left: 0;
+        }
+
+        .practice-modes::-webkit-scrollbar {
+            display: none;
+        }
+
+        .practice-mode {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 8px;
+            min-width: 55px;
+            position: relative;
+        }
+
+        .practice-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .practice-icon::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: #d9d9d9;
+        }
+
+
+
+        .practice-mode:nth-child(1) .practice-icon {
+            background-color: #fff7e6;
+            color: #fa8c16;
+        }
+
+        .practice-mode:nth-child(1) .practice-icon::after {
+            background-color: #fa8c16;
+        }
+
+        .practice-mode:nth-child(2) .practice-icon {
+            background-color: #fff1f0;
+            color: #ff4d4f;
+        }
+
+        .practice-mode:nth-child(2) .practice-icon::after {
+            background-color: #ff4d4f;
+        }
+
+        .practice-mode:nth-child(3) .practice-icon {
+            background-color: #f0f5ff;
+            color: #1890ff;
+        }
+
+        .practice-mode:nth-child(3) .practice-icon::after {
+            background-color: #1890ff;
+        }
+
+        .practice-mode:nth-child(4) .practice-icon {
+            background-color: #f6ffed;
+            color: #52c41a;
+        }
+
+        .practice-mode:nth-child(4) .practice-icon::after {
+            background-color: #52c41a;
+        }
+
+        .practice-mode:nth-child(5) .practice-icon {
+            background-color: #e6f7ff;
+            color: #1890ff;
+        }
+
+        .practice-mode:nth-child(5) .practice-icon::after {
+            background-color: #1890ff;
+        }
+
+        .practice-mode:nth-child(6) .practice-icon {
+            background-color: #f9f0ff;
+            color: #722ed1;
+        }
+
+        .practice-mode:nth-child(6) .practice-icon::after {
+            background-color: #722ed1;
+        }
+
+        .practice-mode:nth-child(7) .practice-icon {
+            background-color: #f0f5ff;
+            color: #1890ff;
+        }
+
+        .practice-mode:nth-child(7) .practice-icon::after {
+            background-color: #1890ff;
+        }
+
+        .practice-mode:nth-child(8) .practice-icon {
+            background-color: #fffbe6;
+            color: #faad14;
+        }
+
+        .practice-mode:nth-child(8) .practice-icon::after {
+            background-color: #faad14;
+        }
+
+        .practice-mode:nth-child(9) .practice-icon {
+            background-color: #e6f7ff;
+            color: #1890ff;
+        }
+
+        .practice-mode:nth-child(9) .practice-icon::after {
+            background-color: #1890ff;
+        }
+
+        .practice-label {
+            font-size: 12px;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .practice-mode.active .practice-label {
+            color: #ff4d4f;
+        }
+
+        .practice-mode.active {
+            position: relative;
+        }
+
+        .practice-mode.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 2px;
+            background-color: #ff4d4f;
+            border-radius: 1px;
+        }
+
+        /* 章节练习 */
+        .special-practice {
+            background-color: #fff;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .special-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .special-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .special-title i {
+            margin-right: 8px;
+            color: #ff4d4f;
+        }
+
+        .practice-mode-tag {
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* 练习单元 */
+        .practice-unit {
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .unit-content {
+            margin-top: 12px;
+        }
+
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .unit-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .unit-title i {
+            margin-right: 12px;
+            color: #ff4d4f;
+        }
+
+        .unit-progress {
+            font-size: 14px;
+            color: #999;
+            margin-top: 8px;
+            margin-bottom: 12px;
+        }
+
+        /* 练习项 */
+        .practice-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .practice-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .item-author {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .item-stats {
+            font-size: 14px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn-small {
+            padding: 6px 16px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fff;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .action-btn-small.primary {
+            background-color: #ff4d4f;
+            color: #fff;
+            border-color: #ff4d4f;
+        }
+
+        /* 估分试卷样式 */
+        .score-prediction-container {
+            padding: 16px;
+        }
+
+        .score-prediction-item {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .score-prediction-header {
+            margin-bottom: 12px;
+        }
+
+        .score-prediction-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .score-prediction-update {
+            color: #1890ff;
+            font-size: 12px;
+            float: right;
+        }
+
+        .score-prediction-time {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .score-prediction-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .score-prediction-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .score-prediction-btn预约 {
+            padding: 6px 16px;
+            background-color: #1890ff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .score-prediction-btn等待 {
+            padding: 6px 16px;
+            background-color: #d9d9d9;
+            color: #666;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .score-prediction-btn开始 {
+            padding: 6px 16px;
+            background-color: #1890ff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* 底部导航栏 */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 56px;
+            background-color: #fff;
+            box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            color: #999;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .nav-item.active .nav-icon,
+        .nav-item.active .nav-label {
+            color: #ff4d4f;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stats-container,
+        .feature-tabs,
+        .practice-modes,
+        .special-practice {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .stats-container {
+            animation-delay: 0.1s;
+        }
+
+        .feature-tabs {
+            animation-delay: 0.2s;
+        }
+
+        .practice-modes {
+            animation-delay: 0.3s;
+        }
+
+        .special-practice {
+            animation-delay: 0.4s;
+        }
+
+        .mastery-tag {
+            font-size: 11px;
+            color: #fa8c16;
+            background-color: #fff7e6;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+            font-weight: normal;
+            border: 1px solid #ffd591;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .mastery-tag.mastered {
+            color: #52c41a;
+            background-color: #f6ffed;
+            border-color: #b7eb8f;
+        }
+
+        .accuracy-red {
+            color: #f5222d;
+            font-weight: 500;
+        }
+
+        .accuracy-yellow {
+            color: #faad14;
+            font-weight: 500;
+        }
+
+        .accuracy-green {
+            color: #52c41a;
+            font-weight: 500;
+        }
+
+        /* 响应式设计 */
+        @media screen and (max-width: 375px) {
+            .header {
+                padding: 10px 14px;
+            }
+
+            .stats-container {
+                padding: 12px;
+            }
+
+            .feature-tabs {
+                padding: 10px 14px;
+            }
+
+            .practice-modes {
+                padding: 12px 14px;
+            }
+
+            .special-practice {
+                margin-bottom: 10px;
+            }
+
+            .practice-unit {
+                padding: 12px;
+            }
+
+            .bottom-nav {
+                height: 52px;
+            }
+        }
+
+        @media screen and (max-width: 320px) {
+            .header {
+                padding: 8px 12px;
+            }
+
+            .header-title {
+                font-size: 16px;
+            }
+
+            .stats-container {
+                padding: 10px;
+            }
+
+            .stat-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+
+            .stat-value {
+                font-size: 14px;
+            }
+
+            .feature-tabs {
+                padding: 8px 12px;
+            }
+
+            .feature-tab {
+                margin-right: 16px;
+                min-width: 50px;
+            }
+
+            .feature-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .practice-modes {
+                padding: 10px 12px;
+            }
+
+            .practice-mode {
+                margin-right: 6px;
+                min-width: 50px;
+            }
+
+            .practice-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 18px;
+            }
+
+            .special-practice {
+                margin-bottom: 8px;
+            }
+
+            .practice-unit {
+                padding: 10px;
+            }
+
+            .bottom-nav {
+                height: 48px;
+            }
+
+            .nav-icon {
+                font-size: 18px;
+            }
+        }
+        /* 底部属性选择弹窗 */
+        .bottom-drawer-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .bottom-drawer {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, 100%);
+            width: 100%;
+            max-width: 480px;
+            background-color: #fff;
+            border-radius: 20px 20px 0 0;
+            z-index: 2001;
+            padding: 24px 20px;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-height: 80vh;
+            overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+
+        .bottom-drawer::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+        }
+
+        .bottom-drawer.active {
+            transform: translate(-50%, 0);
+        }
+
+        .bottom-drawer-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .bottom-drawer-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .bottom-drawer-close {
+            position: absolute;
+            right: 0;
+            top: 0;
+            font-size: 22px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .section-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 16px;
+        }
+
+        .mode-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .mode-card {
+            background-color: #f5f6f8;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .mode-card.active {
+            background-color: #fff;
+            border-color: #f5222d;
+            box-shadow: 0 4px 12px rgba(245, 34, 45, 0.1);
+        }
+
+        .mode-card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        .mode-card.active .mode-card-title {
+            color: #f5222d;
+        }
+
+        .mode-card-desc {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .mode-card.active .mode-card-desc {
+            color: #f5222d;
+            opacity: 0.8;
+        }
+
+        .count-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .count-btn {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            font-size: 15px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .count-btn.active {
+            border-color: #f5222d;
+            background-color: #fff1f0;
+            color: #f5222d;
+            font-weight: 500;
+        }
+
+        .animation-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            margin-bottom: 12px;
+        }
+
+        .toggle-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #f5222d;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        .confirm-btn {
+            width: 100%;
+            height: 50px;
+            background-color: #f5222d;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(245, 34, 45, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="header-top">
+            <div class="header-left">
+                <div class="header-title">专升本 <i class="fas fa-chevron-down" style="font-size: 12px; margin-left: 4px; color: #999;"></i></div>
+                <div class="province-selector">河南省 <i class="fas fa-chevron-down" style="font-size: 10px; color: #999;"></i></div>
+            </div>
+            <div class="header-actions">
+                <button class="action-btn" title="搜索"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+        <div class="subject-nav">
+            <div class="subject-item active">语文</div>
+            <div class="subject-item">数学</div>
+            <div class="subject-item">英语</div>
+            <div class="subject-item">政治</div>
+            <div class="subject-item">教育理论</div>
+            <div class="subject-item">民法</div>
+            <div class="subject-item">艺术概论</div>
+        </div>
+    </header>
+
+    <!-- 金刚区 -->
+    <div class="quick-actions">
+        <div class="quick-mode active">
+            <div class="practice-icon"><i class="fas fa-list"></i></div>
+            <div class="practice-label">章节练习</div>
+        </div>
+        <div class="quick-mode">
+            <div class="practice-icon"><i class="fas fa-fire"></i></div>
+            <div class="practice-label">固定刷题</div>
+        </div>
+        <div class="quick-mode">
+            <div class="practice-icon"><i class="fas fa-calendar-day"></i></div>
+            <div class="practice-label">每日一练</div>
+        </div>
+        <div class="quick-mode">
+            <div class="practice-icon"><i class="fas fa-book-open"></i></div>
+            <div class="practice-label">知识点练习</div>
+        </div>
+        <div class="quick-mode">
+            <div class="practice-icon"><i class="fas fa-book"></i></div>
+            <div class="practice-label">历年真题</div>
+        </div>
+    </div>
+
+    <!-- 统计信息 -->
+    <div class="stats-container">
+        <div class="stat-item">
+            <div class="stat-icon"><i class="fas fa-sun"></i></div>
+            <div class="stat-content">
+                <div class="stat-label">今日已答 <span class="stat-value">0题</span></div>
+                <div class="stat-rank">超出0%的学员</div>
+            </div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon"><i class="fas fa-chart-pie"></i></div>
+            <div class="stat-content">
+                <div class="stat-label">历史共答 <span class="stat-value">1660题</span></div>
+                <div class="stat-rank">超过97.39%的学员</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 功能标签 -->
+    <div class="feature-tabs">
+        <div class="feature-tab">
+            <div class="feature-icon"><i class="fas fa-times-circle"></i></div>
+            <div class="feature-label">错题本</div>
+        </div>
+        <div class="feature-tab">
+            <div class="feature-icon"><i class="fas fa-bookmark"></i></div>
+            <div class="feature-label">收藏本</div>
+        </div>
+        <div class="feature-tab">
+            <div class="feature-icon"><i class="fas fa-history"></i></div>
+            <div class="feature-label">练习历史</div>
+        </div>
+        <div class="feature-tab">
+            <div class="feature-icon"><i class="fas fa-trophy"></i></div>
+            <div class="feature-label">答题排行</div>
+        </div>
+        <div class="feature-tab">
+            <div class="feature-icon"><i class="fas fa-file-alt"></i></div>
+            <div class="feature-label">答题报告</div>
+        </div>
+    </div>
+
+    <!-- 滑动导航 -->
+    <div class="practice-modes">
+        <div class="practice-mode active">
+            <div class="practice-icon"><i class="fas fa-list"></i></div>
+            <div class="practice-label">章节练习</div>
+        </div>
+        <div class="practice-mode">
+            <div class="practice-icon"><i class="fas fa-fire"></i></div>
+            <div class="practice-label">固定刷题</div>
+        </div>
+        <div class="practice-mode">
+            <div class="practice-icon"><i class="fas fa-calendar-day"></i></div>
+            <div class="practice-label">每日一练</div>
+        </div>
+        <div class="practice-mode">
+            <div class="practice-icon"><i class="fas fa-book-open"></i></div>
+            <div class="practice-label">知识点练习</div>
+        </div>
+        <div class="practice-mode">
+            <div class="practice-icon"><i class="fas fa-book"></i></div>
+            <div class="practice-label">历年真题</div>
+        </div>
+        <div class="practice-mode">
+            <div class="practice-icon"><i class="fas fa-file-alt"></i></div>
+            <div class="practice-label">统考试卷</div>
+        </div>
+        <div class="practice-mode">
+            <div class="practice-icon"><i class="fas fa-clipboard-list"></i></div>
+            <div class="practice-label">大联考</div>
+        </div>
+        <div class="practice-mode">
+            <div class="practice-icon"><i class="fas fa-calculator"></i></div>
+            <div class="practice-label">估分试卷</div>
+        </div>
+        <div class="practice-mode">
+            <div class="practice-icon"><i class="fas fa-robot"></i></div>
+            <div class="practice-label">AI通关练</div>
+        </div>
+    </div>
+
+    <!-- 章节练习区域 -->
+    <div id="chapter-practice" class="content-section">
+        <div class="special-practice">
+            <div class="special-header" onclick="location.href='mokuai_xiangqing_zhangjie.html'" style="cursor: pointer;">
+                <div class="special-title">
+                    章节练习 <i class="fas fa-chevron-right" style="font-size: 14px; margin-left: 4px;"></i>
+                    <button class="action-btn-small primary" style="margin-left: 8px; height: 22px; line-height: 20px; padding: 0 8px; font-size: 11px; border-radius: 11px; white-space: nowrap;">立即开通</button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <button class="action-btn-small" onclick="event.stopPropagation(); window.location.href='zhangjie_zhengti_baogao.html'" style="background-color: #f5f5f5; color: #666; border: 1px solid #d9d9d9; height: 22px; line-height: 20px; padding: 0 10px; font-size: 11px; border-radius: 11px; white-space: nowrap;">整体报告</button>
+                    <div class="practice-mode-tag" onclick="event.stopPropagation();"><i class="fas fa-cog" style="font-size: 14px; margin-right: 4px;"></i>练习模式</div>
+                </div>
+            </div>
+
+            <!-- 教材切换按钮 -->
+            <div style="padding: 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: center; align-items: center; gap: 12px;">
+                <button id="textbook-switch" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 14px; color: #666; display: flex; align-items: center; -webkit-tap-highlight-color: transparent;">
+                    <i class="fas fa-book" style="margin-right: 8px;"></i> 某某教材 <i class="fas fa-chevron-down" style="margin-left: 4px;"></i>
+                </button>
+                <i class="fas fa-lock" style="color: #d9d9d9;"></i>
+            </div>
+
+            <!-- 文学常识单元 -->
+            <div class="practice-unit">
+                <div class="unit-header" onclick="toggleUnit(this)">
+                    <div class="unit-title">
+                        <i class="fas fa-chevron-down"></i>
+                        文学常识
+                    </div>
+                </div>
+                <div class="unit-progress">17/37 正确率: 20%</div>
+                <div class="unit-content">
+                    <!-- 练习项 -->
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">文学常识基础</div>
+                            <div class="item-stats">17/37 正确率: 20%</div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small">查看解析</button>
+                            <button class="action-btn-small primary">继续答题</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 记叙文单元 -->
+            <div class="practice-unit">
+                <div class="unit-header" onclick="toggleUnit(this)">
+                    <div class="unit-title"><i class="fas fa-chevron-down"></i>记叙文单元</div>
+                </div>
+                <div class="unit-progress">45/242 正确率: 0%</div>
+                <div class="unit-content">
+                    <!-- 练习项 -->
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">郑伯克段于鄢</div>
+
+                            <div class="item-stats">1/5 正确率: 0%</div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small">查看解析</button>
+                            <button class="action-btn-small primary">继续答题</button>
+                        </div>
+                    </div>
+
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">冯谖客孟尝君</div>
+
+                            <div class="item-stats">19/19 正确率: 0%</div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary">开始答题</button>
+                        </div>
+                    </div>
+
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">垓下之围</div>
+
+                            <div class="item-stats">2/12 正确率: 0%</div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary">开始答题</button>
+                        </div>
+                    </div>
+
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">张中丞传后叙</div>
+
+                            <div class="item-stats">23/23 正确率: 0%</div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary">开始答题</button>
+                        </div>
+                    </div>
+
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">种树郭橐驼传</div>
+                            <div class="item-stats">0/10 正确率: 0%</div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary">开始答题</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 估分试卷区域 -->
+    <div id="score-prediction" class="content-section" style="display: none;">
+        <div class="special-practice">
+            <div class="special-header">
+                <div class="special-title">
+                    估分试卷 <i class="fas fa-chevron-right" style="font-size: 14px; margin-left: 4px;"></i>
+                    <button class="action-btn-small primary" style="margin-left: 8px; height: 22px; line-height: 20px; padding: 0 8px; font-size: 11px; border-radius: 11px; white-space: nowrap;">立即开通</button>
+                </div>
+            </div>
+            <div style="padding: 16px;">
+                <!-- 估分试卷项 1 -->
+                <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center;">
+                            <span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; margin-right: 8px; margin-left: 8px; white-space: nowrap; display: inline-block;">免费</span>
+                            <div style="font-size: 14px; font-weight: 500; color: #333;">试卷名称回显试卷名称回显试卷名称回显试卷名称回显试卷名称回显试卷名称回显</div>
+                        </div>
+                        <i class="fas fa-chevron-right" style="color: #999;"></i>
+                    </div>
+                    <div class="score-prediction-time">估分时间：2024.02.28 15:00—2024.03.01 24:00</div>
+                    <div class="score-prediction-stats">
+                        <span>总分：100分</span>
+                        <span>题量：100题</span>
+                        <span>参与人数：100人</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 14px; color: #666;">未开始：-/20</span>
+                        <button class="score-prediction-btn预约">预约估分</button>
+                    </div>
+                    <div style="font-size: 14px; color: #666;">试卷说明</div>
+                </div>
+
+                <!-- 估分试卷项 2 -->
+                <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center;">
+                            <i class="fas fa-unlock" style="margin-right: 8px; color: #d9d9d9;"></i>
+                            <div style="font-size: 14px; font-weight: 500; color: #333;">试卷名称回显</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span class="score-prediction-update">试卷有更新</span>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                    </div>
+                    <div class="score-prediction-time">估分时间：2024.02.28 15:00—2024.03.01 24:00</div>
+                    <div class="score-prediction-stats">
+                        <span>总分：100分</span>
+                        <span>题量：100题</span>
+                        <span>参与人数：100人</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 14px; color: #666;">未开始：0/20</span>
+                        <button class="score-prediction-btn等待">等待估分</button>
+                    </div>
+                    <div style="font-size: 14px; color: #666;">试卷说明</div>
+                </div>
+
+                <!-- 估分试卷项 3 -->
+                <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center;">
+                            <i class="fas fa-lock" style="margin-right: 8px; color: #d9d9d9;"></i>
+                            <div style="font-size: 14px; font-weight: 500; color: #333;">试卷名称回显</div>
+                        </div>
+                        <i class="fas fa-chevron-right" style="color: #999;"></i>
+                    </div>
+                    <div class="score-prediction-time">估分时间：2024.02.28 15:00—2024.03.01 24:00</div>
+                    <div class="score-prediction-stats">
+                        <span>总分：100分</span>
+                        <span>题量：100题</span>
+                        <span>参与人数：100人</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 14px; color: #666;">未开始：0/20</span>
+                        <button class="score-prediction-btn开始">开始估分</button>
+                    </div>
+                    <div style="font-size: 14px; color: #666;">试卷说明</div>
+                </div>
+
+                <!-- 大联考专用新增状态卡片区域 -->
+                <div id="grand-exam-cards" style="display: none;">
+                    <!-- 大联考状态卡片 1：进行中 -->
+                    <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center;">
+                                <span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; margin-right: 8px; margin-left: 8px; white-space: nowrap; display: inline-block;">免费</span>
+                                <div style="font-size: 14px; font-weight: 500; color: #333;">试卷名称回显</div>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                        <div style="margin-bottom: 12px; font-size: 14px; color: #666;">考试时间：2024.02.28 15:00—2024.03.01 24:00</div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                            <span>总分：100分</span>
+                            <span>题量：100道</span>
+                            <span>参与人数：100人</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div style="font-size: 14px; color: #666;">进行中：0/20</div>
+                            <button style="padding: 6px 16px; background-color: #1890ff; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">继续考试</button>
+                        </div>
+                        <div style="font-size: 14px; color: #666;">试卷说明</div>
+                    </div>
+
+                    <!-- 大联考状态卡片 2：已完成 -->
+                    <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center;">
+                                <span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; margin-right: 8px; margin-left: 8px; white-space: nowrap; display: inline-block;">免费</span>
+                                <div style="font-size: 14px; font-weight: 500; color: #333;">试卷名称回显</div>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                        <div style="margin-bottom: 12px; font-size: 14px; color: #666;">考试时间：2024.02.28 15:00—2024.03.01 24:00</div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                            <span>总分：100分</span>
+                            <span>题量：100道</span>
+                            <span>参与人数：100人</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div style="font-size: 14px; color: #666;">已完成：20/20</div>
+                            <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #fff; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
+                        </div>
+                        <div style="font-size: 14px; color: #666;">试卷说明</div>
+                    </div>
+
+                    <!-- 大联考状态卡片 3：已完成+补考练习 -->
+                    <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); border-top: 2px dashed #d9d9d9; padding-top: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center;">
+                                <span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; margin-right: 8px; margin-left: 8px;">免费</span>
+                                <div style="font-size: 14px; font-weight: 500; color: #333;">试卷名称回显</div>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                        <div style="margin-bottom: 12px; font-size: 14px; color: #666;">考试时间：2024.02.28 15:00—2024.03.01 24:00</div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                            <span>总分：100分</span>
+                            <span>题量：100道</span>
+                            <span>参与人数：100人</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div style="font-size: 14px; color: #666;">已完成：20/20</div>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #fff; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
+                                <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #1890ff; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">补考练习</button>
+                            </div>
+                        </div>
+                        <div style="font-size: 14px; color: #666;">试卷说明</div>
+                    </div>
+
+                    <!-- 大联考状态卡片 4：未开始+补考练习 -->
+                    <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center;">
+                                <i class="fas fa-lock" style="margin-right: 8px; color: #d9d9d9;"></i>
+                                <div style="font-size: 14px; font-weight: 500; color: #333;">试卷名称回显</div>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                        <div style="margin-bottom: 12px; font-size: 14px; color: #666;">考试时间：2024.02.28 15:00—2024.03.01 24:00</div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                            <span>总分：100分</span>
+                            <span>题量：100道</span>
+                            <span>参与人数：100人</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div style="font-size: 14px; color: #666;">未开始：0/20</div>
+                            <button style="padding: 6px 16px; background-color: #1890ff; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">补考练习</button>
+                        </div>
+                        <div style="font-size: 14px; color: #666;">试卷说明</div>
+                    </div>
+
+                    <!-- 大联考状态卡片 5：进行中+查看报告+继续考试 -->
+                    <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center;">
+                                <i class="fas fa-lock" style="margin-right: 8px; color: #d9d9d9;"></i>
+                                <div style="font-size: 14px; font-weight: 500; color: #333;">试卷名称回显</div>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                        <div style="margin-bottom: 12px; font-size: 14px; color: #666;">考试时间：2024.02.28 15:00—2024.03.01 24:00</div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                            <span>总分：100分</span>
+                            <span>题量：100道</span>
+                            <span>参与人数：100人</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div style="font-size: 14px; color: #666;">进行中：0/20</div>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #fff; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
+                                <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #1890ff; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">继续考试</button>
+                            </div>
+                        </div>
+                        <div style="font-size: 14px; color: #666;">试卷说明</div>
+                    </div>
+                </div>
+
+                <!-- 统考试卷专用新增状态卡片区域 -->
+                <div id="unified-exam-cards" style="display: none;">
+                    <!-- 统考试卷状态卡片 1：进行中 -->
+                    <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center;">
+                                <span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; margin-right: 8px; margin-left: 8px; white-space: nowrap; display: inline-block;">免费</span>
+                                <div style="font-size: 14px; font-weight: 500; color: #333;">试卷名称回显</div>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                        <div style="margin-bottom: 12px; font-size: 14px; color: #666;">考试时间：2024.02.28 15:00—2024.03.01 24:00</div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                            <span>总分：100分</span>
+                            <span>题量：100道</span>
+                            <span>参与人数：100人</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div style="font-size: 14px; color: #666;">进行中：0/20</div>
+                            <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #1890ff; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">继续考试</button>
+                        </div>
+                        <div style="font-size: 14px; color: #666;">试卷说明</div>
+                    </div>
+
+                    <!-- 统考试卷状态卡片 2：已完成 -->
+                    <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center;">
+                                <i class="fas fa-lock" style="margin-right: 8px; color: #d9d9d9;"></i>
+                                <div style="font-size: 14px; font-weight: 500; color: #333;">试卷名称回显</div>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                        <div style="margin-bottom: 12px; font-size: 14px; color: #666;">考试时间：2024.02.28 15:00—2024.03.01 24:00</div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                            <span>总分：100分</span>
+                            <span>题量：100道</span>
+                            <span>参与人数：100人</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div style="font-size: 14px; color: #666;">已完成：20/20</div>
+                            <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #fff; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
+                        </div>
+                        <div style="font-size: 14px; color: #666;">试卷说明</div>
+                    </div>
+
+                    <!-- 统考试卷状态卡片 3：已完成+考试结束 -->
+                    <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); border-top: 2px dashed #d9d9d9; padding-top: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center;">
+                                <i class="fas fa-lock" style="margin-right: 8px; color: #d9d9d9;"></i>
+                                <div style="font-size: 14px; font-weight: 500; color: #333;">试卷名称回显</div>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                        <div style="margin-bottom: 12px; font-size: 14px; color: #666;">考试时间：2024.02.28 15:00—2024.03.01 24:00</div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                            <span>总分：100分</span>
+                            <span>题量：100道</span>
+                            <span>参与人数：100人</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div style="font-size: 14px; color: #666;">已完成：20/20</div>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #fff; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
+                                <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #d9d9d9; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">考试结束</button>
+                            </div>
+                        </div>
+                        <div style="font-size: 14px; color: #666;">试卷说明</div>
+                    </div>
+
+                    <!-- 统考试卷状态卡片 4：未开始+考试结束 -->
+                    <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center;">
+                                <i class="fas fa-lock" style="margin-right: 8px; color: #d9d9d9;"></i>
+                                <div style="font-size: 14px; font-weight: 500; color: #333;">试卷名称回显</div>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                        <div style="margin-bottom: 12px; font-size: 14px; color: #666;">考试时间：2024.02.28 15:00—2024.03.01 24:00</div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                            <span>总分：100分</span>
+                            <span>题量：100道</span>
+                            <span>参与人数：100人</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div style="font-size: 14px; color: #666;">未开始：0/20</div>
+                            <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #d9d9d9; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">考试结束</button>
+                        </div>
+                        <div style="font-size: 14px; color: #666;">试卷说明</div>
+                    </div>
+                </div>
+
+                <!-- 估分试卷专用新增状态卡片区域 -->
+                <div id="score-prediction-cards" style="display: none;">
+                    <!-- 估分试卷状态卡片 1：进行中+继续估分 -->
+                    <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center;">
+                                <i class="fas fa-lock" style="margin-right: 8px; color: #d9d9d9;"></i>
+                                <div style="font-size: 14px; font-weight: 500; color: #333;">试卷名称回显</div>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                        <div style="margin-bottom: 12px; font-size: 14px; color: #666;">估分时间：2024.02.28 15:00—2024.03.01 24:00</div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                            <span>总分：100分</span>
+                            <span>题量：100道</span>
+                            <span>参与人数：100人</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div style="font-size: 14px; color: #666;">进行中：0/20</div>
+                            <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #1890ff; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">继续估分</button>
+                        </div>
+                        <div style="font-size: 14px; color: #666;">试卷说明</div>
+                    </div>
+
+                    <!-- 估分试卷状态卡片 2：已完成+查看报告+再次估分 -->
+                    <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center;">
+                                <i class="fas fa-lock" style="margin-right: 8px; color: #d9d9d9;"></i>
+                                <div style="font-size: 14px; font-weight: 500; color: #333;">试卷名称回显</div>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                        <div style="margin-bottom: 12px; font-size: 14px; color: #666;">估分时间：2024.02.28 15:00—2024.03.01 24:00</div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                            <span>总分：100分</span>
+                            <span>题量：100道</span>
+                            <span>参与人数：100人</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div style="font-size: 14px; color: #666;">已完成：20/20</div>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <button style="padding: 6px 16px; background-color: #fff; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
+                                <button style="padding: 6px 16px; background-color: #1890ff; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">再次估分</button>
+                            </div>
+                        </div>
+                        <div style="font-size: 14px; color: #666;">试卷说明</div>
+                    </div>
+
+                    <!-- 估分试卷状态卡片 3：进行中+查看报告+继续估分 -->
+                    <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); border-top: 2px dashed #d9d9d9; padding-top: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center;">
+                                <i class="fas fa-lock" style="margin-right: 8px; color: #d9d9d9;"></i>
+                                <div style="font-size: 14px; font-weight: 500; color: #333;">试卷名称回显</div>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                        <div style="margin-bottom: 12px; font-size: 14px; color: #666;">估分时间：2024.02.28 15:00—2024.03.01 24:00</div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                            <span>总分：100分</span>
+                            <span>题量：100道</span>
+                            <span>参与人数：100人</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div style="font-size: 14px; color: #666;">进行中：0/20</div>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <button style="padding: 6px 16px; background-color: #fff; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
+                                <button style="padding: 6px 16px; background-color: #1890ff; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">继续估分</button>
+                            </div>
+                        </div>
+                        <div style="font-size: 14px; color: #666;">试卷说明</div>
+                    </div>
+
+                    <!-- 估分试卷状态卡片 4：已完成+查看报告+估分结束 -->
+                    <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center;">
+                                <i class="fas fa-lock" style="margin-right: 8px; color: #d9d9d9;"></i>
+                                <div style="font-size: 14px; font-weight: 500; color: #333;">试卷名称回显</div>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                        <div style="margin-bottom: 12px; font-size: 14px; color: #666;">估分时间：2024.02.28 15:00—2024.03.01 24:00</div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                            <span>总分：100分</span>
+                            <span>题量：100道</span>
+                            <span>参与人数：100人</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div style="font-size: 14px; color: #666;">已完成：20/20</div>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <button style="padding: 6px 16px; background-color: #fff; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
+                                <button style="padding: 6px 16px; background-color: #d9d9d9; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">估分结束</button>
+                            </div>
+                        </div>
+                        <div style="font-size: 14px; color: #666;">试卷说明</div>
+                    </div>
+
+                    <!-- 估分试卷状态卡片 5：未开始+估分结束 -->
+                    <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center;">
+                                <i class="fas fa-lock" style="margin-right: 8px; color: #d9d9d9;"></i>
+                                <div style="font-size: 14px; font-weight: 500; color: #333;">试卷名称回显</div>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                        <div style="margin-bottom: 12px; font-size: 14px; color: #666;">估分时间：2024.02.28 15:00—2024.03.01 24:00</div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                            <span>总分：100分</span>
+                            <span>题量：100道</span>
+                            <span>参与人数：100人</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div style="font-size: 14px; color: #666;">未开始：0/20</div>
+                            <button style="padding: 6px 16px; background-color: #d9d9d9; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">估分结束</button>
+                        </div>
+                        <div style="font-size: 14px; color: #666;">试卷说明</div>
+                    </div>
+                </div>
+
+                <!-- 查看更多 -->
+                <div style="display: flex; justify-content: center; margin-top: 16px;">
+                    <button style="padding: 8px 24px; background-color: #f5f5f5; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer; display: flex; align-items: center;">
+                        查看更多
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 历年真题区域 -->
+    <div id="past-exams" class="content-section" style="display: none;">
+        <div class="special-practice">
+            <div class="special-header" onclick="location.href='mokuai_xiangqing_guda.html'" style="cursor: pointer;">
+                <div class="special-title">
+                    历年真题 <i class="fas fa-chevron-right" style="font-size: 14px; margin-left: 4px;"></i>
+                    <button class="action-btn-small" style="margin-left: 8px; height: 22px; line-height: 20px; padding: 0 8px; font-size: 11px; border-radius: 11px; white-space: nowrap; background-color: #f0f0f0; color: #666; border: 1px solid #d9d9d9;">
+                        <i class="fas fa-unlock" style="margin-right: 4px;"></i> 已开通
+                    </button>
+                </div>
+            </div>
+            <div style="padding: 16px;">
+                <!-- 历年真题项 1 -->
+                <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center;">
+                            <span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; margin-right: 8px; white-space: nowrap; display: inline-block;">免费</span>
+                            <div style="font-size: 14px; font-weight: 500; color: #333;">历年真题/模拟试卷试卷名称回显历年真题/模拟试卷试卷名称回显</div>
+                        </div>
+                        <i class="fas fa-chevron-right" style="color: #999;"></i>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                        <span>总分：100分</span>
+                        <span>题量：100道</span>
+                        <span>参与人数：100人</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div style="font-size: 12px; color: #666;">未开始：-/20</div>
+                        <button onclick="window.location.href='dati_yemian.html'" style="padding: 6px 16px; background-color: #1890ff; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">开始答题</button>
+                    </div>
+                    <div style="font-size: 14px; color: #666;">试卷说明</div>
+                </div>
+
+                <!-- 历年真题项 2 -->
+                <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center;">
+                            <i class="fas fa-unlock" style="margin-right: 8px; color: #52c41a;"></i>
+                            <div style="font-size: 14px; font-weight: 500; color: #333;">历年真题/模拟试卷试卷名称回显</div>
+                        </div>
+                        <i class="fas fa-chevron-right" style="color: #999;"></i>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                        <span>总分：100分</span>
+                        <span>题量：100道</span>
+                        <span>参与人数：100人</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div style="font-size: 12px; color: #666;">进行中：0/20</div>
+                        <button onclick="window.location.href='dati_yemian.html'" style="padding: 6px 16px; background-color: #1890ff; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">继续答题</button>
+                    </div>
+                    <div style="font-size: 14px; color: #666;">试卷说明</div>
+                </div>
+
+                <!-- 历年真题项 3 -->
+                <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center;">
+                            <i class="fas fa-unlock" style="margin-right: 8px; color: #52c41a;"></i>
+                            <div style="font-size: 14px; font-weight: 500; color: #333;">历年真题/模拟试卷试卷名称回显</div>
+                        </div>
+                        <i class="fas fa-chevron-right" style="color: #999;"></i>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                        <span>总分：100分</span>
+                        <span>题量：100道</span>
+                        <span>参与人数：100人</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div style="font-size: 12px; color: #666;">已完成：20/20</div>
+                        <div style="display: flex; gap: 8px;">
+                            <button style="padding: 6px 16px; background-color: #fff; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
+                            <button onclick="window.location.href='dati_yemian.html'" style="padding: 6px 16px; background-color: #1890ff; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">再次答题</button>
+                        </div>
+                    </div>
+                    <div style="font-size: 14px; color: #666;">试卷说明</div>
+                </div>
+
+                <!-- 历年真题项 4 -->
+                <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center;">
+                            <i class="fas fa-unlock" style="margin-right: 8px; color: #52c41a;"></i>
+                            <div style="font-size: 14px; font-weight: 500; color: #333;">历年真题/模拟试卷试卷名称回显</div>
+                        </div>
+                        <i class="fas fa-chevron-right" style="color: #999;"></i>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666;">
+                        <span>总分：100分</span>
+                        <span>题量：100道</span>
+                        <span>参与人数：100人</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div style="font-size: 12px; color: #666;">进行中：0/20</div>
+                        <div style="display: flex; gap: 8px;">
+                            <button style="padding: 6px 16px; background-color: #fff; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
+                            <button onclick="window.location.href='dati_yemian.html'" style="padding: 6px 16px; background-color: #1890ff; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">继续答题</button>
+                        </div>
+                    </div>
+                    <div style="font-size: 14px; color: #666;">试卷说明</div>
+                </div>
+
+                <!-- 查看更多 -->
+                <div style="display: flex; justify-content: center; margin-top: 16px;">
+                    <button onclick="location.href='mokuai_xiangqing_guda.html'" style="padding: 8px 24px; background-color: #f5f5f5; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer; display: flex; align-items: center;">
+                        查看更多
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 每日一练区域 -->
+    <div id="daily-practice" class="content-section" style="display: none;">
+        <div class="special-practice">
+            <div class="special-header">
+                <div class="special-title">每日练习 <i class="fas fa-chevron-right" style="font-size: 14px; margin-left: 4px;"></i></div>
+                <div style="display: flex; gap: 8px;">
+                    <div class="practice-mode-tag" onclick="event.stopPropagation();"><i class="fas fa-cog" style="font-size: 14px; margin-right: 4px;"></i>练习模式</div>
+                </div>
+            </div>
+            <div style="padding: 16px;">
+                <!-- 每日一练项 1 -->
+                <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-size: 16px; font-weight: 500; color: #333; margin-bottom: 8px;">【2024年2月26日】每日一练</div>
+                        <div style="display: flex; gap: 20px; font-size: 14px; color: #666; margin-bottom: 16px;">
+                            <span>进度：——</span>
+                            <span>正确率：——</span>
+                        </div>
+                        <div style="display: flex; justify-content: flex-end;">
+                            <button onclick="window.location.href='dati_yemian.html'" style="padding: 6px 16px; background-color: #1890ff; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">开始答题</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 每日一练项 2 -->
+                <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-size: 16px; font-weight: 500; color: #333; margin-bottom: 8px;">【2024年2月27日】每日一练</div>
+                        <div style="display: flex; gap: 20px; font-size: 14px; color: #666; margin-bottom: 16px;">
+                            <span>进度：0/20</span>
+                            <span>正确率：5%</span>
+                        </div>
+                        <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                            <button onclick="window.location.href='shiti_jiexi.html'" style="padding: 6px 16px; background-color: #fff; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看解析</button>
+                            <button onclick="window.location.href='dati_yemian.html'" style="padding: 6px 16px; background-color: #1890ff; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">继续答题</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 每日一练项 3 -->
+                <div style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-size: 16px; font-weight: 500; color: #333; margin-bottom: 8px;">【2024年2月28日】每日一练</div>
+                        <div style="display: flex; gap: 20px; font-size: 14px; color: #666; margin-bottom: 16px;">
+                            <span>进度：20/20</span>
+                            <span>正确率：5%</span>
+                        </div>
+                        <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                            <button onclick="window.location.href='shiti_jiexi.html'" style="padding: 6px 16px; background-color: #fff; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看解析</button>
+                            <button onclick="window.location.href='dati_yemian.html'" style="padding: 6px 16px; background-color: #1890ff; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">再次答题</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 查看更多 -->
+                <div style="display: flex; justify-content: center; margin-top: 16px;">
+                    <button style="padding: 8px 24px; background-color: #f5f5f5; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer; display: flex; align-items: center;">
+                        查看更多
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 固定刷题区域 -->
+    <div id="fixed-practice" class="content-section" style="display: none;">
+        <div class="special-practice">
+            <div class="special-header">
+                <div class="special-title">
+                    固定刷题 <i class="fas fa-chevron-right" style="font-size: 14px; margin-left: 4px;"></i>
+                    <button class="action-btn-small" style="margin-left: 8px; height: 22px; line-height: 20px; padding: 0 8px; font-size: 11px; border-radius: 11px; white-space: nowrap; background-color: #f0f0f0; color: #666; border: 1px solid #d9d9d9;">
+                        <i class="fas fa-unlock" style="margin-right: 4px;"></i> 已开通
+                    </button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="practice-mode-tag" onclick="event.stopPropagation();"><i class="fas fa-cog" style="font-size: 14px; margin-right: 4px;"></i>练习模式</div>
+                </div>
+            </div>
+            <div style="padding: 16px;">
+                <!-- 固定刷题项 1 -->
+                <div onclick="location.href='shuati_mulu.html'" style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center;">
+                            <i class="fas fa-lock" style="margin-right: 8px; color: #d9d9d9;"></i>
+                            <div style="font-size: 14px; font-weight: 500; color: #333;">24春季精编版</div>
+                        </div>
+                        <i class="fas fa-chevron-right" style="color: #999;"></i>
+                    </div>
+                    <div style="display: flex; gap: 24px; font-size: 14px; color: #666;">
+                        <span>题量：100道</span>
+                        <span>参与人数：100人</span>
+                    </div>
+                </div>
+
+                <!-- 固定刷题项 2 -->
+                <div onclick="location.href='shuati_mulu.html'" style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center;">
+                            <i class="fas fa-unlock" style="margin-right: 8px; color: #52c41a;"></i>
+                            <div style="font-size: 14px; font-weight: 500; color: #333;">24春季核心版</div>
+                        </div>
+                        <i class="fas fa-chevron-right" style="color: #999;"></i>
+                    </div>
+                    <div style="display: flex; gap: 24px; font-size: 14px; color: #666;">
+                        <span>题量：100道</span>
+                        <span>参与人数：100人</span>
+                    </div>
+                </div>
+
+                <!-- 固定刷题项 3 -->
+                <div onclick="location.href='shuati_mulu.html'" style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center;">
+                            <i class="fas fa-lock" style="margin-right: 8px; color: #d9d9d9;"></i>
+                            <div style="font-size: 14px; font-weight: 500; color: #333;">23秋季精编版</div>
+                        </div>
+                        <i class="fas fa-chevron-right" style="color: #999;"></i>
+                    </div>
+                    <div style="display: flex; gap: 24px; font-size: 14px; color: #666;">
+                        <span>题量：100道</span>
+                        <span>参与人数：100人</span>
+                    </div>
+                </div>
+
+                <!-- 查看更多 -->
+                <div style="display: flex; justify-content: center; margin-top: 16px;">
+                    <button style="padding: 8px 24px; background-color: #f5f5f5; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer; display: flex; align-items: center;">
+                        查看更多
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI通关练区域 -->
+    <div id="ai-practice" class="content-section" style="display: none; padding: 0;">
+        <div style="background-color: #fff; padding: 12px 16px; border-bottom: 1px solid #e0e0e0;">
+            <div style="display: flex; align-items: center;">
+                <div style="font-size: 16px; font-weight: 500; color: #333;">AI练习</div>
+                <i class="fas fa-chevron-right" style="margin-left: 8px; color: #1890ff;"></i>
+            </div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 60vh; padding: 48px 24px 24px;">
+            <div style="width: 200px; height: 200px; border-radius: 50%; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center; margin-bottom: 32px;">
+                <div style="font-size: 18px; color: #999;">固定配图</div>
+            </div>
+            <button style="width: 200px; padding: 12px; background-color: #1890ff; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer;">开始练习</button>
+        </div>
+    </div>
+
+    <!-- 知识点练习区域 -->
+    <div id="knowledge-practice" class="content-section" style="display: none;">
+        <div class="special-practice">
+            <div class="special-header">
+                <div class="special-title">知识点练习 <i class="fas fa-chevron-right" style="font-size: 14px; margin-left: 4px;"></i></div>
+                <div style="display: flex; gap: 8px;">
+                    <div class="practice-mode-tag" onclick="event.stopPropagation();"><i class="fas fa-cog" style="font-size: 14px; margin-right: 4px;"></i>练习模式</div>
+                </div>
+            </div>
+
+            <!-- 教材切换按钮 -->
+            <div style="padding: 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: center; align-items: center; gap: 12px;">
+                <button id="knowledge-textbook-switch" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 14px; color: #666; display: flex; align-items: center; -webkit-tap-highlight-color: transparent;">
+                    <i class="fas fa-book" style="margin-right: 8px;"></i> 知识点体系 <i class="fas fa-chevron-down" style="margin-left: 4px;"></i>
+                </button>
+            </div>
+            
+            <!-- 新增按钮区域 -->
+            <div style="padding: 16px; display: flex; justify-content: space-around; align-items: center;">
+                <button style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 14px; color: #666; -webkit-tap-highlight-color: transparent;">智能练习</button>
+                <button style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 14px; color: #666; -webkit-tap-highlight-color: transparent;">整体报告</button>
+                <button onclick="window.location.href='lianxi_lishi.html'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 14px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">练习历史</button>
+            </div>
+
+            <!-- 知识点分类 1 -->
+            <div class="practice-unit">
+                <div class="unit-header" onclick="toggleUnit(this)" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="unit-title">
+                        <i class="fas fa-chevron-down"></i>
+                        文学常识
+                    </div>
+                    <button class="action-btn-small primary">练习</button>
+                </div>
+                <div class="unit-progress">17/37 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">20%</span> <span class="mastery-tag mastered">掌握度 0.85</span></div>
+                <div class="unit-content">
+                    <!-- 练习项 -->
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">文学常识基础</div>
+                            <div class="item-stats">17/37 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">20%</span> <span class="mastery-tag mastered">掌握度 0.85</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary">练习</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 知识点分类 4 (原分类4，移动到此) -->
+            <div class="practice-unit">
+                <div class="unit-header" onclick="toggleUnit(this)" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="unit-title">
+                        <i class="fas fa-chevron-down"></i>
+                        基础写作
+                    </div>
+                    <button class="action-btn-small primary">练习</button>
+                </div>
+                <div class="unit-progress">35/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-green">87.5%</span> <span class="mastery-tag mastered">掌握度 0.92</span></div>
+                <div class="unit-content">
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">作文逻辑</div>
+                            <div class="item-stats">35/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-green">87.5%</span> <span class="mastery-tag mastered">掌握度 0.92</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary">练习</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 知识点分类 5 (原分类5，演示中等正确率 - 黄色 50%) -->
+            <div class="practice-unit">
+                <div class="unit-header" onclick="toggleUnit(this)" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="unit-title">
+                        <i class="fas fa-chevron-down"></i>
+                        古诗词背诵
+                    </div>
+                    <button class="action-btn-small primary">练习</button>
+                </div>
+                <div class="unit-progress">16/32 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">50%</span> <span class="mastery-tag">掌握度 0.68</span></div>
+                <div class="unit-content">
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">盛唐诗歌</div>
+                            <div class="item-stats">16/32 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">50%</span> <span class="mastery-tag">掌握度 0.68</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary">练习</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 知识点分类 2 (原分类2) -->
+            <div class="practice-unit">
+                <div class="unit-header" onclick="toggleUnit(this)" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="unit-title">
+                        <i class="fas fa-chevron-down"></i>
+                        语法知识
+                    </div>
+                    <button class="action-btn-small primary">练习</button>
+                </div>
+                <div class="unit-progress">0/25 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">0%</span></div>
+                <div class="unit-content">
+                    <!-- 练习项 -->
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">语法基础</div>
+                            <div class="item-stats">0/25 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">0%</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary">练习</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 知识点分类 3 (原分类3) -->
+            <div class="practice-unit">
+                <div class="unit-header" onclick="toggleUnit(this)" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="unit-title">
+                        <i class="fas fa-chevron-down"></i>
+                        阅读理解
+                    </div>
+                    <button class="action-btn-small primary">练习</button>
+                </div>
+                <div class="unit-progress">5/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">12.5%</span> <span class="mastery-tag">掌握度 0.42</span></div>
+                <div class="unit-content">
+                    <!-- 练习项 -->
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">阅读理解技巧</div>
+                            <div class="item-stats">5/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">12.5%</span> <span class="mastery-tag">掌握度 0.42</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary">练习</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <nav class="bottom-nav">
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-home"></i></div>
+            <div class="nav-label">首页</div>
+        </div>
+        <div class="nav-item active">
+            <div class="nav-icon"><i class="fas fa-book"></i></div>
+            <div class="nav-label">题库</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-shopping-cart"></i></div>
+            <div class="nav-label">书城</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-graduation-cap"></i></div>
+            <div class="nav-label">学习</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-user"></i></div>
+            <div class="nav-label">我的</div>
+        </div>
+    </nav>
+
+    <script>
+        // 展开/折叠单元内容
+        function toggleUnit(header) {
+            const icon = header.querySelector('i');
+            const content = header.nextElementSibling;
+            
+            if (icon.classList.contains('fa-chevron-down')) {
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+                content.style.display = 'none';
+            } else {
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+                content.style.display = 'block';
+            }
+        }
+
+        // DOM元素获取
+        const featureTabs = document.querySelectorAll('.feature-tab');
+        const practiceModes = document.querySelectorAll('.practice-modes .practice-mode');
+        const quickModes = document.querySelectorAll('.quick-actions .quick-mode');
+        const unitHeaders = document.querySelectorAll('.unit-header');
+        const actionBtns = document.querySelectorAll('.action-btn-small');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        // 功能标签点击事件
+        featureTabs.forEach((tab, index) => {
+            tab.addEventListener('click', () => {
+                console.log('点击功能标签:', ['错题本', '收藏本', '练习历史', '答题排行', '答题报告'][index]);
+                // 跳转到对应页面
+                const pages = ['cuotiben.html', 'shoucangben.html', 'lianxi_lishi.html', '#', 'dati_baogao.html'];
+                if (pages[index] !== '#') {
+                    window.location.href = pages[index];
+                }
+            });
+        });
+
+        // 练习模式点击事件
+        practiceModes.forEach((mode, index) => {
+            mode.addEventListener('click', () => {
+                const modes = ['章节练习', '固定刷题', '每日一练', '知识点练习', '历年真题', '统考试卷', '大联考', '估分试卷', 'AI通关练'];
+                const modeName = modes[index];
+                console.log('点击练习模式:', modeName);
+                
+                // 更新active类
+                practiceModes.forEach(m => m.classList.remove('active'));
+                mode.classList.add('active');
+                
+                // 显示对应内容
+                const chapterPractice = document.getElementById('chapter-practice');
+                const scorePrediction = document.getElementById('score-prediction');
+                const scorePredictionTitle = scorePrediction.querySelector('.special-title');
+                const scorePredictionBtns = scorePrediction.querySelectorAll('[class^="score-prediction-btn"]');
+                const scorePredictionTimes = scorePrediction.querySelectorAll('.score-prediction-time');
+                
+                if (modeName === '章节练习') {
+                    chapterPractice.style.display = 'block';
+                    scorePrediction.style.display = 'none';
+                    document.getElementById('past-exams').style.display = 'none';
+                    document.getElementById('daily-practice').style.display = 'none';
+                    document.getElementById('fixed-practice').style.display = 'none';
+                    document.getElementById('ai-practice').style.display = 'none';
+                    document.getElementById('knowledge-practice').style.display = 'none';
+                } else if (modeName === '估分试卷' || modeName === '统考试卷' || modeName === '大联考') {
+                    // 点击估分试卷、统考试卷或大联考时显示估分试卷内容
+                    chapterPractice.style.display = 'none';
+                    scorePrediction.style.display = 'block';
+                    document.getElementById('past-exams').style.display = 'none';
+                    document.getElementById('daily-practice').style.display = 'none';
+                    document.getElementById('fixed-practice').style.display = 'none';
+                    document.getElementById('ai-practice').style.display = 'none';
+                    document.getElementById('knowledge-practice').style.display = 'none';
+                    // 更新标题
+                    if (scorePredictionTitle) {
+                        scorePredictionTitle.innerHTML = modeName + ' <i class="fas fa-chevron-right" style="font-size: 14px; margin-left: 4px;"></i>' + 
+                            '<button class="action-btn-small primary" style="margin-left: 8px; height: 22px; line-height: 20px; padding: 0 8px; font-size: 11px; border-radius: 11px; white-space: nowrap;">立即开通</button>';
+                    }
+                    // 更新按钮文本
+                    if (scorePredictionBtns.length > 0) {
+                        if (modeName === '统考试卷' || modeName === '大联考') {
+                            // 统考试卷或大联考模式下更新按钮文本
+                            scorePredictionBtns[0].textContent = '预约考试';
+                            scorePredictionBtns[1].textContent = '等待考试';
+                            scorePredictionBtns[2].textContent = '开始考试';
+                        } else {
+                            // 估分试卷模式下恢复按钮文本
+                            scorePredictionBtns[0].textContent = '预约估分';
+                            scorePredictionBtns[1].textContent = '等待估分';
+                            scorePredictionBtns[2].textContent = '开始估分';
+                        }
+                    }
+                    // 更新时间显示文本
+                    if (scorePredictionTimes.length > 0) {
+                        scorePredictionTimes.forEach(timeElement => {
+                            if (modeName === '统考试卷' || modeName === '大联考') {
+                                // 统考试卷或大联考模式下更新时间文本
+                                timeElement.innerHTML = timeElement.innerHTML.replace('估分时间', '考试时间');
+                            } else {
+                                // 估分试卷模式下恢复时间文本
+                                timeElement.innerHTML = timeElement.innerHTML.replace('考试时间', '估分时间');
+                            }
+                        });
+                    }
+                    // 处理"试卷有更新"显示和锁样式
+                    const updateElements = scorePrediction.querySelectorAll('.score-prediction-update');
+                    updateElements.forEach(element => {
+                        if (modeName === '统考试卷' || modeName === '大联考') {
+                            // 大联考和统考试卷中去除"试卷有更新"
+                            element.style.display = 'none';
+                        } else {
+                            // 估分试卷中显示"试卷有更新"
+                            element.style.display = 'inline';
+                        }
+                    });
+                    // 统一锁的样式
+                    const lockIcons = scorePrediction.querySelectorAll('.fa-lock, .fa-unlock');
+                    lockIcons.forEach(icon => {
+                        if (icon.classList.contains('fa-unlock')) {
+                            // 解锁图标使用绿色，与历年真题保持一致
+                            icon.style.color = '#52c41a';
+                        } else {
+                            // 锁定图标保持灰色
+                            icon.style.color = '#d9d9d9';
+                        }
+                    });
+                    // 控制大联考专用卡片的显示/隐藏
+                    const grandExamCards = document.getElementById('grand-exam-cards');
+                    if (modeName === '大联考') {
+                        grandExamCards.style.display = 'block';
+                    } else {
+                        grandExamCards.style.display = 'none';
+                    }
+                    // 控制统考试卷专用卡片的显示/隐藏
+                    const unifiedExamCards = document.getElementById('unified-exam-cards');
+                    if (modeName === '统考试卷') {
+                        unifiedExamCards.style.display = 'block';
+                    } else {
+                        unifiedExamCards.style.display = 'none';
+                    }
+                    // 控制估分试卷专用卡片的显示/隐藏
+                    const scorePredictionCards = document.getElementById('score-prediction-cards');
+                    if (modeName === '估分试卷') {
+                        scorePredictionCards.style.display = 'block';
+                    } else {
+                        scorePredictionCards.style.display = 'none';
+                    }
+                    // 隐藏知识点练习区域
+                    document.getElementById('knowledge-practice').style.display = 'none';
+                } else if (modeName === '历年真题') {
+                    // 点击历年真题时显示历年真题内容
+                    chapterPractice.style.display = 'none';
+                    scorePrediction.style.display = 'none';
+                    document.getElementById('past-exams').style.display = 'block';
+                    document.getElementById('daily-practice').style.display = 'none';
+                    document.getElementById('fixed-practice').style.display = 'none';
+                    document.getElementById('ai-practice').style.display = 'none';
+                    document.getElementById('knowledge-practice').style.display = 'none';
+                } else if (modeName === '每日一练') {
+                    // 点击每日一练时显示每日一练内容
+                    chapterPractice.style.display = 'none';
+                    scorePrediction.style.display = 'none';
+                    document.getElementById('past-exams').style.display = 'none';
+                    document.getElementById('daily-practice').style.display = 'block';
+                    document.getElementById('fixed-practice').style.display = 'none';
+                    document.getElementById('ai-practice').style.display = 'none';
+                    document.getElementById('knowledge-practice').style.display = 'none';
+                } else if (modeName === '固定刷题') {
+                    // 点击固定刷题时显示固定刷题内容
+                    chapterPractice.style.display = 'none';
+                    scorePrediction.style.display = 'none';
+                    document.getElementById('past-exams').style.display = 'none';
+                    document.getElementById('daily-practice').style.display = 'none';
+                    document.getElementById('fixed-practice').style.display = 'block';
+                    document.getElementById('ai-practice').style.display = 'none';
+                    document.getElementById('knowledge-practice').style.display = 'none';
+                } else if (modeName === 'AI通关练') {
+                    // 点击AI通关练时显示AI通关练内容
+                    chapterPractice.style.display = 'none';
+                    scorePrediction.style.display = 'none';
+                    document.getElementById('past-exams').style.display = 'none';
+                    document.getElementById('daily-practice').style.display = 'none';
+                    document.getElementById('fixed-practice').style.display = 'none';
+                    document.getElementById('ai-practice').style.display = 'block';
+                    document.getElementById('knowledge-practice').style.display = 'none';
+                } else if (modeName === '知识点练习') {
+                    // 点击知识点练习时显示知识点练习内容
+                    chapterPractice.style.display = 'none';
+                    scorePrediction.style.display = 'none';
+                    document.getElementById('past-exams').style.display = 'none';
+                    document.getElementById('daily-practice').style.display = 'none';
+                    document.getElementById('fixed-practice').style.display = 'none';
+                    document.getElementById('ai-practice').style.display = 'none';
+                    document.getElementById('knowledge-practice').style.display = 'block';
+                } else {
+                    // 其他模式显示章节练习内容
+                    chapterPractice.style.display = 'block';
+                    scorePrediction.style.display = 'none';
+                    document.getElementById('past-exams').style.display = 'none';
+                    document.getElementById('daily-practice').style.display = 'none';
+                    document.getElementById('fixed-practice').style.display = 'none';
+                    document.getElementById('ai-practice').style.display = 'none';
+                    document.getElementById('knowledge-practice').style.display = 'none';
+                }
+                
+                // 滑动到中间
+                const practiceModesContainer = document.querySelector('.practice-modes');
+                const modeWidth = mode.offsetWidth;
+                const containerWidth = practiceModesContainer.offsetWidth;
+                const scrollPosition = mode.offsetLeft - (containerWidth / 2) + (modeWidth / 2);
+                
+                practiceModesContainer.scrollTo({
+                    left: scrollPosition,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // 使用事件委托处理点击事件
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.action-btn-small, [class^="score-prediction-btn"]');
+            if (!btn) return;
+            
+            const text = btn.textContent.trim();
+            if (text === '查看解析') {
+                window.location.href = 'shiti_jiexi.html';
+            } else if (text === '继续答题' || text === '开始答题' || text === '再次答题' || text === '继续考试' || text === '补考练习' || text === '继续估分' || text === '开始估分') {
+                window.location.href = 'dati_yemian.html';
+            } else if (text === '开始考试') {
+                window.location.href = 'shijuan_xiangqing.html';
+            } else if (text === '预约考试' || text === '等待考试' || text === '查看报告' || text === '预约估分' || text === '等待估分') {
+                // 不跳转
+            }
+        });
+
+        // 导航项点击事件
+        navItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                console.log('点击导航:', ['首页', '题库', '书城', '学习', '我的'][index]);
+                if (index === 0) {
+                    window.location.href = '../index.html';
+                }
+            });
+        });
+
+        // 触摸事件优化（移动端）
+        document.addEventListener('touchstart', function() {}, { passive: true });
+        document.addEventListener('touchmove', function() {}, { passive: true });
+        document.addEventListener('touchend', function() {}, { passive: true });
+
+        // 教材切换按钮功能
+        document.getElementById('textbook-switch').addEventListener('click', function() {
+            // 这里可以添加教材切换的逻辑
+            alert('切换到某某教材');
+            // 实际项目中，这里可以打开教材选择弹窗或直接切换教材内容
+        });
+
+        // 禁止双击缩放
+        document.addEventListener('dblclick', function(event) {
+            event.preventDefault();
+        });
+    </script>
+    <!-- 答题设置底部弹窗 -->
+    <div class="bottom-drawer-mask" id="settings-mask"></div>
+    <div class="bottom-drawer" id="settings-drawer">
+        <div class="bottom-drawer-header">
+            <div class="bottom-drawer-title">答题设置</div>
+            <div class="bottom-drawer-close" id="close-settings-btn">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <div class="section-title">答题模式</div>
+        <div class="mode-grid">
+            <div class="mode-card active">
+                <div class="mode-card-title">练习模式</div>
+                <div class="mode-card-desc">答题后直接显示答案</div>
+            </div>
+            <div class="mode-card">
+                <div class="mode-card-title">考试计时模式</div>
+                <div class="mode-card-desc">不限时间，交卷后显示答案</div>
+            </div>
+            <div class="mode-card">
+                <div class="mode-card-title">快答模式</div>
+                <div class="mode-card-desc">答题错误后显示答案</div>
+            </div>
+            <div class="mode-card">
+                <div class="mode-card-title">背题模式</div>
+                <div class="mode-card-desc">直接显示答案</div>
+            </div>
+        </div>
+
+        <div id="question-count-section">
+            <div class="section-title">每次答题数量</div>
+            <div class="count-grid">
+                <div class="count-btn active">全部</div>
+                <div class="count-btn">10道</div>
+                <div class="count-btn">20道</div>
+                <div class="count-btn">30道</div>
+                <div class="count-btn">40道</div>
+                <div class="count-btn">50道</div>
+            </div>
+        </div>
+
+        <div class="animation-toggle">
+            <div class="toggle-label">动画开关</div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="animation-toggle-input">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <button class="confirm-btn" id="confirm-settings-btn">确定</button>
+    </div>
+
+    <script>
+        // 弹窗相关逻辑
+        const settingsMask = document.getElementById('settings-mask');
+        const settingsDrawer = document.getElementById('settings-drawer');
+        // 获取所有练习模式设置按钮
+        const practiceModeTags = document.querySelectorAll('.practice-mode-tag');
+        const closeSettingsBtn = document.getElementById('close-settings-btn');
+        const confirmSettingsBtn = document.getElementById('confirm-settings-btn');
+        
+        function openDrawer() {
+            settingsMask.style.display = 'block';
+            setTimeout(() => {
+                settingsMask.style.opacity = '1';
+                settingsDrawer.classList.add('active');
+            }, 10);
+        }
+
+        function closeDrawer() {
+            settingsMask.style.opacity = '0';
+            settingsDrawer.classList.remove('active');
+            setTimeout(() => {
+                settingsMask.style.display = 'none';
+            }, 300);
+        }
+
+        practiceModeTags.forEach(tag => {
+            tag.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                // 判断是否是每日练习/每日一练
+                const header = tag.closest('.special-header') || tag.closest('.section-header');
+                const title = header ? header.innerText : '';
+                const countSection = document.getElementById('question-count-section');
+                
+                if (title.includes('每日练习') || title.includes('每日一练') || title.includes('固定刷题')) {
+                    if (countSection) countSection.style.display = 'none';
+                } else {
+                    if (countSection) countSection.style.display = 'block';
+                }
+                
+                openDrawer();
+            });
+        });
+
+        if (closeSettingsBtn) {
+            closeSettingsBtn.addEventListener('click', closeDrawer);
+        }
+
+        if (settingsMask) {
+            settingsMask.addEventListener('click', closeDrawer);
+        }
+
+        if (confirmSettingsBtn) {
+            confirmSettingsBtn.addEventListener('click', closeDrawer);
+        }
+
+        // 模式切换
+        const modeCards = document.querySelectorAll('.mode-card');
+        const animationToggleContainer = document.querySelector('.animation-toggle');
+        
+        function updateAnimationToggle() {
+            const activeMode = document.querySelector('.mode-card.active');
+            if (activeMode && activeMode.querySelector('.mode-card-title').innerText.trim() === '练习模式') {
+                animationToggleContainer.style.display = 'flex';
+            } else {
+                animationToggleContainer.style.display = 'none';
+            }
+        }
+        
+        updateAnimationToggle();
+        
+        modeCards.forEach(card => {
+            card.addEventListener('click', () => {
+                modeCards.forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                updateAnimationToggle();
+            });
+        });
+
+        // 数量切换
+        const countBtns = document.querySelectorAll('.count-btn');
+        countBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                countBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>题库入口</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+    </style>
+    <script>
+        // 清理 URL 中的 origin 参数，保持地址栏整洁
+        (function() {
+            const url = new URL(window.location.href);
+            if (url.searchParams.has('origin')) {
+                url.searchParams.delete('origin');
+                const newUrl = url.pathname + url.search + url.hash;
+                window.history.replaceState({}, '', newUrl);
+            }
+        })();
+    </script>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-xl p-8 text-center border border-sky-100">
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">题库</h1>
+        <p class="text-gray-500 mb-8 text-sm">请选择访问端点</p>
+        
+        <div class="space-y-4">
+            <!-- 移动端入口 -->
+            <a href="mobile/tiku.html" class="flex items-center justify-between p-5 bg-sky-50 hover:bg-sky-100 rounded-2xl transition-all group border border-sky-100">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-sky-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-sky-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+                    </div>
+                    <div class="text-left">
+                        <div class="font-bold text-gray-800">移动端</div>
+                        <div class="text-xs text-gray-400">适配手机屏幕</div>
+                    </div>
+                </div>
+                <svg class="text-sky-400 group-hover:translate-x-1 transition-transform" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+
+            <!-- 电脑端入口 -->
+            <a href="pc/tiku_pc.html" class="flex items-center justify-between p-5 bg-rose-50 hover:bg-rose-100 rounded-2xl transition-all group border border-rose-100">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-rose-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-rose-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+                    </div>
+                    <div class="text-left">
+                        <div class="font-bold text-gray-800">电脑端</div>
+                        <div class="text-xs text-gray-400">适配桌面浏览器</div>
+                    </div>
+                </div>
+                <svg class="text-rose-400 group-hover:translate-x-1 transition-transform" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-gray-100">
+            <p class="text-[10px] text-gray-300 uppercase tracking-widest font-semibold">Exam Prep Tracker System</p>
+        </div>
+    </div>
+</body>
+</html>

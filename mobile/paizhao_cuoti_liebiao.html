@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>拍照错题列表</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 重置样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f5f5f5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            /* PC端适配样式 */
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* 移动端适配 */
+        @media screen and (max-width: 768px) {
+            html {
+                font-size: 14px;
+            }
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            display: flex;
+            align-items: center;
+            height: 56px;
+            padding: 0 16px;
+            background-color: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 100;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .back-btn:active {
+            opacity: 0.7;
+        }
+
+        .header-title {
+            flex: 1;
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            margin-right: 40px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            flex: 1;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .nav-tab {
+            padding: 0 16px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #666;
+            cursor: pointer;
+            position: relative;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .nav-tab:active {
+            background-color: #f5f5f5;
+        }
+
+        .nav-tab.active {
+            color: #ff4d4f;
+        }
+
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 16px;
+            right: 16px;
+            height: 2px;
+            background-color: #ff4d4f;
+        }
+
+        /* 错题来源切换 */
+        .source-tabs {
+            display: flex;
+            background-color: #fff;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .source-tab {
+            flex: 1;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            cursor: pointer;
+            position: relative;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .source-tab:active {
+            background-color: #f5f5f5;
+        }
+
+        .source-tab.active {
+            color: #ff4d4f;
+        }
+
+        .source-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            background-color: #ff4d4f;
+        }
+
+        /* 提示信息 */
+        .tip {
+            padding: 12px 16px;
+            font-size: 12px;
+            color: #999;
+            background-color: #fafafa;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        /* 拍照错题列表 */
+        .photo-error-list {
+            padding: 16px;
+        }
+
+        /* 拍照错题项 */
+        .photo-error-item {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 16px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            touch-action: manipulation;
+            transition: transform 0.2s ease;
+        }
+
+        .photo-error-item:active {
+            transform: translateY(2px);
+        }
+
+        .photo-error-header {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 12px;
+        }
+
+        .photo-error-date {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .photo-preview {
+            display: flex;
+            margin-bottom: 12px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 8px;
+        }
+
+        .photo-thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 4px;
+            margin-right: 8px;
+            flex-shrink: 0;
+            background-color: #f5f5f5;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-count {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .photo-error-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .error-type {
+            display: flex;
+            align-items: center;
+        }
+
+        .error-type i {
+            margin-right: 4px;
+            color: #ff4d4f;
+        }
+
+        .mastery-status {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        .mastery-status.unmastered {
+            background-color: #fff2f0;
+            color: #ff4d4f;
+        }
+
+        .mastery-status.mastered {
+            background-color: #f6ffed;
+            color: #52c41a;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            color: #d9d9d9;
+            margin-bottom: 16px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 24px;
+        }
+
+        .add-btn {
+            padding: 8px 24px;
+            background-color: #ff4d4f;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .add-btn:active {
+            background-color: #ff7875;
+            transform: scale(0.98);
+        }
+
+        /* 底部操作栏 */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background-color: #fff;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            z-index: 99;
+        }
+
+        .footer-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            font-size: 12px;
+            color: #666;
+            cursor: pointer;
+            padding: 8px;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+            flex: 1;
+        }
+
+        .footer-btn i {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .footer-btn:hover {
+            color: #ff4d4f;
+        }
+
+        .footer-btn:active {
+            opacity: 0.7;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .photo-error-item {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .photo-error-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .photo-error-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .photo-error-item:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        /* 响应式设计 */
+        @media screen and (max-width: 375px) {
+            .header {
+                height: 52px;
+                padding: 0 14px;
+            }
+
+            .header-title {
+                font-size: 17px;
+            }
+
+            .tip {
+                padding: 10px 14px;
+                font-size: 11px;
+            }
+
+            .photo-error-list {
+                padding: 14px;
+            }
+
+            .photo-error-item {
+                padding: 14px;
+                margin-bottom: 10px;
+            }
+
+            .photo-error-title {
+                font-size: 15px;
+            }
+
+            .photo-error-date {
+                font-size: 11px;
+            }
+
+            .photo-thumbnail {
+                width: 72px;
+                height: 72px;
+            }
+
+            .photo-error-info {
+                font-size: 12px;
+            }
+
+            .footer {
+                height: 56px;
+            }
+
+            .footer-btn i {
+                font-size: 16px;
+            }
+
+            .footer-btn span {
+                font-size: 11px;
+            }
+        }
+
+        @media screen and (max-width: 320px) {
+            .header {
+                height: 48px;
+                padding: 0 12px;
+            }
+
+            .header-title {
+                font-size: 16px;
+            }
+
+            .tip {
+                padding: 8px 12px;
+                font-size: 11px;
+            }
+
+            .photo-error-list {
+                padding: 12px;
+            }
+
+            .photo-error-item {
+                padding: 12px;
+                margin-bottom: 8px;
+            }
+
+            .photo-error-title {
+                font-size: 14px;
+            }
+
+            .photo-error-date {
+                font-size: 10px;
+            }
+
+            .photo-thumbnail {
+                width: 64px;
+                height: 64px;
+            }
+
+            .photo-error-info {
+                font-size: 11px;
+            }
+
+            .footer {
+                height: 52px;
+            }
+
+            .footer-btn i {
+                font-size: 15px;
+            }
+
+            .footer-btn span {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="window.location.href='cuotiben.html'">错题本</div>
+            <div class="nav-tab" onclick="window.location.href='shoucangben.html'">收藏本</div>
+            <div class="nav-tab" onclick="window.location.href='lianxi_lishi.html'">练习历史</div>
+        </div>
+    </header>
+
+    <!-- 错题来源切换 -->
+    <div class="source-tabs">
+        <div class="source-tab">题库错题</div>
+        <div class="source-tab active">拍错题</div>
+    </div>
+
+    <!-- 提示信息 -->
+    <div class="tip">*仅展示所选目标下的数据</div>
+
+    <!-- 拍照错题列表 -->
+    <div class="photo-error-list">
+        <!-- 拍照错题项 1 -->
+        <div class="photo-error-item">
+            <div class="photo-error-header">
+                <div class="photo-error-date">2026-02-04 14:30</div>
+            </div>
+            <div class="photo-preview">
+                <div class="photo-thumbnail">
+                    <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=math%20problem%20on%20paper%2C%20handwritten%20calculation%2C%20student%20exercise%2C%20white%20background&image_size=portrait_4_3" alt="错题图片">
+                </div>
+            </div>
+        </div>
+
+        <!-- 拍照错题项 2 -->
+        <div class="photo-error-item">
+            <div class="photo-error-header">
+                <div class="photo-error-date">2026-02-03 16:45</div>
+            </div>
+            <div class="photo-preview">
+                <div class="photo-thumbnail">
+                    <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=geometry%20proof%20problem%20on%20paper%2C%20handwritten%20student%20work%2C%20white%20background&image_size=portrait_4_3" alt="错题图片">
+                </div>
+            </div>
+        </div>
+
+        <!-- 拍照错题项 3 -->
+        <div class="photo-error-item">
+            <div class="photo-error-header">
+                <div class="photo-error-date">2026-02-02 09:15</div>
+            </div>
+            <div class="photo-preview">
+                <div class="photo-thumbnail">
+                    <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=physics%20mechanics%20problem%20on%20paper%2C%20handwritten%20student%20work%2C%20white%20background&image_size=portrait_4_3" alt="错题图片">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部操作栏 -->
+    <footer class="footer">
+        <button class="footer-btn">
+            <i class="fas fa-camera"></i>
+            <span>拍照</span>
+        </button>
+        <button class="footer-btn">
+            <i class="fas fa-folder-plus"></i>
+            <span>上传图片</span>
+        </button>
+    </footer>
+
+    <script>
+        // DOM元素获取
+        const backBtn = document.querySelector('.back-btn');
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const sourceTabs = document.querySelectorAll('.source-tab');
+        const photoErrorItems = document.querySelectorAll('.photo-error-item');
+        const footerBtns = document.querySelectorAll('.footer-btn');
+
+        // 导航切换功能
+        navTabs.forEach(tab => {
+            // 点击事件
+            tab.addEventListener('click', () => {
+                // 移除所有标签的active类
+                navTabs.forEach(t => t.classList.remove('active'));
+                // 为当前点击的标签添加active类
+                tab.classList.add('active');
+                
+                // 这里可以根据标签切换显示不同的内容
+                console.log('切换到:', tab.textContent);
+                if (tab.textContent === '练习历史') {
+                    window.location.href = 'lianxi_lishi.html';
+                } else if (tab.textContent === '错题本') {
+                    window.location.href = 'cuotiben.html';
+                } else if (tab.textContent === '收藏本') {
+                    window.location.href = 'shoucangben.html';
+                }
+            });
+
+            // 触摸事件（移动端优化）
+            tab.addEventListener('touchstart', (e) => {
+                // 防止触摸时的默认行为
+                e.preventDefault();
+                // 触发点击事件
+                tab.click();
+            }, { passive: false });
+        });
+
+        // 返回按钮功能
+        backBtn.addEventListener('click', () => {
+            console.log('返回');
+            // 返回到题库页面
+            window.location.href = 'tiku.html';
+        });
+
+        // 触摸事件（移动端优化）
+        backBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            backBtn.click();
+        }, { passive: false });
+
+        // 错题来源切换功能
+        sourceTabs.forEach(tab => {
+            // 点击事件
+            tab.addEventListener('click', () => {
+                // 移除所有标签的active类
+                sourceTabs.forEach(t => t.classList.remove('active'));
+                // 为当前点击的标签添加active类
+                tab.classList.add('active');
+                
+                // 这里可以根据标签切换显示不同的内容
+                console.log('切换到:', tab.textContent);
+                
+                // 根据切换的标签显示不同的内容
+                if (tab.textContent === '题库错题') {
+                    // 跳转到题库错题页面
+                    window.location.href = 'cuotiben.html';
+                } else if (tab.textContent === '拍错题') {
+                    // 显示拍错题内容
+                    console.log('显示拍错题');
+                }
+            });
+
+            // 触摸事件（移动端优化）
+            tab.addEventListener('touchstart', (e) => {
+                // 防止触摸时的默认行为
+                e.preventDefault();
+                // 触发点击事件
+                tab.click();
+            }, { passive: false });
+        });
+
+        // 拍照错题项点击功能
+        photoErrorItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                console.log('查看拍照错题:', index + 1);
+                // 跳转到拍照错题查看页面
+                window.location.href = 'paizhao_cuoti_chakan.html';
+            });
+
+            // 触摸事件（移动端优化）
+            item.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                item.click();
+            }, { passive: false });
+        });
+
+        // 从相册选择
+        function selectFromAlbum() {
+            // 创建一个input元素用于选择文件
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.multiple = false;
+            input.capture = 'none';
+
+            // 监听文件选择事件
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    // 创建一个FileReader对象
+                    const reader = new FileReader();
+
+                    // 监听文件读取完成事件
+                    reader.addEventListener('load', (event) => {
+                        try {
+                            const imageUrl = event.target.result;
+                            console.log('从相册选择:', imageUrl.length, 'bytes');
+                            
+                            // 使用localStorage存储图片URL
+                            localStorage.setItem('cropImageUrl', imageUrl);
+                            
+                            // 跳转到截取照片页面
+                            window.location.href = 'jiequ_zhaopian.html';
+                        } catch (error) {
+                            console.error('处理图片失败:', error);
+                            alert('处理图片失败，请重试');
+                        }
+                    });
+
+                    // 读取文件
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // 触发文件选择
+            input.click();
+        }
+
+        // 底部操作按钮功能
+        footerBtns.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                const actions = ['拍照', '从相册选择'];
+                const action = actions[index];
+                console.log(action);
+                
+                if (action === '拍照') {
+                    // 跳转到拍错题页面
+                    window.location.href = 'paicuoti.html';
+                } else if (action === '从相册选择') {
+                    // 直接打开相册选择功能
+                    selectFromAlbum();
+                }
+            });
+
+            // 触摸事件（移动端优化）
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                btn.click();
+            }, { passive: false });
+        });
+
+        // 页面加载完成后执行
+        window.addEventListener('load', () => {
+            console.log('页面加载完成');
+        });
+
+        // 触摸事件优化（移动端）
+        document.addEventListener('touchstart', function() {}, { passive: true });
+        document.addEventListener('touchmove', function() {}, { passive: true });
+        document.addEventListener('touchend', function() {}, { passive: true });
+
+        // 禁止双击缩放
+        document.addEventListener('dblclick', function(event) {
+            event.preventDefault();
+        });
+    </script>
+</body>
+</html>

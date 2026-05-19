@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>刷题版本 - 库课网校</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        padding-top: 60px;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #333;
+        background-color: #f5f5f5;
+      }
+
+      .top-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        height: 60px;
+        background-color: #fff;
+        border-bottom: 1px solid #e8e8e8;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+      .logo img {
+        height: 32px;
+        margin-right: 16px;
+      }
+      .nav-menu {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      .nav-item {
+        font-size: 14px;
+        color: #333;
+        text-decoration: none;
+        padding: 4px 0;
+        position: relative;
+      }
+      .nav-item:hover {
+        color: #ff4d4f;
+      }
+      .nav-item.active {
+        color: #ff4d4f;
+      }
+      .nav-item.active::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #ff4d4f;
+      }
+
+      .search-user {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .search-box {
+        display: flex;
+        align-items: center;
+        background-color: #f5f5f5;
+        border-radius: 4px;
+        padding: 4px 8px;
+      }
+      .search-box input {
+        border: none;
+        background: transparent;
+        outline: none;
+        padding: 4px 8px;
+        font-size: 14px;
+      }
+      .search-btn {
+        background-color: #ff4d4f;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 4px 12px;
+        cursor: pointer;
+      }
+      .user-links {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .user-link {
+        color: #333;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .notification {
+        position: relative;
+      }
+      .notification-badge {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        background-color: #ff4d4f;
+        color: #fff;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        font-size: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .main-container {
+        max-width: 1200px;
+        margin: 24px auto;
+        padding: 0 24px;
+        min-height: calc(100vh - 180px);
+      }
+      .header-section {
+        background-color: #fff;
+        padding: 24px;
+        border-radius: 8px;
+        margin-bottom: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+      .title-group {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .ver-title {
+        font-size: 20px;
+        font-weight: 600;
+      }
+      .tag {
+        padding: 4px 12px;
+        border-radius: 14px;
+        font-size: 12px;
+        background: #f5f5f5;
+        color: #666;
+      }
+
+      .practice-list {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+      .list-header {
+        display: grid;
+        grid-template-columns: 2fr 100px 100px 200px;
+        padding: 12px 0;
+        border-bottom: 1px solid #e8e8e8;
+        color: #999;
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      .practice-unit {
+        border-bottom: 1px solid #f9f9f9;
+      }
+      .unit-header {
+        display: grid;
+        grid-template-columns: 2fr 100px 100px 200px;
+        align-items: center;
+        padding: 16px 0;
+        cursor: pointer;
+      }
+      .unit-title {
+        font-size: 16px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-left: 8px;
+      }
+      .unit-content {
+        padding-left: 28px;
+        display: block;
+      }
+
+      .practice-item {
+        display: grid;
+        grid-template-columns: 2fr 100px 100px 200px;
+        align-items: center;
+        padding: 16px 0;
+        border-bottom: 1px solid #f5f5f5;
+      }
+      .item-title {
+        font-size: 14px;
+        color: #333;
+      }
+      .item-stats,
+      .item-progress {
+        text-align: center;
+        color: #666;
+        font-size: 14px;
+      }
+      .item-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        padding-right: 20px;
+      }
+
+      .action-btn {
+        padding: 0 16px;
+        height: 30px;
+        border-radius: 4px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: none;
+        min-width: 80px;
+      }
+      .action-btn.primary {
+        background-color: #ff4d4f;
+        color: #fff;
+      }
+      .action-btn.secondary {
+        background-color: #fff;
+        border: 1px solid #d9d9d9;
+        color: #666;
+      }
+
+      .footer {
+        height: 60px;
+        background-color: #fff;
+        border-top: 1px solid #e8e8e8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: #999;
+        margin-top: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top-nav">
+      <div
+        class="logo"
+        onclick="window.location.href = '../index.html'"
+        style="cursor: pointer"
+      >
+        <img
+          src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=red%20background%20with%20white%20chinese%20characters%20%E5%BA%93%E8%AF%BE%20with%20registered%20trademark%20symbol%20simple%20clean%20logo&image_size=square"
+          alt="库课网校"
+        />
+        <span style="font-weight: bold; color: #333">库课网校</span>
+      </div>
+      <div class="nav-menu">
+        <a href="tiku_pc.html" class="nav-item">首页</a>
+        <a href="#" class="nav-item">课程中心</a>
+        <a href="tiku_pc.html" class="nav-item active">题库</a>
+        <a href="#" class="nav-item">资讯</a>
+        <a href="#" class="nav-item">直播日历</a>
+        <a href="#" class="nav-item">各地专升本</a>
+      </div>
+      <div class="search-user">
+        <div class="search-box">
+          <input type="text" placeholder="请输入搜索内容" />
+          <button class="search-btn">搜索</button>
+        </div>
+        <div class="user-links">
+          <a href="#" class="user-link">学习中心</a>
+          <div class="notification">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge">3</span>
+          </div>
+          <div class="user-avatar">
+            <i class="fas fa-user" style="font-size: 18px; color: #666"></i>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div
+      class="main-container"
+      style="
+        display: flex;
+        gap: 24px;
+        max-width: 1200px;
+        margin: 24px auto;
+        padding: 0 24px;
+      "
+    >
+      <div class="left-content" style="flex: 1; min-width: 0">
+        <div class="header-section">
+          <div
+            class="title-group"
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 8px;
+            "
+          >
+            <div class="ver-title" style="display: flex; align-items: center; gap: 8px;">
+              <span onclick="window.history.back()" style="cursor: pointer; color: #666; font-size: 14px; font-weight: normal; margin-right: 8px;">&lt; 返回</span>
+              固定刷题版本名称/教材名称
+            </div>
+            <div
+              style="
+                font-size: 14px;
+                color: #888;
+                background-color: #f5f5f5;
+                padding: 4px 12px;
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                cursor: pointer;
+              "
+            >
+              河南省·语文
+              <i
+                class="fas fa-chevron-down"
+                style="font-size: 10px; color: #ccc"
+              ></i>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button
+              class="action-btn secondary"
+              onclick="
+                window.location.href = '../mobile/zhangjie_zhengti_baogao.html'
+              "
+            >
+              整体报告
+            </button>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                color: #666;
+                font-size: 14px;
+              "
+            >
+              <i class="fas fa-cog"></i> 练习模式
+            </div>
+          </div>
+        </div>
+
+        <div class="practice-list">
+          <div class="list-header">
+            <div style="padding-left: 20px">目录</div>
+            <div style="text-align: center">正确率</div>
+            <div style="text-align: center">进度</div>
+            <div style="text-align: right; padding-right: 20px">操作</div>
+          </div>
+
+          <!-- 章节列表 -->
+          <div class="practice-unit">
+            <div class="unit-header" onclick="toggleUnit(this)">
+              <div class="unit-title">
+                <i class="fas fa-chevron-down"></i>
+                <span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; margin-right: 8px; white-space: nowrap; display: inline-block;">免费</span>
+                第一章：极限与连续
+              </div>                
+
+              <div class="item-stats">75%</div>
+              <div class="item-progress">24/50</div>
+              <div class="item-actions"></div>
+            </div>
+            <div class="unit-content">
+              <div class="practice-item">
+                <div class="item-title" style="padding-left: 20px">
+                  <span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; margin-right: 8px; white-space: nowrap; display: inline-block;">免费</span>
+                  1.1 极限的概念
+                </div>
+                <div class="item-stats">80%</div>
+                <div class="item-progress">12/15</div>
+                <div class="item-actions">
+                  <button
+                    class="action-btn secondary"
+                    onclick="window.location.href='shiti_jiexi_pc.html'"
+                  >
+                    查看解析
+                  </button>
+                  <button
+                    class="action-btn primary"
+                    onclick="window.location.href='dati_yemian_pc.html'"
+                  >
+                    继续答题
+                  </button>
+                </div>
+              </div>
+              <div class="practice-item">
+                <div class="item-title" style="padding-left: 20px">
+                  <span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; margin-right: 8px; white-space: nowrap; display: inline-block;">免费</span>
+                  1.2 无穷小与无穷大
+                </div>
+                <div class="item-stats">60%</div>
+                <div class="item-progress">12/35</div>
+                <div class="item-actions">
+                  <button
+                    class="action-btn secondary"
+                    onclick="window.location.href='../mobile/zhangjie_zhengti_baogao.html'"
+                  >
+                    查看报告
+                  </button>
+                  <button
+                    class="action-btn primary"
+                    onclick="window.location.href='dati_yemian_pc.html'"
+                  >
+                    继续答题
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="practice-unit">
+            <div class="unit-header" onclick="toggleUnit(this)">
+              <div class="unit-title">
+                <i class="fas fa-chevron-down"></i> 第二章：导数与微分
+              </div>
+              <div class="item-stats">0%</div>
+              <div class="item-progress">0/50</div>
+              <div class="item-actions"></div>
+            </div>
+            <div class="unit-content" style="display: none">
+              <div class="practice-item">
+                <div class="item-title" style="padding-left: 20px">
+                  2.1 导数的定义
+                </div>
+                <div class="item-stats">-</div>
+                <div class="item-progress">0/25</div>
+                <div class="item-actions">
+                  <button
+                    class="action-btn primary"
+                    onclick="window.location.href='dati_yemian_pc.html'"
+                  >
+                    开始答题
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右侧边栏 -->
+      <div class="right-sidebar" style="width: 280px; min-width: 280px">
+        <!-- 统计信息 -->
+        <div
+          class="stats-container"
+          style="
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+            class="stat-item"
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 16px;
+            "
+          >
+            <div
+              class="stat-label"
+              style="
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 14px;
+                color: #666;
+              "
+            >
+              <i class="fas fa-check-circle" style="color: #1890ff"></i>
+              <span>今日已答</span>
+            </div>
+            <div
+              class="stat-value"
+              style="font-size: 20px; font-weight: 600; color: #333"
+            >
+              0
+              <span
+                class="stat-unit"
+                style="
+                  font-size: 12px;
+                  font-weight: normal;
+                  color: #999;
+                  margin-left: 2px;
+                "
+                >道</span
+              >
+            </div>
+          </div>
+          <div
+            class="stat-rank"
+            style="font-size: 12px; color: #999; margin-top: 4px"
+          >
+            超过 0% 的学员
+          </div>
+
+          <div style="margin-top: 24px"></div>
+
+          <div
+            class="stat-item"
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 16px;
+            "
+          >
+            <div
+              class="stat-label"
+              style="
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 14px;
+                color: #666;
+              "
+            >
+              <i class="fas fa-history" style="color: #fa8c16"></i>
+              <span>历史共答</span>
+            </div>
+            <div
+              class="stat-value"
+              style="font-size: 20px; font-weight: 600; color: #333"
+            >
+              1660
+              <span
+                class="stat-unit"
+                style="
+                  font-size: 12px;
+                  font-weight: normal;
+                  color: #999;
+                  margin-left: 2px;
+                "
+                >道</span
+              >
+            </div>
+          </div>
+          <div
+            class="stat-rank"
+            style="font-size: 12px; color: #999; margin-top: 4px"
+          >
+            超过 97.39% 的学员
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div>© 2026 库课网校 版权所有</div>
+    </footer>
+
+    <script>
+      function toggleUnit(header) {
+        const icon = header.querySelector("i");
+        const content = header.nextElementSibling;
+        if (content.style.display === "none") {
+          content.style.display = "block";
+          icon.className = "fas fa-chevron-down";
+        } else {
+          content.style.display = "none";
+          icon.className = "fas fa-chevron-right";
+        }
+      }
+    </script>
+  </body>
+</html>
