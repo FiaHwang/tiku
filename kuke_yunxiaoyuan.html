@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>库课云校园 - 在线刷题</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #ffffff;
+        }
+        .header-bg {
+            background: linear-gradient(180deg, #f0f7ff 0%, #ffffff 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+        .nav-active::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 3px;
+            background-color: #3b82f6;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="max-w-md mx-auto min-h-screen pb-12">
+    <!-- Header Section -->
+    <div class="header-bg px-4 pt-4 pb-2">
+        <div class="flex items-center justify-between mb-6">
+            <i class="fas fa-chevron-left text-lg text-gray-700" onclick="history.back()"></i>
+            <h1 class="text-lg font-bold text-gray-800">在线刷题</h1>
+            <div class="w-10"></div> <!-- Placeholder to keep title centered -->
+        </div>
+
+        <div class="flex items-center gap-1 mb-4">
+            <span class="text-2xl font-bold text-gray-900">广东</span>
+            <i class="fas fa-caret-down text-gray-800 text-sm"></i>
+        </div>
+
+        <div class="flex items-center justify-between mb-8 relative">
+            <div class="flex gap-6">
+                <div class="relative text-blue-600 font-bold nav-active">高数</div>
+            </div>
+            <i class="fas fa-bars text-gray-700"></i>
+        </div>
+
+        <div class="flex justify-around text-center mb-6">
+            <div>
+                <div class="text-2xl font-bold text-gray-900">0</div>
+                <div class="text-xs text-gray-500 mt-1">已做题目</div>
+            </div>
+            <div>
+                <div class="text-2xl font-bold text-gray-900">0%</div>
+                <div class="text-xs text-gray-500 mt-1">正确率</div>
+            </div>
+            <div>
+                <div class="text-2xl font-bold text-gray-900">0</div>
+                <div class="text-xs text-gray-500 mt-1">今日做题</div>
+            </div>
+        </div>
+
+        <div class="flex gap-4">
+            <div class="flex-1 bg-gray-50 rounded-2xl p-4 flex items-center justify-center gap-2">
+                <img src="https://img.icons8.com/color/48/000000/bookmark.png" class="w-5 h-5" alt="错题本">
+                <span class="font-bold text-gray-800">错题本</span>
+            </div>
+            <div class="flex-1 bg-gray-50 rounded-2xl p-4 flex items-center justify-center gap-2">
+                <img src="https://img.icons8.com/color/48/000000/star.png" class="w-5 h-5" alt="收藏本">
+                <span class="font-bold text-gray-800">收藏本</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="px-4 mt-4 space-y-4">
+        <!-- AI Card -->
+        <div class="relative bg-white rounded-3xl p-6 border border-blue-50 card-shadow overflow-hidden">
+            
+            <div class="flex items-center justify-end mb-4">
+                <div class="bg-gradient-to-r from-violet-500 to-blue-500 px-3 py-1 rounded-full text-white text-[10px] flex items-center gap-1 shadow-sm">
+                    <i class="fas fa-sparkles text-[8px]"></i>
+                    AI个性化刷题 您的专属刷题计划
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">2026.05.19 智能每日刷题</h3>
+                    <div class="text-sm text-gray-400">正确率 <span class="text-gray-800 font-medium">-</span> | 进度 <span class="text-gray-800 font-medium">0/0</span></div>
+                </div>
+                <div class="text-gray-400 text-sm">更多 <i class="fas fa-chevron-right text-[10px]"></i></div>
+            </div>
+
+            <button class="w-full py-4 rounded-2xl border border-pink-400 text-pink-500 font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] active:bg-pink-50">
+                <i class="fas fa-pencil-alt"></i>
+                开始做题
+            </button>
+        </div>
+
+        <!-- Grid Cards -->
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white rounded-2xl p-5 border border-gray-100 card-shadow flex flex-col justify-between h-32 relative overflow-hidden">
+                <div>
+                    <h5 class="font-bold text-gray-800 mb-1 text-lg">章节自主练</h5>
+                    <p class="text-[11px] text-gray-400">按照章节顺序练习</p>
+                </div>
+                <div class="text-sm font-bold text-gray-800">0<span class="text-gray-300 font-normal">/56</span></div>
+                <div class="absolute bottom-4 right-4 w-12 h-12 flex items-center justify-center">
+                   <img src="https://img.icons8.com/fluency/96/000000/edit--v1.png" class="w-10 h-10" alt="icon">
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl p-5 border border-gray-100 card-shadow flex flex-col justify-between h-32 relative overflow-hidden">
+                <div>
+                    <h5 class="font-bold text-gray-800 mb-1 text-lg">神秘题库</h5>
+                    <p class="text-[11px] text-gray-400">筹备中 敬请关注</p>
+                </div>
+                <div class="absolute bottom-4 right-4 w-12 h-12 flex items-center justify-center">
+                    <img src="https://img.icons8.com/fluency/96/000000/book-shelf.png" class="w-10 h-10 opacity-30" alt="icon">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1096,7 +1096,7 @@
             <div id="special-practice" class="content-section">
                 <div class="special-practice">
                     <div class="special-header">
-                        <div class="special-title" id="special-title-link" style="cursor: pointer;" onclick="if(this.innerText.includes('章节练习')) window.location.href='mokuai_xiangqing_zhangjie_pc.html'">
+                        <div class="special-title" id="special-title-link" style="cursor: pointer;" onclick="window.location.href='mokuai_xiangqing_zhangjie_pc.html'">
                             章节练习 <i class="fas fa-chevron-right" style="font-size: 12px; margin-left: 4px;"></i>
                             <button class="action-btn primary" style="margin-left: 12px; height: 26px; line-height: 24px; padding: 0 12px; font-size: 12px; border-radius: 13px; white-space: nowrap;">立即开通</button>
                         </div>
@@ -1650,6 +1650,15 @@
                         }
                         
                         specialTitle.innerHTML = modeName + ' <i class="fas fa-chevron-right" style="font-size: 12px; margin-left: 4px;"></i>' + btnHtml;
+
+                        // 设置标题点击跳转
+                        if (modeName === '章节练习') {
+                            specialTitle.onclick = () => window.location.href = 'mokuai_xiangqing_zhangjie_pc.html';
+                        } else if (modeName === '每日一练') {
+                            specialTitle.onclick = () => window.location.href = 'mokuai_xiangqing_meiri_pc.html';
+                        } else {
+                            specialTitle.onclick = null;
+                        }
                     }
                     
                     // 更新右侧按钮区域
