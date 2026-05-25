@@ -31,13 +31,14 @@
     </style>
 </head>
 <body class="max-w-md mx-auto min-h-screen">
-    <div class="header-bg px-4 pt-4 pb-6">
-        <div class="flex items-center justify-between mb-6">
-            <i class="fas fa-chevron-left text-lg text-gray-700" onclick="history.back()"></i>
-            <h1 class="text-lg font-bold text-gray-800">在线刷题</h1>
-            <div class="w-10"></div> <!-- Placeholder to keep title centered -->
-        </div>
+    <!-- Sticky Header -->
+    <div class="sticky top-0 bg-[#fff5f0] z-50 px-4 py-4 flex items-center justify-between border-b border-orange-100/20 shadow-sm">
+        <i class="fas fa-chevron-left text-lg text-gray-700 cursor-pointer" onclick="history.back()"></i>
+        <h1 class="text-lg font-bold text-gray-800">在线刷题</h1>
+        <div class="w-10"></div> <!-- Placeholder to keep title centered -->
+    </div>
 
+    <div class="header-bg px-4 pt-4 pb-6">
         <div class="flex items-center gap-2 mb-6">
             <span class="text-2xl font-bold text-gray-900">专升本</span>
             <i class="fas fa-caret-down text-gray-400 text-sm"></i>
@@ -69,18 +70,18 @@
         </div>
 
         <div class="flex gap-4">
-            <div class="flex-1 bg-white rounded-2xl p-4 flex items-center justify-center gap-2 card-shadow">
+            <a href="cuotiben.html" class="flex-1 bg-white rounded-2xl p-4 flex items-center justify-center gap-2 card-shadow active:scale-98 transition-all">
                 <div class="w-8 h-8 bg-orange-50 rounded-lg flex items-center justify-center">
                     <i class="fas fa-book-open text-orange-600"></i>
                 </div>
                 <span class="font-bold text-gray-800">错题本</span>
-            </div>
-            <div class="flex-1 bg-white rounded-2xl p-4 flex items-center justify-center gap-2 card-shadow">
+            </a>
+            <a href="shoucangben.html" class="flex-1 bg-white rounded-2xl p-4 flex items-center justify-center gap-2 card-shadow active:scale-98 transition-all">
                 <div class="w-8 h-8 bg-orange-50 rounded-lg flex items-center justify-center">
                     <i class="fas fa-folder-open text-orange-600"></i>
                 </div>
                 <span class="font-bold text-gray-800">收藏本</span>
-            </div>
+            </a>
         </div>
     </div>
 
@@ -111,19 +112,8 @@
 
         <!-- Practice Cards Grid -->
         <div class="grid grid-cols-2 gap-4">
-            <!-- 知识点通关测 -->
-            <a href="#" class="bg-gradient-to-br from-rose-400 to-rose-500 rounded-3xl p-4 text-white h-32 relative overflow-hidden card-shadow block active:scale-[0.98] transition-transform">
-                <h4 class="text-base font-bold mb-0.5">知识点通关测</h4>
-                <p class="text-[9px] opacity-80 mb-3">全量知识点不遗漏</p>
-                <div class="bg-white/30 rounded-full px-2 py-0.5 text-[9px] font-bold inline-flex items-center gap-1">
-                    GO <i class="fas fa-caret-right text-[8px]"></i>
-                </div>
-                <div class="absolute bottom-1 right-1 w-12 h-12 opacity-20">
-                    <i class="fas fa-edit text-4xl"></i>
-                </div>
-            </a>
             <!-- 知识点自主刷 -->
-            <a href="#" class="bg-gradient-to-br from-amber-400 to-orange-500 rounded-3xl p-4 text-white h-32 relative overflow-hidden card-shadow block active:scale-[0.98] transition-transform">
+            <a href="zhishidian_zizhushua.html" class="bg-gradient-to-br from-amber-400 to-orange-500 rounded-3xl p-4 text-white h-32 relative overflow-hidden card-shadow block active:scale-[0.98] transition-transform">
                 <h4 class="text-base font-bold mb-0.5">知识点自主刷</h4>
                 <p class="text-[9px] opacity-80 mb-3">自由练习，查漏补缺</p>
                 <div class="bg-white/30 rounded-full px-2 py-0.5 text-[9px] font-bold inline-flex items-center gap-1">
@@ -133,8 +123,19 @@
                     <i class="fas fa-graduation-cap text-4xl"></i>
                 </div>
             </a>
+            <!-- 知识点通关测 -->
+            <a href="zhishidian_tongguan.html" class="bg-gradient-to-br from-rose-400 to-rose-500 rounded-3xl p-4 text-white h-32 relative overflow-hidden card-shadow block active:scale-[0.98] transition-transform">
+                <h4 class="text-base font-bold mb-0.5">知识点通关测</h4>
+                <p class="text-[9px] opacity-80 mb-3">全量知识点不遗漏</p>
+                <div class="bg-white/30 rounded-full px-2 py-0.5 text-[9px] font-bold inline-flex items-center gap-1">
+                    GO <i class="fas fa-caret-right text-[8px]"></i>
+                </div>
+                <div class="absolute bottom-1 right-1 w-12 h-12 opacity-20">
+                    <i class="fas fa-edit text-4xl"></i>
+                </div>
+            </a>
             <!-- 章节自主刷 (Now colorful) -->
-            <a href="#" class="bg-gradient-to-br from-indigo-400 to-violet-500 rounded-3xl p-4 text-white h-32 relative overflow-hidden card-shadow block active:scale-[0.98] transition-transform">
+            <a href="zhangjie_zizhushua.html" class="bg-gradient-to-br from-indigo-400 to-violet-500 rounded-3xl p-4 text-white h-32 relative overflow-hidden card-shadow block active:scale-[0.98] transition-transform">
                 <h4 class="text-base font-bold mb-0.5">章节自主刷</h4>
                 <p class="text-[9px] opacity-80 mb-3">按照章节顺序练习</p>
                 <div class="bg-white/30 rounded-full px-2 py-0.5 text-[9px] font-bold inline-flex items-center gap-1">
@@ -166,7 +167,7 @@
         <!-- Bottom Cards Grid for Papers -->
         <div class="grid grid-cols-2 gap-4">
             <!-- 套卷速刷 -->
-            <div class="bg-white rounded-3xl p-5 card-shadow flex flex-col justify-between h-32 border border-gray-50 active:scale-[0.98] transition-transform">
+            <a href="taojuan_sushua.html" class="bg-white rounded-3xl p-5 card-shadow flex flex-col justify-between h-32 border border-gray-50 active:scale-[0.98] transition-transform block">
                 <div>
                     <h5 class="font-bold text-gray-800 mb-1">套卷速刷</h5>
                     <p class="text-[10px] text-gray-400 mb-2">模拟练习，见真知</p>
@@ -177,9 +178,9 @@
                         <i class="fas fa-file-alt text-blue-400 text-sm"></i>
                     </div>
                 </div>
-            </div>
+            </a>
             <!-- 章节速刷 -->
-            <div class="bg-white rounded-3xl p-5 card-shadow flex flex-col justify-between h-32 border border-gray-50 active:scale-[0.98] transition-transform">
+            <a href="zhangjie_sushua.html" class="bg-white rounded-3xl p-5 card-shadow flex flex-col justify-between h-32 border border-gray-50 active:scale-[0.98] transition-transform block">
                 <div>
                     <h5 class="font-bold text-gray-800 mb-1">章节速刷</h5>
                     <p class="text-[10px] text-gray-400 mb-2">章节精选试卷</p>
@@ -190,7 +191,7 @@
                         <i class="fas fa-bolt text-violet-400 text-sm"></i>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 </body>

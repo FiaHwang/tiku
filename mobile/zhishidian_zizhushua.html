@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>知识点自主刷</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // 清理 URL 中的 origin 参数，保持地址栏整洁
+        (function() {
+            const url = new URL(window.location.href);
+            if (url.searchParams.has('origin')) {
+                url.searchParams.delete('origin');
+                const newUrl = url.pathname + url.search + url.hash;
+                window.history.replaceState({}, '', newUrl);
+            }
+        })();
+    </script>
+    <style>
+        /* 重置样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f5f5f5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding-bottom: 24px;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            display: flex;
+            flex-direction: column;
+            padding: 12px 16px;
+            background-color: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .action-btn {
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: transparent;
+            font-size: 18px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 模块容器 */
+        .content-container {
+            padding: 12px;
+        }
+
+        .special-practice {
+            background-color: #fff;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .special-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .special-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .special-title i {
+            margin-right: 8px;
+            color: #ff4d4f;
+        }
+
+        .practice-mode-tag {
+            font-size: 12px;
+            color: #999;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* 练习单元 */
+        .practice-unit {
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .practice-unit:last-child {
+            border-bottom: none;
+        }
+
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .unit-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .unit-progress {
+            font-size: 13px;
+            color: #999;
+            margin-top: 8px;
+            margin-bottom: 12px;
+            padding-left: 24px;
+        }
+
+        .unit-content {
+            padding-left: 24px;
+        }
+
+        /* 练习项 */
+        .practice-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .practice-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .item-stats {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn-small {
+            padding: 6px 16px;
+            border: 1px solid #d9d9d9;
+            border-radius: 14px;
+            background-color: #fff;
+            font-size: 13px;
+            color: #666;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            transition: all 0.2s;
+        }
+
+        .action-btn-small.primary {
+            background-color: #ff4d4f;
+            color: #fff;
+            border-color: #ff4d4f;
+        }
+
+        .action-btn-small:active {
+            opacity: 0.8;
+        }
+
+        /* 掌握度标签 */
+        .mastery-tag {
+            font-size: 11px;
+            color: #fa8c16;
+            background-color: #fff7e6;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+            font-weight: normal;
+            border: 1px solid #ffd591;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .mastery-tag.mastered {
+            color: #52c41a;
+            background-color: #f6ffed;
+            border-color: #b7eb8f;
+        }
+
+        /* 正确率颜色 */
+        .accuracy-red {
+            color: #f5222d;
+            font-weight: 500;
+        }
+
+        .accuracy-yellow {
+            color: #faad14;
+            font-weight: 500;
+        }
+
+        .accuracy-green {
+            color: #52c41a;
+            font-weight: 500;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .special-practice {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        /* 底部设置弹窗 */
+        .bottom-drawer-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .bottom-drawer {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, 100%);
+            width: 100%;
+            max-width: 448px; /* max-w-md matching max-w-md mx-auto */
+            background-color: #fff;
+            border-radius: 20px 20px 0 0;
+            z-index: 2001;
+            padding: 24px 20px 20px 20px;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-height: 88vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bottom-drawer-body {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            margin-bottom: 16px;
+            padding-right: 2px;
+        }
+
+        .bottom-drawer-body::-webkit-scrollbar {
+            display: none;
+        }
+
+        .bottom-drawer.active {
+            transform: translate(-50%, 0);
+        }
+
+        .bottom-drawer-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 24px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .bottom-drawer-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .bottom-drawer-close {
+            position: absolute;
+            right: 0;
+            top: 0;
+            font-size: 20px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .mode-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .mode-card {
+            background-color: #f8fafc;
+            border-radius: 12px;
+            padding: 14px;
+            cursor: pointer;
+            border: 1.5px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .mode-card.active {
+            background-color: #fff;
+            border-color: #1890ff;
+            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.1);
+        }
+
+        .mode-card-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .mode-card.active .mode-card-title {
+            color: #1890ff;
+        }
+
+        .mode-card-desc {
+            font-size: 11px;
+            color: #888;
+            line-height: 1.4;
+        }
+
+        .mode-card.active .mode-card-desc {
+            color: #1890ff;
+            opacity: 0.82;
+        }
+
+        .count-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .count-btn {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #4a5568;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.15s;
+        }
+
+        .count-btn.active {
+            border-color: #1890ff;
+            background-color: #e6f7ff;
+            color: #1890ff;
+            font-weight: 600;
+        }
+
+        .animation-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            margin-bottom: 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: .3s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #1890ff;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        .confirm-btn {
+            width: 100%;
+            height: 46px;
+            background-color: #1890ff;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 5px;
+            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.2);
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .confirm-btn:active {
+            transform: translateY(1px);
+            opacity: 0.95;
+        }
+
+        /* Toast 提示圈 */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translate(-50%, 10px);
+            background-color: rgba(0, 0, 0, 0.82);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            transform: translate(-50%, 0);
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="header">
+        <div class="header-top" style="position: relative; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-chevron-left" onclick="history.back()" style="position: absolute; left: 0; font-size: 18px; color: #333; cursor: pointer;"></i>
+            <div class="header-title">知识点自主刷</div>
+        </div>
+    </div>
+
+    <div class="content-container">
+        <div class="special-practice">
+            <!-- 切换及功能导航区 -->
+            <div style="padding: 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                <button id="knowledge-textbook-switch" style="padding: 6px 12px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; cursor: pointer;">
+                    <i class="fas fa-book" style="margin-right: 6px; color: #ff4d4f;"></i> 知识点体系 <i class="fas fa-chevron-down" style="margin-left: 4px; font-size: 10px; color: #aaa;"></i>
+                </button>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div id="practice-mode-btn" style="padding: 6px 12px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #f5f5f5; font-size: 11px; color: #666; display: flex; align-items: center; gap: 4px; cursor: pointer; -webkit-tap-highlight-color: transparent; font-weight: 500; transition: all 0.2s;" class="hover:bg-gray-100 select-none active:scale-95">
+                        <i class="fas fa-cog" style="font-size: 12px; color: #999;"></i> <span id="current-mode-text">练习模式</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 快速动作区域 -->
+            <div style="padding: 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-around; align-items: center;">
+                <button onclick="alert('已开启智能练习！')" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">智能练习</button>
+                <button onclick="alert('整体报告生成中...')" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">整体报告</button>
+                <button onclick="window.location.href='lianxi_lishi.html'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">练习历史</button>
+            </div>
+
+            <!-- 知识分类列表 -->
+            <!-- 知识点分类 1 -->
+            <div class="practice-unit">
+                <div class="unit-header" onclick="toggleUnit(this)">
+                    <div class="unit-title">
+                        <i class="fas fa-chevron-down" style="color: #999; font-size: 14px;"></i>
+                        文学常识
+                    </div>
+                    <button class="action-btn-small primary" onclick="event.stopPropagation(); window.location.href='dati_yemian.html?mode=knowledge&type=1'">练习</button>
+                </div>
+                <div class="unit-progress">17/37 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">20%</span></div>
+                <div class="unit-content">
+                    <!-- 练习项 -->
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">文学常识基础</div>
+                            <div class="item-stats">17/37 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">20%</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=1_1'">练习</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 知识点分类 2 -->
+            <div class="practice-unit">
+                <div class="unit-header" onclick="toggleUnit(this)">
+                    <div class="unit-title">
+                        <i class="fas fa-chevron-down" style="color: #999; font-size: 14px;"></i>
+                        基础写作
+                    </div>
+                    <button class="action-btn-small primary" onclick="event.stopPropagation(); window.location.href='dati_yemian.html?mode=knowledge&type=2'">练习</button>
+                </div>
+                <div class="unit-progress">35/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-green">87.5%</span></div>
+                <div class="unit-content">
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">作文逻辑</div>
+                            <div class="item-stats">35/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-green">87.5%</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=2_1'">练习</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 知识点分类 3 -->
+            <div class="practice-unit">
+                <div class="unit-header" onclick="toggleUnit(this)">
+                    <div class="unit-title">
+                        <i class="fas fa-chevron-down" style="color: #999; font-size: 14px;"></i>
+                        古诗词背诵
+                    </div>
+                    <button class="action-btn-small primary" onclick="event.stopPropagation(); window.location.href='dati_yemian.html?mode=knowledge&type=3'">练习</button>
+                </div>
+                <div class="unit-progress">16/32 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">50%</span></div>
+                <div class="unit-content">
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">盛唐诗歌</div>
+                            <div class="item-stats">16/32 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">50%</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=3_1'">练习</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 知识点分类 4 -->
+            <div class="practice-unit">
+                <div class="unit-header" onclick="toggleUnit(this)">
+                    <div class="unit-title">
+                        <i class="fas fa-chevron-down" style="color: #999; font-size: 14px;"></i>
+                        语法知识
+                    </div>
+                    <button class="action-btn-small primary" onclick="event.stopPropagation(); window.location.href='dati_yemian.html?mode=knowledge&type=4'">练习</button>
+                </div>
+                <div class="unit-progress">0/25 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">0%</span></div>
+                <div class="unit-content">
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">语法基础</div>
+                            <div class="item-stats">0/25 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">0%</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=4_1'">练习</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 知识点分类 5 -->
+            <div class="practice-unit">
+                <div class="unit-header" onclick="toggleUnit(this)">
+                    <div class="unit-title">
+                        <i class="fas fa-chevron-down" style="color: #999; font-size: 14px;"></i>
+                        阅读理解
+                    </div>
+                    <button class="action-btn-small primary" onclick="event.stopPropagation(); window.location.href='dati_yemian.html?mode=knowledge&type=5'">练习</button>
+                </div>
+                <div class="unit-progress">5/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">12.5%</span></div>
+                <div class="unit-content">
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">阅读理解技巧</div>
+                            <div class="item-stats">5/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">12.5%</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=5_1'">练习</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Toast 提示圈 -->
+    <div id="toast" class="toast"></div>
+
+    <!-- 答题设置底部弹窗 -->
+    <div class="bottom-drawer-mask" id="settings-mask"></div>
+    <div class="bottom-drawer" id="settings-drawer">
+        <div class="bottom-drawer-header">
+            <div class="bottom-drawer-title">答题设置</div>
+            <div class="bottom-drawer-close" id="close-settings-btn">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <div class="bottom-drawer-body">
+            <div class="section-title">答题模式</div>
+            <div class="mode-grid">
+                <div class="mode-card active">
+                    <div class="mode-card-title">练习模式</div>
+                    <div class="mode-card-desc">答题后直接显示答案</div>
+                </div>
+                <div class="mode-card">
+                    <div class="mode-card-title">考试计时模式</div>
+                    <div class="mode-card-desc">不限时间，交卷后显示答案</div>
+                </div>
+                <div class="mode-card">
+                    <div class="mode-card-title">快答模式</div>
+                    <div class="mode-card-desc">答题错误后显示答案</div>
+                </div>
+                <div class="mode-card">
+                    <div class="mode-card-title">背题模式</div>
+                    <div class="mode-card-desc">直接显示答案</div>
+                </div>
+            </div>
+
+            <div id="question-count-section">
+                <div class="section-title">每次答题数量</div>
+                <div class="count-grid">
+                    <div class="count-btn active">全部</div>
+                    <div class="count-btn">10道</div>
+                    <div class="count-btn">20道</div>
+                    <div class="count-btn">30道</div>
+                    <div class="count-btn">40道</div>
+                    <div class="count-btn">50道</div>
+                </div>
+            </div>
+
+            <div id="question-difficulty-section">
+                <div class="section-title">试题难度</div>
+                <div class="count-grid" style="grid-template-columns: repeat(4, 1fr);">
+                    <div class="count-btn difficulty-btn active">不限</div>
+                    <div class="count-btn difficulty-btn">易</div>
+                    <div class="count-btn difficulty-btn">中</div>
+                    <div class="count-btn difficulty-btn">难</div>
+                </div>
+            </div>
+
+            <div class="animation-toggle">
+                <div class="toggle-label">动画开关</div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="animation-toggle-input" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <button class="confirm-btn" id="confirm-settings-btn">确定</button>
+    </div>
+
+    <script>
+        // toast 提示
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            if (toast) {
+                toast.textContent = msg;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            }
+        }
+
+        // 展开/收回单元
+        function toggleUnit(header) {
+            const icon = header.querySelector('.fa-chevron-down, .fa-chevron-up');
+            const content = header.parentElement.querySelector('.unit-content');
+            if (!content) return;
+
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                if (icon) {
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                }
+            } else {
+                content.style.display = 'none';
+                if (icon) {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                }
+            }
+        }
+
+        // 弹窗与设置相关逻辑
+        const settingsMask = document.getElementById('settings-mask');
+        const settingsDrawer = document.getElementById('settings-drawer');
+        const practiceModeBtn = document.getElementById('practice-mode-btn');
+        const closeSettingsBtn = document.getElementById('close-settings-btn');
+        const confirmSettingsBtn = document.getElementById('confirm-settings-btn');
+        const currentModeText = document.getElementById('current-mode-text');
+
+        function openDrawer() {
+            settingsMask.style.display = 'block';
+            setTimeout(() => {
+                settingsMask.style.opacity = '1';
+                settingsDrawer.classList.add('active');
+            }, 10);
+        }
+
+        function closeDrawer() {
+            settingsMask.style.opacity = '0';
+            settingsDrawer.classList.remove('active');
+            setTimeout(() => {
+                settingsMask.style.display = 'none';
+            }, 300);
+        }
+
+        if (practiceModeBtn) {
+            practiceModeBtn.addEventListener('click', openDrawer);
+        }
+        if (closeSettingsBtn) {
+            closeSettingsBtn.addEventListener('click', closeDrawer);
+        }
+        if (settingsMask) {
+            settingsMask.addEventListener('click', closeDrawer);
+        }
+
+        // 切换模式逻辑
+        const modeCards = document.querySelectorAll('.mode-card');
+        modeCards.forEach(card => {
+            card.addEventListener('click', () => {
+                modeCards.forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+            });
+        });
+
+        // 切换题数逻辑
+        const countBtns = document.querySelectorAll('#question-count-section .count-btn');
+        countBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                countBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // 切换难度逻辑
+        const difficultyBtns = document.querySelectorAll('#question-difficulty-section .count-btn');
+        difficultyBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                difficultyBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        if (confirmSettingsBtn) {
+            confirmSettingsBtn.addEventListener('click', () => {
+                const activeModeCard = document.querySelector('.mode-card.active');
+                const activeDifficultyBtn = document.querySelector('#question-difficulty-section .count-btn.active');
+                let toastMsg = '';
+                
+                if (activeModeCard) {
+                    const modeTitle = activeModeCard.querySelector('.mode-card-title').textContent.trim();
+                    currentModeText.textContent = modeTitle;
+                    toastMsg = '已保存设置。模式：' + modeTitle;
+                }
+                
+                if (activeDifficultyBtn) {
+                    const diffText = activeDifficultyBtn.textContent.trim();
+                    toastMsg += '，难度：' + diffText;
+                }
+                
+                showToast(toastMsg);
+                closeDrawer();
+            });
+        }
+    </script>
+</body>
+</html>

@@ -43,6 +43,7 @@
         .header {
             display: flex;
             align-items: center;
+            justify-content: center;
             height: 56px;
             padding: 0 16px;
             background-color: #fff;
@@ -52,6 +53,10 @@
         }
 
         .back-btn {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
             width: 40px;
             height: 40px;
             border: none;
@@ -62,7 +67,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 10px;
+            z-index: 101;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -81,7 +86,9 @@
 
         .nav-tabs {
             display: flex;
-            flex: 1;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
             overflow-x: auto;
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
@@ -387,6 +394,13 @@
                 padding: 0 14px;
             }
 
+            .back-btn {
+                left: 14px;
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+            }
+
             .header-title {
                 font-size: 17px;
             }
@@ -439,6 +453,13 @@
             .header {
                 height: 48px;
                 padding: 0 12px;
+            }
+
+            .back-btn {
+                left: 12px;
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
             }
 
             .header-title {

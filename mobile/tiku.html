@@ -1244,7 +1244,7 @@
         </div>
         <div class="practice-mode">
             <div class="practice-icon"><i class="fas fa-robot"></i></div>
-            <div class="practice-label">AI通关练</div>
+            <div class="practice-label">AI闯关练</div>
         </div>
     </div>
 
@@ -2031,26 +2031,26 @@
         </div>
     </div>
 
-    <!-- AI通关练区域 -->
+    <!-- AI闯关练区域 -->
     <div id="ai-practice" class="content-section" style="display: none; padding: 0;">
-        <div style="background-color: #fff; padding: 12px 16px; border-bottom: 1px solid #e0e0e0;">
+        <div style="background-color: #fff; padding: 12px 16px; border-bottom: 1px solid #e0e0e0; cursor: pointer;" onclick="location.href='ai_chuangguan.html'">
             <div style="display: flex; align-items: center;">
-                <div style="font-size: 16px; font-weight: 500; color: #333;">AI练习</div>
+                <div style="font-size: 16px; font-weight: 500; color: #333;">AI闯关练</div>
                 <i class="fas fa-chevron-right" style="margin-left: 8px; color: #1890ff;"></i>
             </div>
         </div>
         <div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 60vh; padding: 48px 24px 24px;">
-            <div style="width: 200px; height: 200px; border-radius: 50%; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center; margin-bottom: 32px;">
+            <div style="width: 200px; height: 200px; border-radius: 50%; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; cursor: pointer;" onclick="location.href='ai_chuangguan.html'">
                 <div style="font-size: 18px; color: #999;">固定配图</div>
             </div>
-            <button style="width: 200px; padding: 12px; background-color: #1890ff; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer;">开始练习</button>
+            <button style="width: 200px; padding: 12px; background-color: #1890ff; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer;" onclick="location.href='ai_chuangguan.html'">开始练习</button>
         </div>
     </div>
 
     <!-- 知识点练习区域 -->
     <div id="knowledge-practice" class="content-section" style="display: none;">
         <div class="special-practice">
-            <div class="special-header">
+            <div class="special-header" onclick="location.href='mokuai_xiangqing_zhishidian.html'" style="cursor: pointer;">
                 <div class="special-title">知识点练习 <i class="fas fa-chevron-right" style="font-size: 14px; margin-left: 4px;"></i></div>
                 <div style="display: flex; gap: 8px;">
                     <div class="practice-mode-tag" onclick="event.stopPropagation();"><i class="fas fa-cog" style="font-size: 14px; margin-right: 4px;"></i>练习模式</div>
@@ -2255,7 +2255,7 @@
         // 练习模式点击事件
         practiceModes.forEach((mode, index) => {
             mode.addEventListener('click', () => {
-                const modes = ['章节练习', '固定刷题', '每日一练', '知识点练习', '历年真题', '统考试卷', '大联考', '估分试卷', 'AI通关练'];
+                const modes = ['章节练习', '固定刷题', '每日一练', '知识点练习', '历年真题', '统考试卷', '大联考', '估分试卷', 'AI闯关练'];
                 const modeName = modes[index];
                 console.log('点击练习模式:', modeName);
                 
@@ -2390,8 +2390,8 @@
                     document.getElementById('fixed-practice').style.display = 'block';
                     document.getElementById('ai-practice').style.display = 'none';
                     document.getElementById('knowledge-practice').style.display = 'none';
-                } else if (modeName === 'AI通关练') {
-                    // 点击AI通关练时显示AI通关练内容
+                } else if (modeName === 'AI闯关练') {
+                    // 点击AI闯关练时显示AI闯关练内容
                     chapterPractice.style.display = 'none';
                     scorePrediction.style.display = 'none';
                     document.getElementById('past-exams').style.display = 'none';

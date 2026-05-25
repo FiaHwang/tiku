@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>章节自主练</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Clean URL parameters
+        (function() {
+            const url = new URL(window.location.href);
+            if (url.searchParams.has('origin')) {
+                url.searchParams.delete('origin');
+                const newUrl = url.pathname + url.search + url.hash;
+                window.history.replaceState({}, '', newUrl);
+            }
+        })();
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8fafc;
+            color: #333;
+        }
+
+        /* 弹出提示框 */
+        .toast {
+            display: none;
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0,0,0,0.85);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            z-index: 2000;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .toast.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translate(-50%, 20px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+
+        .transition-max-height {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+        }
+
+        /* 底部设置弹窗 */
+        .bottom-drawer-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .bottom-drawer {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, 100%);
+            width: 100%;
+            max-width: 448px; /* max-w-md matching max-w-md mx-auto */
+            background-color: #fff;
+            border-radius: 20px 20px 0 0;
+            z-index: 2001;
+            padding: 24px 20px 20px 20px;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-height: 88vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bottom-drawer-body {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            margin-bottom: 16px;
+            padding-right: 2px;
+        }
+
+        .bottom-drawer-body::-webkit-scrollbar {
+            display: none;
+        }
+
+        .bottom-drawer.active {
+            transform: translate(-50%, 0);
+        }
+
+        .bottom-drawer-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 24px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .bottom-drawer-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .bottom-drawer-close {
+            position: absolute;
+            right: 0;
+            top: 0;
+            font-size: 20px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .mode-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .mode-card {
+            background-color: #f8fafc;
+            border-radius: 12px;
+            padding: 14px;
+            cursor: pointer;
+            border: 1.5px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .mode-card.active {
+            background-color: #fff;
+            border-color: #1890ff;
+            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.1);
+        }
+
+        .mode-card-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .mode-card.active .mode-card-title {
+            color: #1890ff;
+        }
+
+        .mode-card-desc {
+            font-size: 11px;
+            color: #888;
+            line-height: 1.4;
+        }
+
+        .mode-card.active .mode-card-desc {
+            color: #1890ff;
+            opacity: 0.82;
+        }
+
+        .count-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .count-btn {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #4a5568;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.15s;
+        }
+
+        .count-btn.active {
+            border-color: #1890ff;
+            background-color: #e6f7ff;
+            color: #1890ff;
+            font-weight: 600;
+        }
+
+        .animation-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            margin-bottom: 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: .3s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #1890ff;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        .confirm-btn {
+            width: 100%;
+            height: 46px;
+            background-color: #1890ff;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 5px;
+            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.2);
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .confirm-btn:active {
+            transform: translateY(1px);
+            opacity: 0.95;
+        }
+    </style>
+</head>
+<body class="max-w-md mx-auto min-h-screen flex flex-col bg-[#f8fafc] shadow-lg relative pb-12">
+
+    <!-- 顶栏 (无胶囊，标题完美水平居中) -->
+    <div class="sticky top-0 bg-white z-50 px-4 py-3.5 flex items-center justify-center border-b border-gray-100 shadow-sm relative">
+        <i class="fas fa-chevron-left text-lg text-gray-700 cursor-pointer hover:opacity-80 transition-opacity absolute left-4" onclick="history.back()"></i>
+        <h1 class="text-base font-bold text-gray-800">章节自主练</h1>
+    </div>
+
+    <!-- 教材选择及练习模式设置栏 -->
+    <div class="bg-white px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <button class="px-3 py-1.5 border border-gray-200 rounded-md bg-[#fafafa] text-[13px] text-gray-600 font-medium flex items-center gap-1.5 active:opacity-80">
+                <i class="fas fa-book-bookmark text-[#1890ff]"></i>
+                <span>2024版核心教材</span>
+                <i class="fas fa-chevron-down text-[10px] text-gray-400"></i>
+            </button>
+        </div>
+        <div class="flex items-center gap-2">
+            <div id="practice-mode-btn" class="px-2.5 py-1.5 bg-[#f5f5f5] hover:bg-gray-100 border border-gray-200/80 rounded-md text-[11px] text-gray-500 font-medium flex items-center gap-1 cursor-pointer select-none active:scale-95 transition-all">
+                <i class="fas fa-cog text-gray-400 font-xs"></i>
+                <span id="current-mode-text">练习模式</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 试题章节列表 -->
+    <div class="flex-1 flex flex-col pt-3 gap-0.5" id="chapterContainer">
+
+        <!-- 章节 1：初等函数 (选做) (初始展开状态) -->
+        <div class="bg-white border-b border-gray-100">
+            <!-- 章节头部，包含点击切换展开/折叠 -->
+            <div class="px-4 py-4 flex items-start gap-3 cursor-pointer select-none active:bg-gray-50/75 transition-colors" onclick="toggleChapter(1)">
+                <!-- 展开/折叠状态图标 -->
+                <div id="chevron-circle-1" class="w-5 h-5 flex items-center justify-center rounded-full bg-[#1890ff] text-white text-[10px] mt-0.5 transition-transform duration-200">
+                    <i class="fas fa-chevron-up"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-base font-bold text-gray-800 leading-snug">初等函数 (选做)</h3>
+                    <p class="text-[11px] text-gray-400 mt-0.5">正确率50%</p>
+                    
+                    <div class="flex items-center justify-between mt-2">
+                        <span class="text-xs font-semibold text-[#1890ff]">进行中</span>
+                        <!-- 进度条 -->
+                        <div class="flex-1 mx-3 bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-[#1890ff] h-full rounded-full" style="width: 1.5%"></div>
+                        </div>
+                        <span class="text-xs font-mono text-gray-400">22/1528</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 子小节列表 (展开状态) -->
+            <div id="subsections-1" class="max-h-[1000px] transition-max-height bg-slate-50/50">
+                <div class="pl-12 pr-4 py-1 flex flex-col gap-5 border-t border-gray-100/50 pb-5">
+                    
+                    <!-- 小节 1 -->
+                    <div class="flex items-center justify-between mt-4">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">数</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">21/294 <span class="ml-2">正确率: 0%</span></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 flex-shrink-0">
+                            <button onclick="view解析('初等函数 - 数')" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold rounded-lg text-xs transition-all active:scale-95">
+                                查看解析
+                            </button>
+                            <button onclick="startDati('初等函数 - 数', 'continue')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                                继续答题
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 小节 2 -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">代数</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">1/368 <span class="ml-2">正确率: 100%</span></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 flex-shrink-0">
+                            <button onclick="startDati('初等函数 - 代数', 'continue')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                                继续答题
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 小节 3 -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">解方程及方程组</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/176 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 flex-shrink-0">
+                            <button onclick="startDati('初等函数 - 解方程及方程组', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                                开始答题
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 小节 4 -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">解不等式及不等式组</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/187 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 flex-shrink-0">
+                            <button onclick="startDati('初等函数 - 解不等式及不等式组', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                                开始答题
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 小节 5 -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">比和比例</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/66 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 flex-shrink-0">
+                            <button onclick="startDati('初等函数 - 比和比例', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                                开始答题
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 小节 6 -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">数列</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/70 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 flex-shrink-0">
+                            <button onclick="startDati('初等函数 - 数列', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                                开始答题
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 小节 7 -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">直角三角形及三角函数</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/66 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 flex-shrink-0">
+                            <button onclick="startDati('初等函数 - 直角三角形及三角函数', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                                开始答题
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 小节 8 -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">平面直角坐标系</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/109 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 flex-shrink-0">
+                            <button onclick="startDati('初等函数 - 平面直角坐标系', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                                开始答题
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 章节 2：函数、极限和连续 -->
+        <div class="bg-white border-b border-gray-100">
+            <div class="px-4 py-4 flex items-start gap-3 cursor-pointer select-none active:bg-gray-50/75 transition-colors" onclick="toggleChapter(2)">
+                <div id="chevron-circle-2" class="w-5 h-5 flex items-center justify-center rounded-full bg-gray-300 text-white text-[10px] mt-0.5 transition-transform duration-200">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-base font-bold text-gray-800 leading-snug">函数、极限和连续</h3>
+                    <p class="text-[11px] text-gray-400 mt-0.5">正确率 -</p>
+                    
+                    <div class="flex items-center justify-between mt-2">
+                        <span class="text-xs font-semibold text-gray-400">未开始</span>
+                        <div class="flex-1 mx-3 bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-gray-300 h-full rounded-full" style="width: 0%"></div>
+                        </div>
+                        <span class="text-xs font-mono text-gray-400">0/17142</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="subsections-2" class="max-h-0 transition-max-height bg-slate-50/50">
+                <div class="pl-12 pr-4 py-1 flex flex-col gap-5 border-t border-gray-100/50 pb-5">
+                    
+                    <div class="flex items-center justify-between mt-4">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">函数的概念与性质</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/3420 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <button onclick="startDati('函数、极限和连续 - 函数的概念与性质', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                            开始答题
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">极限的概念与运算法则</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/5920 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <button onclick="startDati('函数、极限和连续 - 极限的概念与运算法则', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                            开始答题
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">无穷小量与无穷大量</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/4210 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <button onclick="startDati('函数、极限和连续 - 无穷小量与无穷大量', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                            开始答题
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">函数的连续性与间断点</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/3592 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <button onclick="startDati('函数、极限和连续 - 函数的连续性与间断点', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                            开始答题
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 章节 3：导数与微分 -->
+        <div class="bg-white border-b border-gray-100">
+            <div class="px-4 py-4 flex items-start gap-3 cursor-pointer select-none active:bg-gray-50/75 transition-colors" onclick="toggleChapter(3)">
+                <div id="chevron-circle-3" class="w-5 h-5 flex items-center justify-center rounded-full bg-gray-300 text-white text-[10px] mt-0.5 transition-transform duration-200">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-base font-bold text-gray-800 leading-snug">导数与微分</h3>
+                    <p class="text-[11px] text-gray-400 mt-0.5">正确率 -</p>
+                    
+                    <div class="flex items-center justify-between mt-2">
+                        <span class="text-xs font-semibold text-gray-400">未开始</span>
+                        <div class="flex-1 mx-3 bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-gray-300 h-full rounded-full" style="width: 0%"></div>
+                        </div>
+                        <span class="text-xs font-mono text-gray-400">0/10081</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="subsections-3" class="max-h-0 transition-max-height bg-slate-50/50">
+                <div class="pl-12 pr-4 py-1 flex flex-col gap-5 border-t border-gray-100/50 pb-5">
+                    
+                    <div class="flex items-center justify-between mt-4">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">导数的概念与几何意义</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/3890 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <button onclick="startDati('导数与微分 - 导数的概念与几何意义', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                            开始答题
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">求导法则与基本导数公式</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/4110 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <button onclick="startDati('导数与微分 - 求导法则与公式', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                            开始答题
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">高阶导数与微分</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/2081 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <button onclick="startDati('导数与微分 - 高阶导数与微分', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                            开始答题
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 章节 4：中值定理及导数的应用 -->
+        <div class="bg-white border-b border-gray-100">
+            <div class="px-4 py-4 flex items-start gap-3 cursor-pointer select-none active:bg-gray-50/75 transition-colors" onclick="toggleChapter(4)">
+                <div id="chevron-circle-4" class="w-5 h-5 flex items-center justify-center rounded-full bg-gray-300 text-white text-[10px] mt-0.5 transition-transform duration-200">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-base font-bold text-gray-800 leading-snug">中值定理及导数的应用</h3>
+                    <p class="text-[11px] text-gray-400 mt-0.5">正确率 -</p>
+                    
+                    <div class="flex items-center justify-between mt-2">
+                        <span class="text-xs font-semibold text-gray-400">未开始</span>
+                        <div class="flex-1 mx-3 bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-gray-300 h-full rounded-full" style="width: 0%"></div>
+                        </div>
+                        <span class="text-xs font-mono text-gray-400">0/6681</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="subsections-4" class="max-h-0 transition-max-height bg-slate-50/50">
+                <div class="pl-12 pr-4 py-1 flex flex-col gap-5 border-t border-gray-100/50 pb-5">
+                    
+                    <div class="flex items-center justify-between mt-4">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">中值定理（罗尔, 拉格朗日）</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/2400 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <button onclick="startDati('中值定理 - 罗尔拉格朗日', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                            开始答题
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">洛必达法则求极限</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/2181 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <button onclick="startDati('中值定理 - 洛必达求极限', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                            开始答题
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">函数的单调性与极值极最值</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/2100 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <button onclick="startDati('中值定理 - 单调性与极值', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                            开始答题
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 章节 5：不定积分 -->
+        <div class="bg-white border-b border-gray-100">
+            <div class="px-4 py-4 flex items-start gap-3 cursor-pointer select-none active:bg-gray-50/75 transition-colors" onclick="toggleChapter(5)">
+                <div id="chevron-circle-5" class="w-5 h-5 flex items-center justify-center rounded-full bg-gray-300 text-white text-[10px] mt-0.5 transition-transform duration-200">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-base font-bold text-gray-800 leading-snug">不定积分</h3>
+                    <p class="text-[11px] text-gray-400 mt-0.5">正确率 -</p>
+                    
+                    <div class="flex items-center justify-between mt-2">
+                        <span class="text-xs font-semibold text-gray-400">未开始</span>
+                        <div class="flex-1 mx-3 bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-gray-300 h-full rounded-full" style="width: 0%"></div>
+                        </div>
+                        <span class="text-xs font-mono text-gray-400">0/4845</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="subsections-5" class="max-h-0 transition-max-height bg-slate-50/50">
+                <div class="pl-12 pr-4 py-1 flex flex-col gap-5 border-t border-gray-100/50 pb-5">
+                    
+                    <div class="flex items-center justify-between mt-4">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">不定积分的概念与性质</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/1500 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <button onclick="startDati('不定积分 - 概念与性质', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                            开始答题
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">第一换元积分法 (凑微分)</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/1845 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <button onclick="startDati('不定积分 - 第一换元法', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                            开始答题
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">第二换元法与分部积分法</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/1500 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <button onclick="startDati('不定积分 - 第二换元与分部', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                            开始答题
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 章节 6：定积分及应用 -->
+        <div class="bg-white border-b border-gray-100">
+            <div class="px-4 py-4 flex items-start gap-3 cursor-pointer select-none active:bg-gray-50/75 transition-colors" onclick="toggleChapter(6)">
+                <div id="chevron-circle-6" class="w-5 h-5 flex items-center justify-center rounded-full bg-gray-300 text-white text-[10px] mt-0.5 transition-transform duration-200">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-base font-bold text-gray-800 leading-snug">定积分及应用</h3>
+                    <p class="text-[11px] text-gray-400 mt-0.5">正确率 -</p>
+                    
+                    <div class="flex items-center justify-between mt-2">
+                        <span class="text-xs font-semibold text-gray-400">未开始</span>
+                        <div class="flex-1 mx-3 bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-gray-300 h-full rounded-full" style="width: 0%"></div>
+                        </div>
+                        <span class="text-xs font-mono text-gray-400">0/7627</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="subsections-6" class="max-h-0 transition-max-height bg-slate-50/50">
+                <div class="pl-12 pr-4 py-1 flex flex-col gap-5 border-t border-gray-100/50 pb-5">
+                    
+                    <div class="flex items-center justify-between mt-4">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">定积分的概念与基本性质</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/2600 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <button onclick="startDati('定积分 - 概念与基本性质', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                            开始答题
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">微积分基本定理 (牛顿-莱布尼茨)</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/3027 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <button onclick="startDati('定积分 - 牛顿莱布尼茨公式', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                            开始答题
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 章节 7：向量代数与空间解析几何 -->
+        <div class="bg-white border-b border-gray-100">
+            <div class="px-4 py-4 flex items-start gap-3 cursor-pointer select-none active:bg-gray-50/75 transition-colors" onclick="toggleChapter(7)">
+                <div id="chevron-circle-7" class="w-5 h-5 flex items-center justify-center rounded-full bg-gray-300 text-white text-[10px] mt-0.5 transition-transform duration-200">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-base font-bold text-gray-800 leading-snug">向量代数与空间解析几何</h3>
+                    <p class="text-[11px] text-gray-400 mt-0.5">正确率 -</p>
+                    
+                    <div class="flex items-center justify-between mt-2">
+                        <span class="text-xs font-semibold text-gray-400">未开始</span>
+                        <div class="flex-1 mx-3 bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-gray-300 h-full rounded-full" style="width: 0%"></div>
+                        </div>
+                        <span class="text-xs font-mono text-gray-400">0/5200</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="subsections-7" class="max-h-0 transition-max-height bg-slate-50/50">
+                <div class="pl-12 pr-4 py-1 flex flex-col gap-5 border-t border-gray-100/50 pb-5">
+                    
+                    <div class="flex items-center justify-between mt-4">
+                        <div class="flex items-start gap-2.5 flex-1 pr-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-100/80 text-blue-500 flex items-center justify-center text-[8px] mt-1.5 flex-shrink-0">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">立体空间直角坐标系与向量</h4>
+                                <p class="text-[11px] font-mono text-gray-400 mt-1">0/2600 <span class="ml-2">正确率: -</span></p>
+                            </div>
+                        </div>
+                        <button onclick="startDati('空间几何 - 立体直角坐标与向量', 'start')" class="px-3 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] text-white font-bold rounded-lg text-xs transition-all active:scale-95">
+                            开始答题
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Toast 提示圈 -->
+    <div id="toast" class="toast"></div>
+
+    <!-- 答题设置底部弹窗 -->
+    <div class="bottom-drawer-mask" id="settings-mask"></div>
+    <div class="bottom-drawer" id="settings-drawer">
+        <div class="bottom-drawer-header">
+            <div class="bottom-drawer-title">答题设置</div>
+            <div class="bottom-drawer-close" id="close-settings-btn">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <div class="bottom-drawer-body">
+            <div class="section-title">答题模式</div>
+            <div class="mode-grid">
+                <div class="mode-card active">
+                    <div class="mode-card-title">练习模式</div>
+                    <div class="mode-card-desc">答题后直接显示答案</div>
+                </div>
+                <div class="mode-card">
+                    <div class="mode-card-title">考试计时模式</div>
+                    <div class="mode-card-desc">不限时间，交卷后显示答案</div>
+                </div>
+                <div class="mode-card">
+                    <div class="mode-card-title">快答模式</div>
+                    <div class="mode-card-desc">答题错误后显示答案</div>
+                </div>
+                <div class="mode-card">
+                    <div class="mode-card-title">背题模式</div>
+                    <div class="mode-card-desc">直接显示答案</div>
+                </div>
+            </div>
+
+            <div id="question-count-section">
+                <div class="section-title">每次答题数量</div>
+                <div class="count-grid">
+                    <div class="count-btn active">全部</div>
+                    <div class="count-btn">10道</div>
+                    <div class="count-btn">20道</div>
+                    <div class="count-btn">30道</div>
+                    <div class="count-btn">40道</div>
+                    <div class="count-btn">50道</div>
+                </div>
+            </div>
+
+            <div id="question-difficulty-section">
+                <div class="section-title">试题难度</div>
+                <div class="count-grid" style="grid-template-columns: repeat(4, 1fr);">
+                    <div class="count-btn difficulty-btn active">不限</div>
+                    <div class="count-btn difficulty-btn">易</div>
+                    <div class="count-btn difficulty-btn">中</div>
+                    <div class="count-btn difficulty-btn">难</div>
+                </div>
+            </div>
+
+            <div class="animation-toggle">
+                <div class="toggle-label">动画开关</div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="animation-toggle-input" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <button class="confirm-btn" id="confirm-settings-btn">确定</button>
+    </div>
+
+    <script>
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
+        function toggleChapter(id) {
+            const sub = document.getElementById('subsections-' + id);
+            const iconCircle = document.getElementById('chevron-circle-' + id);
+            
+            if (sub.style.maxHeight === '0px' || sub.classList.contains('max-h-0')) {
+                // Expand
+                sub.classList.remove('max-h-0');
+                sub.style.maxHeight = '1500px';
+                
+                iconCircle.style.transform = 'rotate(180deg)';
+                iconCircle.classList.remove('bg-gray-300');
+                iconCircle.classList.add('bg-[#1890ff]');
+                
+                // Keep icon upright while rotating container
+                const icon = iconCircle.querySelector('i');
+                icon.className = 'fas fa-chevron-down'; // Keep a down Chevron so that rotated it looks like up Chevron or vice versa, but we can just use transitions nicely
+            } else {
+                // Collapse
+                sub.style.maxHeight = '0px';
+                sub.classList.add('max-h-0');
+                
+                iconCircle.style.transform = 'rotate(0deg)';
+                
+                // If it is the first chapter, turn off blue highlighting if collapsed
+                if (id !== 1) {
+                    iconCircle.classList.remove('bg-[#1890ff]');
+                    iconCircle.classList.add('bg-gray-300');
+                }
+                const icon = iconCircle.querySelector('i');
+                icon.className = 'fas fa-chevron-down';
+            }
+        }
+
+        // Initialize state nicely
+        window.addEventListener('DOMContentLoaded', () => {
+            const sub1 = document.getElementById('subsections-1');
+            sub1.style.maxHeight = '1500px';
+            const iconCircle1 = document.getElementById('chevron-circle-1');
+            iconCircle1.style.transform = 'rotate(180deg)';
+        });
+
+        function view解析(title) {
+            showToast('正在加载 “' + title + '” 的错题/答题解析...');
+            setTimeout(() => {
+                window.location.href = 'dati_baogao.html?mode=zizhushua';
+            }, 1000);
+        }
+
+        function startDati(title, type) {
+            let msg = '正在加载章节自主练习：' + title + '...';
+            if (type === 'continue') {
+                msg = '正在为您恢复 “' + title + '” 的上次答题进度...';
+            }
+            showToast(msg);
+            setTimeout(() => {
+                window.location.href = 'dati_yemian.html?mode=zizhushua';
+            }, 1000);
+        }
+
+        // 弹窗与设置相关逻辑
+        const settingsMask = document.getElementById('settings-mask');
+        const settingsDrawer = document.getElementById('settings-drawer');
+        const practiceModeBtn = document.getElementById('practice-mode-btn');
+        const closeSettingsBtn = document.getElementById('close-settings-btn');
+        const confirmSettingsBtn = document.getElementById('confirm-settings-btn');
+        const currentModeText = document.getElementById('current-mode-text');
+
+        function openDrawer() {
+            settingsMask.style.display = 'block';
+            setTimeout(() => {
+                settingsMask.style.opacity = '1';
+                settingsDrawer.classList.add('active');
+            }, 10);
+        }
+
+        function closeDrawer() {
+            settingsMask.style.opacity = '0';
+            settingsDrawer.classList.remove('active');
+            setTimeout(() => {
+                settingsMask.style.display = 'none';
+            }, 300);
+        }
+
+        if (practiceModeBtn) {
+            practiceModeBtn.addEventListener('click', openDrawer);
+        }
+        if (closeSettingsBtn) {
+            closeSettingsBtn.addEventListener('click', closeDrawer);
+        }
+        if (settingsMask) {
+            settingsMask.addEventListener('click', closeDrawer);
+        }
+
+        // 切换模式逻辑
+        const modeCards = document.querySelectorAll('.mode-card');
+        modeCards.forEach(card => {
+            card.addEventListener('click', () => {
+                modeCards.forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+            });
+        });
+
+        // 切换题数逻辑
+        const countBtns = document.querySelectorAll('#question-count-section .count-btn');
+        countBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                countBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // 切换难度逻辑
+        const difficultyBtns = document.querySelectorAll('#question-difficulty-section .count-btn');
+        difficultyBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                difficultyBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        if (confirmSettingsBtn) {
+            confirmSettingsBtn.addEventListener('click', () => {
+                const activeModeCard = document.querySelector('.mode-card.active');
+                const activeDifficultyBtn = document.querySelector('#question-difficulty-section .count-btn.active');
+                let toastMsg = '';
+                
+                if (activeModeCard) {
+                    const modeTitle = activeModeCard.querySelector('.mode-card-title').textContent.trim();
+                    currentModeText.textContent = modeTitle;
+                    toastMsg = '已保存设置。模式：' + modeTitle;
+                }
+                
+                if (activeDifficultyBtn) {
+                    const diffText = activeDifficultyBtn.textContent.trim();
+                    toastMsg += '，难度：' + diffText;
+                }
+                
+                showToast(toastMsg);
+                closeDrawer();
+            });
+        }
+    </script>
+</body>
+</html>

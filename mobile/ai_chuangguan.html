@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>AI闯关练</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // 清理 URL 中的 origin 参数，保证干净
+        (function() {
+            const url = new URL(window.location.href);
+            if (url.searchParams.has('origin')) {
+                url.searchParams.delete('origin');
+                const newUrl = url.pathname + url.search + url.hash;
+                window.history.replaceState({}, '', newUrl);
+            }
+        })();
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #fafafa;
+            color: #333;
+        }
+
+        /* 隐藏滚动条 */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        /* 路线图连接线背景 */
+        .roadmap-container {
+            position: relative;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+            min-height: 480px;
+            padding-bottom: 24px;
+        }
+
+        /* SVG 连接线 */
+        .roadmap-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* 关卡节点基础样式 */
+        .node-wrapper {
+            position: relative;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 150px;
+            margin-bottom: 12px;
+        }
+
+        .node-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            padding: 0 12px;
+            box-shadow: 0 6px 16px rgba(24, 144, 255, 0.25);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .node-circle:active {
+            transform: scale(0.95);
+        }
+
+        .node-circle.active {
+            background: #1890ff;
+        }
+
+        .node-circle.locked {
+            background: #b5b5b5;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+        }
+
+        .node-circle.locked:active {
+            transform: scale(0.95);
+        }
+
+        /* 规则说明及下拉弹窗 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .modal.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 弹出提示框 */
+        .toast {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0,0,0,0.8);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            z-index: 2000;
+            white-space: nowrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .toast.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translate(-50%, 20px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="max-w-md mx-auto min-h-screen flex flex-col bg-[#fafafa] relative shadow-lg">
+
+    <!-- 顶部标题栏 -->
+    <div class="sticky top-0 bg-white z-50 px-4 py-4 flex items-center justify-between border-b border-gray-100 shadow-sm">
+        <i class="fas fa-chevron-left text-lg text-gray-700 cursor-pointer" onclick="history.back()"></i>
+        <h1 class="text-lg font-bold text-gray-800" id="page-title">AI闯关练</h1>
+        <button class="text-sm font-medium text-orange-500 hover:text-orange-600 cursor-pointer" onclick="showRules()">规则说明</button>
+    </div>
+
+    <!-- 筛选和版本切换区 -->
+    <div class="bg-white px-4 py-3 border-b border-gray-100 flex flex-col gap-2.5 text-sm text-gray-600 shadow-sm">
+        <div class="flex items-center justify-between w-full">
+            <div class="flex items-center gap-1 font-medium cursor-pointer" onclick="showDropdown('degree')">
+                <span id="degree-selected">专升本</span>
+                <i class="fas fa-chevron-down text-xs text-gray-400"></i>
+            </div>
+            
+            <div class="flex items-center gap-1 font-medium cursor-pointer" onclick="showDropdown('province')">
+                <span id="province-selected">河南 | 英语</span>
+                <i class="fas fa-chevron-down text-xs text-gray-400"></i>
+            </div>
+        </div>
+        
+        <!-- 版本一 左右居中，放在下方 -->
+        <div class="flex justify-center w-full">
+            <div class="flex items-center gap-1.5 bg-orange-50 text-orange-600 px-3 py-1 rounded-full border border-orange-100/50 cursor-pointer text-xs font-bold" onclick="toggleVersion()">
+                <span>版本一</span>
+                <i class="fas fa-exchange-alt text-[10px] transform hover:rotate-180 transition-transform"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主体区域：闯关标签与快速导航 -->
+    <div class="px-4 pt-4 flex-1">
+        <div class="flex items-center justify-between mb-4">
+            <!-- 切换选项卡 -->
+            <div class="flex items-center gap-6">
+                <div class="text-lg font-bold text-gray-900 border-b-4 border-sky-500 pb-1 cursor-pointer">
+                    闯关练
+                </div>
+                <div class="text-lg font-medium text-gray-400 hover:text-gray-600 cursor-pointer" onclick="showToast('强化练模式正在智能分析生成中...')">
+                    强化练
+                </div>
+            </div>
+
+            <!-- 分析与历史行为 -->
+            <div class="flex items-center gap-2">
+                <a href="zhangjie_zhengti_baogao.html" class="px-3 py-1 text-xs border border-gray-200 hover:border-gray-300 rounded-full text-gray-600 bg-white font-medium shadow-sm flex items-center gap-1">
+                    <i class="fas fa-chart-line text-blue-500"></i>整体报告
+                </a>
+                <a href="lianxi_lishi.html" class="px-3 py-1 text-xs border border-gray-200 hover:border-gray-300 rounded-full text-gray-600 bg-white font-medium shadow-sm flex items-center gap-1">
+                    <i class="fas fa-history text-amber-500"></i>练习历史
+                </a>
+            </div>
+        </div>
+
+        <!-- 地图闯关路线模块 -->
+        <div class="roadmap-container mt-6 overflow-hidden">
+            <!-- SVG 连接线背景 -->
+            <svg class="roadmap-svg" id="connections-svg">
+                <!-- 动态画的线将会注入至此处 -->
+            </svg>
+
+            <!-- 关卡布局 -->
+            <div class="relative flex flex-col items-center pt-8 w-full" id="roadmap-nodes">
+                
+                <!-- 关卡一 -->
+                <div class="node-wrapper self-start ml-8">
+                    <div class="node-circle active" onclick="location.href='dati_yemian.html?mode=ai_level&type=1&node=1'" id="node-1">
+                        时态和语态
+                    </div>
+                    <!-- 评分星星 -->
+                    <div class="flex items-center justify-center gap-0.5 mt-2 text-[#ff4d4f]">
+                        <i class="fas fa-star text-sm"></i>
+                        <i class="fas fa-star text-sm"></i>
+                        <i class="fas fa-star-half-alt text-sm"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                    </div>
+                    <!-- 闯关按钮 -->
+                    <button class="mt-2 px-4 py-1 text-xs bg-[#1890ff] text-white rounded-full font-bold hover:bg-[#40a9ff] transition-colors shadow-md" onclick="location.href='dati_yemian.html?mode=ai_level&type=1&node=1'">
+                        AI练习
+                    </button>
+                </div>
+
+                <!-- 关卡二 -->
+                <div class="node-wrapper self-end mr-8">
+                    <div class="node-circle active" onclick="location.href='dati_yemian.html?mode=ai_level&type=1&node=2'" id="node-2">
+                        主谓一致
+                    </div>
+                    <!-- 评分星星 -->
+                    <div class="flex items-center justify-center gap-0.5 mt-2 text-[#ff4d4f]">
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                    </div>
+                    <!-- 闯关按钮 -->
+                    <button class="mt-2 px-4 py-1 text-xs bg-[#1890ff] text-white rounded-full font-bold hover:bg-[#40a9ff] transition-colors shadow-md" onclick="location.href='dati_yemian.html?mode=ai_level&type=1&node=2'">
+                        AI练习
+                    </button>
+                </div>
+
+                <!-- 关卡三 -->
+                <div class="node-wrapper self-start ml-8">
+                    <div class="node-circle locked" onclick="location.href='dati_yemian.html?mode=ai_level&type=1&node=3'" id="node-3">
+                        连词和介词
+                    </div>
+                    <!-- 评分星星 -->
+                    <div class="flex items-center justify-center gap-0.5 mt-2 text-gray-300">
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                    </div>
+                    <!-- 闯关按钮 -->
+                    <button class="mt-2 px-4 py-1 text-xs bg-[#1890ff] text-white rounded-full font-bold hover:bg-[#40a9ff] transition-colors shadow-md" onclick="location.href='dati_yemian.html?mode=ai_level&type=1&node=3'">
+                        AI练习
+                    </button>
+                </div>
+
+                <!-- 关卡四 -->
+                <div class="node-wrapper self-end mr-8">
+                    <div class="node-circle locked" onclick="location.href='dati_yemian.html?mode=ai_level&type=1&node=4'" id="node-4">
+                        形容词和副词
+                    </div>
+                    <!-- 评分星星 -->
+                    <div class="flex items-center justify-center gap-0.5 mt-2 text-gray-300">
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                    </div>
+                    <!-- 闯关按钮 -->
+                    <button class="mt-2 px-4 py-1 text-xs bg-[#1890ff] text-white rounded-full font-bold hover:bg-[#40a9ff] transition-colors shadow-md" onclick="location.href='dati_yemian.html?mode=ai_level&type=1&node=4'">
+                        AI练习
+                    </button>
+                </div>
+
+                <!-- 关卡五 -->
+                <div class="node-wrapper self-start ml-8">
+                    <div class="node-circle locked" onclick="location.href='dati_yemian.html?mode=ai_level&type=1&node=5'" id="node-5">
+                        连词和介词
+                    </div>
+                    <!-- 评分星星 -->
+                    <div class="flex items-center justify-center gap-0.5 mt-2 text-gray-300">
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                    </div>
+                    <!-- 闯关按钮 -->
+                    <button class="mt-2 px-4 py-1 text-xs bg-[#1890ff] text-white rounded-full font-bold hover:bg-[#40a9ff] transition-colors shadow-md" onclick="location.href='dati_yemian.html?mode=ai_level&type=1&node=5'">
+                        AI练习
+                    </button>
+                </div>
+
+                <!-- 关卡六 -->
+                <div class="node-wrapper self-end mr-8">
+                    <div class="node-circle locked" onclick="location.href='dati_yemian.html?mode=ai_level&type=1&node=6'" id="node-6">
+                        形容词和副词
+                    </div>
+                    <!-- 评分星星 -->
+                    <div class="flex items-center justify-center gap-0.5 mt-2 text-gray-300">
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                        <i class="far fa-star text-sm text-gray-300"></i>
+                    </div>
+                    <!-- 闯关按钮 -->
+                    <button class="mt-2 px-4 py-1 text-xs bg-[#1890ff] text-white rounded-full font-bold hover:bg-[#40a9ff] transition-colors shadow-md" onclick="location.href='dati_yemian.html?mode=ai_level&type=1&node=6'">
+                        AI练习
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 规则说明浮动弹窗 -->
+    <div id="rules-modal" class="modal" onclick="closeRules()">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-xs shadow-2xl relative" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-3">
+                <h3 class="font-bold text-gray-800 text-base">AI闯关练规则说明</h3>
+                <i class="fas fa-times text-gray-400 text-lg cursor-pointer hover:text-gray-600" onclick="closeRules()"></i>
+            </div>
+            <div class="space-y-3.5 text-xs text-gray-600 leading-relaxed">
+                <div class="flex gap-2">
+                    <span class="w-5 h-5 rounded-full bg-orange-50 text-orange-500 font-bold flex items-center justify-center shrink-0">1</span>
+                    <p>页面按照学科核心知识图谱自动生成递进式关卡，按顺序自上而下解锁。</p>
+                </div>
+                <div class="flex gap-2">
+                    <span class="w-5 h-5 rounded-full bg-orange-50 text-orange-500 font-bold flex items-center justify-center shrink-0">2</span>
+                    <p>每个关卡闯关成功后（正确率达 80% 或取得三星评价），即可开启下一级核心考点。</p>
+                </div>
+                <div class="flex gap-2">
+                    <span class="w-5 h-5 rounded-full bg-orange-50 text-orange-500 font-bold flex items-center justify-center shrink-0">3</span>
+                    <p>AI会利用智能算法和考点偏好为每个学员按薄弱项针对性推送个性化关卡习题。</p>
+                </div>
+            </div>
+            <button class="w-full mt-6 py-2.5 bg-orange-500 text-white rounded-xl text-xs font-semibold hover:bg-orange-600 transition-colors cursor-pointer" onclick="closeRules()">
+                我已知晓
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast提示 -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // 显示规则框
+        function showRules() {
+            document.getElementById('rules-modal').classList.add('show');
+        }
+
+        // 关闭规则框
+        function closeRules() {
+            document.getElementById('rules-modal').classList.remove('show');
+        }
+
+        // 显示Toast提示
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
+        // 锁定提醒
+        function lockNotice(nodeName) {
+            showToast('请先通关上一个考点，以解锁' + nodeName + '关卡！');
+        }
+
+        // 下拉弹层模拟
+        function showDropdown(type) {
+            if (type === 'degree') {
+                showToast('已选中“专升本”层次，考纲已就绪');
+            } else if (type === 'province') {
+                showToast('已匹配“河南省 | 专升本英语”大纲');
+            }
+        }
+
+        // 版本切换
+        function toggleVersion() {
+            showToast('已成功切换为“英语（版本一）”');
+        }
+
+        // 动态使用 SVG 接线连接每个圆圈
+        function drawRouteLines() {
+            const svg = document.getElementById('connections-svg');
+            // 清理已画的路线
+            svg.innerHTML = '';
+
+            const nodes = [
+                document.getElementById('node-1'),
+                document.getElementById('node-2'),
+                document.getElementById('node-3'),
+                document.getElementById('node-4'),
+                document.getElementById('node-5'),
+                document.getElementById('node-6')
+            ];
+
+            const containerRect = document.querySelector('.roadmap-container').getBoundingClientRect();
+
+            let pathD = '';
+
+            for (let i = 0; i < nodes.length - 1; i++) {
+                const nodeCurrent = nodes[i];
+                const nodeNext = nodes[i + 1];
+
+                if (!nodeCurrent || !nodeNext) continue;
+
+                const rectCurrent = nodeCurrent.getBoundingClientRect();
+                const rectNext = nodeNext.getBoundingClientRect();
+
+                // 圆圈中心点坐标(相对于 .roadmap-container)
+                const x1 = rectCurrent.left + rectCurrent.width / 2 - containerRect.left;
+                const y1 = rectCurrent.top + rectCurrent.height / 2 - containerRect.top;
+
+                const x2 = rectNext.left + rectNext.width / 2 - containerRect.left;
+                const y2 = rectNext.top + rectNext.height / 2 - containerRect.top;
+
+                // 创建贝塞尔或折线曲线
+                if (i === 0) {
+                    pathD += `M ${x1} ${y1} `;
+                }
+
+                // 添加控制点，创造平滑的 S 曲线
+                const cpX1 = x1;
+                const cpY1 = y1 + (y2 - y1) * 0.5;
+                const cpX2 = x2;
+                const cpY2 = y1 + (y2 - y1) * 0.5;
+
+                pathD += `C ${cpX1} ${cpY1}, ${cpX2} ${cpY2}, ${x2} ${y2} `;
+            }
+
+            // 创建路径
+            if (pathD !== '') {
+                const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                pathElement.setAttribute('d', pathD);
+                pathElement.setAttribute('fill', 'none');
+                pathElement.setAttribute('stroke', '#dcdcdc');
+                pathElement.setAttribute('stroke-width', '2.5');
+                pathElement.setAttribute('stroke-dasharray', '6,6');
+                svg.appendChild(pathElement);
+            }
+        }
+
+        // 页面初始化及重排时重新绘图线
+        window.addEventListener('load', () => {
+            setTimeout(drawRouteLines, 100);
+        });
+        window.addEventListener('resize', drawRouteLines);
+    </script>
+</body>
+</html>
