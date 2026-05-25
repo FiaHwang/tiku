@@ -465,13 +465,18 @@
     <!-- AI个性练习 面板 -->
     <div class="px-4 mt-6">
         <!-- 模块头部 (带练习模式按钮) -->
-        <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
             <h2 class="text-base font-bold text-gray-800 flex items-center gap-1.5">
                 <span class="w-1 h-4 bg-blue-500 rounded-full inline-block"></span>
                 AI个性练习
             </h2>
-            <div id="practice-mode-btn" style="padding: 5px 10px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 11px; color: #666; display: flex; align-items: center; gap: 4px; cursor: pointer; -webkit-tap-highlight-color: transparent; font-weight: 500; transition: all 0.2s;" class="hover:bg-gray-50 select-none active:scale-95 shadow-sm">
-                <i class="fas fa-cog" style="font-size: 11px; color: #999;"></i> <span id="current-mode-text">练习模式</span>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <button id="knowledge-textbook-switch" style="padding: 5px 10px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 11px; color: #666; display: flex; align-items: center; gap: 4px; cursor: pointer; -webkit-tap-highlight-color: transparent; font-weight: 500; transition: all 0.2s;" class="hover:bg-gray-50 select-none active:scale-95 shadow-sm">
+                    <i class="fas fa-book" style="font-size: 11px; color: #ff4d4f;"></i> 知识点体系 <i class="fas fa-chevron-down" style="font-size: 9px; color: #aaa;"></i>
+                </button>
+                <div id="practice-mode-btn" style="padding: 5px 10px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 11px; color: #666; display: flex; align-items: center; gap: 4px; cursor: pointer; -webkit-tap-highlight-color: transparent; font-weight: 500; transition: all 0.2s;" class="hover:bg-gray-50 select-none active:scale-95 shadow-sm">
+                    <i class="fas fa-cog" style="font-size: 11px; color: #999;"></i> <span id="current-mode-text">试题难度：不限</span>
+                </div>
             </div>
         </div>
 
@@ -632,39 +637,7 @@
         </div>
 
         <div class="bottom-drawer-body">
-            <div class="section-title">答题模式</div>
-            <div class="mode-grid">
-                <div class="mode-card active">
-                    <div class="mode-card-title">练习模式</div>
-                    <div class="mode-card-desc">答题后直接显示答案</div>
-                </div>
-                <div class="mode-card">
-                    <div class="mode-card-title">考试计时模式</div>
-                    <div class="mode-card-desc">不限时间，交卷后显示答案</div>
-                </div>
-                <div class="mode-card">
-                    <div class="mode-card-title">快答模式</div>
-                    <div class="mode-card-desc">答题错误后显示答案</div>
-                </div>
-                <div class="mode-card">
-                    <div class="mode-card-title">背题模式</div>
-                    <div class="mode-card-desc">直接显示答案</div>
-                </div>
-            </div>
-
-            <div id="question-count-section">
-                <div class="section-title">每次答题数量</div>
-                <div class="count-grid">
-                    <div class="count-btn active">全部</div>
-                    <div class="count-btn">10道</div>
-                    <div class="count-btn">20道</div>
-                    <div class="count-btn">30道</div>
-                    <div class="count-btn">40道</div>
-                    <div class="count-btn">50道</div>
-                </div>
-            </div>
-
-            <div id="question-difficulty-section">
+            <div id="question-difficulty-section" style="margin-top: 8px;">
                 <div class="section-title">试题难度</div>
                 <div class="count-grid" style="grid-template-columns: repeat(4, 1fr);">
                     <div class="count-btn difficulty-btn active">不限</div>
@@ -672,14 +645,6 @@
                     <div class="count-btn difficulty-btn">中</div>
                     <div class="count-btn difficulty-btn">难</div>
                 </div>
-            </div>
-
-            <div class="animation-toggle">
-                <div class="toggle-label">动画开关</div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="animation-toggle-input" checked>
-                    <span class="slider"></span>
-                </label>
             </div>
         </div>
 
@@ -737,24 +702,6 @@
             settingsMask.addEventListener('click', closeDrawer);
         }
 
-        // 切换模式逻辑
-        const modeCards = document.querySelectorAll('.mode-card');
-        modeCards.forEach(card => {
-            card.addEventListener('click', () => {
-                modeCards.forEach(c => c.classList.remove('active'));
-                card.classList.add('active');
-            });
-        });
-
-        // 切换题数逻辑
-        const countBtns = document.querySelectorAll('#question-count-section .count-btn');
-        countBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                countBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-
         // 切换难度逻辑
         const difficultyBtns = document.querySelectorAll('#question-difficulty-section .count-btn');
         difficultyBtns.forEach(btn => {
@@ -766,25 +713,140 @@
 
         if (confirmSettingsBtn) {
             confirmSettingsBtn.addEventListener('click', () => {
-                const activeModeCard = document.querySelector('.mode-card.active');
                 const activeDifficultyBtn = document.querySelector('#question-difficulty-section .count-btn.active');
                 let toastMsg = '';
                 
-                if (activeModeCard) {
-                    const modeTitle = activeModeCard.querySelector('.mode-card-title').textContent.trim();
-                    currentModeText.textContent = modeTitle;
-                    toastMsg = '已保存设置。模式：' + modeTitle;
-                }
-                
                 if (activeDifficultyBtn) {
                     const diffText = activeDifficultyBtn.textContent.trim();
-                    toastMsg += '，难度：' + diffText;
+                    currentModeText.textContent = '试题难度：' + diffText;
+                    toastMsg = '已保存设置。难度：' + diffText;
                 }
                 
                 showToast(toastMsg);
                 closeDrawer();
             });
         }
+    </script>
+
+    <!-- 版本选择底部弹窗 -->
+    <div class="bottom-drawer-mask" id="version-mask"></div>
+    <div class="bottom-drawer" id="version-drawer" style="z-index: 2100;">
+        <style>
+            .version-list-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 16px 0;
+                border-bottom: 1px solid #f1f5f9;
+                cursor: pointer;
+                transition: background-color 0.2s;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .version-list-item:active {
+                background-color: #f8fafc;
+            }
+            .version-name {
+                font-size: 15px;
+                color: #64748b;
+                font-weight: 500;
+                line-height: 1.4;
+                padding-right: 24px;
+                flex: 1;
+                word-break: break-all;
+                text-align: left;
+            }
+            .version-list-item.selected .version-name {
+                color: #1e293b;
+                font-weight: 600;
+            }
+            .version-check {
+                font-size: 16px;
+                color: #3a97ff;
+                flex-shrink: 0;
+                display: none;
+            }
+            .version-list-item.selected .version-check {
+                display: block;
+            }
+        </style>
+        <div class="bottom-drawer-header" style="margin-bottom: 16px;">
+            <div class="bottom-drawer-title">版本</div>
+            <div class="bottom-drawer-close" id="close-version-btn" style="cursor: pointer;">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <div class="bottom-drawer-body" style="padding-top: 8px;">
+            <div class="version-list-item selected" data-value="1">
+                <div class="version-name">知识点体系名称知识点体系名称知识点体系名称知识点体系名称知识点体系名称...</div>
+                <div class="version-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="version-list-item" data-value="2">
+                <div class="version-name">知识点体系</div>
+                <div class="version-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="version-list-item" data-value="3">
+                <div class="version-name">知识点体系名称</div>
+                <div class="version-check"><i class="fas fa-check"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 版本弹窗相关逻辑
+        (function() {
+            const versionMask = document.getElementById('version-mask');
+            const versionDrawer = document.getElementById('version-drawer');
+            const textbookSwitchBtn = document.getElementById('knowledge-textbook-switch');
+            const closeVersionBtn = document.getElementById('close-version-btn');
+            const versionItems = document.querySelectorAll('.version-list-item');
+
+            function openVersionDrawer() {
+                if (versionMask && versionDrawer) {
+                    versionMask.style.display = 'block';
+                    setTimeout(() => {
+                        versionMask.style.opacity = '1';
+                        versionDrawer.classList.add('active');
+                    }, 10);
+                }
+            }
+
+            function closeVersionDrawer() {
+                if (versionMask && versionDrawer) {
+                    versionMask.style.opacity = '0';
+                    versionDrawer.classList.remove('active');
+                    setTimeout(() => {
+                        versionMask.style.display = 'none';
+                    }, 300);
+                }
+            }
+
+            if (textbookSwitchBtn) {
+                textbookSwitchBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openVersionDrawer();
+                });
+            }
+            if (closeVersionBtn) {
+                closeVersionBtn.addEventListener('click', closeVersionDrawer);
+            }
+            if (versionMask) {
+                versionMask.addEventListener('click', closeVersionDrawer);
+            }
+
+            versionItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    versionItems.forEach(i => i.classList.remove('selected'));
+                    item.classList.add('selected');
+
+                    const activeName = item.querySelector('.version-name');
+                    const selectedText = activeName ? activeName.textContent.trim() : '';
+                    showToast('已成功切换版本为: ' + (selectedText.length > 15 ? selectedText.substring(0, 15) + '...' : selectedText));
+                    
+                    closeVersionDrawer();
+                });
+            });
+        })();
     </script>
 </body>
 </html>

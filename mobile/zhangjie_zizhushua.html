@@ -311,7 +311,7 @@
     <!-- 教材选择及练习模式设置栏 -->
     <div class="bg-white px-4 py-3 border-b border-gray-100 flex items-center justify-between">
         <div class="flex items-center gap-2">
-            <button class="px-3 py-1.5 border border-gray-200 rounded-md bg-[#fafafa] text-[13px] text-gray-600 font-medium flex items-center gap-1.5 active:opacity-80">
+            <button id="textbook-switch-btn" class="px-3 py-1.5 border border-gray-200 rounded-md bg-[#fafafa] text-[13px] text-gray-600 font-medium flex items-center gap-1.5 active:opacity-80">
                 <i class="fas fa-book-bookmark text-[#1890ff]"></i>
                 <span>2024版核心教材</span>
                 <i class="fas fa-chevron-down text-[10px] text-gray-400"></i>
@@ -978,6 +978,70 @@
         <button class="confirm-btn" id="confirm-settings-btn">确定</button>
     </div>
 
+    <!-- 教材选择底部弹窗 -->
+    <div class="bottom-drawer-mask" id="textbook-mask"></div>
+    <div class="bottom-drawer" id="textbook-drawer" style="z-index: 2200;">
+        <style>
+            .textbook-list-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 16px 20px;
+                border-bottom: 1px solid #f1f5f9;
+                cursor: pointer;
+                transition: background-color 0.2s;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .textbook-list-item:active {
+                background-color: #f8fafc;
+            }
+            .textbook-name {
+                font-size: 15px;
+                color: #64748b;
+                font-weight: 500;
+                line-height: 1.4;
+                padding-right: 24px;
+                flex: 1;
+                word-break: break-all;
+                text-align: left;
+            }
+            .textbook-list-item.selected .textbook-name {
+                color: #1e293b;
+                font-weight: 600;
+            }
+            .textbook-check {
+                font-size: 16px;
+                color: #3b82f6;
+                flex-shrink: 0;
+                display: none;
+            }
+            .textbook-list-item.selected .textbook-check {
+                display: block;
+            }
+        </style>
+        <div class="bottom-drawer-header" style="margin-bottom: 16px;">
+            <div class="bottom-drawer-title">教材</div>
+            <div class="bottom-drawer-close" id="close-textbook-btn" style="cursor: pointer;">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <div class="bottom-drawer-body" style="padding-top: 8px;">
+            <div class="textbook-list-item selected" data-value="1">
+                <div class="textbook-name">全国版</div>
+                <div class="textbook-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="textbook-list-item" data-value="2">
+                <div class="textbook-name">河南版</div>
+                <div class="textbook-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="textbook-list-item" data-value="3">
+                <div class="textbook-name">江苏版</div>
+                <div class="textbook-check"><i class="fas fa-check"></i></div>
+            </div>
+        </div>
+    </div>
+
     <script>
         function showToast(msg) {
             const toast = document.getElementById('toast');
@@ -1129,6 +1193,65 @@
                 closeDrawer();
             });
         }
+
+        // 教材选择弹窗逻辑
+        const textbookMask = document.getElementById('textbook-mask');
+        const textbookDrawer = document.getElementById('textbook-drawer');
+        const textbookSwitchBtn = document.getElementById('textbook-switch-btn');
+        const closeTextbookBtn = document.getElementById('close-textbook-btn');
+        const textbookItems = document.querySelectorAll('.textbook-list-item');
+
+        function openTextbookDrawer() {
+            if (textbookMask && textbookDrawer) {
+                textbookMask.style.display = 'block';
+                setTimeout(() => {
+                    textbookMask.style.opacity = '1';
+                    textbookDrawer.classList.add('active');
+                }, 10);
+            }
+        }
+
+        function closeTextbookDrawer() {
+            if (textbookMask && textbookDrawer) {
+                textbookMask.style.opacity = '0';
+                textbookDrawer.classList.remove('active');
+                setTimeout(() => {
+                    textbookMask.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        if (textbookSwitchBtn) {
+            textbookSwitchBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openTextbookDrawer();
+            });
+        }
+        if (closeTextbookBtn) {
+            closeTextbookBtn.addEventListener('click', closeTextbookDrawer);
+        }
+        if (textbookMask) {
+            textbookMask.addEventListener('click', closeTextbookDrawer);
+        }
+
+        textbookItems.forEach(item => {
+            item.addEventListener('click', () => {
+                textbookItems.forEach(i => i.classList.remove('selected'));
+                item.classList.add('selected');
+
+                const activeName = item.querySelector('.textbook-name');
+                const selectedText = activeName ? activeName.textContent.trim() : '';
+                showToast('已成功切换教材为: ' + selectedText);
+
+                // 更新按钮文本
+                const displayBtnSpan = document.querySelector('#textbook-switch-btn span');
+                if (displayBtnSpan) {
+                    displayBtnSpan.textContent = selectedText;
+                }
+
+                closeTextbookDrawer();
+            });
+        });
     </script>
 </body>
 </html>

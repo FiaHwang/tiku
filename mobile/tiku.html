@@ -905,6 +905,33 @@
                 font-size: 18px;
             }
         }
+
+        /* Toast 提示圈 */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translate(-50%, 10px);
+            background-color: rgba(0, 0, 0, 0.82);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            transform: translate(-50%, 0);
+            opacity: 1;
+            visibility: visible;
+        }
+
         /* 底部属性选择弹窗 */
         .bottom-drawer-mask {
             position: fixed;
@@ -1124,8 +1151,8 @@
     <header class="header">
         <div class="header-top">
             <div class="header-left">
-                <div class="header-title">专升本 <i class="fas fa-chevron-down" style="font-size: 12px; margin-left: 4px; color: #999;"></i></div>
-                <div class="province-selector">河南省 <i class="fas fa-chevron-down" style="font-size: 10px; color: #999;"></i></div>
+                <div class="header-title" id="major-selector-btn" style="cursor: pointer; -webkit-tap-highlight-color: transparent;"><span>专升本</span> <i class="fas fa-chevron-down" style="font-size: 12px; margin-left: 4px; color: #999;"></i></div>
+                <div class="province-selector" id="province-selector-btn" style="cursor: pointer; -webkit-tap-highlight-color: transparent;"><span>河南省</span> <i class="fas fa-chevron-down" style="font-size: 10px; color: #999;"></i></div>
             </div>
             <div class="header-actions">
                 <button class="action-btn" title="搜索"><i class="fas fa-search"></i></button>
@@ -2467,11 +2494,13 @@
         document.addEventListener('touchend', function() {}, { passive: true });
 
         // 教材切换按钮功能
-        document.getElementById('textbook-switch').addEventListener('click', function() {
-            // 这里可以添加教材切换的逻辑
-            alert('切换到某某教材');
-            // 实际项目中，这里可以打开教材选择弹窗或直接切换教材内容
-        });
+        const textbookSwitch = document.getElementById('textbook-switch');
+        if (textbookSwitch) {
+            textbookSwitch.addEventListener('click', function(e) {
+                e.stopPropagation();
+                openTextbookDrawer();
+            });
+        }
 
         // 禁止双击缩放
         document.addEventListener('dblclick', function(event) {
@@ -2510,13 +2539,15 @@
 
         <div id="question-count-section">
             <div class="section-title">每次答题数量</div>
-            <div class="count-grid">
-                <div class="count-btn active">全部</div>
+            <div class="count-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="count-btn active">5道</div>
                 <div class="count-btn">10道</div>
+                <div class="count-btn">15道</div>
                 <div class="count-btn">20道</div>
+                <div class="count-btn">25道</div>
                 <div class="count-btn">30道</div>
+                <div class="count-btn">35道</div>
                 <div class="count-btn">40道</div>
-                <div class="count-btn">50道</div>
             </div>
         </div>
 
@@ -2618,6 +2649,806 @@
                 btn.classList.add('active');
             });
         });
+    </script>
+
+    <!-- 版本选择底部弹窗 -->
+    <div class="bottom-drawer-mask" id="version-mask"></div>
+    <div class="bottom-drawer" id="version-drawer" style="z-index: 2100;">
+        <style>
+            .version-list-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 16px 0;
+                border-bottom: 1px solid #f1f5f9;
+                cursor: pointer;
+                transition: background-color 0.2s;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .version-list-item:active {
+                background-color: #f8fafc;
+            }
+            .version-name {
+                font-size: 15px;
+                color: #64748b;
+                font-weight: 500;
+                line-height: 1.4;
+                padding-right: 24px;
+                flex: 1;
+                word-break: break-all;
+                text-align: left;
+            }
+            .version-list-item.selected .version-name {
+                color: #1e293b;
+                font-weight: 600;
+            }
+            .version-check {
+                font-size: 16px;
+                color: #3a97ff;
+                flex-shrink: 0;
+                display: none;
+            }
+            .version-list-item.selected .version-check {
+                display: block;
+            }
+
+            /* 教材选择样式 */
+            .textbook-list-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 16px 0;
+                border-bottom: 1px solid #f1f5f9;
+                cursor: pointer;
+                transition: background-color 0.2s;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .textbook-list-item:active {
+                background-color: #f8fafc;
+            }
+            .textbook-name {
+                font-size: 15px;
+                color: #64748b;
+                font-weight: 500;
+                line-height: 1.4;
+                padding-right: 24px;
+                flex: 1;
+                word-break: break-all;
+                text-align: left;
+            }
+            .textbook-list-item.selected .textbook-name {
+                color: #1e293b;
+                font-weight: 600;
+            }
+            .textbook-check {
+                font-size: 16px;
+                color: #3a97ff;
+                flex-shrink: 0;
+                display: none;
+            }
+            .textbook-list-item.selected .textbook-check {
+                display: block;
+            }
+        </style>
+        <div class="bottom-drawer-header" style="margin-bottom: 16px;">
+            <div class="bottom-drawer-title">版本</div>
+            <div class="bottom-drawer-close" id="close-version-btn" style="cursor: pointer;">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <div class="bottom-drawer-body" style="padding-top: 8px;">
+            <div class="version-list-item selected" data-value="1">
+                <div class="version-name">知识点体系名称知识点体系名称知识点体系名称知识点体系名称知识点体系名称...</div>
+                <div class="version-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="version-list-item" data-value="2">
+                <div class="version-name">知识点体系名称</div>
+                <div class="version-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="version-list-item" data-value="3">
+                <div class="version-name">知识点体系名称</div>
+                <div class="version-check"><i class="fas fa-check"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 教材选择底部弹窗 -->
+    <div class="bottom-drawer-mask" id="textbook-mask"></div>
+    <div class="bottom-drawer" id="textbook-drawer" style="z-index: 2200;">
+        <div class="bottom-drawer-header" style="margin-bottom: 16px;">
+            <div class="bottom-drawer-title">教材</div>
+            <div class="bottom-drawer-close" id="close-textbook-drawer-btn" style="cursor: pointer;">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <div class="bottom-drawer-body" style="padding-top: 8px;">
+            <div class="textbook-list-item selected" data-value="1">
+                <div class="textbook-name">全国版</div>
+                <div class="textbook-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="textbook-list-item" data-value="2">
+                <div class="textbook-name">河南版</div>
+                <div class="textbook-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="textbook-list-item" data-value="3">
+                <div class="textbook-name">江苏版</div>
+                <div class="textbook-check"><i class="fas fa-check"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 专业方向选择底部弹窗 -->
+    <div class="bottom-drawer-mask" id="major-mask"></div>
+    <div class="bottom-drawer" id="major-drawer" style="z-index: 2300;">
+        <style>
+            .major-list-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 16px 20px;
+                border-bottom: 1px solid #f1f5f9;
+                cursor: pointer;
+                transition: background-color 0.2s;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .major-list-item:active {
+                background-color: #f8fafc;
+            }
+            .major-name {
+                font-size: 16px;
+                color: #1e293b;
+                font-weight: 500;
+                line-height: 1.4;
+                text-align: left;
+            }
+            .major-list-item.selected .major-name {
+                color: #ff4d4f;
+                font-weight: bold;
+            }
+            .major-check {
+                font-size: 16px;
+                color: #ff4d4f;
+                flex-shrink: 0;
+                display: none;
+            }
+            .major-list-item.selected .major-check {
+                display: block;
+            }
+        </style>
+        <div class="bottom-drawer-header" style="margin-bottom: 16px; position: relative; border-bottom: none; display: flex; justify-content: center; align-items: center; padding: 18px 20px 10px 20px;">
+            <div class="bottom-drawer-title" style="font-size: 20px; font-weight: bold; color: #1e293b; text-align: center; flex: 1;">专业方向</div>
+            <div class="bottom-drawer-close" id="close-major-drawer-btn" style="cursor: pointer; position: absolute; right: 20px; top: 18px; font-size: 18px; color: #94a3b8;">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <div class="bottom-drawer-body" style="padding-top: 8px; padding-bottom: 30px;">
+            <div class="major-list-item selected" data-value="1">
+                <div class="major-name">专升本</div>
+                <div class="major-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="major-list-item" data-value="2">
+                <div class="major-name">社会工作者</div>
+                <div class="major-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="major-list-item" data-value="3">
+                <div class="major-name">公安招警/辅警</div>
+                <div class="major-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="major-list-item" data-value="4">
+                <div class="major-name">乡村振兴村级协理员</div>
+                <div class="major-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="major-list-item" data-value="5">
+                <div class="major-name">时政</div>
+                <div class="major-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="major-list-item" data-value="6">
+                <div class="major-name">教师资格</div>
+                <div class="major-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="major-list-item" data-value="7">
+                <div class="major-name">教师招聘</div>
+                <div class="major-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="major-list-item" data-value="8">
+                <div class="major-name">特岗教师</div>
+                <div class="major-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="major-list-item" data-value="9">
+                <div class="major-name">事业单位</div>
+                <div class="major-check"><i class="fas fa-check"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 省份及科目组合选择底部弹窗 -->
+    <div class="bottom-drawer-mask" id="province-drawer-mask"></div>
+    <div class="bottom-drawer" id="province-drawer" style="z-index: 2500;">
+        <style>
+            .province-drawer-body {
+                padding: 10px 20px 24px 20px;
+                overflow-y: auto;
+                max-height: 70vh;
+            }
+            .province-section-title {
+                font-size: 14px;
+                font-weight: bold;
+                color: #262626;
+                margin: 16px 0 10px 0;
+            }
+            .subject-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                margin-bottom: 8px;
+            }
+            .subject-card {
+                position: relative;
+                background-color: #fafafa;
+                border: 1px solid #f0f0f0;
+                border-radius: 8px;
+                padding: 12px 10px;
+                font-size: 13px;
+                color: #262626;
+                text-align: left;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding-right: 28px;
+                cursor: pointer;
+                transition: all 0.2s;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .subject-card:active {
+                background-color: #f0f0f0;
+            }
+            .subject-card-delete {
+                position: absolute;
+                top: 50%;
+                right: 8px;
+                transform: translateY(-50%);
+                font-size: 14px;
+                color: #bfbfbf;
+                cursor: pointer;
+                transition: color 0.2s;
+                z-index: 5;
+                padding: 4px;
+            }
+            .subject-card-delete:hover {
+                color: #ff4d4f;
+            }
+            .tags-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 4px;
+            }
+            .province-pill {
+                padding: 6px 14px;
+                border: 1px solid #d9d9d9;
+                border-radius: 18px;
+                font-size: 13px;
+                color: #555;
+                background: #fff;
+                cursor: pointer;
+                user-select: none;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 32px;
+                -webkit-tap-highlight-color: transparent;
+                transition: all 0.2s;
+            }
+            .province-pill.selected {
+                border-color: #1890ff;
+                color: #1890ff;
+                background-color: #e6f7ff;
+                font-weight: 500;
+            }
+            .province-bottom-bar {
+                position: sticky;
+                bottom: -24px;
+                background: #fff;
+                padding: 12px 20px;
+                margin-left: -20px;
+                margin-right: -20px;
+                margin-bottom: -24px;
+                border-top: 1px solid #f0f0f0;
+                display: flex;
+                gap: 12px;
+                padding-bottom: calc(env(safe-area-inset-bottom, 10px) + 24px);
+                z-index: 10;
+            }
+            .btn-fav {
+                flex: 4;
+                height: 44px;
+                background-color: #f5f5f5;
+                color: #1890ff;
+                border-radius: 22px;
+                border: none;
+                font-size: 15px;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .btn-fav:active {
+                background-color: #e8e8e8;
+            }
+            .btn-confirm-province {
+                flex: 6;
+                height: 44px;
+                background-color: #1890ff;
+                color: #fff;
+                border-radius: 22px;
+                border: none;
+                font-size: 15px;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                -webkit-tap-highlight-color: transparent;
+                box-shadow: 0 4px 10px rgba(24, 144, 255, 0.2);
+            }
+            .btn-confirm-province:active {
+                opacity: 0.9;
+            }
+        </style>
+        
+        <div class="bottom-drawer-header" style="border-bottom: none; display: flex; justify-content: center; align-items: center; padding: 18px 20px 10px 20px; position: relative; margin-bottom: 12px;">
+            <div class="bottom-drawer-title" id="province-drawer-title" style="font-size: 18px; font-weight: bold; color: #1e293b; text-align: center; flex: 1;">河南 - 笔试 - 语文</div>
+            <div class="bottom-drawer-close" id="close-province-drawer-btn" style="cursor: pointer; position: absolute; right: 20px; top: 18px; font-size: 18px; color: #94a3b8;">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <div class="province-drawer-body">
+            <!-- 热门科目 -->
+            <div class="province-section-title">热门科目</div>
+            <div class="subject-grid" id="popular-subjects-list">
+                <div class="subject-card" data-combined="河南-小学-笔试-语文" data-region="河南" data-type="笔试" data-sub="语文">河南-小学-笔试-语文</div>
+                <div class="subject-card" data-combined="河南-小学-笔试-英语" data-region="河南" data-type="笔试" data-sub="英语">河南-小学-笔试-英语</div>
+                <div class="subject-card" data-combined="新疆维吾尔自治区-小学-笔试-综合" data-region="其他" data-type="笔试" data-sub="综合" title="新疆维吾尔自治区-小学-笔试-综合">新疆-小学-笔试-综合...</div>
+            </div>
+
+            <!-- 我的收藏 -->
+            <div class="province-section-title">我的收藏</div>
+            <div class="subject-grid" id="favorite-subjects-list">
+                <div class="subject-card" data-combined="河南-小学-笔试-语文" data-region="河南" data-type="笔试" data-sub="语文">
+                    河南-小学-笔试-语文
+                    <span class="subject-card-delete" onclick="event.stopPropagation(); removeFavoriteItem('河南-小学-笔试-语文', this);"><i class="fas fa-times-circle"></i></span>
+                </div>
+                <div class="subject-card" data-combined="河南-小学-笔试-英语" data-region="河南" data-type="笔试" data-sub="英语">
+                    河南-小学-笔试-英语
+                    <span class="subject-card-delete" onclick="event.stopPropagation(); removeFavoriteItem('河南-小学-笔试-英语', this);"><i class="fas fa-times-circle"></i></span>
+                </div>
+            </div>
+
+            <!-- 标签项名称 1 -->
+            <div class="province-section-title">标签项名称</div>
+            <div class="tags-container" id="province-region-group">
+                <div class="province-pill" data-value="最多2行" style="width: 100px; font-size: 10px; line-height: 1.2; padding: 2px 6px; text-align: center; white-space: normal; height: 32px;">最多2行字体缩<br/>小超出省略...</div>
+                <div class="province-pill selected" data-value="河南">河南</div>
+                <div class="province-pill" data-value="标签值3">标签值3</div>
+                <div class="province-pill" data-value="标签值4">标签值4</div>
+                <div class="province-pill" data-value="标签值5">标签值5</div>
+                <div class="province-pill" data-value="标签值6">标签值6</div>
+                <div class="province-pill" data-value="其他">其他</div>
+            </div>
+
+            <!-- 标签项名称 2 -->
+            <div class="province-section-title">标签项名称</div>
+            <div class="tags-container" id="province-type-group">
+                <div class="province-pill selected" data-value="笔试">笔试</div>
+            </div>
+
+            <!-- 标签项名称 3 -->
+            <div class="province-section-title">标签项名称</div>
+            <div class="tags-container" id="province-subject-group">
+                <div class="province-pill selected" data-value="语文">语文</div>
+                <div class="province-pill" data-value="数学">数学</div>
+            </div>
+
+            <!-- 底部按钮 -->
+            <div class="province-bottom-bar">
+                <button class="btn-fav" id="province-btn-fav">收藏</button>
+                <button class="btn-confirm-province" id="province-btn-confirm">已选好</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- toast 提示 -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // 版本弹窗相关逻辑
+        const versionMask = document.getElementById('version-mask');
+        const versionDrawer = document.getElementById('version-drawer');
+        const textbookSwitchBtn = document.getElementById('knowledge-textbook-switch');
+        const closeVersionBtn = document.getElementById('close-version-btn');
+        const versionItems = document.querySelectorAll('.version-list-item');
+
+        const textbookMask = document.getElementById('textbook-mask');
+        const textbookDrawer = document.getElementById('textbook-drawer');
+        const closeTextbookDrawerBtn = document.getElementById('close-textbook-drawer-btn');
+        const textbookItems = document.querySelectorAll('.textbook-list-item');
+
+        function openVersionDrawer() {
+            if (versionMask && versionDrawer) {
+                versionMask.style.display = 'block';
+                setTimeout(() => {
+                    versionMask.style.opacity = '1';
+                    versionDrawer.classList.add('active');
+                }, 10);
+            }
+        }
+
+        function closeVersionDrawer() {
+            if (versionMask && versionDrawer) {
+                versionMask.style.opacity = '0';
+                versionDrawer.classList.remove('active');
+                setTimeout(() => {
+                    versionMask.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        function openTextbookDrawer() {
+            if (textbookMask && textbookDrawer) {
+                textbookMask.style.display = 'block';
+                setTimeout(() => {
+                    textbookMask.style.opacity = '1';
+                    textbookDrawer.classList.add('active');
+                }, 10);
+            }
+        }
+
+        function closeTextbookDrawer() {
+            if (textbookMask && textbookDrawer) {
+                textbookMask.style.opacity = '0';
+                textbookDrawer.classList.remove('active');
+                setTimeout(() => {
+                    textbookMask.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            if (toast) {
+                toast.textContent = msg;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            }
+        }
+
+        if (textbookSwitchBtn) {
+            textbookSwitchBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openVersionDrawer();
+            });
+        }
+        if (closeVersionBtn) {
+            closeVersionBtn.addEventListener('click', closeVersionDrawer);
+        }
+        if (versionMask) {
+            versionMask.addEventListener('click', closeVersionDrawer);
+        }
+
+        if (closeTextbookDrawerBtn) {
+            closeTextbookDrawerBtn.addEventListener('click', closeTextbookDrawer);
+        }
+        if (textbookMask) {
+            textbookMask.addEventListener('click', closeTextbookDrawer);
+        }
+
+        versionItems.forEach(item => {
+            item.addEventListener('click', () => {
+                versionItems.forEach(i => i.classList.remove('selected'));
+                item.classList.add('selected');
+
+                const activeName = item.querySelector('.version-name');
+                const selectedText = activeName ? activeName.textContent.trim() : '';
+                showToast('已成功切换版本为: ' + (selectedText.length > 15 ? selectedText.substring(0, 15) + '...' : selectedText));
+                
+                closeVersionDrawer();
+            });
+        });
+
+        textbookItems.forEach(item => {
+            item.addEventListener('click', () => {
+                textbookItems.forEach(i => i.classList.remove('selected'));
+                item.classList.add('selected');
+
+                const activeName = item.querySelector('.textbook-name');
+                const selectedText = activeName ? activeName.textContent.trim() : '';
+                showToast('已成功切换教材为: ' + selectedText);
+                
+                // 更新页面中的教材按钮文本
+                const displayBtnText = document.querySelector('#textbook-switch span') || document.querySelector('#textbook-switch');
+                if (displayBtnText) {
+                    if (displayBtnText.tagName === 'SPAN') {
+                        displayBtnText.textContent = selectedText;
+                    } else {
+                        displayBtnText.innerHTML = `<i class="fas fa-book" style="margin-right: 8px;"></i> ${selectedText} <i class="fas fa-chevron-down" style="margin-left: 4px;"></i>`;
+                    }
+                }
+
+                closeTextbookDrawer();
+            });
+        });
+
+        // 专业方向弹窗相关逻辑
+        const majorMask = document.getElementById('major-mask');
+        const majorDrawer = document.getElementById('major-drawer');
+        const majorSelectorBtn = document.getElementById('major-selector-btn');
+        const closeMajorDrawerBtn = document.getElementById('close-major-drawer-btn');
+        const majorItems = document.querySelectorAll('.major-list-item');
+
+        function openMajorDrawer() {
+            if (majorMask && majorDrawer) {
+                majorMask.style.display = 'block';
+                setTimeout(() => {
+                    majorMask.style.opacity = '1';
+                    majorDrawer.classList.add('active');
+                }, 10);
+            }
+        }
+
+        function closeMajorDrawer() {
+            if (majorMask && majorDrawer) {
+                majorMask.style.opacity = '0';
+                majorDrawer.classList.remove('active');
+                setTimeout(() => {
+                    majorMask.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        if (majorSelectorBtn) {
+            majorSelectorBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openMajorDrawer();
+            });
+        }
+        if (closeMajorDrawerBtn) {
+            closeMajorDrawerBtn.addEventListener('click', closeMajorDrawer);
+        }
+        if (majorMask) {
+            majorMask.addEventListener('click', closeMajorDrawer);
+        }
+
+        majorItems.forEach(item => {
+            item.addEventListener('click', () => {
+                majorItems.forEach(i => i.classList.remove('selected'));
+                item.classList.add('selected');
+
+                const activeName = item.querySelector('.major-name');
+                const selectedText = activeName ? activeName.textContent.trim() : '';
+                showToast('已成功切换专业方向为: ' + selectedText);
+                
+                // 更新页面中的专业方向按钮文本
+                const displayBtnSpan = document.querySelector('#major-selector-btn span');
+                if (displayBtnSpan) {
+                    displayBtnSpan.textContent = selectedText;
+                }
+
+                closeMajorDrawer();
+            });
+        });
+
+        // 省份/科目组合弹窗相关逻辑
+        const provinceMask = document.getElementById('province-drawer-mask');
+        const provinceDrawer = document.getElementById('province-drawer');
+        const provinceSelectorBtn = document.getElementById('province-selector-btn');
+        const closeProvinceDrawerBtn = document.getElementById('close-province-drawer-btn');
+        const btnConfirmProvince = document.getElementById('province-btn-confirm');
+        const btnFavProvince = document.getElementById('province-btn-fav');
+        const drawerTitle = document.getElementById('province-drawer-title');
+
+        function openProvinceDrawer() {
+            if (provinceMask && provinceDrawer) {
+                provinceMask.style.display = 'block';
+                setTimeout(() => {
+                    provinceMask.style.opacity = '1';
+                    provinceDrawer.classList.add('active');
+                }, 10);
+            }
+        }
+
+        function closeProvinceDrawer() {
+            if (provinceMask && provinceDrawer) {
+                provinceMask.style.opacity = '0';
+                provinceDrawer.classList.remove('active');
+                setTimeout(() => {
+                    provinceMask.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        if (provinceSelectorBtn) {
+            provinceSelectorBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openProvinceDrawer();
+            });
+        }
+        if (closeProvinceDrawerBtn) {
+            closeProvinceDrawerBtn.addEventListener('click', closeProvinceDrawer);
+        }
+        if (provinceMask) {
+            provinceMask.addEventListener('click', closeProvinceDrawer);
+        }
+
+        // Tag switching and dynamic title update
+        function getSelectedProvinceCombination() {
+            const activeRegionEl = document.querySelector('#province-region-group .province-pill.selected');
+            const activeTypeEl = document.querySelector('#province-type-group .province-pill.selected');
+            const activeSubjectEl = document.querySelector('#province-subject-group .province-pill.selected');
+
+            const region = activeRegionEl ? activeRegionEl.getAttribute('data-value') : '河南';
+            const type = activeTypeEl ? activeTypeEl.getAttribute('data-value') : '笔试';
+            const sub = activeSubjectEl ? activeSubjectEl.getAttribute('data-value') : '语文';
+
+            return { region, type, sub };
+        }
+
+        function updateProvinceDrawerTitle() {
+            const { region, type, sub } = getSelectedProvinceCombination();
+            if (drawerTitle) {
+                drawerTitle.textContent = `${region} - ${type} - ${sub}`;
+            }
+        }
+
+        // Set tag selection
+        const regionPills = document.querySelectorAll('#province-region-group .province-pill');
+        const typePills = document.querySelectorAll('#province-type-group .province-pill');
+        const subjectPills = document.querySelectorAll('#province-subject-group .province-pill');
+
+        function setupPillSwitching(pills) {
+            pills.forEach(pill => {
+                pill.addEventListener('click', () => {
+                    pills.forEach(p => p.classList.remove('selected'));
+                    pill.classList.add('selected');
+                    updateProvinceDrawerTitle();
+                });
+            });
+        }
+
+        setupPillSwitching(regionPills);
+        setupPillSwitching(typePills);
+        setupPillSwitching(subjectPills);
+
+        // Grid items clicking (popular or favorites)
+        const gridItems = document.querySelectorAll('.subject-grid .subject-card');
+        gridItems.forEach(card => {
+            card.addEventListener('click', (e) => {
+                // If clicked delete, ignore
+                if (e.target.closest('.subject-card-delete')) return;
+
+                const region = card.getAttribute('data-region') || '河南';
+                const type = card.getAttribute('data-type') || '笔试';
+                const sub = card.getAttribute('data-sub') || '语文';
+
+                // Find and select region pill
+                regionPills.forEach(p => {
+                    if (p.getAttribute('data-value') === region) {
+                        p.classList.add('selected');
+                    } else {
+                        p.classList.remove('selected');
+                    }
+                });
+                // Find and select type pill
+                typePills.forEach(p => {
+                    if (p.getAttribute('data-value') === type) {
+                        p.classList.add('selected');
+                    } else {
+                        p.classList.remove('selected');
+                    }
+                });
+                // Find and select subject pill
+                subjectPills.forEach(p => {
+                    if (p.getAttribute('data-value') === sub) {
+                        p.classList.add('selected');
+                    } else {
+                        p.classList.remove('selected');
+                    }
+                });
+
+                updateProvinceDrawerTitle();
+                showToast(`已切换组合: ${region} - ${type} - ${sub}`);
+            });
+        });
+
+        // Add to Favorite Logic
+        if (btnFavProvince) {
+            btnFavProvince.addEventListener('click', () => {
+                const { region, type, sub } = getSelectedProvinceCombination();
+                const combined = `${region}-小学-${type}-${sub}`;
+
+                const favoriteList = document.getElementById('favorite-subjects-list');
+                // Check if already in favorite list
+                const existing = favoriteList.querySelector(`[data-combined="${combined}"]`);
+                if (existing) {
+                    showToast('该学科组合已在我的收藏中');
+                    return;
+                }
+
+                const newCard = document.createElement('div');
+                newCard.className = 'subject-card';
+                newCard.setAttribute('data-combined', combined);
+                newCard.setAttribute('data-region', region);
+                newCard.setAttribute('data-type', type);
+                newCard.setAttribute('data-sub', sub);
+                newCard.innerHTML = `
+                    ${combined.length > 15 ? combined.substring(0, 13) + '...' : combined}
+                    <span class="subject-card-delete" onclick="event.stopPropagation(); removeFavoriteItem('${combined}', this);"><i class="fas fa-times-circle"></i></span>
+                `;
+
+                // Add click listener to the newly created element
+                newCard.addEventListener('click', (e) => {
+                    if (e.target.closest('.subject-card-delete')) return;
+                    // Trigger selection
+                    regionPills.forEach(p => {
+                        if (p.getAttribute('data-value') === region) p.classList.add('selected');
+                        else p.classList.remove('selected');
+                    });
+                    typePills.forEach(p => {
+                        if (p.getAttribute('data-value') === type) p.classList.add('selected');
+                        else p.classList.remove('selected');
+                    });
+                    subjectPills.forEach(p => {
+                        if (p.getAttribute('data-value') === sub) p.classList.add('selected');
+                        else p.classList.remove('selected');
+                    });
+                    updateProvinceDrawerTitle();
+                    showToast(`已切换组合: ${region} - ${type} - ${sub}`);
+                });
+
+                favoriteList.appendChild(newCard);
+                showToast('已成功添加至我的收藏');
+            });
+        }
+
+        // Global function for inline click
+        window.removeFavoriteItem = function(combinedVal, element) {
+            if (element) {
+                element.closest('.subject-card').remove();
+                showToast('已取消收藏: ' + combinedVal);
+            }
+        };
+
+        // Confirm Action
+        if (btnConfirmProvince) {
+            btnConfirmProvince.addEventListener('click', () => {
+                const { region, type, sub } = getSelectedProvinceCombination();
+                
+                // Update header province
+                const displayBtnSpan = document.querySelector('#province-selector-btn span');
+                if (displayBtnSpan) {
+                    displayBtnSpan.textContent = region === '最多2行' ? '河南' : region;
+                }
+
+                // Update active subjects in navigation if matching
+                const topSubjectItems = document.querySelectorAll('.subject-nav .subject-item');
+                topSubjectItems.forEach(item => {
+                    if (item.textContent.trim() === sub) {
+                        topSubjectItems.forEach(i => i.classList.remove('active'));
+                        item.classList.add('active');
+                    }
+                });
+
+                showToast(`已成功切换省份及科目为: ${region} - ${type} - ${sub}`);
+                closeProvinceDrawer();
+            });
+        }
     </script>
 </body>
 </html>
