@@ -127,6 +127,8 @@
             white-space: nowrap;
             position: relative;
             padding-bottom: 6px;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .subject-item.active {
@@ -176,7 +178,7 @@
         }
 
         .quick-actions .practice-label {
-            font-size: 9px;
+            font-size: 12px;
             text-align: center;
             white-space: nowrap;
         }
@@ -319,7 +321,7 @@
         }
 
         .feature-label {
-            font-size: 11px;
+            font-size: 13px;
             color: #666;
             text-align: center;
         }
@@ -554,6 +556,8 @@
             color: #999;
             margin-top: 8px;
             margin-bottom: 12px;
+            display: flex;
+            align-items: center;
         }
 
         /* 练习项 */
@@ -589,6 +593,14 @@
             font-size: 14px;
             color: #999;
             margin-top: 4px;
+            display: flex;
+            align-items: center;
+        }
+
+        .stats-progress {
+            display: inline-block;
+            width: 80px;
+            flex-shrink: 0;
         }
 
         .item-actions {
@@ -1144,6 +1156,56 @@
             margin-top: 10px;
             box-shadow: 0 4px 12px rgba(245, 34, 45, 0.3);
         }
+
+        /* 百宝箱弹窗样式 */
+        .toolbox-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px 8px;
+        }
+        .toolbox-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .toolbox-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+        .toolbox-item:nth-child(1) .toolbox-icon {
+            background-color: #fff1f0;
+            color: #ff4d4f;
+        }
+        .toolbox-item:nth-child(2) .toolbox-icon {
+            background-color: #f6ffed;
+            color: #52c41a;
+        }
+        .toolbox-item:nth-child(3) .toolbox-icon {
+            background-color: #e6f7ff;
+            color: #1890ff;
+        }
+        .toolbox-item:nth-child(4) .toolbox-icon {
+            background-color: #f9f0ff;
+            color: #722ed1;
+        }
+        .toolbox-item:nth-child(5) .toolbox-icon {
+            background-color: #fff7e6;
+            color: #fa8c16;
+        }
+        .toolbox-label {
+            font-size: 12px;
+            color: #333;
+            text-align: center;
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
@@ -1155,6 +1217,7 @@
                 <div class="province-selector" id="province-selector-btn" style="cursor: pointer; -webkit-tap-highlight-color: transparent;"><span>河南省</span> <i class="fas fa-chevron-down" style="font-size: 10px; color: #999;"></i></div>
             </div>
             <div class="header-actions">
+                <button class="action-btn" id="toolbox-btn" title="百宝箱"><i class="fas fa-toolbox" style="color: #666;"></i></button>
                 <button class="action-btn" title="搜索"><i class="fas fa-search"></i></button>
             </div>
         </div>
@@ -1171,23 +1234,23 @@
 
     <!-- 金刚区 -->
     <div class="quick-actions">
-        <div class="quick-mode active">
+        <div class="quick-mode active" onclick="location.href='mokuai_xiangqing_zhangjie.html'" style="cursor: pointer;">
             <div class="practice-icon"><i class="fas fa-list"></i></div>
             <div class="practice-label">章节练习</div>
         </div>
-        <div class="quick-mode">
+        <div class="quick-mode" style="cursor: pointer;">
             <div class="practice-icon"><i class="fas fa-fire"></i></div>
             <div class="practice-label">固定刷题</div>
         </div>
-        <div class="quick-mode">
+        <div class="quick-mode" onclick="location.href='mokuai_xiangqing_meiri.html'" style="cursor: pointer;">
             <div class="practice-icon"><i class="fas fa-calendar-day"></i></div>
             <div class="practice-label">每日一练</div>
         </div>
-        <div class="quick-mode">
+        <div class="quick-mode" onclick="location.href='mokuai_xiangqing_zhishidian.html'" style="cursor: pointer;">
             <div class="practice-icon"><i class="fas fa-book-open"></i></div>
             <div class="practice-label">知识点练习</div>
         </div>
-        <div class="quick-mode">
+        <div class="quick-mode" onclick="location.href='mokuai_xiangqing_guda.html'" style="cursor: pointer;">
             <div class="practice-icon"><i class="fas fa-book"></i></div>
             <div class="practice-label">历年真题</div>
         </div>
@@ -1279,9 +1342,9 @@
     <div id="chapter-practice" class="content-section">
         <div class="special-practice">
             <div class="special-header" onclick="location.href='mokuai_xiangqing_zhangjie.html'" style="cursor: pointer;">
-                <div class="special-title">
-                    章节练习 <i class="fas fa-chevron-right" style="font-size: 14px; margin-left: 4px;"></i>
-                    <button class="action-btn-small primary" style="margin-left: 8px; height: 22px; line-height: 20px; padding: 0 8px; font-size: 11px; border-radius: 11px; white-space: nowrap;">立即开通</button>
+                <div class="special-title" style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                    <span>章节练习</span> <i class="fas fa-chevron-right" style="font-size: 14px;"></i>
+                    <button class="action-btn-small primary" style="height: 22px; line-height: 20px; padding: 0 8px; font-size: 11px; border-radius: 11px; white-space: nowrap;">立即开通</button>
                 </div>
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <button class="action-btn-small" onclick="event.stopPropagation(); window.location.href='zhangjie_zhengti_baogao.html'" style="background-color: #f5f5f5; color: #666; border: 1px solid #d9d9d9; height: 22px; line-height: 20px; padding: 0 10px; font-size: 11px; border-radius: 11px; white-space: nowrap;">整体报告</button>
@@ -1292,9 +1355,11 @@
             <!-- 教材切换按钮 -->
             <div style="padding: 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: center; align-items: center; gap: 12px;">
                 <button id="textbook-switch" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 14px; color: #666; display: flex; align-items: center; -webkit-tap-highlight-color: transparent;">
-                    <i class="fas fa-book" style="margin-right: 8px;"></i> 某某教材 <i class="fas fa-chevron-down" style="margin-left: 4px;"></i>
+                    <i class="fas fa-book-bookmark" style="margin-right: 6px; color: #ff4d4f; font-size: 13px;"></i> <span>全国版</span> <i class="fas fa-chevron-down" style="margin-left: 4px;"></i>
                 </button>
-                <i class="fas fa-lock" style="color: #d9d9d9;"></i>
+                <div id="textbook-lock-container" style="display: flex; align-items: center;">
+                    <span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; white-space: nowrap; display: inline-block;">免费</span>
+                </div>
             </div>
 
             <!-- 文学常识单元 -->
@@ -1302,16 +1367,18 @@
                 <div class="unit-header" onclick="toggleUnit(this)">
                     <div class="unit-title">
                         <i class="fas fa-chevron-down"></i>
-                        文学常识
+                        <span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; margin-right: 8px; white-space: nowrap; display: inline-block; font-weight: normal;">免费</span>文学常识
                     </div>
                 </div>
-                <div class="unit-progress">17/37 正确率: 20%</div>
+                <div class="unit-progress"><span class="stats-progress">17/37</span><span>正确率: 20%</span></div>
                 <div class="unit-content">
                     <!-- 练习项 -->
                     <div class="practice-item">
                         <div class="item-info">
-                            <div class="item-title">文学常识基础</div>
-                            <div class="item-stats">17/37 正确率: 20%</div>
+                            <div class="item-title" style="display: flex; align-items: center;">
+                                <span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; margin-right: 8px; white-space: nowrap; display: inline-block; font-weight: normal;">免费</span>文学常识基础
+                            </div>
+                            <div class="item-stats"><span class="stats-progress">17/37</span><span>正确率: 20%</span></div>
                         </div>
                         <div class="item-actions">
                             <button class="action-btn-small">查看解析</button>
@@ -1326,14 +1393,14 @@
                 <div class="unit-header" onclick="toggleUnit(this)">
                     <div class="unit-title"><i class="fas fa-chevron-down"></i>记叙文单元</div>
                 </div>
-                <div class="unit-progress">45/242 正确率: 0%</div>
+                <div class="unit-progress"><span class="stats-progress">45/242</span><span>正确率: 0%</span></div>
                 <div class="unit-content">
                     <!-- 练习项 -->
                     <div class="practice-item">
                         <div class="item-info">
                             <div class="item-title">郑伯克段于鄢</div>
 
-                            <div class="item-stats">1/5 正确率: 0%</div>
+                            <div class="item-stats"><span class="stats-progress">1/5</span><span>正确率: 0%</span></div>
                         </div>
                         <div class="item-actions">
                             <button class="action-btn-small">查看解析</button>
@@ -1345,7 +1412,7 @@
                         <div class="item-info">
                             <div class="item-title">冯谖客孟尝君</div>
 
-                            <div class="item-stats">19/19 正确率: 0%</div>
+                            <div class="item-stats"><span class="stats-progress">19/19</span><span>正确率: 0%</span></div>
                         </div>
                         <div class="item-actions">
                             <button class="action-btn-small primary">开始答题</button>
@@ -1356,7 +1423,7 @@
                         <div class="item-info">
                             <div class="item-title">垓下之围</div>
 
-                            <div class="item-stats">2/12 正确率: 0%</div>
+                            <div class="item-stats"><span class="stats-progress">2/12</span><span>正确率: 0%</span></div>
                         </div>
                         <div class="item-actions">
                             <button class="action-btn-small primary">开始答题</button>
@@ -1367,7 +1434,7 @@
                         <div class="item-info">
                             <div class="item-title">张中丞传后叙</div>
 
-                            <div class="item-stats">23/23 正确率: 0%</div>
+                            <div class="item-stats"><span class="stats-progress">23/23</span><span>正确率: 0%</span></div>
                         </div>
                         <div class="item-actions">
                             <button class="action-btn-small primary">开始答题</button>
@@ -1377,7 +1444,7 @@
                     <div class="practice-item">
                         <div class="item-info">
                             <div class="item-title">种树郭橐驼传</div>
-                            <div class="item-stats">0/10 正确率: 0%</div>
+                            <div class="item-stats"><span class="stats-progress">0/10</span><span>正确率: 0%</span></div>
                         </div>
                         <div class="item-actions">
                             <button class="action-btn-small primary">开始答题</button>
@@ -2007,7 +2074,7 @@
                 <div onclick="location.href='shuati_mulu.html'" style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); cursor: pointer;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                         <div style="display: flex; align-items: center;">
-                            <i class="fas fa-lock" style="margin-right: 8px; color: #d9d9d9;"></i>
+                            <i class="fas fa-unlock" style="margin-right: 8px; color: #52c41a;"></i>
                             <div style="font-size: 14px; font-weight: 500; color: #333;">24春季精编版</div>
                         </div>
                         <i class="fas fa-chevron-right" style="color: #999;"></i>
@@ -2037,7 +2104,7 @@
                 <div onclick="location.href='shuati_mulu.html'" style="background-color: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); cursor: pointer;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                         <div style="display: flex; align-items: center;">
-                            <i class="fas fa-lock" style="margin-right: 8px; color: #d9d9d9;"></i>
+                            <i class="fas fa-unlock" style="margin-right: 8px; color: #52c41a;"></i>
                             <div style="font-size: 14px; font-weight: 500; color: #333;">23秋季精编版</div>
                         </div>
                         <i class="fas fa-chevron-right" style="color: #999;"></i>
@@ -2087,15 +2154,15 @@
             <!-- 教材切换按钮 -->
             <div style="padding: 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: center; align-items: center; gap: 12px;">
                 <button id="knowledge-textbook-switch" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 14px; color: #666; display: flex; align-items: center; -webkit-tap-highlight-color: transparent;">
-                    <i class="fas fa-book" style="margin-right: 8px;"></i> 知识点体系 <i class="fas fa-chevron-down" style="margin-left: 4px;"></i>
+                    <i class="fas fa-book-bookmark" style="margin-right: 6px; color: #ff4d4f; font-size: 13px;"></i> 知识点体系 <i class="fas fa-chevron-down" style="margin-left: 4px;"></i>
                 </button>
             </div>
             
             <!-- 新增按钮区域 -->
             <div style="padding: 16px; display: flex; justify-content: space-around; align-items: center;">
-                <button style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 14px; color: #666; -webkit-tap-highlight-color: transparent;">智能练习</button>
-                <button style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 14px; color: #666; -webkit-tap-highlight-color: transparent;">整体报告</button>
-                <button onclick="window.location.href='lianxi_lishi.html'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 14px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">练习历史</button>
+                <button onclick="window.location.href='dati_yemian.html?mode=knowledge&title=智能练习'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 14px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">智能练习</button>
+                <button onclick="window.location.href='zhishidian_zhengti_baogao.html'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 14px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">整体报告</button>
+                <button onclick="window.location.href='zhishidian_lianxi_lishi.html'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 14px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">练习历史</button>
             </div>
 
             <!-- 知识点分类 1 -->
@@ -2507,9 +2574,42 @@
             event.preventDefault();
         });
     </script>
+    <!-- 百宝箱弹窗 -->
+    <div class="bottom-drawer-mask" id="toolbox-mask"></div>
+    <div class="bottom-drawer" id="toolbox-modal">
+        <div class="bottom-drawer-header">
+            <div class="bottom-drawer-title">百宝箱</div>
+            <div class="bottom-drawer-close" id="close-toolbox-btn"><i class="fas fa-times"></i></div>
+        </div>
+        <div class="bottom-drawer-body" style="padding-top: 10px; padding-bottom: 30px;">
+            <div class="toolbox-grid">
+                <div class="toolbox-item" onclick="location.href='cuoti.html'">
+                    <div class="toolbox-icon"><i class="fas fa-times-circle"></i></div>
+                    <div class="toolbox-label">错题本</div>
+                </div>
+                <div class="toolbox-item" onclick="location.href='shoucang.html'">
+                    <div class="toolbox-icon"><i class="fas fa-bookmark"></i></div>
+                    <div class="toolbox-label">收藏本</div>
+                </div>
+                <div class="toolbox-item" onclick="location.href='lianxi_lishi.html'">
+                    <div class="toolbox-icon"><i class="fas fa-history"></i></div>
+                    <div class="toolbox-label">练习历史</div>
+                </div>
+                <div class="toolbox-item" onclick="location.href='paihang.html'">
+                    <div class="toolbox-icon"><i class="fas fa-trophy"></i></div>
+                    <div class="toolbox-label">答题排行</div>
+                </div>
+                <div class="toolbox-item" onclick="location.href='baogao.html'">
+                    <div class="toolbox-icon"><i class="fas fa-file-alt"></i></div>
+                    <div class="toolbox-label">答题报告</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 答题设置底部弹窗 -->
     <div class="bottom-drawer-mask" id="settings-mask"></div>
-    <div class="bottom-drawer" id="settings-drawer">
+    <div class="bottom-drawer" id="settings-drawer" style="height: auto; max-height: none; overflow-y: visible; padding-bottom: 24px;">
         <div class="bottom-drawer-header">
             <div class="bottom-drawer-title">答题设置</div>
             <div class="bottom-drawer-close" id="close-settings-btn">
@@ -2563,6 +2663,44 @@
     </div>
 
     <script>
+        // 百宝箱弹窗逻辑
+        const toolboxMask = document.getElementById('toolbox-mask');
+        const toolboxModal = document.getElementById('toolbox-modal');
+        const toolboxBtn = document.getElementById('toolbox-btn');
+        const closeToolboxBtn = document.getElementById('close-toolbox-btn');
+
+        function openToolbox() {
+            if (toolboxMask && toolboxModal) {
+                toolboxMask.style.display = 'block';
+                toolboxModal.style.display = 'block';
+                // trigger reflow
+                void toolboxMask.offsetWidth;
+                toolboxMask.style.opacity = '1';
+                toolboxModal.classList.add('active');
+            }
+        }
+
+        function closeToolbox() {
+            if (toolboxMask && toolboxModal) {
+                toolboxMask.style.opacity = '0';
+                toolboxModal.classList.remove('active');
+                setTimeout(() => {
+                    toolboxMask.style.display = 'none';
+                    toolboxModal.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        if (toolboxBtn) {
+            toolboxBtn.addEventListener('click', openToolbox);
+        }
+        if (closeToolboxBtn) {
+            closeToolboxBtn.addEventListener('click', closeToolbox);
+        }
+        if (toolboxMask) {
+            toolboxMask.addEventListener('click', closeToolbox);
+        }
+
         // 弹窗相关逻辑
         const settingsMask = document.getElementById('settings-mask');
         const settingsDrawer = document.getElementById('settings-drawer');
@@ -2866,12 +3004,17 @@
 
     <!-- 省份及科目组合选择底部弹窗 -->
     <div class="bottom-drawer-mask" id="province-drawer-mask"></div>
-    <div class="bottom-drawer" id="province-drawer" style="z-index: 2500;">
+    <div class="bottom-drawer" id="province-drawer" style="z-index: 2500; overflow: hidden !important; padding: 0 !important; display: flex; flex-direction: column; max-height: 80vh;">
         <style>
             .province-drawer-body {
                 padding: 10px 20px 24px 20px;
                 overflow-y: auto;
-                max-height: 70vh;
+                max-height: calc(80vh - 70px);
+                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none; /* IE and Edge */
+            }
+            .province-drawer-body::-webkit-scrollbar {
+                display: none; /* Chrome, Safari and Opera */
             }
             .province-section-title {
                 font-size: 14px;
@@ -3182,6 +3325,16 @@
                     }
                 }
 
+                // 更新锁/免费状态
+                const lockContainer = document.getElementById('textbook-lock-container');
+                if (lockContainer) {
+                    if (selectedText === '全国版') {
+                        lockContainer.innerHTML = `<span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; white-space: nowrap; display: inline-block;">免费</span>`;
+                    } else {
+                        lockContainer.innerHTML = `<i class="fas fa-lock" style="color: #d9d9d9;"></i>`;
+                    }
+                }
+
                 closeTextbookDrawer();
             });
         });
@@ -3447,6 +3600,17 @@
 
                 showToast(`已成功切换省份及科目为: ${region} - ${type} - ${sub}`);
                 closeProvinceDrawer();
+            });
+        }
+
+        // 科目点击切换
+        const navSubjectItems = document.querySelectorAll('.subject-nav .subject-item');
+        if (navSubjectItems) {
+            navSubjectItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    navSubjectItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                });
             });
         }
     </script>

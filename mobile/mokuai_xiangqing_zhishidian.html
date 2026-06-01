@@ -143,6 +143,59 @@
             padding: 12px;
         }
 
+        /* 学习报告卡片 */
+        .report-card {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 12px;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.15);
+        }
+
+        .report-card-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .report-progress-container {
+            margin-bottom: 16px;
+        }
+
+        .report-progress-bar-bg {
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.22);
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .report-progress-bar-fill {
+            height: 100%;
+            background-color: #ffffff;
+            border-radius: 5px;
+            width: 68.56%;
+        }
+
+        .report-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            row-gap: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .report-stat-left {
+            text-align: left;
+        }
+
+        .report-stat-right {
+            text-align: right;
+        }
+
         .special-practice {
             background-color: #fff;
             margin-bottom: 12px;
@@ -178,6 +231,8 @@
             display: flex;
             align-items: center;
             gap: 4px;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* 练习单元 */
@@ -255,7 +310,7 @@
         .action-btn-small {
             padding: 6px 16px;
             border: 1px solid #d9d9d9;
-            border-radius: 14px;
+            border-radius: 4px;
             background-color: #fff;
             font-size: 13px;
             color: #666;
@@ -346,7 +401,7 @@
             left: 50%;
             transform: translate(-50%, 100%);
             width: 100%;
-            max-width: 448px; /* max-w-md matching max-w-md mx-auto */
+            max-width: 480px; /* match body max-width */
             background-color: #fff;
             border-radius: 20px 20px 0 0;
             z-index: 2001;
@@ -619,6 +674,22 @@
     </div>
 
     <div class="content-container">
+        <!-- 学习报告卡片 -->
+        <div class="report-card">
+            <div class="report-card-title">学习报告</div>
+            <div class="report-progress-container">
+                <div class="report-progress-bar-bg">
+                    <div class="report-progress-bar-fill"></div>
+                </div>
+            </div>
+            <div class="report-stats-grid">
+                <div class="report-stat-left">已完成 68.56%</div>
+                <div class="report-stat-right">已答/总量 126/185题</div>
+                <div class="report-stat-left">正确率 78%</div>
+                <div class="report-stat-right">今日练习 12题</div>
+            </div>
+        </div>
+
         <div class="special-practice">
             <!-- 切换及功能导航区 -->
             <div style="padding: 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
@@ -626,17 +697,17 @@
                     <i class="fas fa-book" style="margin-right: 6px; color: #ff4d4f;"></i> 知识点体系 <i class="fas fa-chevron-down" style="margin-left: 4px; font-size: 10px; color: #aaa;"></i>
                 </button>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <button class="practice-mode-tag" id="practice-mode-btn" style="border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; padding: 6px 12px; font-size: 13px; color: #666; display: flex; align-items: center; gap: 4px; cursor: pointer; -webkit-tap-highlight-color: transparent;">
-                        <i class="fas fa-cog" style="font-size: 12px; color: #999;"></i> <span id="current-mode-text">练习模式</span>
-                    </button>
+                    <div class="practice-mode-tag" id="practice-mode-btn">
+                        <i class="fas fa-cog" style="font-size: 14px; margin-right: 4px;"></i> <span id="current-mode-text">练习模式</span>
+                    </div>
                 </div>
             </div>
             
             <!-- 快速动作区域 -->
             <div style="padding: 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-around; align-items: center;">
-                <button onclick="alert('已开启智能练习！')" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">智能练习</button>
-                <button onclick="alert('整体报告生成中...')" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">整体报告</button>
-                <button onclick="window.location.href='lianxi_lishi.html'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">练习历史</button>
+                <button onclick="window.location.href='dati_yemian.html?mode=knowledge&title=智能练习'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">智能练习</button>
+                <button onclick="window.location.href='zhishidian_zhengti_baogao.html'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">整体报告</button>
+                <button onclick="window.location.href='zhishidian_lianxi_lishi.html'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">练习历史</button>
             </div>
 
             <!-- 知识分类列表 -->
@@ -793,7 +864,7 @@
 
     <!-- 答题设置底部弹窗 -->
     <div class="bottom-drawer-mask" id="settings-mask"></div>
-    <div class="bottom-drawer" id="settings-drawer">
+    <div class="bottom-drawer" id="settings-drawer" style="display: block; height: auto; max-height: none; overflow-y: visible; padding-bottom: 24px;">
         <div class="bottom-drawer-header">
             <div class="bottom-drawer-title">答题设置</div>
             <div class="bottom-drawer-close" id="close-settings-btn">
@@ -801,58 +872,46 @@
             </div>
         </div>
 
-        <div class="bottom-drawer-body">
-            <div class="section-title">答题模式</div>
-            <div class="mode-grid">
-                <div class="mode-card active">
-                    <div class="mode-card-title">练习模式</div>
-                    <div class="mode-card-desc">答题后直接显示答案</div>
-                </div>
-                <div class="mode-card">
-                    <div class="mode-card-title">考试计时模式</div>
-                    <div class="mode-card-desc">不限时间，交卷后显示答案</div>
-                </div>
-                <div class="mode-card">
-                    <div class="mode-card-title">快答模式</div>
-                    <div class="mode-card-desc">答题错误后显示答案</div>
-                </div>
-                <div class="mode-card">
-                    <div class="mode-card-title">背题模式</div>
-                    <div class="mode-card-desc">直接显示答案</div>
-                </div>
+        <div class="section-title">答题模式</div>
+        <div class="mode-grid">
+            <div class="mode-card active">
+                <div class="mode-card-title">练习模式</div>
+                <div class="mode-card-desc">答题后直接显示答案</div>
             </div>
+            <div class="mode-card">
+                <div class="mode-card-title">考试计时模式</div>
+                <div class="mode-card-desc">不限时间，交卷后显示答案</div>
+            </div>
+            <div class="mode-card">
+                <div class="mode-card-title">快答模式</div>
+                <div class="mode-card-desc">答题错误后显示答案</div>
+            </div>
+            <div class="mode-card">
+                <div class="mode-card-title">背题模式</div>
+                <div class="mode-card-desc">直接显示答案</div>
+            </div>
+        </div>
 
-            <div id="question-count-section">
-                <div class="section-title">每次答题数量</div>
-                <div class="count-grid" style="grid-template-columns: repeat(4, 1fr);">
-                    <div class="count-btn active">5道</div>
-                    <div class="count-btn">10道</div>
-                    <div class="count-btn">15道</div>
-                    <div class="count-btn">20道</div>
-                    <div class="count-btn">25道</div>
-                    <div class="count-btn">30道</div>
-                    <div class="count-btn">35道</div>
-                    <div class="count-btn">40道</div>
-                </div>
+        <div id="question-count-section">
+            <div class="section-title">每次答题数量</div>
+            <div class="count-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="count-btn active">5道</div>
+                <div class="count-btn">10道</div>
+                <div class="count-btn">15道</div>
+                <div class="count-btn">20道</div>
+                <div class="count-btn">25道</div>
+                <div class="count-btn">30道</div>
+                <div class="count-btn">35道</div>
+                <div class="count-btn">40道</div>
             </div>
+        </div>
 
-            <div id="question-difficulty-section">
-                <div class="section-title">试题难度</div>
-                <div class="count-grid" style="grid-template-columns: repeat(4, 1fr);">
-                    <div class="count-btn difficulty-btn active">不限</div>
-                    <div class="count-btn difficulty-btn">易</div>
-                    <div class="count-btn difficulty-btn">中</div>
-                    <div class="count-btn difficulty-btn">难</div>
-                </div>
-            </div>
-
-            <div class="animation-toggle">
-                <div class="toggle-label">动画开关</div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="animation-toggle-input" checked>
-                    <span class="slider"></span>
-                </label>
-            </div>
+        <div class="animation-toggle">
+            <div class="toggle-label">动画开关</div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="animation-toggle-input">
+                <span class="slider"></span>
+            </label>
         </div>
 
         <button class="confirm-btn" id="confirm-settings-btn">确定</button>
@@ -865,6 +924,15 @@
     <div class="bottom-drawer-mask" id="province-drawer-mask"></div>
     <div class="bottom-drawer" id="province-drawer" style="z-index: 2500;">
         <style>
+            .bottom-drawer {
+                max-width: 480px !important;
+                max-height: 75vh !important;
+                border-top-left-radius: 20px !important;
+                border-top-right-radius: 20px !important;
+                z-index: 2200 !important;
+                transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.15) !important;
+                box-shadow: 0 -10px 30px rgba(0,0,0,0.08) !important;
+            }
             .province-drawer-body {
                 padding: 10px 20px 24px 20px;
                 overflow-y: auto;
@@ -959,26 +1027,8 @@
                 padding-bottom: calc(env(safe-area-inset-bottom, 10px) + 24px);
                 z-index: 10;
             }
-            .btn-fav {
-                flex: 4;
-                height: 44px;
-                background-color: #f5f5f5;
-                color: #1890ff;
-                border-radius: 22px;
-                border: none;
-                font-size: 15px;
-                font-weight: 500;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                -webkit-tap-highlight-color: transparent;
-            }
-            .btn-fav:active {
-                background-color: #e8e8e8;
-            }
             .btn-confirm-province {
-                flex: 6;
+                flex: 1;
                 height: 44px;
                 background-color: #1890ff;
                 color: #fff;
@@ -1033,7 +1083,6 @@
 
             <!-- 底部按钮 -->
             <div class="province-bottom-bar">
-                <button class="btn-fav" id="province-btn-fav">收藏</button>
                 <button class="btn-confirm-province" id="province-btn-confirm">已选好</button>
             </div>
         </div>
@@ -1460,17 +1509,8 @@
                     // Update header province
                     const displayBtnSpan = document.querySelector('#province-selector-btn span');
                     if (displayBtnSpan) {
-                        displayBtnSpan.textContent = region === '最多2行' ? '河南' : region;
+                        displayBtnSpan.textContent = `${region}·${sub}`;
                     }
-
-                    // Update active subjects in navigation if matching
-                    const topSubjectItems = document.querySelectorAll('.subject-nav .subject-item');
-                    topSubjectItems.forEach(item => {
-                        if (item.textContent.trim().includes(sub) || sub.includes(item.textContent.trim())) {
-                            topSubjectItems.forEach(i => i.classList.remove('active'));
-                            item.classList.add('active');
-                        }
-                    });
 
                     showToast(`已成功切换省份及科目为: ${region} - ${type} - ${sub}`);
                     closeProvinceDrawer();

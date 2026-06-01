@@ -127,6 +127,8 @@
             display: flex;
             align-items: center;
             gap: 4px;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* 练习单元 */
@@ -204,7 +206,7 @@
         .action-btn-small {
             padding: 6px 16px;
             border: 1px solid #d9d9d9;
-            border-radius: 14px;
+            border-radius: 4px;
             background-color: #fff;
             font-size: 13px;
             color: #666;
@@ -552,17 +554,17 @@
                     <i class="fas fa-book" style="margin-right: 6px; color: #ff4d4f;"></i> 知识点体系 <i class="fas fa-chevron-down" style="margin-left: 4px; font-size: 10px; color: #aaa;"></i>
                 </button>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <div id="practice-mode-btn" style="padding: 6px 12px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #f5f5f5; font-size: 11px; color: #666; display: flex; align-items: center; gap: 4px; cursor: pointer; -webkit-tap-highlight-color: transparent; font-weight: 500; transition: all 0.2s;" class="hover:bg-gray-100 select-none active:scale-95">
-                        <i class="fas fa-cog" style="font-size: 12px; color: #999;"></i> <span id="current-mode-text">练习模式</span>
+                    <div class="practice-mode-tag" id="practice-mode-btn">
+                        <i class="fas fa-cog" style="font-size: 14px; margin-right: 4px;"></i> <span id="current-mode-text">练习模式</span>
                     </div>
                 </div>
             </div>
             
             <!-- 快速动作区域 -->
             <div style="padding: 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-around; align-items: center;">
-                <button onclick="alert('已开启智能练习！')" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">智能练习</button>
-                <button onclick="alert('整体报告生成中...')" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">整体报告</button>
-                <button onclick="window.location.href='lianxi_lishi.html'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">练习历史</button>
+                <button onclick="window.location.href='dati_yemian.html?mode=knowledge&title=智能练习'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">智能练习</button>
+                <button onclick="window.location.href='zhishidian_zhengti_baogao.html'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">整体报告</button>
+                <button onclick="window.location.href='zhishidian_lianxi_lishi.html'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">练习历史</button>
             </div>
 
             <!-- 知识分类列表 -->

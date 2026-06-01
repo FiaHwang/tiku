@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>整体报告</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS resets */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f6f8fa;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 24px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px;
+            padding: 0 16px;
+            background-color: #fff;
+            border-bottom: 1px solid #f1f5f9;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            font-size: 18px;
+            color: #475569;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .back-btn:active {
+            opacity: 0.7;
+        }
+
+        .header-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1e293b;
+            flex: 1;
+            text-align: center;
+            margin-right: 40px; /* offset back-btn for symmetry */
+        }
+
+        /* 顶端蓝卡 */
+        .summary-card {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.2);
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .stat-lbl {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.82);
+            margin-bottom: 4px;
+        }
+
+        .stat-val {
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        /* 进度条 */
+        .progress-container {
+            margin-top: 10px;
+        }
+
+        .progress-bar-bg {
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.25);
+            border-radius: 100px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 6px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #ffffff;
+            border-radius: 100px;
+            width: 68.99%;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* 通用卡片容器 */
+        .section-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 0 16px 16px 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 14px;
+        }
+
+        /* 答题数据 Bento Grid spacing */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .bento-item {
+            border-radius: 10px;
+            padding: 14px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .bento-lbl {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .bento-val {
+            font-size: 20px;
+            font-weight: bold;
+            word-break: break-all;
+        }
+
+        /* Soft color blocks for grids */
+        .bento-green {
+            background-color: #f0fdf4;
+        }
+        .bento-green .bento-val {
+            color: #10b981;
+        }
+
+        .bento-red {
+            background-color: #fff5f5;
+        }
+        .bento-red .bento-val {
+            color: #ef4444;
+        }
+
+        .bento-blue {
+            background-color: #f0f7ff;
+        }
+        .bento-blue .bento-val {
+            color: #2563eb;
+        }
+
+        .bento-purple {
+            background-color: #faf5ff;
+        }
+        .bento-purple .bento-val {
+            color: #8b5cf6;
+        }
+
+        /* 知识点表格/列表 */
+        .list-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            font-size: 12px;
+            color: #64748b;
+            padding: 6px 4px;
+            border-bottom: 1px solid #f1f5f9;
+            margin-bottom: 8px;
+        }
+
+        .list-header span:nth-child(2),
+        .list-header span:nth-child(3) {
+            text-align: center;
+        }
+
+        .kp-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            align-items: center;
+            background-color: #ffffff;
+            border: 1px solid #f1f5f9;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .kp-identity {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .kp-name {
+            font-weight: 500;
+            color: #1e293b;
+        }
+
+        .practice-tag {
+            background-color: #3b82f6;
+            color: #ffffff;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 100px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .practice-tag:active {
+            opacity: 0.8;
+        }
+
+        .kp-rate {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .kp-count {
+            text-align: center;
+            color: #475569;
+            font-weight: 500;
+        }
+
+        /* Colors helper */
+        .text-green {
+            color: #10b981;
+        }
+        .text-orange {
+            color: #f97316;
+        }
+        .text-red {
+            color: #ef4444;
+        }
+
+        /* Expand more button link */
+        .expand-btn {
+            width: 100%;
+            background-color: transparent;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 13px;
+            color: #64748b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 4px;
+            transition: background 0.2s;
+        }
+
+        .expand-btn:active {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <button class="back-btn" id="back-btn"><i class="fas fa-arrow-left"></i></button>
+        <span class="header-title">整体报告</span>
+    </header>
+
+    <!-- 蓝卡数据总结 -->
+    <div class="summary-card">
+        <div class="stats-row">
+            <div>
+                <p class="stat-lbl">正确率</p>
+                <h3 class="stat-val">78%</h3>
+            </div>
+            <div>
+                <p class="stat-lbl">累计已答</p>
+                <h3 class="stat-val">85题</h3>
+            </div>
+            <div>
+                <p class="stat-lbl">今日练习</p>
+                <h3 class="stat-val">18题</h3>
+            </div>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill"></div>
+            </div>
+            <div class="progress-labels">
+                <span>总量126题</span>
+                <span>已完成68.99%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 答题数据块 -->
+    <div class="section-card">
+        <div class="section-title">答题数据</div>
+        <div class="bento-grid">
+            <div class="bento-item bento-green">
+                <span class="bento-lbl">正确题数</span>
+                <span class="bento-val">100</span>
+            </div>
+            <div class="bento-item bento-red">
+                <span class="bento-lbl">错误题数</span>
+                <span class="bento-val">26</span>
+            </div>
+            <div class="bento-item bento-blue">
+                <span class="bento-lbl">平均每题用时</span>
+                <span class="bento-val" style="font-size: 16px; margin-top: 4px;">1分钟20秒</span>
+            </div>
+            <div class="bento-item bento-purple">
+                <span class="bento-lbl">累计用时</span>
+                <span class="bento-val" style="font-size: 16px; margin-top: 4px;">1小时8分钟</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 需要加强的知识点 -->
+    <div class="section-card">
+        <div class="section-title">需要加强的知识点</div>
+        <div class="list-header">
+            <span>知识点名称</span>
+            <span>正确率</span>
+            <span>答错次数</span>
+        </div>
+        <div id="weak-kp-list">
+            <div class="kp-row">
+                <div class="kp-identity">
+                    <span class="kp-name">虚词辨析</span>
+                    <button class="practice-tag" onclick="practiceKnowledge('虚词辨析')">练习</button>
+                </div>
+                <span class="kp-rate text-orange">45%</span>
+                <span class="kp-count text-red">8次</span>
+            </div>
+            <div class="kp-row">
+                <div class="kp-identity">
+                    <span class="kp-name">句式结构</span>
+                    <button class="practice-tag" onclick="practiceKnowledge('句式结构')">练习</button>
+                </div>
+                <span class="kp-rate text-orange">38%</span>
+                <span class="kp-count text-red">6次</span>
+            </div>
+            <div class="kp-row">
+                <div class="kp-identity">
+                    <span class="kp-name">文化常识</span>
+                    <button class="practice-tag" onclick="practiceKnowledge('文化常识')">练习</button>
+                </div>
+                <span class="kp-rate text-orange">42%</span>
+                <span class="kp-count text-red">4次</span>
+            </div>
+        </div>
+        <button class="expand-btn" id="expand-weak-btn">展开更多 <i class="fas fa-chevron-down"></i></button>
+    </div>
+
+    <!-- 掌握较好的知识点 -->
+    <div class="section-card">
+        <div class="section-title">掌握较好的知识点</div>
+        <div class="list-header">
+            <span>知识点名称</span>
+            <span>正确率</span>
+            <span>答对次数</span>
+        </div>
+        <div id="strong-kp-list">
+            <div class="kp-row">
+                <div class="kp-identity">
+                    <span class="kp-name">虚词用法辨析</span>
+                </div>
+                <span class="kp-rate text-green">90%</span>
+                <span class="kp-count text-green">5次</span>
+            </div>
+            <div class="kp-row">
+                <div class="kp-identity">
+                    <span class="kp-name">句式结构分析</span>
+                </div>
+                <span class="kp-rate text-green">85%</span>
+                <span class="kp-count text-green">3次</span>
+            </div>
+            <div class="kp-row">
+                <div class="kp-identity">
+                    <span class="kp-name">古代文化常识</span>
+                </div>
+                <span class="kp-rate text-orange">55%</span>
+                <span class="kp-count text-green">2次</span>
+            </div>
+        </div>
+        <button class="expand-btn" id="expand-strong-btn">展开更多 <i class="fas fa-chevron-down"></i></button>
+    </div>
+
+    <script>
+        // Back Navigation
+        const backBtn = document.getElementById('back-btn');
+        if (backBtn) {
+            backBtn.addEventListener('click', () => {
+                if (document.referrer) {
+                    window.location.href = document.referrer;
+                } else {
+                    window.location.href = 'tiku.html';
+                }
+            });
+        }
+
+        // Action when clicking practice tag
+        function practiceKnowledge(name) {
+            window.location.href = 'dati_yemian.html?mode=knowledge&title=' + encodeURIComponent(name);
+        }
+
+        // Expand more weak points
+        const expandWeakBtn = document.getElementById('expand-weak-btn');
+        let isWeakExpanded = false;
+        let addedWeakNodes = [];
+        if (expandWeakBtn) {
+            expandWeakBtn.addEventListener('click', () => {
+                const weakList = document.getElementById('weak-kp-list');
+                if (!isWeakExpanded) {
+                    if (addedWeakNodes.length === 0) {
+                        const extras = [
+                            { name: "文言实词释义", rate: "48%", count: "3次", countColor: "text-red" },
+                            { name: "句子翻译细节", rate: "50%", count: "3次", countColor: "text-red" }
+                        ];
+                        extras.forEach(item => {
+                            const row = document.createElement('div');
+                            row.className = 'kp-row';
+                            row.innerHTML = `
+                                <div class="kp-identity">
+                                    <span class="kp-name">${item.name}</span>
+                                    <button class="practice-tag" onclick="practiceKnowledge('${item.name}')">练习</button>
+                                </div>
+                                <span class="kp-rate text-orange">${item.rate}</span>
+                                <span class="kp-count ${item.countColor}">${item.count}</span>
+                            `;
+                            weakList.appendChild(row);
+                            addedWeakNodes.push(row);
+                        });
+                    } else {
+                        addedWeakNodes.forEach(node => node.style.display = 'grid');
+                    }
+                    expandWeakBtn.innerHTML = '收起 <i class="fas fa-chevron-up"></i>';
+                    isWeakExpanded = true;
+                } else {
+                    addedWeakNodes.forEach(node => node.style.display = 'none');
+                    expandWeakBtn.innerHTML = '展开更多 <i class="fas fa-chevron-down"></i>';
+                    isWeakExpanded = false;
+                }
+            });
+        }
+
+        // Expand more strong points
+        const expandStrongBtn = document.getElementById('expand-strong-btn');
+        let isStrongExpanded = false;
+        let addedStrongNodes = [];
+        if (expandStrongBtn) {
+            expandStrongBtn.addEventListener('click', () => {
+                const strongList = document.getElementById('strong-kp-list');
+                if (!isStrongExpanded) {
+                    if (addedStrongNodes.length === 0) {
+                        const extras = [
+                            { name: "修辞手法鉴赏", rate: "95%", count: "6次" },
+                            { name: "文章主旨归纳", rate: "92%", count: "4次" }
+                        ];
+                        extras.forEach(item => {
+                            const row = document.createElement('div');
+                            row.className = 'kp-row';
+                            row.innerHTML = `
+                                <div class="kp-identity">
+                                    <span class="kp-name">${item.name}</span>
+                                </div>
+                                <span class="kp-rate text-green">${item.rate}</span>
+                                <span class="kp-count text-green">${item.count}</span>
+                            `;
+                            strongList.appendChild(row);
+                            addedStrongNodes.push(row);
+                        });
+                    } else {
+                        addedStrongNodes.forEach(node => node.style.display = 'grid');
+                    }
+                    expandStrongBtn.innerHTML = '收起 <i class="fas fa-chevron-up"></i>';
+                    isStrongExpanded = true;
+                } else {
+                    addedStrongNodes.forEach(node => node.style.display = 'none');
+                    expandStrongBtn.innerHTML = '展开更多 <i class="fas fa-chevron-down"></i>';
+                    isStrongExpanded = false;
+                }
+            });
+        }
+
+        // Double click zooming prevention
+        document.addEventListener('dblclick', function(event) {
+            event.preventDefault();
+        });
+    </script>
+</body>
+</html>

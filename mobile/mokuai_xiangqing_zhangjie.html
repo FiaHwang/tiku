@@ -130,17 +130,15 @@
         }
 
         .action-btn-small {
-            padding: 4px 12px;
-            border: 1px solid #e8e8e8;
-            border-radius: 11px;
+            padding: 6px 16px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
             background-color: #fff;
-            font-size: 12px;
+            font-size: 14px;
             color: #666;
             cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
             transition: all 0.2s;
-            height: 22px;
-            line-height: 20px;
-            white-space: nowrap;
         }
 
         .action-btn-small.primary {
@@ -161,17 +159,13 @@
         }
 
         .practice-mode-tag {
-            font-size: 11px;
+            font-size: 12px;
             color: #999;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 4px;
-            background-color: #f5f5f5;
-            padding: 0 8px;
-            border-radius: 10px;
-            border: 1px solid #eee;
-            height: 22px;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .practice-unit {
@@ -187,18 +181,21 @@
         }
 
         .unit-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #222;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
         .unit-progress {
-            font-size: 12px;
-            color: #bbb;
-            margin-top: 4px;
+            font-size: 14px;
+            color: #999;
+            margin-top: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
             margin-left: 24px;
         }
 
@@ -211,8 +208,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 14px 0;
-            border-bottom: 1px dotted #eeeeee;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
         }
 
         .practice-item:last-child {
@@ -225,15 +222,27 @@
         }
 
         .item-title {
-            font-size: 14px;
-            color: #333;
-            margin-bottom: 6px;
+            font-size: 16px;
             font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .item-stats {
-            font-size: 12px;
-            color: #aaa;
+            font-size: 14px;
+            color: #999;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+        }
+
+        .stats-progress {
+            display: inline-block;
+            width: 80px;
+            flex-shrink: 0;
         }
 
         .item-actions {
@@ -249,8 +258,8 @@
             <div class="header-title">章节练习</div>
         </div>
         
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-            <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                 <div style="font-size: 14px; font-weight: 600; color: #333; display: flex; align-items: center;">
                     专升本
                     <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 4px; color: #bbb;"></i>
@@ -259,8 +268,9 @@
                     <span>河南省</span>
                     <i class="fas fa-chevron-down" style="font-size: 10px; color: #ccc;"></i>
                 </div>
-                <button class="action-btn-small" style="height: 20px; line-height: 18px; padding: 0 8px; font-size: 10px; border-radius: 10px; white-space: nowrap; background-color: #f7f7f7; color: #888; border: 1px solid #ededed; display: flex; align-items: center;">
-                    <i class="fas fa-unlock" style="margin-right: 4px; color: #ff4d4f;"></i> 已开通
+                <!-- 都是未开通，按钮为立即开通 -->
+                <button class="action-btn-small primary" onclick="alert('跳转到开通会员页面')" style="height: 22px; line-height: 20px; padding: 0 8px; font-size: 11px; border-radius: 11px; white-space: nowrap; border: none; font-weight: bold; cursor: pointer; -webkit-tap-highlight-color: transparent;">
+                    立即开通
                 </button>
             </div>
         </div>
@@ -281,13 +291,15 @@
             <div class="textbook-bar">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <button id="textbook-switch-btn" style="padding: 6px 12px; border: 1px solid #eee; border-radius: 4px; background-color: #fafafa; font-size: 13px; color: #555; display: flex; align-items: center; cursor: pointer; -webkit-tap-highlight-color: transparent;">
-                        <i class="fas fa-book-bookmark" style="margin-right: 6px; color: #ff4d4f; font-size: 13px;"></i> <span>2024版核心教材</span> <i class="fas fa-chevron-down" style="margin-left: 8px; font-size: 10px; color: #ccc;"></i>
+                        <i class="fas fa-book-bookmark" style="margin-right: 6px; color: #ff4d4f; font-size: 13px;"></i> <span>全国版</span> <i class="fas fa-chevron-down" style="margin-left: 8px; font-size: 10px; color: #ccc;"></i>
                     </button>
-                    <i class="fas fa-unlock" style="color: #ff4d4f; font-size: 14px;"></i>
+                    <div id="textbook-lock-container" style="display: flex; align-items: center;">
+                        <span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; white-space: nowrap; display: inline-block;">免费</span>
+                    </div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px; height: 22px;">
-                    <button class="action-btn-small" onclick="window.location.href='zhangjie_zhengti_baogao.html'" style="display: flex; align-items: center; justify-content: center;">整体报告</button>
-                    <div class="practice-mode-tag"><i class="fas fa-cog" style="font-size: 12px; margin-right: 4px;"></i>练习模式</div>
+                    <button class="action-btn-small" onclick="window.location.href='zhangjie_zhengti_baogao.html'" style="background-color: #f5f5f5; color: #666; border: 1px solid #d9d9d9; height: 22px; line-height: 20px; padding: 0 10px; font-size: 11px; border-radius: 11px; white-space: nowrap; display: flex; align-items: center; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent;">整体报告</button>
+                    <div class="practice-mode-tag" onclick="event.stopPropagation();"><i class="fas fa-cog" style="font-size: 14px; margin-right: 4px;"></i>练习模式</div>
                 </div>
             </div>
 
@@ -295,21 +307,21 @@
             <!-- 文学常识单元 -->
             <div class="practice-unit">
                 <div class="unit-header" onclick="toggleUnit(this)">
-                    <div class="unit-title">
-                        <i class="fas fa-chevron-down" style="font-size: 14px; color: #cccccc;"></i>
-                        文学常识
+                    <div class="unit-title" style="display: flex; align-items: center;">
+                        <i class="fas fa-chevron-down" style="font-size: 14px; color: #cccccc; margin-right: 4px;"></i>
+                        <span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; margin-right: 8px; white-space: nowrap; display: inline-block; font-weight: normal;">免费</span>文学常识
                     </div>
                 </div>
-                <div class="unit-progress">17/37 | 正确率: 20%</div>
+                <div class="unit-progress"><span class="stats-progress">17/37</span><span>正确率: 20%</span></div>
                 <div class="unit-content">
                     <div class="practice-item">
                         <div class="item-info">
-                            <div class="item-title">文学常识基础知识点</div>
-                            <div class="item-stats">17/37 | 正确率: 20%</div>
+                            <div class="item-title"><span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; margin-right: 8px; white-space: nowrap; display: inline-block; font-weight: normal;">免费</span>文学常识基础知识点</div>
+                            <div class="item-stats"><span class="stats-progress">17/37</span><span>正确率: 20%</span></div>
                         </div>
                         <div class="item-actions">
-                            <button class="action-btn-small" style="padding: 0 10px;">查看解析</button>
-                            <button class="action-btn-small primary" style="padding: 0 10px;">继续答题</button>
+                            <button class="action-btn-small">查看解析</button>
+                            <button class="action-btn-small primary">继续答题</button>
                         </div>
                     </div>
                 </div>
@@ -318,39 +330,39 @@
             <!-- 记叙文单元 -->
             <div class="practice-unit">
                 <div class="unit-header" onclick="toggleUnit(this)">
-                    <div class="unit-title">
-                        <i class="fas fa-chevron-down" style="font-size: 14px; color: #999;"></i>
-                        记叙文单元
+                    <div class="unit-title" style="display: flex; align-items: center;">
+                        <i class="fas fa-chevron-down" style="font-size: 14px; color: #999; margin-right: 4px;"></i>
+                        <span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; margin-right: 8px; white-space: nowrap; display: inline-block; font-weight: normal;">免费</span>记叙文单元
                     </div>
                 </div>
-                <div class="unit-progress">45/242 | 正确率: 68%</div>
+                <div class="unit-progress"><span class="stats-progress">45/242</span><span>正确率: 68%</span></div>
                 <div class="unit-content">
                     <div class="practice-item">
                         <div class="item-info">
                             <div class="item-title">郑伯克段于鄢</div>
-                            <div class="item-stats">1/5 | 正确率: 0%</div>
+                            <div class="item-stats"><span class="stats-progress">1/5</span><span>正确率: 0%</span></div>
                         </div>
                         <div class="item-actions">
-                            <button class="action-btn-small primary" style="padding: 0 10px;">继续答题</button>
+                            <button class="action-btn-small primary">继续答题</button>
                         </div>
                     </div>
                     <div class="practice-item">
                         <div class="item-info">
                             <div class="item-title">冯谖客孟尝君</div>
-                            <div class="item-stats">19/19 | 正确率: 95%</div>
+                            <div class="item-stats"><span class="stats-progress">19/19</span><span>正确率: 95%</span></div>
                         </div>
                         <div class="item-actions">
-                            <button class="action-btn-small" style="padding: 0 10px;">查看解析</button>
-                            <button class="action-btn-small primary" style="padding: 0 10px;">继续答题</button>
+                            <button class="action-btn-small">查看解析</button>
+                            <button class="action-btn-small primary">继续答题</button>
                         </div>
                     </div>
                     <div class="practice-item">
                         <div class="item-info">
                             <div class="item-title">垓下之围</div>
-                            <div class="item-stats">0/12 | 正确率: --</div>
+                            <div class="item-stats"><span class="stats-progress">0/12</span><span>正确率: --</span></div>
                         </div>
                         <div class="item-actions">
-                            <button class="action-btn-small primary" style="padding: 0 10px;">开始答题</button>
+                            <button class="action-btn-small primary">开始答题</button>
                         </div>
                     </div>
                 </div>
@@ -364,29 +376,224 @@
                         议论文单元
                     </div>
                 </div>
-                <div class="unit-progress">0/156 | 正确率: --</div>
+                <div class="unit-progress"><span class="stats-progress">0/156</span><span>正确率: --</span></div>
                 <div class="unit-content" style="display: none;">
                     <div class="practice-item">
                         <div class="item-info">
                             <div class="item-title">季氏将伐颛臾</div>
-                            <div class="item-stats">0/15 | 正确率: --</div>
+                            <div class="item-stats"><span class="stats-progress">0/15</span><span>正确率: --</span></div>
                         </div>
                         <div class="item-actions">
-                            <button class="action-btn-small primary" style="padding: 0 10px;">开始答题</button>
+                            <button class="action-btn-small primary">开始答题</button>
                         </div>
                     </div>
                     <div class="practice-item">
                         <div class="item-info">
                             <div class="item-title">寡人之于国也</div>
-                            <div class="item-stats">0/15 | 正确率: --</div>
+                            <div class="item-stats"><span class="stats-progress">0/15</span><span>正确率: --</span></div>
                         </div>
                         <div class="item-actions">
-                            <button class="action-btn-small primary" style="padding: 0 10px;">开始答题</button>
+                            <button class="action-btn-small primary">开始答题</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- 答题设置底部弹窗 -->
+    <div class="bottom-drawer-mask" id="settings-mask"></div>
+    <div class="bottom-drawer" id="settings-drawer" style="z-index: 2600; display: block; height: auto; max-height: none; overflow-y: visible;">
+        <style>
+            .section-title {
+                font-size: 17px;
+                font-weight: 600;
+                color: #000;
+                margin-bottom: 16px;
+                margin-top: 10px;
+                text-align: left;
+            }
+            .mode-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+                margin-bottom: 24px;
+            }
+            .mode-card {
+                background-color: #f5f6f8;
+                border-radius: 12px;
+                padding: 16px;
+                cursor: pointer;
+                border: 1px solid transparent;
+                transition: all 0.2s;
+                text-align: left;
+            }
+            .mode-card.active {
+                background-color: #fff;
+                border-color: #f5222d;
+                box-shadow: 0 4px 12px rgba(245, 34, 45, 0.1);
+            }
+            .mode-card-title {
+                font-size: 16px;
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 6px;
+            }
+            .mode-card.active .mode-card-title {
+                color: #f5222d;
+            }
+            .mode-card-desc {
+                font-size: 13px;
+                color: #999;
+            }
+            .mode-card.active .mode-card-desc {
+                color: #f5222d;
+                opacity: 0.8;
+            }
+            .count-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+                margin-bottom: 24px;
+            }
+            .count-btn {
+                height: 48px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #fff;
+                border: 1px solid #eee;
+                border-radius: 8px;
+                font-size: 15px;
+                color: #333;
+                cursor: pointer;
+            }
+            .count-btn.active {
+                border-color: #f5222d;
+                background-color: #fff1f0;
+                color: #f5222d;
+                font-weight: 500;
+            }
+            .animation-toggle {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 16px 0;
+                margin-bottom: 12px;
+            }
+            .toggle-label {
+                font-size: 16px;
+                font-weight: 600;
+                color: #000;
+            }
+            .toggle-switch {
+                position: relative;
+                display: inline-block;
+                width: 50px;
+                height: 26px;
+            }
+            .toggle-switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                transition: .4s;
+                border-radius: 34px;
+            }
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 18px;
+                width: 18px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                transition: .4s;
+                border-radius: 50%;
+            }
+            input:checked + .slider {
+                background-color: #f5222d;
+            }
+            input:checked + .slider:before {
+                transform: translateX(24px);
+            }
+            .confirm-btn {
+                width: 100%;
+                height: 50px;
+                background-color: #f5222d;
+                color: #fff;
+                border: none;
+                border-radius: 25px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                box-shadow: 0 4px 12px rgba(245, 34, 45, 0.2);
+                transition: all 0.2s;
+                margin-top: 10px;
+            }
+            .confirm-btn:active {
+                transform: scale(0.98);
+                opacity: 0.9;
+            }
+        </style>
+        <div class="bottom-drawer-header">
+            <div class="bottom-drawer-title" style="font-size: 18px; font-weight: bold; color: #1e293b; text-align: center; flex: 1;">答题设置</div>
+            <div class="bottom-drawer-close" id="close-settings-btn" style="cursor: pointer; position: absolute; right: 20px; top: 18px; font-size: 18px; color: #94a3b8;">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <div class="section-title">答题模式</div>
+            <div class="mode-grid">
+                <div class="mode-card active">
+                    <div class="mode-card-title">练习模式</div>
+                    <div class="mode-card-desc">答题后直接显示答案</div>
+                </div>
+                <div class="mode-card">
+                    <div class="mode-card-title">考试计时模式</div>
+                    <div class="mode-card-desc">不限时间，交卷后显示答案</div>
+                </div>
+                <div class="mode-card">
+                    <div class="mode-card-title">快答模式</div>
+                    <div class="mode-card-desc">答题错误后显示答案</div>
+                </div>
+                <div class="mode-card">
+                    <div class="mode-card-title">背题模式</div>
+                    <div class="mode-card-desc">直接显示答案</div>
+                </div>
+            </div>
+
+            <div id="question-count-section">
+                <div class="section-title">每次答题数量</div>
+                <div class="count-grid" style="grid-template-columns: repeat(4, 1fr);">
+                    <div class="count-btn active">5道</div>
+                    <div class="count-btn">10道</div>
+                    <div class="count-btn">15道</div>
+                    <div class="count-btn">20道</div>
+                    <div class="count-btn">25道</div>
+                    <div class="count-btn">30道</div>
+                    <div class="count-btn">35道</div>
+                    <div class="count-btn">40道</div>
+                </div>
+            </div>
+
+            <div class="animation-toggle">
+                <div class="toggle-label">动画开关</div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="animation-toggle-input">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <button class="confirm-btn" id="confirm-settings-btn">确定</button>
     </div>
 
     <!-- 教材选择底部弹窗 -->
@@ -409,6 +616,7 @@
                 display: flex;
                 flex-direction: column;
                 max-height: 75vh;
+                padding: 24px 20px;
             }
             .bottom-drawer.active {
                 transform: translate(-50%, 0);
@@ -536,6 +744,15 @@
     <div class="bottom-drawer-mask" id="province-drawer-mask"></div>
     <div class="bottom-drawer" id="province-drawer" style="z-index: 2500;">
         <style>
+            .bottom-drawer {
+                max-width: 480px !important;
+                max-height: 75vh !important;
+                border-top-left-radius: 20px !important;
+                border-top-right-radius: 20px !important;
+                z-index: 2200 !important;
+                transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.15) !important;
+                box-shadow: 0 -10px 30px rgba(0,0,0,0.08) !important;
+            }
             .province-drawer-body {
                 padding: 10px 20px 24px 20px;
                 overflow-y: auto;
@@ -630,26 +847,8 @@
                 padding-bottom: calc(env(safe-area-inset-bottom, 10px) + 24px);
                 z-index: 10;
             }
-            .btn-fav {
-                flex: 4;
-                height: 44px;
-                background-color: #f5f5f5;
-                color: #1890ff;
-                border-radius: 22px;
-                border: none;
-                font-size: 15px;
-                font-weight: 500;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                -webkit-tap-highlight-color: transparent;
-            }
-            .btn-fav:active {
-                background-color: #e8e8e8;
-            }
             .btn-confirm-province {
-                flex: 6;
+                flex: 1;
                 height: 44px;
                 background-color: #1890ff;
                 color: #fff;
@@ -704,7 +903,6 @@
 
             <!-- 底部按钮 -->
             <div class="province-bottom-bar">
-                <button class="btn-fav" id="province-btn-fav">收藏</button>
                 <button class="btn-confirm-province" id="province-btn-confirm">已选好</button>
             </div>
         </div>
@@ -780,6 +978,82 @@
                     openTextbookDrawer();
                 });
             }
+            // 答题设置相关逻辑
+            const settingsMask = document.getElementById('settings-mask');
+            const settingsDrawer = document.getElementById('settings-drawer');
+            const closeSettingsBtn = document.getElementById('close-settings-btn');
+            const confirmSettingsBtn = document.getElementById('confirm-settings-btn');
+
+            function openSettingsDrawer() {
+                if (settingsMask && settingsDrawer) {
+                    settingsMask.style.display = 'block';
+                    setTimeout(() => {
+                        settingsMask.style.opacity = '1';
+                        settingsDrawer.classList.add('active');
+                    }, 10);
+                }
+            }
+
+            function closeSettingsDrawer() {
+                if (settingsMask && settingsDrawer) {
+                    settingsMask.style.opacity = '0';
+                    settingsDrawer.classList.remove('active');
+                    setTimeout(() => {
+                        settingsMask.style.display = 'none';
+                    }, 300);
+                }
+            }
+
+            const practiceModeTag = document.querySelector('.practice-mode-tag');
+            if (practiceModeTag) {
+                practiceModeTag.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openSettingsDrawer();
+                });
+            }
+
+            if (closeSettingsBtn) {
+                closeSettingsBtn.addEventListener('click', closeSettingsDrawer);
+            }
+            if (settingsMask) {
+                settingsMask.addEventListener('click', closeSettingsDrawer);
+            }
+            if (confirmSettingsBtn) {
+                confirmSettingsBtn.addEventListener('click', closeSettingsDrawer);
+            }
+
+            // 模式切换
+            const modeCards = document.querySelectorAll('#settings-drawer .mode-card');
+            const animationToggleContainer = document.querySelector('#settings-drawer .animation-toggle');
+            
+            function updateAnimationToggle() {
+                const activeMode = document.querySelector('#settings-drawer .mode-card.active');
+                if (activeMode && activeMode.querySelector('.mode-card-title').innerText.trim() === '练习模式') {
+                    if (animationToggleContainer) animationToggleContainer.style.display = 'flex';
+                } else {
+                    if (animationToggleContainer) animationToggleContainer.style.display = 'none';
+                }
+            }
+            
+            updateAnimationToggle();
+            
+            modeCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    modeCards.forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    updateAnimationToggle();
+                });
+            });
+
+            // 数量切换
+            const countBtns = document.querySelectorAll('#settings-drawer .count-btn');
+            countBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    countBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+            });
+
             if (closeTextbookBtn) {
                 closeTextbookBtn.addEventListener('click', closeTextbookDrawer);
             }
@@ -799,6 +1073,16 @@
                     const btnSpan = document.querySelector('#textbook-switch-btn span');
                     if (btnSpan) {
                         btnSpan.textContent = selectedText;
+                    }
+
+                    // 更新锁/免费状态
+                    const lockContainer = document.getElementById('textbook-lock-container');
+                    if (lockContainer) {
+                        if (selectedText === '全国版') {
+                            lockContainer.innerHTML = `<span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; white-space: nowrap; display: inline-block;">免费</span>`;
+                        } else {
+                            lockContainer.innerHTML = `<i class="fas fa-lock" style="color: #ccc; font-size: 14px;"></i>`;
+                        }
                     }
                     
                     showToast('已成功切换教材为: ' + selectedText);
