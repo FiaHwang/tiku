@@ -474,7 +474,7 @@
                 <button id="knowledge-textbook-switch" style="padding: 5px 10px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 11px; color: #666; display: flex; align-items: center; gap: 4px; cursor: pointer; -webkit-tap-highlight-color: transparent; font-weight: 500; transition: all 0.2s;" class="hover:bg-gray-50 select-none active:scale-95 shadow-sm">
                     <i class="fas fa-book" style="font-size: 11px; color: #ff4d4f;"></i> 知识点体系 <i class="fas fa-chevron-down" style="font-size: 9px; color: #aaa;"></i>
                 </button>
-                <div id="practice-mode-btn" style="padding: 5px 10px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 11px; color: #666; display: flex; align-items: center; gap: 4px; cursor: pointer; -webkit-tap-highlight-color: transparent; font-weight: 500; transition: all 0.2s;" class="hover:bg-gray-50 select-none active:scale-95 shadow-sm">
+                <div id="practice-mode-btn" style="padding: 5px 10px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 11px; color: #666; display: none; align-items: center; gap: 4px; cursor: pointer; -webkit-tap-highlight-color: transparent; font-weight: 500; transition: all 0.2s;" class="hover:bg-gray-50 select-none active:scale-95 shadow-sm">
                     <i class="fas fa-cog" style="font-size: 11px; color: #999;"></i> <span id="current-mode-text">试题难度：不限</span>
                 </div>
             </div>
@@ -539,15 +539,15 @@
                 </div>
             </div>
 
-            <!-- 关卡三：相反数 (灰色状态，但保留明亮练习按钮，去锁) -->
+            <!-- 关卡三：相反数 (已激活) -->
             <div class="relative mb-6">
                 <!-- 时间轴节点 -->
-                <div class="timeline-node gray-state">
-                    <i class="fas fa-pencil text-xs text-gray-400"></i>
+                <div class="timeline-node active">
+                    <i class="fas fa-pen text-xs"></i>
                 </div>
-                <!-- 卡片内容 (灰色状态) -->
-                <div class="practice-card gray-state p-4 ml-3" onclick="startPractice('相反数')">
-                    <h3 class="card-title text-sm font-bold mb-1">相反数</h3>
+                <!-- 卡片内容 -->
+                <div class="practice-card p-4 ml-3" onclick="startPractice('相反数')">
+                    <h3 class="card-title text-sm font-bold text-gray-800 mb-1">相反数</h3>
                     <!-- 星星等级 -->
                     <div class="star-rating flex text-gray-200 mb-2.5">
                         <i class="far fa-star"></i>
@@ -558,7 +558,7 @@
                     </div>
                     <!-- 数据指标与明亮练习按钮 -->
                     <div class="flex items-center justify-between mt-2">
-                        <span class="card-stats text-xs">挑战题数 <strong class="font-medium">0</strong> &nbsp;&nbsp; 正确率 <strong class="font-medium">0%</strong></span>
+                        <span class="card-stats text-xs text-gray-500">挑战题数 <strong class="text-gray-800 font-semibold">0</strong> &nbsp;&nbsp; 正确率 <strong class="text-gray-800 font-semibold">0%</strong></span>
                         <button class="px-5 py-1.5 bg-[#1890ff] hover:bg-[#40a9ff] active:scale-95 transition-all text-white text-xs font-bold rounded-lg shadow-sm" onclick="event.stopPropagation(); startPractice('相反数')">
                             练习
                         </button>

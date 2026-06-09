@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>答题报告与学情分析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        html {
+            background-color: #eff1f3;
+        }
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background-color: #f8f9fa !important;
+            color: #333;
+            max-width: 480px;
+            margin: 0 auto !important;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+        .header-sticky {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: #fff;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .card-shadow {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="pb-10 antialiased">
+
+    <!-- Header navigation -->
+    <div class="header-sticky">
+        <div class="flex items-center justify-between px-4 h-14">
+            <a href="javascript:history.back()" class="w-10 h-10 flex items-center justify-start text-xl text-gray-800 hover:text-blue-500 transition-colors">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            <h1 class="text-lg font-bold text-gray-800 flex-1 text-center">
+                学情分析报告
+            </h1>
+            <div class="w-10"></div>
+        </div>
+    </div>
+
+    <!-- Main learning report content -->
+    <div id="xueqing-report-content" class="mt-4 space-y-4">
+      
+      <!-- 学报核心参数卡片 -->
+      <div class="mx-4 bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-700 rounded-2xl p-5 text-white shadow-lg relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+        <div class="absolute right-4 top-4 flex items-center gap-1.5 bg-black/20 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
+          <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+          <span class="text-[10px] text-white/90">学情实时更新</span>
+        </div>
+        
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center border border-white/10">
+            <i class="fas fa-brain text-lg text-yellow-300"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold opacity-90">核心学情评估</h3>
+            <p class="text-[10px] opacity-75">智能大数据多维度深度画像</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-white/10 backdrop-blur-sm p-3.5 rounded-xl border border-white/10 text-center">
+            <div class="text-xs text-blue-100 mb-1">综合学习评级</div>
+            <div class="text-3xl font-extrabold text-yellow-300 tracking-tight flex items-baseline justify-center gap-1">A <span class="text-[11px] font-medium text-white/80">极佳</span></div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm p-3.5 rounded-xl border border-white/10 text-center">
+            <div class="text-xs text-blue-100 mb-1">预计考核得分</div>
+            <div class="text-3xl font-extrabold text-white tracking-tight">92<span class="text-[11px] font-medium text-blue-100">分</span></div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm p-3 text-xl border border-white/10 text-center col-span-2">
+            <div class="text-xs text-blue-100 mb-1">学习表现</div>
+            <div class="text-sm font-bold text-white">击败了 87.5% 同学，已累计打卡 45 天</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 认知与答题能力雷达图 -->
+      <div class="mx-4 bg-white rounded-2xl p-4 card-shadow">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-5 h-5 bg-blue-100 text-blue-600 rounded flex items-center justify-center text-xs">
+            <i class="fas fa-network-wired"></i>
+          </div>
+          <h2 class="text-sm font-bold text-gray-800">认知与解题能力画像</h2>
+        </div>
+        <p class="text-[11px] text-gray-400 mb-4 leading-relaxed">
+          基于您近期练习、章节和模块表现深度分析得出。建议通过提升“知识迁移”与“审题速度”来进一步提升答题表现。
+        </p>
+        <div class="h-64 flex justify-center items-center">
+          <canvas id="xueqingRadarChart" class="w-full h-full"></canvas>
+        </div>
+      </div>
+
+      <!-- AI学情智能建议 -->
+      <div class="mx-4 bg-amber-50/50 rounded-2xl p-4 border border-amber-100/70 relative overflow-hidden">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 bg-amber-100 rounded-lg flex items-center justify-center text-amber-600">
+              <i class="far fa-lightbulb text-sm"></i>
+            </div>
+            <h2 class="text-sm font-extrabold text-amber-900">智能学情分析报告</h2>
+          </div>
+          <span class="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-bold">AI深度解析</span>
+        </div>
+        <div class="text-xs leading-relaxed text-amber-800 space-y-2">
+          <p>
+            🔍 <strong class="text-amber-900">学情总结：</strong>您在选择题及基础记忆类考点（如“文言文实词”）中的正确率始终保持在 <strong class="text-green-600">92% 以上</strong>，具有扎实的基础功底。
+          </p>
+          <p>
+            ⚠️ <strong class="text-amber-900">核心痛点：</strong>但在探究与论述题型、字音字形（极易失分的基础点）中仍面临一定阻力，平均正确率仅为 <strong class="text-red-500">45%</strong>，是您的关键学习瓶颈。
+          </p>
+          <p>
+            🚀 <strong class="text-amber-900">提分攻略：</strong>建议立即通过专属的 <strong class="text-blue-600 font-bold">【AI薄弱突破练】</strong> 进行高性价比提分，配合错题本进行滚动复习。
+          </p>
+        </div>
+      </div>
+
+      <!-- 重点薄弱项一键冲刺突破 -->
+      <div class="mx-4 bg-white rounded-2xl p-4 card-shadow">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <div class="w-5 h-5 bg-red-100 text-red-500 rounded flex items-center justify-center text-xs">
+              <i class="fas fa-bullseye"></i>
+            </div>
+            <h2 class="text-sm font-bold text-gray-800">薄弱项一键突破通道</h2>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <!-- Item 1 -->
+          <div class="flex items-center justify-between p-3 bg-red-50/40 rounded-xl border border-red-50/80">
+            <div class="flex flex-col gap-0.5">
+              <span class="text-xs font-extrabold text-gray-800">字音字形 / 常考字形辨析</span>
+              <span class="text-[10px] text-red-500 font-medium">当前掌握程度: 45.3% | 错题数: 88次</span>
+            </div>
+            <a href="mobile/boruo_tupo.html" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-[11px] font-bold rounded-lg transition-transform text-center shadow-sm">
+              去薄弱突破
+            </a>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="flex items-center justify-between p-3 bg-red-50/40 rounded-xl border border-red-50/80">
+            <div class="flex flex-col gap-0.5">
+              <span class="text-xs font-extrabold text-gray-800">数轴与相反数基础</span>
+              <span class="text-[10px] text-red-500 font-medium">当前掌握程度: 55.0% | 错题数: 65次</span>
+            </div>
+            <a href="mobile/boruo_tupo.html" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-[11px] font-bold rounded-lg transition-transform text-center shadow-sm">
+              去薄弱突破
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 学情进步走势图 -->
+      <div class="mx-4 bg-white rounded-2xl p-4 card-shadow">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <div class="w-5 h-5 bg-green-100 text-green-600 rounded flex items-center justify-center text-xs">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h2 class="text-sm font-bold text-gray-800">学习效率与进步走势</h2>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+            <span class="text-[10px] text-gray-400">综合学情指数</span>
+          </div>
+        </div>
+        <div class="h-44">
+          <canvas id="xueqingTrendChart" class="w-full h-full"></canvas>
+        </div>
+      </div>
+
+      <!-- 各模块突破进展 -->
+      <div class="mx-4 bg-white rounded-2xl p-4 card-shadow">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-5 h-5 bg-indigo-100 text-indigo-600 rounded flex items-center justify-center text-xs">
+            <i class="fas fa-tasks"></i>
+          </div>
+          <h2 class="text-sm font-bold text-gray-800">核心模块通关攻坚度</h2>
+        </div>
+
+        <div class="space-y-3.5">
+          <!-- Module 1 -->
+          <div>
+            <div class="flex justify-between items-center text-xs text-gray-700 font-bold mb-1">
+              <span>古代文学及常识</span>
+              <span class="text-green-500">90% (已掌握)</span>
+            </div>
+            <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div class="bg-gradient-to-r from-green-400 to-emerald-500 h-full rounded-full" style="width: 90%;"></div>
+            </div>
+          </div>
+
+          <!-- Module 2 -->
+          <div>
+            <div class="flex justify-between items-center text-xs text-gray-700 font-bold mb-1">
+              <span>现代文深度阅读分析</span>
+              <span class="text-blue-500">78% (掌握良好)</span>
+            </div>
+            <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div class="bg-gradient-to-r from-blue-400 to-indigo-500 h-full rounded-full" style="width: 78%;"></div>
+            </div>
+          </div>
+
+          <!-- Module 3 -->
+          <div>
+            <div class="flex justify-between items-center text-xs text-gray-700 font-bold mb-1">
+              <span>字音字形与基础语用</span>
+              <span class="text-amber-500">45% (急需突破)</span>
+            </div>
+            <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div class="bg-gradient-to-r from-amber-400 to-red-500 h-full rounded-full" style="width: 45%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            drawXueqingCharts();
+        });
+
+        function drawXueqingCharts() {
+            // Radar Chart
+            try {
+                new Chart(document.getElementById("xueqingRadarChart"), {
+                    type: "radar",
+                    data: {
+                        labels: ["审题速度", "基础记忆", "解题深度", "纠错能力", "知识迁移"],
+                        datasets: [{
+                            label: "综合实力",
+                            data: [82, 90, 75, 88, 62],
+                            backgroundColor: "rgba(59, 130, 246, 0.2)",
+                            borderColor: "rgba(59, 130, 246, 0.8)",
+                            borderWidth: 2,
+                            pointBackgroundColor: "rgba(59, 130, 246, 1)",
+                            pointBorderColor: "#fff",
+                            pointHoverBackgroundColor: "#fff",
+                            pointHoverBorderColor: "rgba(59, 130, 246, 1)",
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            r: {
+                                angleLines: { display: true, color: "rgba(226, 232, 240, 0.8)" },
+                                grid: { color: "rgba(226, 232, 240, 0.8)" },
+                                pointLabels: { font: { size: 11, weight: "bold" }, color: "#475569" },
+                                ticks: { display: false },
+                                suggestedMin: 0,
+                                suggestedMax: 100
+                            }
+                        }
+                    }
+                });
+            } catch (e) {
+                console.error(e);
+            }
+
+            // Fluctuation Trend Line Chart
+            try {
+                new Chart(document.getElementById("xueqingTrendChart"), {
+                    type: "line",
+                    data: {
+                        labels: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+                        datasets: [{
+                            label: "学情指数",
+                            data: [72, 75, 74, 82, 80, 85, 92],
+                            borderColor: "#3b82f6",
+                            backgroundColor: "rgba(59, 130, 246, 0.05)",
+                            fill: true,
+                            tension: 0.35,
+                            borderWidth: 3,
+                            pointRadius: 4,
+                            pointBackgroundColor: "#ffffff",
+                            pointBorderWidth: 2,
+                            pointBorderColor: "#3b82f6",
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { size: 10 }, color: "#94a3b8" }
+                            },
+                            y: {
+                                beginAtZero: false,
+                                min: 60,
+                                max: 100,
+                                grid: { color: "#f1f5f9" },
+                                ticks: { font: { size: 10 }, color: "#94a3b8" }
+                            }
+                        }
+                    }
+                });
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    </script>
+</body>
+</html>

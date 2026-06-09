@@ -6,7 +6,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>章节自主练</title>
+    <title>章节自主刷</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -305,7 +305,7 @@
     <!-- 顶栏 (无胶囊，标题完美水平居中) -->
     <div class="sticky top-0 bg-white z-50 px-4 py-3.5 flex items-center justify-center border-b border-gray-100 shadow-sm relative">
         <i class="fas fa-chevron-left text-lg text-gray-700 cursor-pointer hover:opacity-80 transition-opacity absolute left-4" onclick="history.back()"></i>
-        <h1 class="text-base font-bold text-gray-800">章节自主练</h1>
+        <h1 class="text-base font-bold text-gray-800">章节自主刷</h1>
     </div>
 
     <!-- 教材选择及练习模式设置栏 -->
@@ -318,7 +318,7 @@
             </button>
         </div>
         <div class="flex items-center gap-2">
-            <div id="practice-mode-btn" class="text-[12px] text-gray-400 flex items-center gap-1 cursor-pointer select-none active:opacity-80 transition-all">
+            <div id="practice-mode-btn" style="display: none;" class="text-[12px] text-gray-400 flex items-center gap-1 cursor-pointer select-none active:opacity-80 transition-all">
                 <i class="fas fa-cog text-[14px]"></i>
                 <span id="current-mode-text">练习模式</span>
             </div>
@@ -1101,7 +1101,7 @@
         }
 
         function startDati(title, type) {
-            let msg = '正在加载章节自主练习：' + title + '...';
+            let msg = '正在加载章节自主刷：' + title + '...';
             if (type === 'continue') {
                 msg = '正在为您恢复 “' + title + '” 的上次答题进度...';
             }

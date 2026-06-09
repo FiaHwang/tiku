@@ -735,16 +735,6 @@
                 </div>
             </div>
 
-            <div id="question-difficulty-section">
-                <div class="section-title">试题难度</div>
-                <div class="count-grid" style="grid-template-columns: repeat(4, 1fr);">
-                    <div class="count-btn difficulty-btn active">不限</div>
-                    <div class="count-btn difficulty-btn">易</div>
-                    <div class="count-btn difficulty-btn">中</div>
-                    <div class="count-btn difficulty-btn">难</div>
-                </div>
-            </div>
-
             <div class="animation-toggle">
                 <div class="toggle-label">动画开关</div>
                 <label class="toggle-switch">
@@ -843,30 +833,15 @@
             });
         });
 
-        // 切换难度逻辑
-        const difficultyBtns = document.querySelectorAll('#question-difficulty-section .count-btn');
-        difficultyBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                difficultyBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-
         if (confirmSettingsBtn) {
             confirmSettingsBtn.addEventListener('click', () => {
                 const activeModeCard = document.querySelector('.mode-card.active');
-                const activeDifficultyBtn = document.querySelector('#question-difficulty-section .count-btn.active');
                 let toastMsg = '';
                 
                 if (activeModeCard) {
                     const modeTitle = activeModeCard.querySelector('.mode-card-title').textContent.trim();
                     currentModeText.textContent = modeTitle;
                     toastMsg = '已保存设置。模式：' + modeTitle;
-                }
-                
-                if (activeDifficultyBtn) {
-                    const diffText = activeDifficultyBtn.textContent.trim();
-                    toastMsg += '，难度：' + diffText;
                 }
                 
                 showToast(toastMsg);

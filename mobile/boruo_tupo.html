@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>AI薄弱突破练</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        html {
+            background-color: #f1f5f9;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f8fafc;
+            box-shadow: 0 0 40px rgba(15, 23, 42, 0.08);
+            border-left: 1px solid rgba(226, 232, 240, 0.6);
+            border-right: 1px solid rgba(226, 232, 240, 0.6);
+        }
+
+        /* Robot grid bubble bg */
+        .ai-banner-bg {
+            background: linear-gradient(180deg, #1d4ed8 0%, #3b82f6 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .grid-pattern {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.8;
+        }
+
+        .robot-shadow {
+            filter: drop-shadow(0 12px 24px rgba(29, 78, 216, 0.3));
+        }
+
+        /* Floating Animation */
+        @keyframes hover-float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-6px) rotate(1.5deg); }
+        }
+        .animate-robot {
+            animation: hover-float 4.5s ease-in-out infinite;
+        }
+
+        .card-blur {
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .neon-border-btn {
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(to right, #ec4899, #a855f7) border-box;
+            border: 1px solid transparent;
+        }
+
+        /* Standard responsive touches */
+        .press-effect {
+            transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .press-effect:active {
+            transform: scale(0.97);
+            filter: brightness(0.95);
+        }
+    </style>
+</head>
+<body class="max-w-md mx-auto min-h-screen flex flex-col justify-between pb-10 relative select-none">
+
+    <!-- Header Block inside banner in screenshot -->
+    <div class="ai-banner-bg pt-4 pb-12 px-5 text-white relative">
+        <div class="grid-pattern"></div>
+        
+        <!-- Navigation Bar -->
+        <div class="relative z-10 flex items-center justify-between mb-6">
+            <button class="w-10 h-10 -ml-2 rounded-full flex items-center justify-center text-white/90 active:bg-white/10 transition-colors" onclick="history.back()">
+                <i class="fas fa-chevron-left text-lg"></i>
+            </button>
+            <h1 class="text-lg font-bold tracking-wide">AI薄弱突破练</h1>
+            <div class="w-10"></div> <!-- Empty balance spacer since there is no right-side capsule logo -->
+        </div>
+
+        <!-- Banner Content -->
+        <div class="relative z-10 flex justify-between items-center mt-2">
+            <div class="space-y-1">
+                <h2 class="text-3xl font-extrabold tracking-tight text-white leading-tight">AI个性化学习路径</h2>
+                <p class="text-blue-100 text-lg font-bold">精准突破薄弱点</p>
+            </div>
+            
+            <!-- Beautiful AI Robot Illustrator -->
+            <div class="w-28 h-28 relative -mr-1 animate-robot">
+                <svg viewBox="0 0 200 200" fill="none" class="w-full h-full robot-shadow" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Head Outer Ring -->
+                    <rect x="30" y="40" width="140" height="110" rx="45" fill="#ffffff" />
+                    <!-- Screen Inner Face -->
+                    <rect x="40" y="52" width="120" height="86" rx="35" fill="#1e293b" />
+                    <!-- Cute blue virtual eyes -->
+                    <ellipse cx="75" cy="90" rx="14" ry="16" fill="#38bdf8" />
+                    <ellipse cx="125" cy="90" rx="14" ry="16" fill="#38bdf8" />
+                    <path d="M72 82C72 82 75 75 82 76" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+                    <path d="M128 82C128 82 125 75 118 76" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+                    <!-- Cute mouth -->
+                    <path d="M92 110Q100 118 108 110" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" />
+                    <!-- Antennas / Side Ears -->
+                    <rect x="15" y="80" width="15" height="30" rx="7" fill="#f43f5e" />
+                    <rect x="170" y="80" width="15" height="30" rx="7" fill="#f43f5e" />
+                    <!-- Antenna Top Glow -->
+                    <circle cx="100" cy="22" r="10" fill="#38bdf8" />
+                    <line x1="100" y1="22" x2="100" y2="40" stroke="#e2e8f0" stroke-width="5" />
+                    <!-- Cute blushing cheeks -->
+                    <circle cx="58" cy="110" r="6" fill="#f43f5e" opacity="0.5" />
+                    <circle cx="142" cy="110" r="6" fill="#f43f5e" opacity="0.5" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Sparkles background deco -->
+        <div class="absolute right-32 top-8 text-sky-200 text-lg opacity-80 animate-pulse">✦</div>
+        <div class="absolute right-28 top-12 text-teal-300 text-sm opacity-90">✦</div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="px-4 -mt-6 relative z-20 space-y-5 flex-grow">
+        
+        <!-- Section Header List Recommendation -->
+        <div class="flex items-center justify-between px-1">
+            <span class="text-[17px] font-extrabold text-[#1e293b]">为您推荐</span>
+            <!-- Refresh Action trigger -->
+            <button class="flex items-center gap-1.5 text-blue-600 font-bold text-sm bg-blue-50 hover:bg-blue-100/70 px-3.5 py-1.5 rounded-full transition-colors active:scale-95" onclick="refreshRecommendations()">
+                <i class="fas fa-rotate text-xs"></i>
+                <span>换一批</span>
+            </button>
+        </div>
+
+        <!-- Master Recommendation Card Panel -->
+        <div class="bg-white rounded-[28px] p-5 shadow-lg border border-slate-100 relative overflow-hidden">
+            <!-- Target visual illustration top right corner -->
+            <div class="absolute -right-3 -top-1 w-24 h-24 opacity-90 scale-90 pointer-events-none">
+                <svg viewBox="0 0 120 120" class="w-full h-full text-blue-500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Concentric target circles -->
+                    <circle cx="60" cy="60" r="45" stroke="#3b82f6" stroke-width="2" stroke-dasharray="4 4" />
+                    <circle cx="60" cy="60" r="32" stroke="#60a5fa" stroke-width="3" />
+                    <circle cx="60" cy="60" r="20" fill="#2563eb" />
+                    <!-- Dart arrowhead -->
+                    <path d="M40 80L55 65L50 60L60 60L60 70L55 65L40 80Z" fill="#ff4d4f" />
+                </svg>
+            </div>
+
+            <!-- Card titles -->
+            <div class="mb-5">
+                <h3 class="text-xl font-extrabold text-slate-800 tracking-tight">薄弱知识点突破</h3>
+                <p class="text-xs text-gray-400 font-medium mt-1">智能练习，提高学习效率</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Badge Description Item 1: 推荐理由 -->
+                <div class="relative pt-2">
+                    <div class="absolute -top-3.5 left-0">
+                        <span class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-sm flex items-center gap-1">
+                            推荐理由 <i class="fas fa-sparkles text-[9px] text-amber-200"></i>
+                        </span>
+                    </div>
+                    
+                    <!-- Content Card box -->
+                    <div class="bg-[#f8fafc] rounded-2xl p-4 pt-5 mt-1 border border-slate-50">
+                        <p class="text-[13px] text-slate-600 font-medium leading-relaxed mb-4">
+                            这些知识点您掌握程度不足，是当前学习阶段的关键瓶颈，优先突破可显著提升整体升级。
+                        </p>
+                        
+                        <!-- List of weak topics inside -->
+                        <div class="space-y-3 pt-1 border-t border-dashed border-slate-200">
+                            <!-- Topic 1 -->
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-bold text-slate-800">数轴</span>
+                                <div class="flex text-gray-200 gap-0.5">
+                                    <i class="far fa-star text-xs"></i>
+                                    <i class="far fa-star text-xs"></i>
+                                    <i class="far fa-star text-xs"></i>
+                                    <i class="far fa-star text-xs"></i>
+                                    <i class="far fa-star text-xs"></i>
+                                </div>
+                            </div>
+                            <!-- Topic 2 -->
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-bold text-slate-800">复数</span>
+                                <div class="flex text-gray-200 gap-0.5">
+                                    <i class="far fa-star text-xs"></i>
+                                    <i class="far fa-star text-xs"></i>
+                                    <i class="far fa-star text-xs"></i>
+                                    <i class="far fa-star text-xs"></i>
+                                    <i class="far fa-star text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Badge Description Item 2: 训练目标 -->
+                <div class="relative pt-2">
+                    <div class="absolute -top-3.5 left-0">
+                        <span class="bg-gradient-to-r from-teal-500 to-emerald-600 text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-sm flex items-center gap-1">
+                            训练目标 <i class="fas fa-bullseye text-[9px] text-amber-100"></i>
+                        </span>
+                    </div>
+                    
+                    <!-- Content Card box -->
+                    <div class="bg-[#f8fafc] rounded-2xl p-4 pt-5 mt-1 border border-slate-50 flex flex-col justify-between">
+                        <p class="text-[13px] text-slate-600 font-medium leading-relaxed">
+                            掌握数轴上点的位置表示与复数在复平面上的几何意义，理解实数与复数的对应关系及运算的几何直观。
+                        </p>
+                        <button class="text-xs text-blue-500 font-bold self-end mt-2 flex items-center gap-0.5 hover:text-blue-600 active:scale-95 transition-all">
+                            <span>查看全部</span>
+                            <i class="fas fa-chevron-down text-[9px] mt-0.5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Outline Button in Fuchsia/Pink border: 知识点含义讲解 -->
+                <button class="w-full py-3.5 rounded-full border border-fuchsia-400 text-fuchsia-600 font-bold flex items-center justify-center gap-2 press-effect hover:bg-fuchsia-50 mt-4 outline-none">
+                    <i class="far fa-edit text-sm"></i>
+                    <span>知识点含义讲解</span>
+                </button>
+
+            </div>
+        </div>
+
+        <!-- Score indicators / stats block -->
+        <div class="bg-white/90 backdrop-blur-sm rounded-[24px] p-5 border border-slate-100 shadow-sm space-y-4">
+            
+            <!-- Cards wrap: 17 Ease, 1 Medium, 2 hard/easy -->
+            <div class="grid grid-cols-3 gap-3">
+                <!-- Unit 1 -->
+                <div class="bg-blue-50/50 rounded-2xl p-4 text-center border border-blue-50 flex flex-col justify-between h-20">
+                    <div class="text-[26px] font-extrabold text-slate-800 leading-none">17</div>
+                    <div class="text-[11px] text-slate-500 font-semibold mt-1">易</div>
+                </div>
+                <!-- Unit 2 -->
+                <div class="bg-indigo-50/40 rounded-2xl p-4 text-center border border-indigo-50/50 flex flex-col justify-between h-20">
+                    <div class="text-[26px] font-extrabold text-slate-800 leading-none">1</div>
+                    <div class="text-[11px] text-slate-500 font-semibold mt-1">中</div>
+                </div>
+                <!-- Unit 3 -->
+                <div class="bg-purple-50/40 rounded-2xl p-4 text-center border border-purple-50/50 flex flex-col justify-between h-20">
+                    <div class="text-[26px] font-extrabold text-slate-800 leading-none">2</div>
+                    <div class="text-[11px] text-slate-500 font-semibold mt-1">较易</div>
+                </div>
+            </div>
+
+            <!-- Detailed counts -->
+            <div class="flex items-center justify-between text-xs font-bold text-slate-500 px-2 mt-4">
+                <span>共计 <strong class="text-slate-800 text-sm font-extrabold">20</strong> 题</span>
+                <span>预计时间 <strong class="text-slate-800 text-sm font-extrabold">30</strong> 分钟</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Action Button bar -->
+    <div class="px-4 pt-4 pb-8">
+        <button class="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full text-white font-extrabold text-base tracking-wide shadow-md shadow-blue-500/20 active:scale-[0.98] active:brightness-95 transition-all text-center" onclick="startSpecialTraining()">
+            开始专项突破
+        </button>
+    </div>
+
+    <!-- Toast Component -->
+    <div id="toast" class="fixed top-12 left-1/2 -translate-x-1/2 bg-black/80 text-white text-xs font-bold px-4 py-2.5 rounded-full opacity-0 pointer-events-none transition-all duration-300 z-50 shadow-lg flex items-center gap-1.5">
+        <i class="fas fa-check-circle text-emerald-400"></i>
+        <span id="toast-message">加载中...</span>
+    </div>
+
+    <script>
+        function showToast(message, isSuccess = true) {
+            const toast = document.getElementById('toast');
+            const icon = toast.querySelector('i');
+            const msgSpan = document.getElementById('toast-message');
+            
+            msgSpan.textContent = message;
+            if (isSuccess) {
+                icon.className = "fas fa-check-circle text-emerald-400";
+            } else {
+                icon.className = "fas fa-circle-info text-blue-400";
+            }
+            
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 2000);
+        }
+
+        function refreshRecommendations() {
+            showToast('已为您推荐最新的薄弱知识点', true);
+        }
+
+        function startSpecialTraining() {
+            showToast('正在为您智能组卷，即将开始专项练习...', false);
+        }
+    </script>
+</body>
+</html>
