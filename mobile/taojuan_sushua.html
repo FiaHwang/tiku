@@ -85,9 +85,20 @@
         <div class="w-5"></div>
     </div>
 
-    <!-- 排序筛选控制区 -->
-    <div class="bg-white px-4 py-2.5 flex items-center justify-end border-b border-gray-100 text-xs text-gray-500">
-        <button id="sortBtn" onclick="toggleSort()" class="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-lg text-gray-700 font-semibold border border-gray-200/60 transition-all select-none">
+    <!-- 搜索与排序筛选控制区 -->
+    <div class="bg-white px-4 py-2.5 flex items-center justify-between gap-3 border-b border-gray-100 text-xs text-gray-500">
+        <!-- 搜索栏 -->
+        <div class="relative flex-1 flex items-center">
+            <i class="fas fa-search absolute left-3 text-gray-400 text-xs"></i>
+            <input type="text" id="searchInput" oninput="filterPapers()" placeholder="搜索试卷标题..." class="w-full pl-8 pr-14 py-2 bg-gray-50 hover:bg-gray-100/70 focus:bg-white text-xs text-gray-800 rounded-xl border border-gray-100 focus:border-[#1890ff] focus:outline-none transition-all placeholder-gray-400">
+            <i id="clearSearch" onclick="clearSearchInput()" class="fas fa-times-circle absolute right-9 text-gray-300 hover:text-gray-400 cursor-pointer hidden"></i>
+            <button onclick="filterPapers()" class="absolute right-3 text-[#1890ff] hover:text-blue-600 active:scale-95 text-xs font-semibold select-none transition-all">
+                搜索
+            </button>
+        </div>
+
+        <!-- 排序方式 -->
+        <button id="sortBtn" onclick="toggleSort()" class="flex items-center gap-1.5 px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-xl text-gray-700 font-semibold border border-gray-200/60 transition-all select-none shrink-0">
             <i class="fas fa-calendar-alt text-[#1890ff]"></i>
             年份排序
             <span id="sortDirectionText" class="text-[#1890ff] font-bold">默认</span>
@@ -232,6 +243,51 @@
         let currentOrder = 'none'; // 'none', 'asc', 'desc'
         let originalCards = null;
 
+        function filterPapers() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const cards = document.querySelectorAll('.paper-card');
+            const clearBtn = document.getElementById('clearSearch');
+            
+            if (query !== '') {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+
+            let foundCount = 0;
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                if (title.includes(query)) {
+                    card.style.display = 'flex';
+                    foundCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            let noResultElem = document.getElementById('noResultsMsg');
+            if (foundCount === 0) {
+                if (!noResultElem) {
+                    noResultElem = document.createElement('div');
+                    noResultElem.id = 'noResultsMsg';
+                    noResultElem.className = 'text-center py-12 text-xs text-gray-400 flex flex-col items-center justify-center gap-2 w-full';
+                    noResultElem.innerHTML = '<i class="fas fa-folder-open text-3xl text-gray-200"></i><span>暂无数据</span>';
+                    document.getElementById('paperList').appendChild(noResultElem);
+                }
+            } else {
+                if (noResultElem) {
+                    noResultElem.remove();
+                }
+            }
+        }
+
+        function clearSearchInput() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.value = '';
+            filterPapers();
+            searchInput.focus();
+        }
+
         function getOriginalCards() {
             if (!originalCards) {
                 const paperList = document.getElementById('paperList');
@@ -243,6 +299,12 @@
         }
 
         function sortPapers(order) {
+            // Remove no results message first to avoid sorting it
+            const existingNoResult = document.getElementById('noResultsMsg');
+            if (existingNoResult) {
+                existingNoResult.remove();
+            }
+
             const paperList = document.getElementById('paperList');
             const orig = getOriginalCards();
             
@@ -262,6 +324,9 @@
             paperList.innerHTML = '';
             sortedCards.forEach(card => paperList.appendChild(card));
             
+            // Reapply existing search filters
+            filterPapers();
+
             // Update sorting UI text and icons
             const sortDirectionText = document.getElementById('sortDirectionText');
             const sortIcon = document.getElementById('sortIcon');

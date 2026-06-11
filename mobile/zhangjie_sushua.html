@@ -78,15 +78,27 @@
 <body class="max-w-md mx-auto min-h-screen flex flex-col bg-[#f8fafc] shadow-lg relative pb-12">
 
     <!-- 顶部导航栏 (无Capsule按钮) -->
-    <div class="sticky top-0 bg-white z-50 px-4 py-4 flex items-center justify-between border-b border-gray-100 shadow-sm">
-        <i class="fas fa-chevron-left text-lg text-gray-700 cursor-pointer hover:opacity-80 transition-opacity" onclick="history.back()"></i>
-        <h1 class="text-lg font-bold text-gray-800">章节速刷</h1>
-        <!-- 占位保持标题居中 -->
-        <div class="w-5"></div>
+    <div class="sticky top-0 bg-white z-50 px-4 py-4 flex flex-col gap-3 border-b border-gray-100 shadow-sm">
+        <div class="flex items-center justify-between">
+            <i class="fas fa-chevron-left text-lg text-gray-700 cursor-pointer hover:opacity-80 transition-opacity" onclick="history.back()"></i>
+            <h1 class="text-lg font-bold text-gray-800">章节速刷</h1>
+            <!-- 占位保持标题居中 -->
+            <div class="w-5"></div>
+        </div>
+        
+        <!-- 搜索栏 -->
+        <div class="relative flex items-center">
+            <i class="fas fa-search absolute left-3.5 text-gray-400 text-xs"></i>
+            <input type="text" id="searchInput" oninput="filterPapers()" placeholder="搜索试卷标题..." class="w-full pl-9 pr-14 py-2 bg-gray-50 hover:bg-gray-100/70 focus:bg-white text-xs text-gray-800 rounded-xl border border-gray-100 focus:border-[#1890ff] focus:outline-none transition-all placeholder-gray-400">
+            <i id="clearSearch" onclick="clearSearchInput()" class="fas fa-times-circle absolute right-9 text-gray-300 hover:text-gray-400 cursor-pointer hidden"></i>
+            <button onclick="filterPapers()" class="absolute right-3 text-[#1890ff] hover:text-blue-600 active:scale-95 text-xs font-semibold select-none transition-all">
+                搜索
+            </button>
+        </div>
     </div>
 
     <!-- 试卷列表区域 -->
-    <div class="px-4 py-5 flex flex-col gap-4">
+    <div id="paperList" class="px-4 py-5 flex flex-col gap-4">
 
         <!-- 章节 1 -->
         <div class="paper-card p-5 flex flex-col" onclick="startPaper('2001河南·专升本高数·章节试卷')">
@@ -219,6 +231,51 @@
     <div id="toast" class="toast"></div>
 
     <script>
+        function filterPapers() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const cards = document.querySelectorAll('.paper-card');
+            const clearBtn = document.getElementById('clearSearch');
+            
+            if (query !== '') {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+
+            let foundCount = 0;
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                if (title.includes(query)) {
+                    card.style.display = 'flex';
+                    foundCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            let noResultElem = document.getElementById('noResultsMsg');
+            if (foundCount === 0) {
+                if (!noResultElem) {
+                    noResultElem = document.createElement('div');
+                    noResultElem.id = 'noResultsMsg';
+                    noResultElem.className = 'text-center py-12 text-xs text-gray-400 flex flex-col items-center justify-center gap-2 w-full';
+                    noResultElem.innerHTML = '<i class="fas fa-folder-open text-3xl text-gray-200"></i><span>暂无数据</span>';
+                    document.getElementById('paperList').appendChild(noResultElem);
+                }
+            } else {
+                if (noResultElem) {
+                    noResultElem.remove();
+                }
+            }
+        }
+
+        function clearSearchInput() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.value = '';
+            filterPapers();
+            searchInput.focus();
+        }
+
         function showToast(msg) {
             const toast = document.getElementById('toast');
             toast.textContent = msg;
