@@ -417,46 +417,55 @@
 
         .practice-mode:nth-child(5) .practice-icon {
             background-color: #e6f7ff;
-            color: #1890ff;
+            color: #0050b3;
         }
 
         .practice-mode:nth-child(5) .practice-icon::after {
-            background-color: #1890ff;
+            background-color: #0050b3;
         }
 
         .practice-mode:nth-child(6) .practice-icon {
-            background-color: #f9f0ff;
-            color: #722ed1;
-        }
-
-        .practice-mode:nth-child(6) .practice-icon::after {
-            background-color: #722ed1;
-        }
-
-        .practice-mode:nth-child(7) .practice-icon {
-            background-color: #f0f5ff;
-            color: #1890ff;
-        }
-
-        .practice-mode:nth-child(7) .practice-icon::after {
-            background-color: #1890ff;
-        }
-
-        .practice-mode:nth-child(8) .practice-icon {
-            background-color: #fffbe6;
-            color: #faad14;
-        }
-
-        .practice-mode:nth-child(8) .practice-icon::after {
-            background-color: #faad14;
-        }
-
-        .practice-mode:nth-child(9) .practice-icon {
             background-color: #e6f7ff;
             color: #1890ff;
         }
 
+        .practice-mode:nth-child(6) .practice-icon::after {
+            background-color: #1890ff;
+        }
+
+        .practice-mode:nth-child(7) .practice-icon {
+            background-color: #f9f0ff;
+            color: #722ed1;
+        }
+
+        .practice-mode:nth-child(7) .practice-icon::after {
+            background-color: #722ed1;
+        }
+
+        .practice-mode:nth-child(8) .practice-icon {
+            background-color: #f0f5ff;
+            color: #1890ff;
+        }
+
+        .practice-mode:nth-child(8) .practice-icon::after {
+            background-color: #1890ff;
+        }
+
+        .practice-mode:nth-child(9) .practice-icon {
+            background-color: #fffbe6;
+            color: #faad14;
+        }
+
         .practice-mode:nth-child(9) .practice-icon::after {
+            background-color: #faad14;
+        }
+
+        .practice-mode:nth-child(10) .practice-icon {
+            background-color: #e6f7ff;
+            color: #1890ff;
+        }
+
+        .practice-mode:nth-child(10) .practice-icon::after {
             background-color: #1890ff;
         }
 
@@ -529,6 +538,7 @@
 
         .unit-content {
             margin-top: 12px;
+            padding-left: 24px;
         }
 
         .unit-header {
@@ -558,6 +568,7 @@
             margin-bottom: 12px;
             display: flex;
             align-items: center;
+            padding-left: 24px;
         }
 
         /* 练习项 */
@@ -800,6 +811,53 @@
             color: #52c41a;
             background-color: #f6ffed;
             border-color: #b7eb8f;
+        }
+
+        .beihang-tag {
+            font-size: 11px;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-left: 6px;
+            font-weight: normal;
+            display: inline-block;
+            vertical-align: middle;
+            border: 1px solid transparent;
+        }
+
+        .beihang-tag.val-tag {
+            color: #d46b08;
+            background-color: #fff7e6;
+            border-color: #ffd591;
+        }
+
+        .beihang-tag.tag-hard {
+            color: #cf1322;
+            background-color: #fff1f0;
+            border-color: #ffa39e;
+        }
+
+        .beihang-tag.tag-medium {
+            color: #d46b08;
+            background-color: #fff7e6;
+            border-color: #ffd591;
+        }
+
+        .beihang-tag.tag-easy {
+            color: #389e0d;
+            background-color: #f6ffed;
+            border-color: #b7eb8f;
+        }
+
+        .beihang-tag.freq-tag {
+            color: #096dd9;
+            background-color: #e6f7ff;
+            border-color: #91d5ff;
+        }
+
+        .beihang-tag.type-tag {
+            color: #722ed1;
+            background-color: #f9f0ff;
+            border-color: #d3adf7;
         }
 
         .accuracy-red {
@@ -1315,6 +1373,10 @@
         <div class="practice-mode">
             <div class="practice-icon"><i class="fas fa-book-open"></i></div>
             <div class="practice-label">知识点练习</div>
+        </div>
+        <div class="practice-mode">
+            <div class="practice-icon"><i class="fas fa-university"></i></div>
+            <div class="practice-label">北航知识点</div>
         </div>
         <div class="practice-mode">
             <div class="practice-icon"><i class="fas fa-book"></i></div>
@@ -2174,13 +2236,13 @@
                     </div>
                     <button class="action-btn-small primary">练习</button>
                 </div>
-                <div class="unit-progress">17/37 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">20%</span> <span class="mastery-tag mastered">掌握度 0.85</span></div>
+                <div class="unit-progress">17/37 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">20%</span></div>
                 <div class="unit-content">
                     <!-- 练习项 -->
                     <div class="practice-item">
                         <div class="item-info">
                             <div class="item-title">文学常识基础</div>
-                            <div class="item-stats">17/37 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">20%</span> <span class="mastery-tag mastered">掌握度 0.85</span></div>
+                            <div class="item-stats">17/37 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">20%</span></div>
                         </div>
                         <div class="item-actions">
                             <button class="action-btn-small primary">练习</button>
@@ -2198,12 +2260,12 @@
                     </div>
                     <button class="action-btn-small primary">练习</button>
                 </div>
-                <div class="unit-progress">35/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-green">87.5%</span> <span class="mastery-tag mastered">掌握度 0.92</span></div>
+                <div class="unit-progress">35/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-green">87.5%</span></div>
                 <div class="unit-content">
                     <div class="practice-item">
                         <div class="item-info">
                             <div class="item-title">作文逻辑</div>
-                            <div class="item-stats">35/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-green">87.5%</span> <span class="mastery-tag mastered">掌握度 0.92</span></div>
+                            <div class="item-stats">35/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-green">87.5%</span></div>
                         </div>
                         <div class="item-actions">
                             <button class="action-btn-small primary">练习</button>
@@ -2221,12 +2283,12 @@
                     </div>
                     <button class="action-btn-small primary">练习</button>
                 </div>
-                <div class="unit-progress">16/32 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">50%</span> <span class="mastery-tag">掌握度 0.68</span></div>
+                <div class="unit-progress">16/32 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">50%</span></div>
                 <div class="unit-content">
                     <div class="practice-item">
                         <div class="item-info">
                             <div class="item-title">盛唐诗歌</div>
-                            <div class="item-stats">16/32 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">50%</span> <span class="mastery-tag">掌握度 0.68</span></div>
+                            <div class="item-stats">16/32 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">50%</span></div>
                         </div>
                         <div class="item-actions">
                             <button class="action-btn-small primary">练习</button>
@@ -2268,16 +2330,261 @@
                     </div>
                     <button class="action-btn-small primary">练习</button>
                 </div>
-                <div class="unit-progress">5/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">12.5%</span> <span class="mastery-tag">掌握度 0.42</span></div>
+                <div class="unit-progress">5/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">12.5%</span></div>
                 <div class="unit-content">
                     <!-- 练习项 -->
                     <div class="practice-item">
                         <div class="item-info">
                             <div class="item-title">阅读理解技巧</div>
-                            <div class="item-stats">5/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">12.5%</span> <span class="mastery-tag">掌握度 0.42</span></div>
+                            <div class="item-stats">5/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">12.5%</span></div>
                         </div>
                         <div class="item-actions">
                             <button class="action-btn-small primary">练习</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 北航知识点区域 -->
+    <div id="beihang-knowledge-practice" class="content-section" style="display: none;">
+        <div class="special-practice">
+            <div class="special-header" onclick="location.href='mokuai_xiangqing_zhishidian.html?mode=beihang&title=北航知识点'" style="cursor: pointer;">
+                <div class="special-title">北航知识点 <i class="fas fa-chevron-right" style="font-size: 14px; margin-left: 4px;"></i></div>
+                <div style="display: flex; gap: 8px;">
+                    <div class="practice-mode-tag" onclick="event.stopPropagation();"><i class="fas fa-cog" style="font-size: 14px; margin-right: 4px;"></i>练习模式</div>
+                </div>
+            </div>
+
+            <!-- 教材切换按钮 -->
+            <div style="padding: 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: center; align-items: center; gap: 12px;">
+                <button id="beihang-knowledge-textbook-switch" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 14px; color: #666; display: flex; align-items: center; -webkit-tap-highlight-color: transparent;">
+                    <i class="fas fa-book-bookmark" style="margin-right: 6px; color: #0050b3; font-size: 13px;"></i> 北航考研知识体系 <i class="fas fa-chevron-down" style="margin-left: 4px;"></i>
+                </button>
+            </div>
+            
+            <!-- 新增按钮区域 -->
+            <div style="padding: 16px; display: flex; justify-content: space-around; align-items: center; gap: 4px;">
+                <button onclick="window.location.href='dati_yemian.html?mode=beihang&title=智能练习'" style="padding: 8px 10px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">智能练习</button>
+                <button onclick="window.location.href='zhineng_guihua.html'" style="padding: 8px 10px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">智能规划</button>
+                <button onclick="window.location.href='zhishidian_zhengti_baogao.html'" style="padding: 8px 10px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">整体报告</button>
+                <button onclick="window.location.href='zhishidian_lianxi_lishi.html'" style="padding: 8px 10px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">练习历史</button>
+            </div>
+
+            <!-- 知识点分类 1 -->
+            <div class="practice-unit">
+                <div class="unit-header" onclick="toggleUnit(this)" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px;">
+                    <div class="unit-title">
+                        <i class="fas fa-chevron-down"></i>
+                        北航高等数学
+                    </div>
+                    <button class="action-btn-small primary">练习</button>
+                </div>
+                <div class="beihang-unit-meta" style="margin-top: 4px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; padding-left: 24px;">
+                    <div style="font-size: 13px; color: #8c8c8c; display: flex; align-items: center; gap: 16px;">
+                        <span>进度: <strong style="color: #262626; font-weight: 500;">28/45</strong></span>
+                        <span>正确率: <span class="accuracy-green" style="font-weight: 600;">62.2%</span></span>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+                        <span class="beihang-tag val-tag" style="margin-left: 0;">价值: <i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i></span>
+                        <span class="beihang-tag tag-hard" style="margin-left: 0;">难度: 难</span>
+                        <span class="beihang-tag freq-tag" style="margin-left: 0;">考频: 5/5年</span>
+                        <span class="beihang-tag type-tag" style="margin-left: 0;">常考：单选题、多选题</span>
+                    </div>
+                </div>
+                <div class="unit-content">
+                    <!-- 练习项 -->
+                    <div class="practice-item" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 12px 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+                            <div class="item-title" style="margin-bottom: 0;">微积分与级数基础</div>
+                            <button class="action-btn-small primary" style="flex-shrink: 0;">练习</button>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <div style="font-size: 12px; color: #8c8c8c; display: flex; align-items: center; gap: 12px;">
+                                <span>进度: <strong style="color: #595959; font-weight: 500;">28/45</strong></span>
+                                <span>正确率: <span class="accuracy-green" style="font-weight: 500;">62.2%</span></span>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+                                <span class="beihang-tag val-tag" style="margin-left: 0;">价值: <i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i></span>
+                                <span class="beihang-tag tag-hard" style="margin-left: 0;">难度: 难</span>
+                                <span class="beihang-tag freq-tag" style="margin-left: 0;">考频: 5/5年</span>
+                                <span class="beihang-tag type-tag" style="margin-left: 0;">常考：单选题、多选题</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 知识点分类 2 -->
+            <div class="practice-unit">
+                <div class="unit-header" onclick="toggleUnit(this)" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px;">
+                    <div class="unit-title">
+                        <i class="fas fa-chevron-down"></i>
+                        北航计算机基础
+                    </div>
+                    <button class="action-btn-small primary">练习</button>
+                </div>
+                <div class="beihang-unit-meta" style="margin-top: 4px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; padding-left: 24px;">
+                    <div style="font-size: 13px; color: #8c8c8c; display: flex; align-items: center; gap: 16px;">
+                        <span>进度: <strong style="color: #262626; font-weight: 500;">38/40</strong></span>
+                        <span>正确率: <span class="accuracy-green" style="font-weight: 600;">95%</span></span>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+                        <span class="beihang-tag val-tag" style="margin-left: 0;">价值: <i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i></span>
+                        <span class="beihang-tag tag-medium" style="margin-left: 0;">难度: 中</span>
+                        <span class="beihang-tag freq-tag" style="margin-left: 0;">考频: 4/5年</span>
+                        <span class="beihang-tag type-tag" style="margin-left: 0;">常考：单选题、多选题</span>
+                    </div>
+                </div>
+                <div class="unit-content">
+                    <div class="practice-item" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 12px 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+                            <div class="item-title" style="margin-bottom: 0;">数据结构与算法</div>
+                            <button class="action-btn-small primary" style="flex-shrink: 0;">练习</button>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <div style="font-size: 12px; color: #8c8c8c; display: flex; align-items: center; gap: 12px;">
+                                <span>进度: <strong style="color: #595959; font-weight: 500;">38/40</strong></span>
+                                <span>正确率: <span class="accuracy-green" style="font-weight: 500;">95%</span></span>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+                                <span class="beihang-tag val-tag" style="margin-left: 0;">价值: <i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i></span>
+                                <span class="beihang-tag tag-medium" style="margin-left: 0;">难度: 中</span>
+                                <span class="beihang-tag freq-tag" style="margin-left: 0;">考频: 4/5年</span>
+                                <span class="beihang-tag type-tag" style="margin-left: 0;">常考：单选题、问答题</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 知识点分类 3 -->
+            <div class="practice-unit">
+                <div class="unit-header" onclick="toggleUnit(this)" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px;">
+                    <div class="unit-title">
+                        <i class="fas fa-chevron-down"></i>
+                        北航专业英语
+                    </div>
+                    <button class="action-btn-small primary">练习</button>
+                </div>
+                <div class="beihang-unit-meta" style="margin-top: 4px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; padding-left: 24px;">
+                    <div style="font-size: 13px; color: #8c8c8c; display: flex; align-items: center; gap: 16px;">
+                        <span>进度: <strong style="color: #262626; font-weight: 500;">18/32</strong></span>
+                        <span>正确率: <span class="accuracy-yellow" style="font-weight: 600;">56.2%</span></span>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+                        <span class="beihang-tag val-tag" style="margin-left: 0;">价值: <i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="far fa-star" style="color: #d9d9d9; font-size: 10px;"></i><i class="far fa-star" style="color: #d9d9d9; font-size: 10px;"></i></span>
+                        <span class="beihang-tag tag-easy" style="margin-left: 0;">难度: 易</span>
+                        <span class="beihang-tag freq-tag" style="margin-left: 0;">考频: 3/5年</span>
+                        <span class="beihang-tag type-tag" style="margin-left: 0;">常考：单选题、多选题</span>
+                    </div>
+                </div>
+                <div class="unit-content">
+                    <div class="practice-item" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 12px 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+                            <div class="item-title" style="margin-bottom: 0;">学术论文阅读理解</div>
+                            <button class="action-btn-small primary" style="flex-shrink: 0;">练习</button>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <div style="font-size: 12px; color: #8c8c8c; display: flex; align-items: center; gap: 12px;">
+                                <span>进度: <strong style="color: #595959; font-weight: 500;">18/32</strong></span>
+                                <span>正确率: <span class="accuracy-yellow" style="font-weight: 500;">56.2%</span></span>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+                                <span class="beihang-tag val-tag" style="margin-left: 0;">价值: <i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="far fa-star" style="color: #d9d9d9; font-size: 10px;"></i><i class="far fa-star" style="color: #d9d9d9; font-size: 10px;"></i></span>
+                                <span class="beihang-tag tag-easy" style="margin-left: 0;">难度: 易</span>
+                                <span class="beihang-tag freq-tag" style="margin-left: 0;">考频: 3/5年</span>
+                                <span class="beihang-tag type-tag" style="margin-left: 0;">常考：单选题、多选题</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 知识点分类 4 -->
+            <div class="practice-unit">
+                <div class="unit-header" onclick="toggleUnit(this)" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px;">
+                    <div class="unit-title">
+                        <i class="fas fa-chevron-down"></i>
+                        线性代数
+                    </div>
+                    <button class="action-btn-small primary">练习</button>
+                </div>
+                <div class="beihang-unit-meta" style="margin-top: 4px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; padding-left: 24px;">
+                    <div style="font-size: 13px; color: #8c8c8c; display: flex; align-items: center; gap: 16px;">
+                        <span>进度: <strong style="color: #262626; font-weight: 500;">12/25</strong></span>
+                        <span>正确率: <span class="accuracy-yellow" style="font-weight: 600;">48%</span></span>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+                        <span class="beihang-tag val-tag" style="margin-left: 0;">价值: <i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="far fa-star" style="color: #d9d9d9; font-size: 10px;"></i></span>
+                        <span class="beihang-tag tag-medium" style="margin-left: 0;">难度: 中</span>
+                        <span class="beihang-tag freq-tag" style="margin-left: 0;">考频: 4/5年</span>
+                        <span class="beihang-tag type-tag" style="margin-left: 0;">常考：单选题、多选题</span>
+                    </div>
+                </div>
+                <div class="unit-content">
+                    <!-- 练习项 -->
+                    <div class="practice-item" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 12px 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+                            <div class="item-title" style="margin-bottom: 0;">矩阵与二次型</div>
+                            <button class="action-btn-small primary" style="flex-shrink: 0;">练习</button>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <div style="font-size: 12px; color: #8c8c8c; display: flex; align-items: center; gap: 12px;">
+                                <span>进度: <strong style="color: #595959; font-weight: 500;">12/25</strong></span>
+                                <span>正确率: <span class="accuracy-yellow" style="font-weight: 500;">48%</span></span>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+                                <span class="beihang-tag val-tag" style="margin-left: 0;">价值: <i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="far fa-star" style="color: #d9d9d9; font-size: 10px;"></i></span>
+                                <span class="beihang-tag tag-medium" style="margin-left: 0;">难度: 中</span>
+                                <span class="beihang-tag freq-tag" style="margin-left: 0;">考频: 4/5年</span>
+                                <span class="beihang-tag type-tag" style="margin-left: 0;">常考：单选题、问答题</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 知识点分类 5 -->
+            <div class="practice-unit">
+                <div class="unit-header" onclick="toggleUnit(this)" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px;">
+                    <div class="unit-title">
+                        <i class="fas fa-chevron-down"></i>
+                        离散数学
+                    </div>
+                    <button class="action-btn-small primary">练习</button>
+                </div>
+                <div class="beihang-unit-meta" style="margin-top: 4px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; padding-left: 24px;">
+                    <div style="font-size: 13px; color: #8c8c8c; display: flex; align-items: center; gap: 16px;">
+                        <span>进度: <strong style="color: #262626; font-weight: 500;">3/40</strong></span>
+                        <span>正确率: <span class="accuracy-red" style="font-weight: 600;">7.5%</span></span>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+                        <span class="beihang-tag val-tag" style="margin-left: 0;">价值: <i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="far fa-star" style="color: #d9d9d9; font-size: 10px;"></i></span>
+                        <span class="beihang-tag tag-hard" style="margin-left: 0;">难度: 难</span>
+                        <span class="beihang-tag freq-tag" style="margin-left: 0;">考频: 2/5年</span>
+                        <span class="beihang-tag type-tag" style="margin-left: 0;">常考：单选题、填空题</span>
+                    </div>
+                </div>
+                <div class="unit-content">
+                    <!-- 练习项 -->
+                    <div class="practice-item" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 12px 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+                            <div class="item-title" style="margin-bottom: 0;">图论与数理逻辑</div>
+                            <button class="action-btn-small primary" style="flex-shrink: 0;">练习</button>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <div style="font-size: 12px; color: #8c8c8c; display: flex; align-items: center; gap: 12px;">
+                                <span>进度: <strong style="color: #595959; font-weight: 500;">3/40</strong></span>
+                                <span>正确率: <span class="accuracy-red" style="font-weight: 500;">7.5%</span></span>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+                                <span class="beihang-tag val-tag" style="margin-left: 0;">价值: <i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i><i class="far fa-star" style="color: #d9d9d9; font-size: 10px;"></i></span>
+                                <span class="beihang-tag tag-hard" style="margin-left: 0;">难度: 难</span>
+                                <span class="beihang-tag freq-tag" style="margin-left: 0;">考频: 2/5年</span>
+                                <span class="beihang-tag type-tag" style="margin-left: 0;">常考：单选题、问答题</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2313,7 +2620,9 @@
         // 展开/折叠单元内容
         function toggleUnit(header) {
             const icon = header.querySelector('i');
-            const content = header.nextElementSibling;
+            const parent = header.closest('.practice-unit') || header.parentElement;
+            const content = parent.querySelector('.unit-content');
+            if (!content) return;
             
             if (icon.classList.contains('fa-chevron-down')) {
                 icon.classList.remove('fa-chevron-down');
@@ -2349,38 +2658,34 @@
         // 练习模式点击事件
         practiceModes.forEach((mode, index) => {
             mode.addEventListener('click', () => {
-                const modes = ['章节练习', '固定刷题', '每日一练', '知识点练习', '历年真题', '统考试卷', '大联考', '估分试卷', 'AI闯关练'];
+                const modes = ['章节练习', '固定刷题', '每日一练', '知识点练习', '北航知识点', '历年真题', '统考试卷', '大联考', '估分试卷', 'AI闯关练'];
                 const modeName = modes[index];
                 console.log('点击练习模式:', modeName);
+                
+                // 缓存当前选中的模块索引
+                localStorage.setItem('tiku_active_practice_mode_index', index);
                 
                 // 更新active类
                 practiceModes.forEach(m => m.classList.remove('active'));
                 mode.classList.add('active');
                 
-                // 显示对应内容
+                // 隐藏所有内容区域
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // 获取对应内容组件
                 const chapterPractice = document.getElementById('chapter-practice');
                 const scorePrediction = document.getElementById('score-prediction');
-                const scorePredictionTitle = scorePrediction.querySelector('.special-title');
-                const scorePredictionBtns = scorePrediction.querySelectorAll('[class^="score-prediction-btn"]');
-                const scorePredictionTimes = scorePrediction.querySelectorAll('.score-prediction-time');
+                const scorePredictionTitle = scorePrediction ? scorePrediction.querySelector('.special-title') : null;
+                const scorePredictionBtns = scorePrediction ? scorePrediction.querySelectorAll('[class^="score-prediction-btn"]') : [];
+                const scorePredictionTimes = scorePrediction ? scorePrediction.querySelectorAll('.score-prediction-time') : [];
                 
                 if (modeName === '章节练习') {
                     chapterPractice.style.display = 'block';
-                    scorePrediction.style.display = 'none';
-                    document.getElementById('past-exams').style.display = 'none';
-                    document.getElementById('daily-practice').style.display = 'none';
-                    document.getElementById('fixed-practice').style.display = 'none';
-                    document.getElementById('ai-practice').style.display = 'none';
-                    document.getElementById('knowledge-practice').style.display = 'none';
                 } else if (modeName === '估分试卷' || modeName === '统考试卷' || modeName === '大联考') {
                     // 点击估分试卷、统考试卷或大联考时显示估分试卷内容
-                    chapterPractice.style.display = 'none';
                     scorePrediction.style.display = 'block';
-                    document.getElementById('past-exams').style.display = 'none';
-                    document.getElementById('daily-practice').style.display = 'none';
-                    document.getElementById('fixed-practice').style.display = 'none';
-                    document.getElementById('ai-practice').style.display = 'none';
-                    document.getElementById('knowledge-practice').style.display = 'none';
                     // 更新标题
                     if (scorePredictionTitle) {
                         scorePredictionTitle.innerHTML = modeName + ' <i class="fas fa-chevron-right" style="font-size: 14px; margin-left: 4px;"></i>' + 
@@ -2436,81 +2741,52 @@
                     });
                     // 控制大联考专用卡片的显示/隐藏
                     const grandExamCards = document.getElementById('grand-exam-cards');
-                    if (modeName === '大联考') {
-                        grandExamCards.style.display = 'block';
-                    } else {
-                        grandExamCards.style.display = 'none';
+                    if (grandExamCards) {
+                        if (modeName === '大联考') {
+                            grandExamCards.style.display = 'block';
+                        } else {
+                            grandExamCards.style.display = 'none';
+                        }
                     }
                     // 控制统考试卷专用卡片的显示/隐藏
                     const unifiedExamCards = document.getElementById('unified-exam-cards');
-                    if (modeName === '统考试卷') {
-                        unifiedExamCards.style.display = 'block';
-                    } else {
-                        unifiedExamCards.style.display = 'none';
+                    if (unifiedExamCards) {
+                        if (modeName === '统考试卷') {
+                            unifiedExamCards.style.display = 'block';
+                        } else {
+                            unifiedExamCards.style.display = 'none';
+                        }
                     }
                     // 控制估分试卷专用卡片的显示/隐藏
                     const scorePredictionCards = document.getElementById('score-prediction-cards');
-                    if (modeName === '估分试卷') {
-                        scorePredictionCards.style.display = 'block';
-                    } else {
-                        scorePredictionCards.style.display = 'none';
+                    if (scorePredictionCards) {
+                        if (modeName === '估分试卷') {
+                            scorePredictionCards.style.display = 'block';
+                        } else {
+                            scorePredictionCards.style.display = 'none';
+                        }
                     }
-                    // 隐藏知识点练习区域
-                    document.getElementById('knowledge-practice').style.display = 'none';
                 } else if (modeName === '历年真题') {
                     // 点击历年真题时显示历年真题内容
-                    chapterPractice.style.display = 'none';
-                    scorePrediction.style.display = 'none';
                     document.getElementById('past-exams').style.display = 'block';
-                    document.getElementById('daily-practice').style.display = 'none';
-                    document.getElementById('fixed-practice').style.display = 'none';
-                    document.getElementById('ai-practice').style.display = 'none';
-                    document.getElementById('knowledge-practice').style.display = 'none';
                 } else if (modeName === '每日一练') {
                     // 点击每日一练时显示每日一练内容
-                    chapterPractice.style.display = 'none';
-                    scorePrediction.style.display = 'none';
-                    document.getElementById('past-exams').style.display = 'none';
                     document.getElementById('daily-practice').style.display = 'block';
-                    document.getElementById('fixed-practice').style.display = 'none';
-                    document.getElementById('ai-practice').style.display = 'none';
-                    document.getElementById('knowledge-practice').style.display = 'none';
                 } else if (modeName === '固定刷题') {
                     // 点击固定刷题时显示固定刷题内容
-                    chapterPractice.style.display = 'none';
-                    scorePrediction.style.display = 'none';
-                    document.getElementById('past-exams').style.display = 'none';
-                    document.getElementById('daily-practice').style.display = 'none';
                     document.getElementById('fixed-practice').style.display = 'block';
-                    document.getElementById('ai-practice').style.display = 'none';
-                    document.getElementById('knowledge-practice').style.display = 'none';
                 } else if (modeName === 'AI闯关练') {
                     // 点击AI闯关练时显示AI闯关练内容
-                    chapterPractice.style.display = 'none';
-                    scorePrediction.style.display = 'none';
-                    document.getElementById('past-exams').style.display = 'none';
-                    document.getElementById('daily-practice').style.display = 'none';
-                    document.getElementById('fixed-practice').style.display = 'none';
                     document.getElementById('ai-practice').style.display = 'block';
-                    document.getElementById('knowledge-practice').style.display = 'none';
                 } else if (modeName === '知识点练习') {
                     // 点击知识点练习时显示知识点练习内容
-                    chapterPractice.style.display = 'none';
-                    scorePrediction.style.display = 'none';
-                    document.getElementById('past-exams').style.display = 'none';
-                    document.getElementById('daily-practice').style.display = 'none';
-                    document.getElementById('fixed-practice').style.display = 'none';
-                    document.getElementById('ai-practice').style.display = 'none';
                     document.getElementById('knowledge-practice').style.display = 'block';
+                } else if (modeName === '北航知识点') {
+                    // 点击北航知识点时显示北航知识点内容
+                    document.getElementById('beihang-knowledge-practice').style.display = 'block';
                 } else {
                     // 其他模式显示章节练习内容
                     chapterPractice.style.display = 'block';
-                    scorePrediction.style.display = 'none';
-                    document.getElementById('past-exams').style.display = 'none';
-                    document.getElementById('daily-practice').style.display = 'none';
-                    document.getElementById('fixed-practice').style.display = 'none';
-                    document.getElementById('ai-practice').style.display = 'none';
-                    document.getElementById('knowledge-practice').style.display = 'none';
                 }
                 
                 // 滑动到中间
@@ -2525,6 +2801,16 @@
                 });
             });
         });
+
+        // 恢复上次选中的练习模式
+        const savedPracticeModeIndex = localStorage.getItem('tiku_active_practice_mode_index');
+        if (savedPracticeModeIndex !== null && practiceModes[savedPracticeModeIndex]) {
+            setTimeout(() => {
+                if (practiceModes[savedPracticeModeIndex]) {
+                    practiceModes[savedPracticeModeIndex].click();
+                }
+            }, 50);
+        }
 
         // 使用事件委托处理点击事件
         document.addEventListener('click', (e) => {
@@ -2551,6 +2837,10 @@
                 console.log('点击导航:', ['首页', '题库', '书城', '学习', '我的'][index]);
                 if (index === 0) {
                     window.location.href = '../index.html';
+                } else if (index === 1) {
+                    window.location.href = 'tiku.html';
+                } else if (index === 4) {
+                    window.location.href = 'mine.html';
                 }
             });
         });

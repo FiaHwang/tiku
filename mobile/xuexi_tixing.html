@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>学习提醒</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // 清理 URL 中的 origin 参数，保持地址栏整洁
+        (function() {
+            const url = new URL(window.location.href);
+            if (url.searchParams.has('origin')) {
+                url.searchParams.delete('origin');
+                const newUrl = url.pathname + url.search + url.hash;
+                window.history.replaceState({}, '', newUrl);
+            }
+        })();
+    </script>
+    <style>
+        html {
+            background-color: #f1f5f9;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #ffffff;
+            max-width: 480px !important;
+            margin: 0 auto !important;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            display: block !important;
+            color: #333333;
+        }
+
+        /* 顶部导航 */
+        .header {
+            position: sticky;
+            top: 0;
+            background-color: #ffffff;
+            z-index: 100;
+            border-bottom: 1px solid #f8fafc;
+        }
+
+        /* 提醒条目样式 */
+        .noti-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background-color 0.2s ease;
+        }
+        .noti-item:active {
+            background-color: #f8fafc;
+        }
+
+        /* 未读点点 */
+        .unread-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ff4d4f;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+            vertical-align: middle;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        .unread-dot.read {
+            transform: scale(0);
+            opacity: 0;
+        }
+
+        /* Toast 气泡 */
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(30, 41, 59, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 1001;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航栏 -->
+    <div class="header flex items-center justify-between px-4 py-3 h-[56px]">
+        <button onclick="window.location.href='xiaoxi.html'" class="flex items-center justify-center w-9 h-9 text-slate-600 active:bg-gray-100 rounded-full transition-colors">
+            <i class="fas fa-chevron-left text-lg"></i>
+        </button>
+        <span class="text-[17px] font-bold text-slate-800 tracking-wide">学习提醒</span>
+        <button onclick="markAllAsRead()" class="flex items-center gap-1.5 text-[13px] text-slate-500 hover:text-red-500 active:scale-95 transition-transform font-medium">
+            <i class="fa-solid fa-paintbrush text-sm"></i>
+            <span>全部已读</span>
+        </button>
+    </div>
+
+    <!-- 提醒消息列表 -->
+    <div class="flex flex-col" id="alerts-container">
+        <!-- 提醒 4 - 预约考试 (大联考) -->
+        <div class="noti-item flex flex-col gap-1.5" onclick="readAlert(this, 4)">
+            <span class="text-xs text-slate-400 font-medium">23年11月11日 12:11</span>
+            <div>
+                <span class="unread-dot" id="dot-4"></span>
+                <span class="text-base font-bold text-slate-800 leading-snug">预约考试提醒</span>
+            </div>
+            <p class="text-[13px] text-slate-600 leading-relaxed pl-3.5">
+                您预约的《2026年北航专业课万人大联考·一模》距离考试还有10分钟！请提前做好准备～
+            </p>
+        </div>
+
+        <!-- 提醒 5 - 预约考试 (统考) -->
+        <div class="noti-item flex flex-col gap-1.5" onclick="readAlert(this, 5)">
+            <span class="text-xs text-slate-400 font-medium">23年11月11日 12:10</span>
+            <div>
+                <span class="unread-dot" id="dot-5"></span>
+                <span class="text-base font-bold text-slate-800 leading-snug">预约估分提醒</span>
+            </div>
+            <p class="text-[13px] text-slate-600 leading-relaxed pl-3.5">
+                您预约的《全国统一考试综合科目估分试卷（一）》距离估分还有10分钟！请提前做好准备～
+            </p>
+        </div>
+
+        <!-- 提醒 1 -->
+        <div class="noti-item flex flex-col gap-1.5" onclick="readAlert(this, 1)">
+            <span class="text-xs text-slate-400 font-medium">23年11月11日 12:12</span>
+            <div>
+                <span class="unread-dot" id="dot-1"></span>
+                <span class="text-base font-bold text-slate-800 leading-snug">直播上课提醒</span>
+            </div>
+            <p class="text-[13px] text-slate-600 leading-relaxed pl-3.5">
+                您的课程《课程名称》-课时名称 将于8月23日 19:00开始直播，请按时上课哦~
+            </p>
+        </div>
+
+        <!-- 提醒 2 -->
+        <div class="noti-item flex flex-col gap-1.5" onclick="readAlert(this, 2)">
+            <span class="text-xs text-slate-400 font-medium">23年11月11日 12:12</span>
+            <div>
+                <span class="unread-dot" id="dot-2"></span>
+                <span class="text-base font-bold text-slate-800 leading-snug">面授上课提醒</span>
+            </div>
+            <p class="text-[13px] text-slate-600 leading-relaxed pl-3.5">
+                您的课程《班次名称》将于8月23日 19:00在上课地点+教室开始上课，请按时上课哦~
+            </p>
+        </div>
+
+        <!-- 提醒 3 -->
+        <div class="noti-item flex flex-col gap-1.5" onclick="readAlert(this, 3)">
+            <span class="text-xs text-slate-400 font-medium">23年11月11日 12:12</span>
+            <div>
+                <span class="unread-dot" id="dot-3"></span>
+                <span class="text-base font-bold text-slate-800 leading-snug">课程更新提醒</span>
+            </div>
+            <p class="text-[13px] text-slate-600 leading-relaxed pl-3.5">
+                您的课程《班次名称》将于8月23日 19:00在上课地点+教室开始上课，请按时上课哦~
+            </p>
+        </div>
+    </div>
+
+    <!-- Toast 弹窗 -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // 初始化读取状态
+        const alertReadStates = JSON.parse(localStorage.getItem('alerts_read_states') || '{}');
+
+        // 应用初始化状态：检查是否已被读
+        for (let i = 1; i <= 5; i++) {
+            if (alertReadStates[i]) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (dot) dot.classList.add('read');
+            }
+        }
+
+        function showToast(text) {
+            const t = document.getElementById('toast');
+            t.innerText = text;
+            t.classList.add('show');
+            setTimeout(() => {
+                t.classList.remove('show');
+            }, 1800);
+        }
+
+        function readAlert(element, id) {
+            const dot = document.getElementById(`dot-${id}`);
+            if (dot && !dot.classList.contains('read')) {
+                dot.classList.add('read');
+                alertReadStates[id] = true;
+                localStorage.setItem('alerts_read_states', JSON.stringify(alertReadStates));
+                showToast('已标记该提醒为已读');
+            }
+        }
+
+        function markAllAsRead() {
+            let hasUnread = false;
+            for (let i = 1; i <= 5; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (dot && !dot.classList.contains('read')) {
+                    dot.classList.add('read');
+                    alertReadStates[i] = true;
+                    hasUnread = true;
+                }
+            }
+            if (hasUnread) {
+                localStorage.setItem('alerts_read_states', JSON.stringify(alertReadStates));
+                showToast('已将所有提醒消息标记为已读');
+            } else {
+                showToast('暂无未读消息');
+            }
+        }
+    </script>
+</body>
+</html>

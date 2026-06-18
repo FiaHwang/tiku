@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>消息中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // 清理 URL 中的 origin 参数，保持地址栏整洁
+        (function() {
+            const url = new URL(window.location.href);
+            if (url.searchParams.has('origin')) {
+                url.searchParams.delete('origin');
+                const newUrl = url.pathname + url.search + url.hash;
+                window.history.replaceState({}, '', newUrl);
+            }
+        })();
+    </script>
+    <style>
+        html {
+            background-color: #f1f5f9;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #ffffff;
+            max-width: 480px !important;
+            margin: 0 auto !important;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            display: block !important;
+        }
+
+        /* 顶部导航栏固定 */
+        .header {
+            position: sticky;
+            top: 0;
+            background-color: #ffffff;
+            z-index: 100;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        /* 消息列表容器 */
+        .message-list {
+            padding: 8px 0;
+        }
+
+        .message-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border-bottom: 1px solid #f8fafc;
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .message-item:active {
+            background-color: #f8fafc;
+        }
+
+        /* 未读徽章动画 */
+        .badge {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .badge.hide {
+            transform: scale(0);
+            opacity: 0;
+        }
+
+        /* 弹窗消息 */
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(30, 41, 59, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 1001;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* 弹出设置层动画 */
+        .settings-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .settings-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .settings-panel {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, 100%);
+            width: 100%;
+            max-width: 480px;
+            background-color: #ffffff;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 24px 20px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        }
+        .settings-overlay.show .settings-panel {
+            transform: translate(-50%, 0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航栏 -->
+    <div class="header flex items-center justify-between px-4 py-4.5 h-[56px]">
+        <button onclick="window.location.href='mine.html'" class="flex items-center justify-center w-9 h-9 border border-gray-100 rounded-full text-slate-600 active:bg-gray-100 transition-colors">
+            <i class="fas fa-chevron-left text-lg"></i>
+        </button>
+        <span class="text-[17px] font-bold text-slate-800 tracking-wide">消息中心</span>
+        <div class="flex items-center gap-6">
+            <!-- 一键已读字样/刷子图标 -->
+            <button onclick="markAllAsRead()" class="flex items-center justify-center text-slate-500 hover:text-red-500 active:scale-95 transition-transform" title="全部已读">
+                <i class="fa-solid fa-paintbrush text-lg"></i>
+            </button>
+            <!-- 设置按钮 -->
+            <button onclick="toggleSettings(true)" class="flex items-center justify-center text-slate-500 hover:text-slate-800 active:scale-95 transition-transform">
+                <i class="fa-solid fa-gear text-lg"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 消息列表 -->
+    <div class="message-list flex flex-col" id="message-container">
+        <!-- 学习提醒 -->
+        <div class="message-item" onclick="openLearningAlerts()">
+            <div class="flex items-center gap-4.5 flex-1">
+                <div class="relative flex-shrink-0">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-blue-500">
+                        <i class="fa-solid fa-graduation-cap text-xl"></i>
+                    </div>
+                    <span id="badge-1" class="badge absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-[18px] h-[18px] flex items-center justify-center rounded-full leading-none border border-white">3</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <span class="text-sm font-bold text-slate-800">学习提醒</span>
+                    <span class="text-xs text-slate-500 line-clamp-1">直播提醒</span>
+                </div>
+            </div>
+            <div class="text-xs text-slate-400 font-medium ml-4">
+                23年11月11日 12:12
+            </div>
+        </div>
+
+        <!-- 交易提醒 -->
+        <div class="message-item" onclick="readMsg(2)">
+            <div class="flex items-center gap-4.5 flex-1">
+                <div class="relative flex-shrink-0">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-orange-400">
+                        <i class="fa-solid fa-credit-card text-xl"></i>
+                    </div>
+                    <span id="badge-2" class="badge absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-[18px] h-[18px] flex items-center justify-center rounded-full leading-none border border-white">3</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <span class="text-sm font-bold text-slate-800">交易提醒</span>
+                    <span class="text-xs text-slate-500 line-clamp-1">支付成功</span>
+                </div>
+            </div>
+            <div class="text-xs text-slate-400 font-medium ml-4">
+                23年11月11日 12:12
+            </div>
+        </div>
+
+        <!-- 活动提醒 -->
+        <div class="message-item" onclick="readMsg(3)">
+            <div class="flex items-center gap-4.5 flex-1">
+                <div class="relative flex-shrink-0">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-pink-500">
+                        <i class="fa-solid fa-gift text-xl"></i>
+                    </div>
+                    <span id="badge-3" class="badge absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-[18px] h-[18px] flex items-center justify-center rounded-full leading-none border border-white">3</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <span class="text-sm font-bold text-slate-800">活动提醒</span>
+                    <span class="text-xs text-slate-500 line-clamp-1">拼团成功</span>
+                </div>
+            </div>
+            <div class="text-xs text-slate-400 font-medium ml-4">
+                23年11月11日 12:12
+            </div>
+        </div>
+
+        <!-- 系统公告 -->
+        <div class="message-item" onclick="readMsg(4)">
+            <div class="flex items-center gap-4.5 flex-1">
+                <div class="relative flex-shrink-0">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-purple-500">
+                        <i class="fa-solid fa-bullhorn text-xl"></i>
+                    </div>
+                    <span id="badge-4" class="badge absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-[18px] h-[18px] flex items-center justify-center rounded-full leading-none border border-white">3</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <span class="text-sm font-bold text-slate-800">系统公告</span>
+                    <span class="text-xs text-slate-500 line-clamp-1">因版本升级，在9:00-12:00不可用</span>
+                </div>
+            </div>
+            <div class="text-xs text-slate-400 font-medium ml-4">
+                23年11月11日 12:12
+            </div>
+        </div>
+
+        <!-- 精选活动 -->
+        <div class="message-item" onclick="readMsg(5)">
+            <div class="flex items-center gap-4.5 flex-1">
+                <div class="relative flex-shrink-0">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-red-500">
+                        <i class="fa-solid fa-fire text-xl"></i>
+                    </div>
+                    <span id="badge-5" class="badge absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-[18px] h-[18px] flex items-center justify-center rounded-full leading-none border border-white">3</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <span class="text-sm font-bold text-slate-800">精选活动</span>
+                    <span class="text-xs text-slate-500 line-clamp-1">尊敬的客户，现邀请您参与大赢家活动，活动...</span>
+                </div>
+            </div>
+            <div class="text-xs text-slate-400 font-medium ml-4">
+                23年11月11日 12:12
+            </div>
+        </div>
+    </div>
+
+    <!-- 消息接收设置侧滑/上拉层 -->
+    <div id="settings-modal" class="settings-overlay flex items-end justify-center" onclick="toggleSettings(false)">
+        <div class="settings-panel flex flex-col gap-5" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+                <h4 class="text-base font-bold text-slate-800">通知接收设置</h4>
+                <button onclick="toggleSettings(false)" class="text-slate-400 text-sm font-semibold active:text-slate-700">完成</button>
+            </div>
+            <div class="flex flex-col gap-4">
+                <!-- 学习消息开关 -->
+                <div class="flex justify-between items-center">
+                    <div class="flex flex-col">
+                        <span class="text-sm font-semibold text-slate-700">学习提醒</span>
+                        <span class="text-xs text-slate-400">直播与排课重要通知</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" checked class="sr-only peer" onchange="toggleNotify('study', this)">
+                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
+                    </label>
+                </div>
+
+                <!-- 订单消息开关 -->
+                <div class="flex justify-between items-center">
+                    <div class="flex flex-col">
+                        <span class="text-sm font-semibold text-slate-700">交易及发货消息</span>
+                        <span class="text-xs text-slate-400">订单产生、修改或发货时的极速告知</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" checked class="sr-only peer" onchange="toggleNotify('trade', this)">
+                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
+                    </label>
+                </div>
+
+                <!-- 升级维护公告开关 -->
+                <div class="flex justify-between items-center">
+                    <div class="flex flex-col">
+                        <span class="text-sm font-semibold text-slate-700">系统维护公告</span>
+                        <span class="text-xs text-slate-400">平台因升级影响服务的通知</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" checked class="sr-only peer" onchange="toggleNotify('system', this)">
+                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 简易Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // 初始化状态
+        const readStates = JSON.parse(localStorage.getItem('messages_read') || '{}');
+
+        // 应用初始化状态：检查是否已被读
+        for (let i = 1; i <= 5; i++) {
+            if (readStates[i]) {
+                const badge = document.getElementById(`badge-${i}`);
+                if (badge) badge.classList.add('hide');
+            }
+        }
+
+        function showToast(text) {
+            const t = document.getElementById('toast');
+            t.innerText = text;
+            t.classList.add('show');
+            setTimeout(() => {
+                t.classList.remove('show');
+            }, 1800);
+        }
+
+        function openLearningAlerts() {
+            const badge = document.getElementById('badge-1');
+            if (badge && !badge.classList.contains('hide')) {
+                badge.classList.add('hide');
+                readStates[1] = true;
+                localStorage.setItem('messages_read', JSON.stringify(readStates));
+            }
+            window.location.href = 'xuexi_tixing.html';
+        }
+
+        function readMsg(id) {
+            const badge = document.getElementById(`badge-${id}`);
+            if (badge && !badge.classList.contains('hide')) {
+                badge.classList.add('hide');
+                readStates[id] = true;
+                localStorage.setItem('messages_read', JSON.stringify(readStates));
+                showToast('已标记该条消息为已读');
+            } else {
+                showToast('该条消息已阅读过');
+            }
+        }
+
+        function markAllAsRead() {
+            let hasUnread = false;
+            for (let i = 1; i <= 5; i++) {
+                const badge = document.getElementById(`badge-${i}`);
+                if (badge && !badge.classList.contains('hide')) {
+                    badge.classList.add('hide');
+                    readStates[i] = true;
+                    hasUnread = true;
+                }
+            }
+            if (hasUnread) {
+                localStorage.setItem('messages_read', JSON.stringify(readStates));
+                showToast('消息已全部置为已读');
+            } else {
+                showToast('暂无未读消息');
+            }
+        }
+
+        function toggleSettings(show) {
+            const modal = document.getElementById('settings-modal');
+            if (show) {
+                modal.classList.add('show');
+            } else {
+                modal.classList.remove('show');
+            }
+        }
+
+        function toggleNotify(type, checkbox) {
+            localStorage.setItem(`notify_${type}`, checkbox.checked);
+            showToast(`${checkbox.checked ? '已开启' : '已关闭'}相关通知频道的精准接收`);
+        }
+    </script>
+</body>
+</html>

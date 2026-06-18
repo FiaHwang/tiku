@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>智能规划</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // 清理 URL 中的 origin 参数，保持地址栏整洁
+        (function() {
+            const url = new URL(window.location.href);
+            if (url.searchParams.has('origin')) {
+                url.searchParams.delete('origin');
+                const newUrl = url.pathname + url.search + url.hash;
+                window.history.replaceState({}, '', newUrl);
+            }
+        })();
+    </script>
+    <style>
+        /* 重置样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f8f9fc;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 56px;
+            padding: 0 16px;
+            background-color: #fff;
+            border-bottom: 1px solid #f1f5f9;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            font-size: 18px;
+            color: #475569;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 101;
+        }
+
+        .back-btn:active {
+            opacity: 0.7;
+        }
+
+        .header-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        /* 顶级跳转按钮区 */
+        .top-action-bar {
+            padding: 12px 16px 4px 16px;
+        }
+
+        .skip-page-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 16px;
+            border: 1px dashed #1890ff;
+            border-radius: 8px;
+            background-color: #e6f7ff;
+            font-size: 14px;
+            color: #1890ff;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .skip-page-btn:active {
+            background-color: #bae7ff;
+        }
+
+        /* 列表区域 */
+        .points-list {
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+        }
+
+        /* 知识点卡片，样式与北航知识点列表中样式相同 */
+        .point-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.01);
+            border: 1px solid #e2e8f0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        /* 当前学习知识点高亮式样 */
+        .point-card.current {
+            border-color: #1890ff;
+            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.12);
+            background-color: #f0f7ff;
+        }
+
+        .point-card.current::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: #1890ff;
+        }
+
+        .point-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .point-title-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            flex: 1;
+        }
+
+        /* 序号标记 */
+        .serial-num {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 15px;
+            font-weight: 700;
+            color: #94a3b8;
+            background-color: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            flex-shrink: 0;
+            text-align: center;
+        }
+
+        .point-card.current .serial-num {
+            color: #1890ff;
+            background-color: #e6f7ff;
+        }
+
+        .point-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1e293b;
+            line-height: 1.4;
+        }
+
+        .point-card.current .point-title {
+            color: #0050b3;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        /* 原北航系统tag样式 */
+        .beihang-tag {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: normal;
+            display: inline-block;
+            vertical-align: middle;
+            border: 1px solid transparent;
+        }
+
+        .beihang-tag.val-tag {
+            color: #d46b08;
+            background-color: #fff7e6;
+            border-color: #ffd591;
+        }
+
+        .beihang-tag.tag-hard {
+            color: #cf1322;
+            background-color: #fff1f0;
+            border-color: #ffa39e;
+        }
+
+        .beihang-tag.tag-medium {
+            color: #d46b08;
+            background-color: #fff7e6;
+            border-color: #ffd591;
+        }
+
+        .beihang-tag.tag-easy {
+            color: #389e0d;
+            background-color: #f6ffed;
+            border-color: #b7eb8f;
+        }
+
+        .beihang-tag.freq-tag {
+            color: #096dd9;
+            background-color: #e6f7ff;
+            border-color: #91d5ff;
+        }
+
+        .beihang-tag.type-tag {
+            color: #722ed1;
+            background-color: #f9f0ff;
+            border-color: #d3adf7;
+        }
+
+        /* 当前学习标签 */
+        .beihang-tag.learning-tag {
+            color: #fff;
+            background-color: #1890ff;
+            border-color: #1890ff;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(24, 144, 255, 0.2);
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                opacity: 0.9;
+            }
+            50% {
+                opacity: 1;
+                box-shadow: 0 2px 8px rgba(24, 144, 255, 0.4);
+            }
+            100% {
+                opacity: 0.9;
+            }
+        }
+
+        /* 正确率进度信息 */
+        .point-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .accuracy-green {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+            height: 30px;
+        }
+
+        .btn-primary {
+            background-color: #ff4d4f;
+            color: #white;
+            border: 1px solid #ff4d4f;
+            color: #fff;
+            padding: 0 14px;
+        }
+
+        .btn-primary:active {
+            background-color: #d9363e;
+            border-color: #d9363e;
+        }
+
+        .btn-outline-danger {
+            background-color: #fff;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+            padding: 0 10px;
+        }
+
+        .btn-outline-danger:active {
+            background-color: #fff1f0;
+            color: #ff4d4f;
+            border-color: #ffa39e;
+        }
+
+        /* 空列表状态 */
+        .empty-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+            color: #94a3b8;
+            flex: 1;
+        }
+
+        .empty-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+            color: #cbd5e1;
+        }
+
+        .toast-msg {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background-color: rgba(30, 41, 59, 0.9);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .toast-msg.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="header">
+        <button class="back-btn" onclick="window.location.href='tiku.html'"><i class="fas fa-chevron-left"></i></button>
+        <span class="header-title">智能规划</span>
+    </div>
+
+    <!-- 顶层跳转按钮区 -->
+    <div class="top-action-bar">
+        <button class="skip-page-btn" onclick="window.location.href='tiaoguo_zhishidian.html'">
+            <i class="fas fa-eye-slash"></i> 查看已跳过的知识点
+        </button>
+    </div>
+
+    <!-- 列表区域 -->
+    <div class="points-list" id="pointsListContainer">
+        <!-- 动态生成 -->
+    </div>
+
+    <!-- 弹窗消息 -->
+    <div class="toast-msg" id="toastMsg"></div>
+
+    <script>
+        const defaultKnowledgePoints = [
+            {id: 1, title: "微积分与级数基础", difficulty: "难", freq: "5/5年", types: ["单选题", "多选题"], stars: 5, skipped: false, progress: "28/45", rate: "62.2%"},
+            {id: 2, title: "数据结构与算法", difficulty: "中", freq: "4/5年", types: ["单选题", "多选题"], stars: 5, skipped: false, progress: "15/30", rate: "75%"},
+            {id: 3, title: "学术论文阅读理解", difficulty: "中", freq: "4/5年", types: ["单选题", "问答题"], stars: 4, skipped: false, progress: "18/25", rate: "80%"},
+            {id: 4, title: "矩阵与二次型", difficulty: "易", freq: "3/5年", types: ["单选题", "多选题"], stars: 3, skipped: false, progress: "10/10", rate: "100%"},
+            {id: 5, title: "图论与数理逻辑", difficulty: "难", freq: "2/5年", types: ["单选题", "问答题"], stars: 4, skipped: false, progress: "5/15", rate: "50%"},
+            {id: 6, title: "线性代数与向量空间", difficulty: "中", freq: "3/5年", types: ["单选题", "填空题"], stars: 3, skipped: false, progress: "0/20", rate: "0%"},
+            {id: 7, title: "操作系统与底层编译", difficulty: "难", freq: "4/5年", types: ["单选题", "问答题"], stars: 5, skipped: false, progress: "2/12", rate: "41.6%"},
+            {id: 8, title: "逻辑句法与真值表", difficulty: "易", freq: "2/5年", types: ["单选题", "多选题"], stars: 2, skipped: false, progress: "7/10", rate: "90%"},
+            {id: 9, title: "人工智能与神经网络", difficulty: "中", freq: "5/5年", types: ["单选题", "问答题"], stars: 4, skipped: false, progress: "0/15", rate: "0%"},
+            {id: 10, title: "概率论与数理统计", difficulty: "中", freq: "4/5年", types: ["单选题", "填空题"], stars: 4, skipped: false, progress: "12/20", rate: "85%"}
+        ];
+
+        function getPoints() {
+            let pts = localStorage.getItem('beihang_points');
+            if (!pts) {
+                localStorage.setItem('beihang_points', JSON.stringify(defaultKnowledgePoints));
+                pts = JSON.stringify(defaultKnowledgePoints);
+            }
+            return JSON.parse(pts);
+        }
+
+        function savePoints(pts) {
+            localStorage.setItem('beihang_points', JSON.stringify(pts));
+        }
+
+        function getCurrentId() {
+            let cid = localStorage.getItem('beihang_current_id');
+            if (!cid) {
+                cid = '1';
+                localStorage.setItem('beihang_current_id', cid);
+            }
+            return parseInt(cid);
+        }
+
+        function setCurrentId(id) {
+            localStorage.setItem('beihang_current_id', id.toString());
+        }
+
+        // 显示Toast
+        function showToast(text, iconClass = "fa-check-circle") {
+            const toast = document.getElementById('toastMsg');
+            toast.innerHTML = `<i class="fas ${iconClass}"></i> ${text}`;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // 切换当前学习点
+        function selectCurrent(e, id) {
+            // 避免按钮点击也触发选择
+            if (e.target.closest('button')) return;
+            setCurrentId(id);
+            renderList();
+            showToast("已切换当前学习知识点");
+        }
+
+        // 跳过某项
+        function skipItem(id) {
+            let pts = getPoints();
+            let item = pts.find(p => p.id === id);
+            if (item) {
+                item.skipped = true;
+                
+                // 如果跳过的是当前学习项，找下一个未跳过的项作为当前学习项
+                let currentId = getCurrentId();
+                if (currentId === id) {
+                    let nextActive = pts.find(p => !p.skipped && p.id !== id);
+                    if (nextActive) {
+                        setCurrentId(nextActive.id);
+                    } else {
+                        localStorage.removeItem('beihang_current_id');
+                    }
+                }
+                
+                savePoints(pts);
+                renderList();
+                showToast(`已跳过《${item.title}》`, "fa-eye-slash");
+            }
+        }
+
+        // 重复点击进入练习
+        function startPractice(title) {
+            window.location.href = `dati_yemian.html?mode=beihang&title=${encodeURIComponent(title)}`;
+        }
+
+        function renderList() {
+            const container = document.getElementById('pointsListContainer');
+            const data = getPoints();
+            const currentId = getCurrentId();
+
+            // 过滤出未跳过的点
+            const activeList = data.filter(p => !p.skipped);
+
+            if (activeList.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-container">
+                        <i class="fas fa-clipboard-check empty-icon"></i>
+                        <p style="font-size: 15px; font-weight: 500; margin-bottom: 6px;">规划列表已空</p>
+                        <p style="font-size: 12px; color: #94a3b8;">所有知识点均被学习或跳过</p>
+                        <button onclick="resetAll()" class="btn btn-outline" style="margin-top: 18px; border: 1px solid #d9d9d9; padding: 6px 16px; border-radius: 6px; font-size: 13px; color: #595959; background: #fff;">重置所有知识点</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '';
+            
+            // 检查当前学习点是否在这些未跳过项中，如果由于外部修改丢失，重新设一个
+            const hasCurrentActive = activeList.some(p => p.id === currentId);
+            let finalCurrentId = currentId;
+            if (!hasCurrentActive && activeList.length > 0) {
+                finalCurrentId = activeList[0].id;
+                setCurrentId(finalCurrentId);
+            }
+
+            activeList.forEach((point, index) => {
+                const isCurrent = point.id === finalCurrentId;
+                
+                // 计算序号 格式为 "01", "02"
+                const displayIndex = String(index + 1).padStart(2, '0');
+
+                // 难度对应标签
+                let diffTagClass = 'tag-medium';
+                if (point.difficulty === '难') {
+                    diffTagClass = 'tag-hard';
+                } else if (point.difficulty === '易') {
+                    diffTagClass = 'tag-easy';
+                }
+
+                // 颗星
+                let starsHTML = '';
+                for (let s = 0; s < 5; s++) {
+                    if (s < point.stars) {
+                        starsHTML += '<i class="fas fa-star" style="color: #ffca28; font-size: 10px;"></i>';
+                    } else {
+                        starsHTML += '<i class="far fa-star" style="color: #d9d9d9; font-size: 10px;"></i>';
+                    }
+                }
+
+                // 常考题型拼接
+                const typeText = "常考：" + point.types.join('、');
+
+                const cardDiv = document.createElement('div');
+                cardDiv.className = `point-card ${isCurrent ? 'current' : ''}`;
+                cardDiv.onclick = (e) => selectCurrent(e, point.id);
+                
+                cardDiv.innerHTML = `
+                    <div class="point-header">
+                        <div class="point-title-container">
+                            <span class="serial-num">${displayIndex}</span>
+                            <span class="point-title">${point.title}</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-outline-danger" onclick="skipItem(${point.id})">跳过</button>
+                            <button class="btn btn-primary" onclick="startPractice('${point.title}')">练习</button>
+                        </div>
+                    </div>
+                    <div style="padding-left: 32px; display: flex; flex-direction: column; gap: 6px;">
+                        <div class="point-meta-row">
+                            <span>进度: <strong style="color: #475569; font-weight: 500;">${point.progress}</strong></span>
+                            <span>正确率: <span class="accuracy-green">${point.rate}</span></span>
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+                            <span class="beihang-tag val-tag" style="margin-left: 0;">价值: ${starsHTML}</span>
+                            <span class="beihang-tag ${diffTagClass}" style="margin-left: 0;">难度: ${point.difficulty}</span>
+                            <span class="beihang-tag freq-tag" style="margin-left: 0;">考频: ${point.freq}</span>
+                            <span class="beihang-tag type-tag" style="margin-left: 0;">${typeText}</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(cardDiv);
+            });
+        }
+
+        function resetAll() {
+            localStorage.setItem('beihang_points', JSON.stringify(defaultKnowledgePoints));
+            localStorage.setItem('beihang_current_id', '1');
+            renderList();
+            showToast("已成功重置所有知识点状态");
+        }
+
+        // 第一次载入
+        window.onload = function() {
+            renderList();
+        };
+    </script>
+</body>
+</html>

@@ -48,7 +48,8 @@
             padding: 0 16px;
             background-color: #fff;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-            position: relative;
+            position: sticky;
+            top: 0;
             z-index: 100;
         }
 
@@ -331,6 +332,193 @@
                 bottom: 4px;
             }
         }
+
+        /* 子Tab导航栏 */
+        .sub-tabs-container {
+            display: flex;
+            background-color: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 56px;
+            z-index: 99;
+        }
+
+        .sub-tab {
+            flex: 1;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 500;
+            color: #64748b;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .sub-tab:active {
+            background-color: #f8fafc;
+        }
+
+        .sub-tab.active {
+            color: #ff4d4f;
+            font-weight: 600;
+        }
+
+        .sub-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 3px;
+            background-color: #ff4d4f;
+            border-radius: 99px;
+        }
+
+        /* 练习历史卡片样式 (按模块) */
+        .history-list {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .history-card {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .history-card:active {
+            transform: scale(0.99);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 12px;
+            border-bottom: none;
+            padding: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .card-title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .module-badge {
+            font-size: 11px;
+            color: #ff4d4f;
+            background-color: #fff1f0;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            display: inline-block;
+            align-self: flex-start;
+            border: 1px solid #ffccc7;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1e293b;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .status-badge {
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-uncompleted {
+            color: #eab308;
+        }
+
+        .status-completed {
+            color: #10b981;
+        }
+
+        .status-reviewing {
+            color: #f87171;
+        }
+
+        .status-reviewed {
+            color: #22c55e;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            border-top: 1px dashed #f1f5f9;
+            padding-top: 12px;
+            background: transparent;
+        }
+
+        .card-time {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .action-btn {
+            border: none;
+            outline: none;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-continue {
+            background-color: #3b82f6;
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 100px;
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
+        }
+
+        .btn-continue:active {
+            background-color: #2563eb;
+            transform: translateY(0.5px);
+        }
+
+        .btn-report {
+            background-color: #f1f5f9;
+            color: #475569;
+            padding: 6px 16px;
+            border-radius: 100px;
+        }
+
+        .btn-report:active {
+            background-color: #e2e8f0;
+        }
     </style>
 </head>
 <body>
@@ -344,69 +532,176 @@
         </div>
     </header>
 
+    <!-- 子Tab导航栏 -->
+    <div class="sub-tabs-container">
+        <div class="sub-tab active" id="sub-tab-module" onclick="switchSubTab('module')">按模块</div>
+        <div class="sub-tab" id="sub-tab-type" onclick="switchSubTab('type')">按题型</div>
+    </div>
+
     <!-- 提示信息 -->
-    <div class="tip">*仅展示所选目标下近一年的数据</div>
+    <div class="tip" id="tip-info">*仅展示所选目标下近一年的数据</div>
 
-    <!-- 错题分类容器 -->
-    <div class="error-category-container">
-        <div class="error-category-grid">
-            <!-- 单选题 -->
-            <div class="error-category-card">
-                <div class="error-category-title">单选题</div>
-                <div class="error-category-count">共9999道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
+    <!-- 1. 按模块内容 (默认显示) -->
+    <div class="sub-tab-content" id="content-module">
+        <div class="history-list">
+            <!-- 1. 章节练习 -->
+            <div class="history-card" onclick="viewAnalysis('章节练习');">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <span class="module-badge" style="color: #3b82f6; background-color: #eff6ff; border-color: #bfdbfe;">章节练习</span>
+                        <span class="card-title">第一章：文言文阅读与实词虚词推断</span>
+                    </div>
+                    <span class="status-badge status-completed">已完成</span>
+                </div>
+                <div class="card-footer">
+                    <span class="card-time">今天 14:30</span>
+                    <button class="action-btn btn-report" onclick="event.stopPropagation(); viewAnalysis('章节练习');">查看解析</button>
+                </div>
             </div>
 
-            <!-- 多选题 -->
-            <div class="error-category-card">
-                <div class="error-category-title">多选题</div>
-                <div class="error-category-count">共8888道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
+            <!-- 2. 每日一练 -->
+            <div class="history-card" onclick="viewAnalysis('每日一练');">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <span class="module-badge" style="color: #10b981; background-color: #ecfdf5; border-color: #a7f3d0;">每日一练</span>
+                        <span class="card-title">2026年6月17日 基础语基与古诗词鉴赏专项</span>
+                    </div>
+                    <span class="status-badge status-completed">已完成</span>
+                </div>
+                <div class="card-footer">
+                    <span class="card-time">今天 08:15</span>
+                    <button class="action-btn btn-report" onclick="event.stopPropagation(); viewAnalysis('每日一练');">查看解析</button>
+                </div>
             </div>
 
-            <!-- 不定项选择题 -->
-            <div class="error-category-card">
-                <div class="error-category-title">不定项选择题</div>
-                <div class="error-category-count">共7777道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
+            <!-- 3. 历年真题 -->
+            <div class="history-card" onclick="startPractice('历年真题');">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <span class="module-badge" style="color: #eab308; background-color: #fef9c3; border-color: #fef08a;">历年真题</span>
+                        <span class="card-title">2025年高考语文全国甲卷全真套卷训练</span>
+                    </div>
+                    <span class="status-badge status-uncompleted">未完成</span>
+                </div>
+                <div class="card-footer">
+                    <span class="card-time">昨天 16:45</span>
+                    <button class="action-btn btn-continue" onclick="event.stopPropagation(); startPractice('历年真题');">继续答题</button>
+                </div>
             </div>
 
-            <!-- 判断题 -->
-            <div class="error-category-card">
-                <div class="error-category-title">判断题</div>
-                <div class="error-category-count">共6666道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
+            <!-- 4. 大联考 -->
+            <div class="history-card" onclick="viewReport('大联考');">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <span class="module-badge" style="color: #f43f5e; background-color: #fff1f2; border-color: #fecdd3;">大联考</span>
+                        <span class="card-title">2026届卓越联盟联合学业水准测试语文试卷</span>
+                    </div>
+                    <span class="status-badge status-reviewing">AI批改中</span>
+                </div>
+                <div class="card-footer">
+                    <span class="card-time">2026年6月12日</span>
+                    <button class="action-btn btn-report" onclick="event.stopPropagation(); viewReport('大联考');">查看报告</button>
+                </div>
             </div>
 
-            <!-- 填空题 -->
-            <div class="error-category-card">
-                <div class="error-category-title">填空题</div>
-                <div class="error-category-count">共5555道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
+            <!-- 5. 估分试卷 -->
+            <div class="history-card" onclick="viewReport('估分试卷');">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <span class="module-badge" style="color: #8b5cf6; background-color: #f5f3ff; border-color: #ddd6fe;">估分试卷</span>
+                        <span class="card-title">2026年高考语文考前押题与估分预测卷（一）</span>
+                    </div>
+                    <span class="status-badge status-completed">已完成</span>
+                </div>
+                <div class="card-footer">
+                    <span class="card-time">2026年6月01日</span>
+                    <button class="action-btn btn-report" onclick="event.stopPropagation(); viewReport('估分试卷');">查看报告</button>
+                </div>
             </div>
 
-            <!-- 问答题 -->
-            <div class="error-category-card">
-                <div class="error-category-title">问答题</div>
-                <div class="error-category-count">共4444道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
-            </div>
-
-            <!-- 材料题 -->
-            <div class="error-category-card">
-                <div class="error-category-title">材料题</div>
-                <div class="error-category-count">共3333道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
+            <!-- 6. 统考试卷 -->
+            <div class="history-card" onclick="viewReport('统考试卷');">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <span class="module-badge" style="color: #0d9488; background-color: #f0fdfa; border-color: #ccfbf1;">统考试卷</span>
+                        <span class="card-title">2026年普通高等学校招生全国统一考试高三学业诊断（一）</span>
+                    </div>
+                    <span class="status-badge status-reviewed">AI批改完成</span>
+                </div>
+                <div class="card-footer">
+                    <span class="card-time">2026年5月28日</span>
+                    <button class="action-btn btn-report" onclick="event.stopPropagation(); viewReport('统考试卷');">查看报告</button>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- 2. 按题型内容 (默认隐藏) -->
+    <div class="sub-tab-content" id="content-type" style="display: none;">
+        <!-- 错题分类容器 -->
+        <div class="error-category-container">
+            <div class="error-category-grid">
+                <!-- 单选题 -->
+                <div class="error-category-card">
+                    <div class="error-category-title">单选题</div>
+                    <div class="error-category-count">共9999道</div>
+                    <button class="view-btn">查看</button>
+                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
+                </div>
+
+                <!-- 多选题 -->
+                <div class="error-category-card">
+                    <div class="error-category-title">多选题</div>
+                    <div class="error-category-count">共8888道</div>
+                    <button class="view-btn">查看</button>
+                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
+                </div>
+
+                <!-- 不定项选择题 -->
+                <div class="error-category-card">
+                    <div class="error-category-title">不定项选择题</div>
+                    <div class="error-category-count">共7777道</div>
+                    <button class="view-btn">查看</button>
+                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
+                </div>
+
+                <!-- 判断题 -->
+                <div class="error-category-card">
+                    <div class="error-category-title">判断题</div>
+                    <div class="error-category-count">共6666道</div>
+                    <button class="view-btn">查看</button>
+                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
+                </div>
+
+                <!-- 填空题 -->
+                <div class="error-category-card">
+                    <div class="error-category-title">填空题</div>
+                    <div class="error-category-count">共5555道</div>
+                    <button class="view-btn">查看</button>
+                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
+                </div>
+
+                <!-- 问答题 -->
+                <div class="error-category-card">
+                    <div class="error-category-title">问答题</div>
+                    <div class="error-category-count">共4444道</div>
+                    <button class="view-btn">查看</button>
+                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
+                </div>
+
+                <!-- 材料题 -->
+                <div class="error-category-card">
+                    <div class="error-category-title">材料题</div>
+                    <div class="error-category-count">共3333道</div>
+                    <button class="view-btn">查看</button>
+                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- toast 提示 -->
+    <div id="toast" style="position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px); background-color: rgba(30, 41, 59, 0.9); color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 13px; z-index: 999; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.16); white-space: nowrap;"></div>
 
     <script>
         // DOM元素获取
@@ -414,16 +709,44 @@
         const viewBtns = document.querySelectorAll('.view-btn');
         const backBtn = document.querySelector('.back-btn');
 
+        // 子Tab切换功能
+        function switchSubTab(type) {
+            const tabModule = document.getElementById('sub-tab-module');
+            const tabType = document.getElementById('sub-tab-type');
+            const contentModule = document.getElementById('content-module');
+            const contentType = document.getElementById('content-type');
+
+            if (type === 'module') {
+                tabModule.classList.add('active');
+                tabType.classList.remove('active');
+                contentModule.style.display = 'block';
+                contentType.style.display = 'none';
+            } else if (type === 'type') {
+                tabType.classList.add('active');
+                tabModule.classList.remove('active');
+                contentModule.style.display = 'none';
+                contentType.style.display = 'block';
+            }
+        }
+
+        // Action Handlers for Module Practice List
+        function startPractice(subject) {
+            window.location.href = 'dati_yemian.html?mode=knowledge&title=' + encodeURIComponent(subject);
+        }
+
+        function viewReport(subject) {
+            window.location.href = 'zhishidian_lianxi-baogao.html?title=' + encodeURIComponent(subject);
+        }
+
+        function viewAnalysis(subject) {
+            window.location.href = 'shiti_jiexi.html';
+        }
+
         // 导航切换功能
         navTabs.forEach(tab => {
-            // 点击事件
             tab.addEventListener('click', () => {
-                // 移除所有标签的active类
                 navTabs.forEach(t => t.classList.remove('active'));
-                // 为当前点击的标签添加active类
                 tab.classList.add('active');
-                
-                // 这里可以根据标签切换显示不同的内容
                 console.log('切换到:', tab.textContent);
                 if (tab.textContent === '错题本') {
                     window.location.href = 'cuotiben.html';
@@ -432,31 +755,23 @@
                 }
             });
 
-            // 触摸事件（移动端优化）
             tab.addEventListener('touchstart', (e) => {
-                // 防止触摸时的默认行为
                 e.preventDefault();
-                // 触发点击事件
                 tab.click();
             }, { passive: false });
         });
 
-        // 查看按钮功能
+        // 查看按钮功能 (按题型)
         viewBtns.forEach((btn, index) => {
-            // 点击事件
             btn.addEventListener('click', () => {
                 const categories = ['单选题', '多选题', '不定项选择题', '判断题', '填空题', '问答题', '材料题'];
                 const category = categories[index];
                 console.log('查看:', category);
-                // 跳转到试题查看页
                 window.location.href = 'cuotiben_shiti_chakan.html';
             });
 
-            // 触摸事件（移动端优化）
             btn.addEventListener('touchstart', (e) => {
-                // 防止触摸时的默认行为
                 e.preventDefault();
-                // 触发点击事件
                 btn.click();
             }, { passive: false });
         });
@@ -464,27 +779,13 @@
         // 返回按钮功能
         backBtn.addEventListener('click', () => {
             console.log('返回');
-            // 返回到题库页面
             window.location.href = 'tiku.html';
         });
 
-        // 触摸事件（移动端优化）
         backBtn.addEventListener('touchstart', (e) => {
-            // 防止触摸时的默认行为
             e.preventDefault();
-            // 触发点击事件
             backBtn.click();
         }, { passive: false });
-
-        // 页面加载完成后执行
-        window.addEventListener('load', () => {
-            console.log('页面加载完成');
-        });
-
-        // 触摸事件优化（移动端）
-        document.addEventListener('touchstart', function() {}, { passive: true });
-        document.addEventListener('touchmove', function() {}, { passive: true });
-        document.addEventListener('touchend', function() {}, { passive: true });
 
         // 禁止双击缩放
         document.addEventListener('dblclick', function(event) {
