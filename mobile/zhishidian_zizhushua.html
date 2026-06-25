@@ -553,11 +553,6 @@
                 <button id="knowledge-textbook-switch" style="padding: 6px 12px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; cursor: pointer;">
                     <i class="fas fa-book" style="margin-right: 6px; color: #ff4d4f;"></i> 知识点体系 <i class="fas fa-chevron-down" style="margin-left: 4px; font-size: 10px; color: #aaa;"></i>
                 </button>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div class="practice-mode-tag" id="practice-mode-btn">
-                        <i class="fas fa-cog" style="font-size: 14px; margin-right: 4px;"></i> <span id="current-mode-text">练习模式</span>
-                    </div>
-                </div>
             </div>
             
             <!-- 快速动作区域 -->
@@ -840,7 +835,9 @@
                 
                 if (activeModeCard) {
                     const modeTitle = activeModeCard.querySelector('.mode-card-title').textContent.trim();
-                    currentModeText.textContent = modeTitle;
+                    if (currentModeText) {
+                        currentModeText.textContent = modeTitle;
+                    }
                     toastMsg = '已保存设置。模式：' + modeTitle;
                 }
                 
