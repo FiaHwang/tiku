@@ -1272,7 +1272,7 @@
         <div class="header-top">
             <div class="header-left">
                 <div class="header-title" id="major-selector-btn" style="cursor: pointer; -webkit-tap-highlight-color: transparent;"><span>专升本</span> <i class="fas fa-chevron-down" style="font-size: 12px; margin-left: 4px; color: #999;"></i></div>
-                <div class="province-selector" id="province-selector-btn" style="cursor: pointer; -webkit-tap-highlight-color: transparent;"><span>河南省</span> <i class="fas fa-chevron-down" style="font-size: 10px; color: #999;"></i></div>
+                <div class="province-selector" id="province-selector-btn" style="cursor: pointer; -webkit-tap-highlight-color: transparent;"><span>河南省-笔试</span> <i class="fas fa-chevron-down" style="font-size: 10px; color: #999;"></i></div>
             </div>
             <div class="header-actions">
                 <button class="action-btn" id="toolbox-btn" title="百宝箱"><i class="fas fa-toolbox" style="color: #666;"></i></button>
@@ -2839,6 +2839,8 @@
                     window.location.href = '../index.html';
                 } else if (index === 1) {
                     window.location.href = 'tiku.html';
+                } else if (index === 3) {
+                    window.location.href = 'xuexi_zhongxin.html';
                 } else if (index === 4) {
                     window.location.href = 'mine.html';
                 }
@@ -3876,7 +3878,9 @@
                 // Update header province
                 const displayBtnSpan = document.querySelector('#province-selector-btn span');
                 if (displayBtnSpan) {
-                    displayBtnSpan.textContent = region === '最多2行' ? '河南' : region;
+                    const displayRegion = region === '最多2行' ? '河南' : region;
+                    const formattedRegion = displayRegion === '河南' ? '河南省' : displayRegion;
+                    displayBtnSpan.textContent = `${formattedRegion}-${type}`;
                 }
 
                 // Update active subjects in navigation if matching

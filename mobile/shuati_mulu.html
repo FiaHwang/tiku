@@ -324,7 +324,7 @@
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
             <div style="display: flex; align-items: center; gap: 10px;">
                 <div class="province-selector" id="province-selector-btn" style="cursor: pointer; -webkit-tap-highlight-color: transparent;">
-                    <span>河南省·语文</span>
+                    <span>河南省-语文</span>
                     <i class="fas fa-chevron-down" style="font-size: 10px; color: #ccc;"></i>
                 </div>
             </div>
@@ -683,7 +683,7 @@
                     // Update header province
                     const displayBtnSpan = document.querySelector('#province-selector-btn span');
                     if (displayBtnSpan) {
-                        displayBtnSpan.textContent = `${region}·${sub}`;
+                        displayBtnSpan.textContent = `${region}-${sub}`;
                     }
 
                     showToast(`已成功切换省份及科目为: ${region} - ${type} - ${sub}`);

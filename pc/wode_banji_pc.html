@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的班级 - 库课网校</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            padding-top: 60px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f5f6f9;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* 顶部导航栏 */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 60px;
+            background-color: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 32px;
+            margin-right: 16px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-item {
+            font-size: 14px;
+            color: #333;
+            text-decoration: none;
+            padding: 4px 0;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: #ff4d4f;
+        }
+
+        .nav-item.active {
+            color: #ff4d4f;
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #ff4d4f;
+        }
+
+        .search-user {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            padding: 4px 8px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 4px 8px;
+            font-size: 14px;
+        }
+
+        .search-btn {
+            background-color: #ff4d4f;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 12px;
+            cursor: pointer;
+        }
+
+        .user-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-link {
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .user-link.active {
+            color: #ff4d4f;
+            font-weight: 600;
+        }
+
+        .notification {
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background-color: #ff4d4f;
+            color: #fff;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 页脚 */
+        .footer {
+            height: 60px;
+            background-color: #fff;
+            border-top: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: 40px;
+        }
+
+        /* Expiration Stamp effect */
+        .stamp {
+            position: relative;
+            width: 64px;
+            height: 64px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 11px;
+            transform: rotate(-15deg);
+            background-color: transparent;
+            user-select: none;
+        }
+
+        .stamp::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border: 1px dashed #ccc;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- 顶部导航栏 -->
+    <header class="top-nav" id="top-nav">
+        <div class="logo" onclick="window.location.href='tiku_pc.html'" style="cursor: pointer;">
+            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=red%20background%20with%20white%20chinese%20characters%20%E5%BA%93%E8%AF%BE%20with%20registered%20trademark%20symbol%20simple%20clean%20logo&image_size=square" alt="库课网校">
+            <span style="font-weight: bold; color: #333; font-size: 16px;">库课网校</span>
+        </div>
+        <div class="nav-menu">
+            <a href="tiku_pc.html" class="nav-item">首页</a>
+            <a href="#" class="nav-item" onclick="showToast('课程中心功能建设中，先去刷题吧~')">课程中心</a>
+            <a href="tiku_pc.html" class="nav-item">题库</a>
+            <a href="#" class="nav-item" onclick="showToast('资讯中心功能建设中~')">资讯</a>
+            <a href="#" class="nav-item" onclick="showToast('直播日历功能建设中~')">直播日历</a>
+            <a href="#" class="nav-item" onclick="showToast('专升本专题建设中~')">各地专升本</a>
+        </div>
+        <div class="search-user">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="请输入搜索内容">
+                <button class="search-btn" onclick="handleSearch()">搜索</button>
+            </div>
+            <div class="user-links">
+                <a href="xuexi_zhongxin_pc.html" class="user-link active">学习中心</a>
+                <div class="notification" style="cursor: pointer;" onclick="showToast('您有3条新通知：您的班课权益已成功开通！')">
+                    <i class="fas fa-bell text-gray-600"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="user-avatar" style="cursor: pointer;" onclick="showToast('欢迎回来，技术-黄飞亚！')">
+                    <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 font-bold text-sm">
+                        亚
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主体内容区 -->
+    <main class="flex-grow max-w-[1200px] w-full mx-auto px-6 py-6 mt-[20px]">
+
+        <!-- 1. 商品大卡片 (包含商品配图 and 基本班级信息) -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6 flex gap-6 items-center">
+            <!-- 套餐配图 (使用SVG绘制斜线以匹配草图样式) -->
+            <div class="w-[210px] h-[120px] bg-[#f5f5f5] rounded-lg flex-shrink-0 flex flex-col items-center justify-center relative border border-gray-200 overflow-hidden">
+                <svg class="absolute inset-0 w-full h-full text-gray-300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <line x1="0" y1="0" x2="100%" y2="100%" stroke="currentColor" stroke-width="1" />
+                    <line x1="100%" y1="0" x2="0" y2="100%" stroke="currentColor" stroke-width="1" />
+                </svg>
+                <div class="relative bg-[#f5f5f5] px-2 py-1 text-xs text-gray-400 z-10 font-semibold tracking-wider">商品套餐配图</div>
+            </div>
+
+            <!-- 班级右侧文字信息 -->
+            <div class="flex-grow min-w-0">
+                <h2 id="course-title" class="text-base md:text-lg font-bold text-slate-800 mb-4 leading-snug">
+                    加载中...
+                </h2>
+                <div class="flex flex-col gap-2 text-xs md:text-sm text-slate-500">
+                    <div>
+                        已学习：<span id="learned-progress" class="font-bold text-slate-700">-- / --</span>
+                        <span class="mx-4 text-slate-300">|</span>
+                        听课率：<span id="learning-rate" class="font-bold text-slate-700">--%</span>
+                    </div>
+                    <div class="mt-1">
+                        有效期至：<span id="valid-time" class="font-medium text-slate-600">--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. 科目筛选二级栏 (全部 | 科目一 | 科目二 ...) -->
+        <div class="bg-white rounded-lg border border-gray-200 shadow-sm px-6 py-3.5 mb-5 flex items-center text-sm">
+            <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar" id="subject-tabs-container">
+                <!-- 由 JS 动态填充 -->
+            </div>
+        </div>
+
+        <!-- 3. 资料类型三级筛选栏 (全部 / 课程 / 试卷 / 面授课 / 题库模块) -->
+        <div class="flex items-center gap-6 border-b border-gray-200 pb-2 mb-6" id="type-tabs-container">
+            <button class="type-tab-btn pb-2 font-medium text-slate-500 hover:text-rose-600 relative transition-all" onclick="switchTypeFilter('全部')" data-type="全部">
+                全部
+            </button>
+            <button class="type-tab-btn pb-2 font-medium text-slate-500 hover:text-rose-600 relative transition-all" onclick="switchTypeFilter('网课')" data-type="网课">
+                课程
+            </button>
+            <button class="type-tab-btn pb-2 font-medium text-slate-500 hover:text-rose-600 relative transition-all" onclick="switchTypeFilter('试卷包')" data-type="试卷包">
+                试卷
+            </button>
+            <button class="type-tab-btn pb-2 font-medium text-slate-500 hover:text-rose-600 relative transition-all" onclick="switchTypeFilter('面授课')" data-type="面授课">
+                面授课
+            </button>
+            <button class="type-tab-btn pb-2 font-semibold text-rose-500 border-b-2 border-rose-500 relative transition-all" onclick="switchTypeFilter('题库')" data-type="题库">
+                题库
+            </button>
+        </div>
+
+        <!-- 4. 主内容列表 (各种模块、视频、题库单品) -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 flex flex-col gap-4" id="items-list-container">
+            <!-- 动态生成卡片列表 -->
+        </div>
+
+        <!-- 暂无数据状态 -->
+        <div id="no-data-state" class="hidden bg-white border border-gray-200 rounded-xl p-16 flex flex-col items-center justify-center text-center shadow-sm">
+            <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 mb-4 text-2xl">
+                <i class="far fa-folder-open"></i>
+            </div>
+            <h3 class="font-bold text-slate-700 text-base mb-1">暂无符合当前筛选条件的学习内容</h3>
+            <p class="text-slate-400 text-xs">您可以尝试更换其他科目或类别标签</p>
+        </div>
+    </main>
+
+    <!-- 全局提示 (Toast) -->
+    <div id="toast" class="hidden fixed bottom-12 left-1/2 -translate-x-1/2 bg-slate-900/95 text-white text-xs font-bold px-5 py-3 rounded-full shadow-lg z-50 transition-all flex items-center gap-2">
+        <i class="fas fa-info-circle text-rose-500"></i>
+        <span id="toast-text">提示内容</span>
+    </div>
+
+    <!-- 视频播放模态框 (与学习中心保持一致) -->
+    <div id="video-modal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6">
+        <div class="bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden w-full max-w-[1000px] flex shadow-2xl h-[560px]">
+            <!-- 左侧：播放器区域 -->
+            <div class="flex-grow flex flex-col justify-between p-6 relative">
+                <!-- 顶部状态栏 -->
+                <div class="flex justify-between items-center z-10">
+                    <div>
+                        <span class="bg-rose-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full mr-2">LIVE</span>
+                        <span id="video-title" class="text-white font-bold text-sm">--</span>
+                    </div>
+                </div>
+
+                <!-- 模拟视频播放画面 -->
+                <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-900/40">
+                    <div class="w-16 h-16 rounded-full bg-rose-600 flex items-center justify-center text-white text-xl cursor-pointer hover:scale-110 transition-transform shadow-lg shadow-rose-600/30" onclick="togglePlayState()">
+                        <i id="play-pause-icon" class="fas fa-play ml-1"></i>
+                    </div>
+                    <div class="mt-4 text-xs text-slate-400" id="lecture-status">视频已暂停</div>
+                </div>
+
+                <!-- 底部播放进度控制条 -->
+                <div class="w-full z-10 flex flex-col gap-2">
+                    <div id="video-subtitle" class="text-xs text-slate-300 font-semibold mb-1">正在播放：第1讲</div>
+                    <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden cursor-pointer relative" onclick="seekVideo(event)">
+                        <div id="video-progress" class="bg-rose-500 h-full rounded-full" style="width: 12%"></div>
+                    </div>
+                    <div class="flex justify-between items-center text-[11px] text-slate-400">
+                        <div class="flex items-center gap-4">
+                            <button onclick="togglePlayState()" class="hover:text-white transition-colors"><i id="control-play-icon" class="fas fa-play"></i></button>
+                            <span>15:20 / 45:00</span>
+                        </div>
+                        <span class="hover:text-white cursor-pointer"><i class="fas fa-cog"></i> 1080P 蓝光</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧：目录列表 -->
+            <div class="w-[320px] bg-slate-900 border-l border-slate-800 flex flex-col flex-shrink-0">
+                <div class="p-5 border-b border-slate-800 flex justify-between items-center">
+                    <span class="font-bold text-white text-sm">课程目录</span>
+                    <button class="text-slate-400 hover:text-white text-base" onclick="closeVideo()"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="flex-grow overflow-y-auto p-4 flex flex-col gap-2">
+                    <!-- 目录选项 -->
+                    <div onclick="switchLecture(1, '教育大纲与高频真题解密-第一讲')" class="lecture-item bg-rose-600/10 border border-rose-600/30 p-3 rounded-xl flex justify-between items-center text-xs text-rose-500 font-bold cursor-pointer hover:bg-slate-800 hover:text-white transition-all">
+                        <div class="flex items-center gap-2.5 truncate">
+                            <i class="far fa-play-circle text-rose-500"></i>
+                            <span class="truncate">1. 教育大纲与高频真题解密-第一讲</span>
+                        </div>
+                        <span class="text-[10px] font-semibold bg-rose-600 text-white px-2 py-0.5 rounded-full">正在学习</span>
+                    </div>
+
+                    <div onclick="switchLecture(2, '考点精细串讲-第二讲')" class="lecture-item bg-slate-950/40 border border-slate-800 p-3 rounded-xl flex justify-between items-center text-xs text-slate-300 cursor-pointer hover:bg-slate-800 hover:text-white transition-all">
+                        <div class="flex items-center gap-2.5 truncate">
+                            <i class="far fa-play-circle text-slate-500"></i>
+                            <span class="truncate">2. 考点精细串讲-第二讲</span>
+                        </div>
+                        <span class="text-[10px] text-slate-500 font-normal">45:00</span>
+                    </div>
+
+                    <div onclick="switchLecture(3, '冲刺核心密卷演练-第三讲')" class="lecture-item bg-slate-950/40 border border-slate-800 p-3 rounded-xl flex justify-between items-center text-xs text-slate-300 cursor-pointer hover:bg-slate-800 hover:text-white transition-all">
+                        <div class="flex items-center gap-2.5 truncate">
+                            <i class="far fa-play-circle text-slate-500"></i>
+                            <span class="truncate">3. 冲刺核心密卷演练-第三讲</span>
+                        </div>
+                        <span class="text-[10px] text-slate-500 font-normal">50:00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div>© 2026 库课网校 版权所有</div>
+    </footer>
+
+    <script>
+        // ------------------ 数据配置 ------------------
+        const coursesData = {
+            1: {
+                title: "2014-2024年河南特岗历年真题汇编",
+                learned: "0 / 12",
+                rate: "0%",
+                valid: "2027.02.10 23:59",
+                subjects: ["全部", "专业知识", "教育综合"],
+                items: [
+                    {
+                        title: "2024年河南特岗教师招聘考试真题",
+                        type: "试卷包",
+                        subject: "专业知识",
+                        desc: "1套试卷",
+                        progressText: "已做完",
+                        progress: 100,
+                        ratio: "1/1",
+                        btnText: "查看试卷",
+                        valid: "2022.04.21 23:56",
+                        link: "shijuan_xiangqing_pc.html"
+                    },
+                    {
+                        title: "河南特岗教师招聘核心高频题库",
+                        type: "题库模块",
+                        subject: "专业知识",
+                        desc: "专业课高频重难点习题",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/1",
+                        btnText: "去刷题",
+                        valid: "2022.04.21 23:56",
+                        link: "yigou_mokuai_zhangjie_pc.html"
+                    },
+                    {
+                        title: "2026年河南特岗教育综合高频考点特训",
+                        type: "题库单品",
+                        subject: "教育综合",
+                        desc: "特岗专用高频必刷题库",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/100",
+                        btnText: "去刷题",
+                        valid: "2022.04.21 23:56",
+                        link: "shuati_mulu_pc.html"
+                    },
+                    {
+                        title: "河南特岗教师历年真题高清直播课",
+                        type: "网课",
+                        subject: "教育综合",
+                        desc: "12节课时/5套讲义",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/12",
+                        btnText: "开始学习",
+                        valid: "2022.04.21 23:56",
+                        link: "video",
+                        isExpired: true
+                    }
+                ]
+            },
+            2: {
+                title: "2026年河南专升本期中大联考《英语+高等数学》",
+                learned: "10 / 300",
+                rate: "65%",
+                valid: "2026.11.14 23:59",
+                subjects: ["全部", "高等数学", "英语"],
+                items: [
+                    {
+                        title: "2026年河南专升本期中联考-高等数学",
+                        type: "试卷包",
+                        subject: "高等数学",
+                        desc: "1套试卷",
+                        progressText: "已做完",
+                        progress: 100,
+                        ratio: "1/1",
+                        btnText: "查看试卷",
+                        valid: "2022.04.21 23:56",
+                        link: "shijuan_xiangqing_pc.html"
+                    },
+                    {
+                        title: "2026年河南专升本期中联考-英语",
+                        type: "题库模块",
+                        subject: "英语",
+                        desc: "英语高频重难点模块",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/1",
+                        btnText: "去刷题",
+                        valid: "2022.04.21 23:56",
+                        link: "yigou_mokuai_zhangjie_pc.html"
+                    },
+                    {
+                        title: "2026年河南专升本英语高频题库单品",
+                        type: "题库单品",
+                        subject: "英语",
+                        desc: "英语高频单品必刷",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/150",
+                        btnText: "去刷题",
+                        valid: "2022.04.21 23:56",
+                        link: "shuati_mulu_pc.html"
+                    },
+                    {
+                        title: "2026年河南专升本期中大联考直播解析-高等数学",
+                        type: "网课",
+                        subject: "高等数学",
+                        desc: "1节课时/1套讲义",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/1",
+                        btnText: "开始学习",
+                        valid: "2022.04.21 23:56",
+                        link: "video",
+                        isExpired: true
+                    }
+                ]
+            },
+            3: {
+                title: "【专升本】破译阅读-英语高分突破强化营",
+                learned: "0 / 20",
+                rate: "0%",
+                valid: "2026.09.05 23:59",
+                subjects: ["全部", "阅读理解", "完形填空"],
+                items: [
+                    {
+                        title: "专升本英语阅读必刷核心真题精选",
+                        type: "题库模块",
+                        subject: "阅读理解",
+                        desc: "阅读理解核心精选",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/1",
+                        btnText: "去刷题",
+                        valid: "2022.04.21 23:56",
+                        link: "yigou_mokuai_zhangjie_pc.html"
+                    },
+                    {
+                        title: "专升本英语阅读必刷核心题库单品",
+                        type: "题库单品",
+                        subject: "阅读理解",
+                        desc: "阅读理解必刷单品",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/90",
+                        btnText: "去刷题",
+                        valid: "2022.04.21 23:56",
+                        link: "shuati_mulu_pc.html"
+                    },
+                    {
+                        title: "专升本英语阅读精讲精练 - 基础篇",
+                        type: "网课",
+                        subject: "阅读理解",
+                        desc: "2节课时/1套讲义",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/2",
+                        btnText: "开始学习",
+                        valid: "2022.04.21 23:56",
+                        link: "video",
+                        isExpired: true
+                    },
+                    {
+                        title: "专升本英语阅读强化冲刺直播",
+                        type: "网课",
+                        subject: "阅读理解",
+                        desc: "2节课时",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/2",
+                        btnText: "开始学习",
+                        valid: "2022.04.21 23:56",
+                        link: "video",
+                        isExpired: true
+                    }
+                ]
+            }
+        };
+
+        // ------------------ 状态管理 ------------------
+        let currentCourseId = 2; // 默认专升本期中联考
+        let selectedSubject = "全部";
+        let selectedType = "题库"; // 默认展示 题库
+
+        // ------------------ 初始化 ------------------
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const courseParam = parseInt(params.get('course'));
+            if (courseParam && coursesData[courseParam]) {
+                currentCourseId = courseParam;
+            }
+
+            // 加载班级基本信息
+            const currentCourse = coursesData[currentCourseId];
+            document.getElementById('course-title').innerText = currentCourse.title;
+            document.getElementById('learned-progress').innerText = currentCourse.learned;
+            document.getElementById('learning-rate').innerText = currentCourse.rate;
+            document.getElementById('valid-time').innerText = currentCourse.valid;
+
+            // 动态渲染二级科目tabs
+            renderSubjectTabs(currentCourse.subjects);
+
+            // 初始渲染列表
+            renderList();
+        });
+
+        // ------------------ 渲染科目标签 ------------------
+        function renderSubjectTabs(subjects) {
+            const container = document.getElementById('subject-tabs-container');
+            container.innerHTML = '';
+
+            subjects.forEach((sub, index) => {
+                const btn = document.createElement('button');
+                btn.className = `subject-tab-btn px-4 py-1.5 rounded-full hover:text-rose-600 transition-all font-medium ${sub === selectedSubject ? 'text-rose-500 font-bold bg-rose-50' : 'text-slate-600'}`;
+                btn.innerText = sub;
+                btn.onclick = () => selectSubject(sub);
+                container.appendChild(btn);
+
+                if (index < subjects.length - 1) {
+                    const divider = document.createElement('span');
+                    divider.className = 'text-slate-200';
+                    divider.innerText = '|';
+                    container.appendChild(divider);
+                }
+            });
+        }
+
+        // ------------------ 选择科目 ------------------
+        function selectSubject(sub) {
+            selectedSubject = sub;
+            // 重新高亮二级标签
+            const currentCourse = coursesData[currentCourseId];
+            renderSubjectTabs(currentCourse.subjects);
+            renderList();
+        }
+
+        // ------------------ 资料类型过滤 ------------------
+        function switchTypeFilter(type) {
+            selectedType = type;
+            
+            // 重新高亮三级分类
+            const buttons = document.querySelectorAll('.type-tab-btn');
+            buttons.forEach(btn => {
+                const bType = btn.getAttribute('data-type');
+                if (bType === selectedType) {
+                    btn.className = "type-tab-btn pb-2 font-semibold text-rose-500 border-b-2 border-rose-500 relative transition-all";
+                } else {
+                    btn.className = "type-tab-btn pb-2 font-medium text-slate-500 hover:text-rose-600 relative transition-all";
+                }
+            });
+
+            renderList();
+        }
+
+        // ------------------ 渲染资料列表 ------------------
+        function renderList() {
+            const listContainer = document.getElementById('items-list-container');
+            const noDataState = document.getElementById('no-data-state');
+            listContainer.innerHTML = '';
+
+            const currentCourse = coursesData[currentCourseId];
+            
+            // 过滤列表
+            const filteredItems = currentCourse.items.filter(item => {
+                const matchSubject = (selectedSubject === "全部" || item.subject === selectedSubject);
+                let matchType = (selectedType === "全部" || item.type === selectedType);
+                if (selectedType === "题库") {
+                    matchType = (item.type === "题库模块" || item.type === "题库单品");
+                }
+                return matchSubject && matchType;
+            });
+
+            if (filteredItems.length === 0) {
+                listContainer.classList.add('hidden');
+                noDataState.classList.remove('hidden');
+                return;
+            }
+
+            listContainer.classList.remove('hidden');
+            noDataState.classList.add('hidden');
+
+            filteredItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "flex items-center justify-between gap-6 p-5 rounded-xl border border-slate-100 hover:border-rose-100 hover:shadow-md transition-all cursor-pointer bg-white relative";
+                
+                // 点击卡片跳转逻辑
+                card.onclick = () => {
+                    if (item.type === "题库单品") {
+                        window.location.href = "shuati_mulu_pc.html";
+                    } else if (item.link === 'video') {
+                        playVideo(currentCourse.title, item.title);
+                    } else {
+                        window.location.href = item.link;
+                    }
+                };
+
+                // Thumbnail gradient matching by subject
+                let thumbnailGradient = "from-red-400 to-rose-500";
+                if (item.subject.includes("英语")) {
+                    thumbnailGradient = "from-cyan-400 to-teal-500";
+                } else if (item.subject.includes("数学") || item.subject.includes("高等数学")) {
+                    thumbnailGradient = "from-blue-400 to-indigo-500";
+                } else {
+                    thumbnailGradient = "from-amber-400 to-orange-500";
+                }
+
+                // 左侧配图占位 (带渐变背景、类型和科目标签)
+                const imgBox = document.createElement('div');
+                imgBox.className = `w-[110px] h-[75px] rounded-lg flex-shrink-0 relative overflow-hidden bg-gradient-to-br ${thumbnailGradient} p-2 flex flex-col justify-between text-white shadow-sm`;
+                imgBox.innerHTML = `
+                    <div class="absolute inset-0 opacity-10 bg-[linear-gradient(45deg,rgba(0,0,0,0.1)_25%,transparent_25%,transparent_50%,rgba(0,0,0,0.1)_50%,rgba(0,0,0,0.1)_75%,transparent_75%,transparent)] bg-[length:8px_8px]"></div>
+                    <div class="absolute top-1 left-1 bg-black/40 text-[9px] font-bold px-1.5 py-0.5 rounded scale-90 origin-top-left">${item.type}</div>
+                    <div class="text-right text-[8px] opacity-80 mt-1">${item.subject}</div>
+                    <div class="text-[10px] font-bold truncate mt-auto leading-tight">${item.title.split('-')[1] || item.title}</div>
+                `;
+
+                // 中间文字信息
+                const infoBox = document.createElement('div');
+                infoBox.className = "flex-grow min-w-0";
+                
+                const title = document.createElement('h3');
+                title.className = "font-bold text-slate-800 text-sm mb-1 hover:text-rose-600 transition-colors truncate";
+                title.innerText = item.title;
+
+                const subtitle = document.createElement('p');
+                subtitle.className = "text-slate-400 text-xs truncate";
+                subtitle.innerText = item.desc || "精品资料，伴你备战";
+
+                const validity = document.createElement('div');
+                validity.className = "text-[11px] text-slate-400 mt-2";
+                validity.innerText = `有效期至：${item.valid || '2026.11.14'}`;
+
+                infoBox.appendChild(title);
+                if (item.type !== "题库模块" && item.type !== "题库单品") {
+                    infoBox.appendChild(subtitle);
+                }
+                infoBox.appendChild(validity);
+
+                // 进度条部分 (参照移动端)
+                const progressBox = document.createElement('div');
+                progressBox.className = "w-[240px] flex-shrink-0 flex flex-col justify-center gap-1.5 px-4 border-l border-r border-slate-100";
+                
+                const isCompleted = item.progress === 100;
+                const progressColor = isCompleted ? 'bg-emerald-500' : 'bg-rose-500';
+                const statusTextColor = isCompleted ? 'text-emerald-500' : 'text-slate-500';
+
+                progressBox.innerHTML = `
+                    <div class="flex justify-between text-xs font-semibold ${statusTextColor}">
+                        <span>${item.progressText || '未开始'}</span>
+                        <span class="text-slate-400">${item.ratio || '0/1'}</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div class="${progressColor} h-full rounded-full transition-all duration-300" style="width: ${item.progress || 0}%;"></div>
+                    </div>
+                `;
+
+                // 右侧操作按钮 / 过期印章
+                const actionBox = document.createElement('div');
+                actionBox.className = "w-[120px] flex-shrink-0 flex items-center justify-end";
+                
+                const btn = document.createElement('button');
+                btn.className = "bg-rose-600 text-white font-bold px-4 py-2 rounded-lg text-xs hover:bg-rose-700 transition-colors shadow-sm focus:outline-none";
+                btn.innerText = item.btnText || "去刷题";
+                actionBox.appendChild(btn);
+
+                card.appendChild(imgBox);
+                card.appendChild(infoBox);
+                card.appendChild(progressBox);
+                card.appendChild(actionBox);
+
+                // 右侧 "已过期" 印章
+                if (item.isExpired) {
+                    const stamp = document.createElement('div');
+                    stamp.className = "absolute right-[140px] top-1/2 -translate-y-1/2 stamp opacity-80 scale-75";
+                    stamp.innerText = "已过期";
+                    card.appendChild(stamp);
+                    
+                    // 按钮置灰
+                    btn.className = "bg-slate-300 text-slate-500 font-bold px-4 py-2 rounded-lg text-xs cursor-not-allowed shadow-sm focus:outline-none";
+                    btn.disabled = true;
+                }
+
+                listContainer.appendChild(card);
+            });
+        }
+
+        // ------------------ 全局提示逻辑 (Toast) ------------------
+        let toastTimeout;
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toast-text');
+            
+            toastText.innerText = text;
+            toast.classList.remove('hidden');
+            toast.style.opacity = '1';
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // ------------------ 搜索处理 ------------------
+        function handleSearch() {
+            const text = document.getElementById('search-input').value.trim();
+            if (text === '') {
+                showToast('请输入关键词再进行检索哦');
+                return;
+            }
+            showToast(`正在为您检索“${text}”相关资料...`);
+        }
+
+        // ------------------ 视频播放逻辑 (保持一致) ------------------
+        let isPlaying = false;
+        function playVideo(courseName, lectureName) {
+            document.getElementById('video-title').innerText = courseName;
+            document.getElementById('video-subtitle').innerText = `正在播放：${lectureName}`;
+            document.getElementById('video-modal').classList.remove('hidden');
+            isPlaying = false;
+            updatePlayUI();
+        }
+
+        function closeVideo() {
+            document.getElementById('video-modal').classList.add('hidden');
+            isPlaying = false;
+        }
+
+        function togglePlayState() {
+            isPlaying = !isPlaying;
+            updatePlayUI();
+        }
+
+        function updatePlayUI() {
+            const playPauseIcon = document.getElementById('play-pause-icon');
+            const controlPlayIcon = document.getElementById('control-play-icon');
+            const statusText = document.getElementById('lecture-status');
+            const progressEl = document.getElementById('video-progress');
+
+            if (isPlaying) {
+                playPauseIcon.className = 'fas fa-pause';
+                controlPlayIcon.className = 'fas fa-pause';
+                statusText.innerText = '正在流式传输高清视频画面...';
+                let currentWidth = parseFloat(progressEl.style.width);
+                if (currentWidth < 100) {
+                    progressEl.style.width = (currentWidth + 12.5) + '%';
+                }
+            } else {
+                playPauseIcon.className = 'fas fa-play';
+                controlPlayIcon.className = 'fas fa-play';
+                statusText.innerText = '视频已暂停';
+            }
+        }
+
+        function switchLecture(lectureNum, name) {
+            document.querySelectorAll('.lecture-item').forEach(el => {
+                el.className = 'lecture-item bg-slate-950/40 border border-slate-800 p-3 rounded-xl flex justify-between items-center text-xs text-slate-300 cursor-pointer hover:bg-slate-800 hover:text-white transition-all';
+                const badge = el.querySelector('span:last-child');
+                if (badge && badge.innerText === '正在学习') {
+                    badge.innerText = '45:00';
+                    badge.className = 'text-[10px] text-slate-500 font-normal';
+                }
+            });
+
+            const activeLecture = event.currentTarget;
+            activeLecture.className = 'lecture-item bg-rose-600/10 border border-rose-600/30 p-3 rounded-xl flex justify-between items-center text-xs text-rose-500 font-bold cursor-pointer hover:bg-slate-800 hover:text-white transition-all';
+            const badge = activeLecture.querySelector('span:last-child');
+            if (badge) {
+                badge.innerText = '正在学习';
+                badge.className = 'text-[10px] font-semibold bg-rose-600 text-white px-2 py-0.5 rounded-full';
+            }
+
+            document.getElementById('video-subtitle').innerText = `正在播放：${name}`;
+            isPlaying = true;
+            updatePlayUI();
+            showToast(`已为您切到第 ${lectureNum} 节：${name}`);
+        }
+
+        function seekVideo(e) {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const percent = (clickX / rect.width) * 100;
+            document.getElementById('video-progress').style.width = percent + '%';
+            showToast('已调整视频播放进度');
+        }
+    </script>
+</body>
+</html>

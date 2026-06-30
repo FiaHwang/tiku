@@ -92,6 +92,59 @@
             padding: 12px;
         }
 
+        /* 学习报告卡片 */
+        .report-card {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 12px;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.15);
+        }
+
+        .report-card-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .report-progress-container {
+            margin-bottom: 16px;
+        }
+
+        .report-progress-bar-bg {
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.22);
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .report-progress-bar-fill {
+            height: 100%;
+            background-color: #ffffff;
+            border-radius: 5px;
+            width: 68.56%;
+        }
+
+        .report-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            row-gap: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .report-stat-left {
+            text-align: left;
+        }
+
+        .report-stat-right {
+            text-align: right;
+        }
+
         .special-practice {
             background-color: #fff;
             margin-bottom: 12px;
@@ -553,6 +606,24 @@
                 <button id="knowledge-textbook-switch" style="padding: 6px 12px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; cursor: pointer;">
                     <i class="fas fa-book" style="margin-right: 6px; color: #ff4d4f;"></i> 知识点体系 <i class="fas fa-chevron-down" style="margin-left: 4px; font-size: 10px; color: #aaa;"></i>
                 </button>
+            </div>
+
+            <!-- 学习报告卡片 -->
+            <div style="padding: 16px 16px 0 16px;">
+                <div class="report-card" style="margin-bottom: 0;">
+                    <div class="report-card-title">学习报告</div>
+                    <div class="report-progress-container">
+                        <div class="report-progress-bar-bg">
+                            <div class="report-progress-bar-fill"></div>
+                        </div>
+                    </div>
+                    <div class="report-stats-grid">
+                        <div class="report-stat-left">已完成 68.56%</div>
+                        <div class="report-stat-right">已答/总量 126/185题</div>
+                        <div class="report-stat-left">正确率 78%</div>
+                        <div class="report-stat-right">今日练习 12题</div>
+                    </div>
+                </div>
             </div>
             
             <!-- 快速动作区域 -->

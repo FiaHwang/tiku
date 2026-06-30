@@ -525,16 +525,24 @@
                 
                 if (isWeak) {
                     div.innerHTML = `
-                        <div class="flex flex-col gap-1">
+                        <div class="flex flex-col gap-1 pr-2">
                             <span class="text-sm text-gray-700 font-medium">${item.name}</span>
                             <span class="text-xs text-red-500">正确率 ${item.rate} | 答错${item.count}</span>
                         </div>
-                        <button
-                            onclick="location.href='boruo_tupo.html'"
-                            class="bg-blue-50 text-blue-500 px-3 py-1 text-xs rounded-full whitespace-nowrap active:scale-95 transition-transform"
-                        >
-                            练习
-                        </button>
+                        <div class="flex items-center gap-2 flex-shrink-0">
+                            <button
+                                onclick="location.href='cuotiben.html'"
+                                class="bg-rose-50 text-rose-500 border border-rose-100 px-2.5 py-1 text-xs rounded-full whitespace-nowrap active:scale-95 transition-transform"
+                            >
+                                错题重练
+                            </button>
+                            <button
+                                onclick="location.href='boruo_tupo.html'"
+                                class="bg-blue-50 text-blue-500 border border-blue-100 px-2.5 py-1 text-xs rounded-full whitespace-nowrap active:scale-95 transition-transform"
+                            >
+                                专项练习
+                            </button>
+                        </div>
                     `;
                 } else {
                     div.innerHTML = `

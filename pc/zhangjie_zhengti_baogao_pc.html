@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>整体报告 - 库课网校</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 重置样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            padding-top: 60px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f5f5f5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* 顶部导航栏 */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 60px;
+            background-color: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 32px;
+            margin-right: 16px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-item {
+            font-size: 14px;
+            color: #333;
+            text-decoration: none;
+            padding: 4px 0;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: #ff4d4f;
+        }
+
+        .nav-item.active {
+            color: #ff4d4f;
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #ff4d4f;
+        }
+
+        .search-user {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            padding: 4px 8px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 4px 8px;
+            font-size: 14px;
+        }
+
+        .search-btn {
+            background-color: #ff4d4f;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 12px;
+            cursor: pointer;
+        }
+
+        .user-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-link {
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .notification {
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background-color: #ff4d4f;
+            color: #fff;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 概览卡片 */
+        .summary-card {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+        }
+
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .list-item-border {
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .list-item-border:last-child {
+            border-bottom: none;
+        }
+
+        .expand-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            font-size: 13px;
+            color: #999;
+            padding-top: 12px;
+            border-top: 1px solid #f0f0f0;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .expand-btn:hover {
+            color: #ff4d4f;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="top-nav">
+        <div class="logo" onclick="window.location.href='../index.html'" style="cursor: pointer;">
+            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=red%20background%20with%20white%20chinese%20characters%20%E5%BA%93%E8%AF%BE%20with%20registered%20trademark%20symbol%20simple%20clean%20logo&image_size=square" alt="库课网校">
+            <span class="text-lg font-bold text-gray-800">库课网校</span>
+        </div>
+        <div class="nav-menu">
+            <a href="tiku_pc.html" class="nav-item">首页</a>
+            <a href="#" class="nav-item">课程中心</a>
+            <a href="tiku_pc.html" class="nav-item active">题库</a>
+            <a href="#" class="nav-item">资讯</a>
+            <a href="#" class="nav-item">直播日历</a>
+            <a href="#" class="nav-item">各地专升本</a>
+        </div>
+        <div class="search-user">
+            <div class="search-box">
+                <input type="text" placeholder="请输入搜索内容">
+                <button class="search-btn">搜索</button>
+            </div>
+            <div class="user-links">
+                <a href="xuexi_zhongxin_pc.html" class="user-link">学习中心</a>
+                <div class="notification">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="user-avatar">
+                    <i class="fas fa-user text-lg text-gray-600"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 模块标题 & 返回栏 -->
+    <div class="bg-white py-4 border-b border-gray-200">
+        <div class="max-width-1200 max-w-[1200px] mx-auto px-6 relative flex items-center justify-center">
+            <div onclick="history.back()" class="absolute left-6 cursor-pointer text-gray-500 hover:text-red-500 flex items-center transition-colors">
+                <i class="fas fa-chevron-left mr-2"></i>
+                <span class="font-medium">返回</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <h1 class="text-xl font-bold text-gray-800">整体报告</h1>
+            </div>
+            <div class="flex items-center gap-3" style="display: none;">
+                <span class="text-sm text-gray-500 font-medium"><i class="fas fa-book text-blue-500 mr-1.5"></i>当前科目</span>
+                <select id="subject-selector" class="text-sm px-3 py-1.5 rounded-lg border border-gray-300 bg-gray-50 text-gray-700 outline-none font-medium cursor-pointer transition-colors focus:border-blue-500">
+                    <option value="chinese" selected>大学语文 (有刷题历史)</option>
+                    <option value="math">高等数学 (无刷题历史)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主内容区域 -->
+    <main class="max-w-[1200px] mx-auto px-6 py-8">
+        <!-- 第一行: 核心统计数据 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- 概览卡片 (左侧 1 栏) -->
+            <div class="summary-card text-white rounded-2xl p-6 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-sm text-white/80 font-medium mb-4"><i class="fas fa-chart-bar mr-2"></i>整体概览</h3>
+                    <div class="grid grid-cols-3 gap-4 mb-6 text-center">
+                        <div>
+                            <div class="text-xs text-white/70 mb-1">正确率</div>
+                            <div class="text-2xl font-bold" id="val-accuracy">78%</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-white/70 mb-1">累计已答</div>
+                            <div class="text-2xl font-bold" id="val-total-answered">85道</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-white/70 mb-1">今日练习</div>
+                            <div class="text-2xl font-bold" id="val-today-answered">18道</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="progress-container mb-2">
+                        <div class="h-2 bg-white/20 rounded-full overflow-hidden">
+                            <div class="h-full bg-white rounded-full transition-all duration-500" id="val-progress-bar" style="width: 68.99%;"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between text-xs text-white/95 font-medium">
+                        <span id="val-progress-left">总量126道</span>
+                        <span id="val-progress-right">已完成69%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 答题数据细节 (右侧 2 栏) -->
+            <div class="lg:col-span-2 bg-white rounded-2xl p-6 card-shadow">
+                <h3 class="text-base font-bold text-gray-800 mb-6 flex items-center"><i class="fas fa-list-check text-blue-500 mr-2"></i>答题数据</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-green-50 rounded-xl p-4 transition-transform hover:-translate-y-0.5">
+                        <div class="text-xs text-gray-500 mb-2">正确题数</div>
+                        <div class="text-2xl font-bold text-green-600" id="val-correct-count">100道</div>
+                    </div>
+                    <div class="bg-red-50 rounded-xl p-4 transition-transform hover:-translate-y-0.5">
+                        <div class="text-xs text-gray-500 mb-2">错误题数</div>
+                        <div class="text-2xl font-bold text-red-500" id="val-wrong-count">26道</div>
+                    </div>
+                    <div class="bg-blue-50 rounded-xl p-4 transition-transform hover:-translate-y-0.5">
+                        <div class="text-xs text-gray-500 mb-2">平均每题用时</div>
+                        <div class="text-lg font-bold text-blue-600 mt-1" id="val-avg-time">1分钟20秒</div>
+                    </div>
+                    <div class="bg-purple-50 rounded-xl p-4 transition-transform hover:-translate-y-0.5">
+                        <div class="text-xs text-gray-500 mb-2">答题时长</div>
+                        <div class="text-lg font-bold text-purple-600 mt-1" id="val-total-time">1小时8分钟</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第二行: AI 智能提分与建议 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8" id="ai-container">
+            <!-- 提分攻略 -->
+            <div class="bg-white rounded-2xl p-6 card-shadow border border-indigo-50/50" id="ai-improvement-card">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h2 class="text-base font-bold text-gray-800">提分攻略</h2>
+                    </div>
+                    <span class="text-xs text-gray-400">内容由AI生成，每日凌晨更新</span>
+                </div>
+                <div class="bg-indigo-50/40 rounded-xl p-4 text-sm leading-relaxed text-gray-600 space-y-3">
+                    <p><strong class="text-indigo-600">1. 夯实章节核心考点：</strong>本章节中“古代文学”部分失分较多。建议针对该章节的常考人物、文化常识进行专项突破。</p>
+                    <p><strong class="text-indigo-600">2. 进行限时专项练习：</strong>针对“现代文阅读”，尝试在每次练习时设定闹钟，训练在压力下的阅读抓取速度。</p>
+                    <p><strong class="text-indigo-600">3. 建立错题本逻辑：</strong>将本章节中由于概念混淆导致的错题进行分类，定期回顾，避免在同类陷阱中再次失分。</p>
+                </div>
+            </div>
+
+            <!-- 学习建议 -->
+            <div class="bg-white rounded-2xl p-6 card-shadow border border-orange-50/50" id="ai-suggestion-card">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-orange-50 text-orange-600 rounded-lg flex items-center justify-center">
+                            <i class="far fa-lightbulb"></i>
+                        </div>
+                        <h2 class="text-base font-bold text-gray-800">学习建议</h2>
+                    </div>
+                    <span class="text-xs text-gray-400">内容由AI生成，每日凌晨更新</span>
+                </div>
+                <div class="bg-orange-50/40 rounded-xl p-5 text-sm leading-relaxed text-orange-900 border border-orange-100/50">
+                    你在本章节的基础题型上表现稳健，整体完成度已达69%。接下来的任务是攻克章节内的“深水区”知识点，通过精读解析来提升思维深度。
+                </div>
+            </div>
+        </div>
+
+        <!-- 第三行: 章节分析板块 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="chapter-analysis-card">
+            <!-- Chapter Needs Improvement -->
+            <div class="bg-white rounded-2xl p-6 card-shadow">
+                <div class="flex items-center justify-between mb-6 pb-3 border-b border-gray-100">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-rose-50 text-rose-500 rounded-lg flex items-center justify-center font-bold">
+                            <i class="fas fa-triangle-exclamation"></i>
+                        </div>
+                        <h2 class="text-base font-bold text-gray-800">需要加强的章节</h2>
+                    </div>
+                </div>
+                <div id="weak-chapters-list" class="space-y-0 min-h-[400px]">
+                    <!-- 由JS动态渲染 -->
+                </div>
+                <div class="expand-btn mt-4" id="weak-expand-btn">
+                    <span>展开更多</span> <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+
+            <!-- Chapter Well Mastered -->
+            <div class="bg-white rounded-2xl p-6 card-shadow">
+                <div class="flex items-center justify-between mb-6 pb-3 border-b border-gray-100">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-emerald-50 text-emerald-500 rounded-lg flex items-center justify-center font-bold">
+                            <i class="fas fa-square-check"></i>
+                        </div>
+                        <h2 class="text-base font-bold text-gray-800">掌握较好的章节</h2>
+                    </div>
+                </div>
+                <div id="strong-chapters-list" class="space-y-0 min-h-[400px]">
+                    <!-- 由JS动态渲染 -->
+                </div>
+                <div class="expand-btn mt-4" id="strong-expand-btn">
+                    <span>展开更多</span> <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="mt-16 py-6 bg-white border-t border-gray-200 text-center text-xs text-gray-400">
+        <div>© 2026 库课网校 版权所有</div>
+    </footer>
+
+    <script>
+        // 模拟章节数据库数据 (各20条)
+        const weakChapters = [
+            { name: "古代文学", rate: "40%", count: "12次", tag: "练习" },
+            { name: "现代文阅读", rate: "48%", count: "9次", tag: "练习" },
+            { name: "文言文虚词辨析", rate: "50%", count: "8次", tag: "章节" },
+            { name: "文言文特殊句式", rate: "52%", count: "7次", tag: "练习" },
+            { name: "修辞手法及作用", rate: "55%", count: "6次", tag: "练习" },
+            { name: "汉语拼音与读音", rate: "56%", count: "6次", tag: "自选" },
+            { name: "现代汉语常考字形", rate: "58%", count: "5次", tag: "练习" },
+            { name: "标点符号规范运用", rate: "59%", count: "5次", tag: "核心" },
+            { name: "论述类文本阅读", rate: "61%", count: "4次", tag: "练习" },
+            { name: "文学类文本阅读", rate: "62%", count: "4次", tag: "练习" },
+            { name: "实用类文本阅读", rate: "64%", count: "4次", tag: "章节" },
+            { name: "古诗名句理解", rate: "65%", count: "3次", tag: "练习" },
+            { name: "名篇名句默写", rate: "67%", count: "3次", tag: "练习" },
+            { name: "作文材料立意分析", rate: "69%", count: "3次", tag: "核心" },
+            { name: "作文框架结构设计", rate: "70%", count: "2次", tag: "练习" },
+            { name: "病句修改与辨析", rate: "71%", count: "2次", tag: "练习" },
+            { name: "古汉语实词推断", rate: "72%", count: "2次", tag: "自选" },
+            { name: "诗歌表达技巧赏析", rate: "73%", count: "2次", tag: "练习" },
+            { name: "词类活用专项练习", rate: "74%", count: "2次", tag: "核心" },
+            { name: "文言句式翻译技巧", rate: "75%", count: "1次", tag: "练习" }
+        ];
+
+        const strongChapters = [
+            { name: "诗歌鉴赏", rate: "88%", count: "15次", tag: "" },
+            { name: "文言文断句", rate: "92%", count: "14次", tag: "" },
+            { name: "小说人物形象分析", rate: "90%", count: "12次", tag: "" },
+            { name: "散文意境赏析", rate: "89%", count: "11次", tag: "" },
+            { name: "新闻阅读方法要点", rate: "87%", count: "10次", tag: "" },
+            { name: "说明文说明方法", rate: "86%", count: "10次", tag: "" },
+            { name: "科技文逻辑性整合", rate: "85%", count: "9次", tag: "" },
+            { name: "叙事视角及作用", rate: "84%", count: "9次", tag: "" },
+            { name: "景物描写多角度", rate: "83%", count: "83%", tag: "" },
+            { name: "语言风格品味赏析", rate: "82%", count: "8次", tag: "" },
+            { name: "古诗修辞手法", rate: "81%", count: "8次", tag: "" },
+            { name: "戏剧矛盾冲突", rate: "80%", count: "7次", tag: "" },
+            { name: "文学常识高频点", rate: "80%", count: "7次", tag: "" },
+            { name: "熟语在语境中运用", rate: "79%", count: "7次", tag: "" },
+            { name: "同义词辨析", rate: "79%", count: "6次", tag: "" },
+            { name: "关联词的选用", rate: "78%", count: "6次", tag: "" },
+            { name: "表达简明连贯得体", rate: "78%", count: "5次", tag: "" },
+            { name: "经典句子仿写", rate: "77%", count: "5次", tag: "" },
+            { name: "语段压缩提炼", rate: "77%", count: "5次", tag: "" },
+            { name: "综合性学习实践", rate: "76%", count: "4次", tag: "" }
+        ];
+
+        let weakLimit = 10;
+        let strongLimit = 10;
+
+        function renderChapters(listId, data, limit) {
+            const container = document.getElementById(listId);
+            if (!container) return;
+            container.innerHTML = '';
+            const isWeak = listId === 'weak-chapters-list';
+            
+            const slice = data.slice(0, limit);
+            slice.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center py-3.5 list-item-border hover:bg-gray-50/50 px-2 rounded-lg transition-colors';
+                
+                if (isWeak) {
+                    div.innerHTML = `
+                        <div class="flex flex-col gap-1 pr-2">
+                            <span class="text-sm text-gray-700 font-semibold">${item.name}</span>
+                            <span class="text-xs text-rose-500 font-medium">正确率 ${item.rate} | 答错${item.count}</span>
+                        </div>
+                        <div class="flex items-center gap-2 flex-shrink-0">
+                            <button
+                                onclick="location.href='../mobile/cuotiben.html'"
+                                class="bg-rose-50 text-rose-600 hover:bg-rose-100 border border-rose-200/50 px-3 py-1 text-xs font-medium rounded-full whitespace-nowrap active:scale-95 transition-all"
+                            >
+                                错题重练
+                            </button>
+                            <button
+                                onclick="location.href='../mobile/boruo_tupo.html'"
+                                class="bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200/50 px-3 py-1 text-xs font-medium rounded-full whitespace-nowrap active:scale-95 transition-all"
+                            >
+                                专项练习
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    div.innerHTML = `
+                        <div class="flex flex-col gap-1">
+                            <span class="text-sm text-gray-700 font-semibold">${item.name}</span>
+                            <span class="text-xs text-emerald-600 font-medium">正确率 ${item.rate} | 答对${item.count}</span>
+                        </div>
+                    `;
+                }
+                container.appendChild(div);
+            });
+        }
+
+        function initPage() {
+            const selector = document.getElementById('subject-selector');
+            
+            function updateSubjectData() {
+                const subject = selector.value;
+                const hasRecords = (subject === 'chinese');
+                
+                const impCard = document.getElementById('ai-improvement-card');
+                const sugCard = document.getElementById('ai-suggestion-card');
+                const anaCard = document.getElementById('chapter-analysis-card');
+                const aiContainer = document.getElementById('ai-container');
+                
+                if (hasRecords) {
+                    impCard.style.display = 'block';
+                    sugCard.style.display = 'block';
+                    anaCard.style.display = 'grid';
+                    aiContainer.style.display = 'grid';
+                    
+                    document.getElementById('val-accuracy').textContent = '78%';
+                    document.getElementById('val-total-answered').textContent = '85道';
+                    document.getElementById('val-today-answered').textContent = '18道';
+                    document.getElementById('val-progress-bar').style.width = '68.99%';
+                    document.getElementById('val-progress-left').textContent = '总量126道';
+                    document.getElementById('val-progress-right').textContent = '已完成69%';
+                    document.getElementById('val-correct-count').textContent = '100道';
+                    document.getElementById('val-wrong-count').textContent = '26道';
+                    document.getElementById('val-avg-time').textContent = '1分钟20秒';
+                    document.getElementById('val-total-time').textContent = '1小时8分钟';
+                    
+                    weakLimit = 10;
+                    strongLimit = 10;
+                    renderChapters('weak-chapters-list', weakChapters, weakLimit);
+                    renderChapters('strong-chapters-list', strongChapters, strongLimit);
+                    document.getElementById('weak-expand-btn').innerHTML = '<span>展开更多</span> <i class="fas fa-chevron-down"></i>';
+                    document.getElementById('strong-expand-btn').innerHTML = '<span>展开更多</span> <i class="fas fa-chevron-down"></i>';
+                } else {
+                    impCard.style.display = 'none';
+                    sugCard.style.display = 'none';
+                    anaCard.style.display = 'none';
+                    aiContainer.style.display = 'none';
+                    
+                    document.getElementById('val-accuracy').textContent = '0%';
+                    document.getElementById('val-total-answered').textContent = '0道';
+                    document.getElementById('val-today-answered').textContent = '0道';
+                    document.getElementById('val-progress-bar').style.width = '0%';
+                    document.getElementById('val-progress-left').textContent = '总量126道';
+                    document.getElementById('val-progress-right').textContent = '已完成0%';
+                    document.getElementById('val-correct-count').textContent = '0道';
+                    document.getElementById('val-wrong-count').textContent = '0道';
+                    document.getElementById('val-avg-time').textContent = '0秒';
+                    document.getElementById('val-total-time').textContent = '0分钟';
+                }
+            }
+            
+            selector.addEventListener('change', updateSubjectData);
+            
+            document.getElementById('weak-expand-btn').addEventListener('click', () => {
+                if (weakLimit === 10) {
+                    weakLimit = 20;
+                    document.getElementById('weak-expand-btn').innerHTML = '<span>收起</span> <i class="fas fa-chevron-up"></i>';
+                } else {
+                    weakLimit = 10;
+                    document.getElementById('weak-expand-btn').innerHTML = '<span>展开更多</span> <i class="fas fa-chevron-down"></i>';
+                }
+                renderChapters('weak-chapters-list', weakChapters, weakLimit);
+            });
+
+            document.getElementById('strong-expand-btn').addEventListener('click', () => {
+                if (strongLimit === 10) {
+                    strongLimit = 20;
+                    document.getElementById('strong-expand-btn').innerHTML = '<span>收起</span> <i class="fas fa-chevron-up"></i>';
+                } else {
+                    strongLimit = 10;
+                    document.getElementById('strong-expand-btn').innerHTML = '<span>展开更多</span> <i class="fas fa-chevron-down"></i>';
+                }
+                renderChapters('strong-chapters-list', strongChapters, strongLimit);
+            });
+            
+            updateSubjectData();
+        }
+        
+        window.onload = initPage;
+    </script>
+</body>
+</html>

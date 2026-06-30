@@ -292,7 +292,7 @@
           <button class="search-btn">搜索</button>
         </div>
         <div class="user-links">
-          <a href="#" class="user-link">学习中心</a>
+          <a href="xuexi_zhongxin_pc.html" class="user-link">学习中心</a>
           <div class="notification">
             <i class="fas fa-bell"></i>
             <span class="notification-badge">3</span>
@@ -315,21 +315,19 @@
       "
     >
       <div class="left-content" style="flex: 1; min-width: 0">
-        <div class="header-section">
-          <div
-            class="title-group"
-            style="
-              display: flex;
-              flex-direction: column;
-              align-items: flex-start;
-              gap: 8px;
-            "
-          >
-            <div class="ver-title" style="display: flex; align-items: center; gap: 8px;">
-              <span onclick="window.history.back()" style="cursor: pointer; color: #666; font-size: 14px; font-weight: normal; margin-right: 8px;">&lt; 返回</span>
+        <div class="header-section" style="display: flex; flex-direction: column; gap: 16px; align-items: stretch;">
+          <div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 32px;">
+            <div onclick="window.history.back()" style="position: absolute; left: 0; cursor: pointer; color: #666; font-size: 14px; display: flex; align-items: center; gap: 4px; transition: color 0.2s;" onmouseover="this.style.color='#ff4d4f'" onmouseout="this.style.color='#666'">
+              <i class="fas fa-chevron-left" style="font-size: 12px;"></i>
+              <span>返回</span>
+            </div>
+            <div class="ver-title" style="font-size: 20px; font-weight: 600; color: #333; text-align: center;">
               固定刷题版本名称/教材名称
             </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f5f5f5; padding-top: 14px;">
             <div
+              onclick="openProvinceModal()"
               style="
                 font-size: 14px;
                 color: #888;
@@ -342,32 +340,34 @@
                 cursor: pointer;
               "
             >
-              河南省·语文
+              <span id="subnav-province-text">河南省-语文</span>
               <i
                 class="fas fa-chevron-down"
                 style="font-size: 10px; color: #ccc"
               ></i>
             </div>
-          </div>
-          <div style="display: flex; align-items: center; gap: 12px">
-            <button
-              class="action-btn secondary"
-              onclick="
-                window.location.href = '../mobile/zhangjie_zhengti_baogao.html'
-              "
-            >
-              整体报告
-            </button>
-            <div
-              style="
-                display: flex;
-                align-items: center;
-                gap: 4px;
-                color: #666;
-                font-size: 14px;
-              "
-            >
-              <i class="fas fa-cog"></i> 练习模式
+            <div style="display: flex; align-items: center; gap: 16px">
+              <button
+                class="action-btn secondary"
+                style="height: 32px; border-radius: 16px; font-size: 12px; padding: 0 16px;"
+                onclick="
+                  window.location.href = 'zhangjie_zhengti_baogao_pc.html'
+                "
+              >
+                整体报告
+              </button>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 4px;
+                  color: #666;
+                  font-size: 14px;
+                  cursor: pointer;
+                "
+              >
+                <i class="fas fa-cog"></i> 练习模式
+              </div>
             </div>
           </div>
         </div>
@@ -426,7 +426,7 @@
                 <div class="item-actions">
                   <button
                     class="action-btn secondary"
-                    onclick="window.location.href='../mobile/zhangjie_zhengti_baogao.html'"
+                    onclick="window.location.href='zhangjie_zhengti_baogao_pc.html'"
                   >
                     查看报告
                   </button>
@@ -578,8 +578,64 @@
             超过 97.39% 的学员
           </div>
         </div>
-      </div>
     </div>
+
+    <!-- 省份学段科目选择弹窗 -->
+    <div id="provinceModal" class="modal-backdrop" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.45); z-index: 2000; align-items: center; justify-content: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+        <div style="background-color: #fff; width: 880px; max-width: 95%; border-radius: 12px; padding: 32px 40px; box-shadow: 0 12px 32px rgba(0,0,0,0.15); position: relative; animation: fadeInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+            
+            <!-- Close Icon -->
+            <div onclick="closeProvinceModal()" style="position: absolute; right: 28px; top: 28px; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.backgroundColor='rgba(0,0,0,0.04)'" onmouseout="this.style.backgroundColor='transparent'">
+                <i class="fas fa-times" style="font-size: 20px; color: #333;"></i>
+            </div>
+
+            <!-- Title: 省份 - 科目 -->
+            <div style="text-align: center; margin-bottom: 32px;">
+                <span id="provinceModalTitle" style="font-size: 24px; font-weight: 600; color: #1a1a1a; letter-spacing: 0.5px;">河南省 - 语文</span>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+                <!-- Row 1: 省份 -->
+                <div style="display: flex; align-items: flex-start;">
+                    <div style="width: 100px; font-size: 15px; font-weight: 600; color: #666; padding-top: 6px;">省份：</div>
+                    <div style="flex: 1; display: flex; flex-wrap: wrap; gap: 12px;" id="provincesContainer">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+
+                <!-- Row 2: 学段 -->
+                <div style="display: flex; align-items: flex-start;">
+                    <div style="width: 100px; font-size: 15px; font-weight: 600; color: #666; padding-top: 6px;">学段：</div>
+                    <div style="flex: 1; display: flex; flex-wrap: wrap; gap: 12px;" id="levelsContainer">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+
+                <!-- Row 3: 科目 -->
+                <div style="display: flex; align-items: flex-start;">
+                    <div style="width: 100px; font-size: 15px; font-weight: 600; color: #666; padding-top: 6px;">科目：</div>
+                    <div style="flex: 1; display: flex; flex-wrap: wrap; gap: 12px;" id="subjectsContainer">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Action Buttons -->
+            <div style="display: flex; justify-content: center; gap: 16px; margin-top: 40px;">
+                <button onclick="confirmProvinceSelection()" style="width: 140px; height: 44px; background-color: #ff4d4f; color: #fff; border: none; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;" onmouseover="this.style.backgroundColor='#ff7875'" onmouseout="this.style.backgroundColor='#ff4d4f'">
+                    已选好
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes fadeInModal {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
 
     <footer class="footer">
       <div>© 2026 库课网校 版权所有</div>
@@ -597,6 +653,112 @@
           icon.className = "fas fa-chevron-right";
         }
       }
+
+      // --- PROVINCE SELECTION MODAL LOGIC ---
+      let selectedProvince = "河南省";
+      let selectedLevel = "大学";
+      let selectedSubject = "语文";
+
+      const provincesList = ["河南省", "北京市", "上海市", "山东省", "江苏省", "浙江省", "湖北省", "广东省", "四川省", "陕西省"];
+      const levelsList = ["大学", "小学", "中学", "幼儿园"];
+      const subjectsList = ["语文", "数学", "英语", "物理", "化学", "生物", "历史", "地理", "政治"];
+
+      function updateProvinceModalTitle() {
+          const titleEl = document.getElementById('provinceModalTitle');
+          if (titleEl) {
+              titleEl.innerText = `${selectedProvince} - ${selectedLevel} - ${selectedSubject}`;
+          }
+      }
+
+      function renderProvinceModalContents() {
+          updateProvinceModalTitle();
+
+          // Render Provinces
+          const provContainer = document.getElementById('provincesContainer');
+          if (provContainer) {
+              provContainer.innerHTML = '';
+              provincesList.forEach(p => {
+                  const isActive = p === selectedProvince;
+                  const chip = document.createElement('div');
+                  chip.innerText = p;
+                  chip.style.cssText = isActive 
+                      ? "padding: 6px 18px; border: 1.5px solid #ff4d4f; border-radius: 20px; font-size: 14px; color: #ff4d4f; background-color: #fff; cursor: pointer; font-weight: 600; transition: all 0.2s;"
+                      : "padding: 7px 19px; background-color: #f5f5f5; border-radius: 20px; font-size: 14px; color: #333; cursor: pointer; transition: all 0.2s;";
+                  chip.onmouseover = () => { if (!isActive) chip.style.backgroundColor = '#e8e8e8'; };
+                  chip.onmouseout = () => { if (!isActive) chip.style.backgroundColor = '#f5f5f5'; };
+                  chip.onclick = () => {
+                      selectedProvince = p;
+                      renderProvinceModalContents();
+                  };
+                  provContainer.appendChild(chip);
+              });
+          }
+
+          // Render Levels
+          const levelsContainer = document.getElementById('levelsContainer');
+          if (levelsContainer) {
+              levelsContainer.innerHTML = '';
+              levelsList.forEach(l => {
+                  const isActive = l === selectedLevel;
+                  const chip = document.createElement('div');
+                  chip.innerText = l;
+                  chip.style.cssText = isActive 
+                      ? "padding: 6px 18px; border: 1.5px solid #ff4d4f; border-radius: 20px; font-size: 14px; color: #ff4d4f; background-color: #fff; cursor: pointer; font-weight: 600; transition: all 0.2s;"
+                      : "padding: 7px 19px; background-color: #f5f5f5; border-radius: 20px; font-size: 14px; color: #333; cursor: pointer; transition: all 0.2s;";
+                  chip.onmouseover = () => { if (!isActive) chip.style.backgroundColor = '#e8e8e8'; };
+                  chip.onmouseout = () => { if (!isActive) chip.style.backgroundColor = '#f5f5f5'; };
+                  chip.onclick = () => {
+                      selectedLevel = l;
+                      renderProvinceModalContents();
+                  };
+                  levelsContainer.appendChild(chip);
+              });
+          }
+
+          // Render Subjects
+          const subContainer = document.getElementById('subjectsContainer');
+          if (subContainer) {
+              subContainer.innerHTML = '';
+              subjectsList.forEach(s => {
+                  const isActive = s === selectedSubject;
+                  const chip = document.createElement('div');
+                  chip.innerText = s;
+                  chip.style.cssText = isActive 
+                      ? "padding: 6px 18px; border: 1.5px solid #ff4d4f; border-radius: 20px; font-size: 14px; color: #ff4d4f; background-color: #fff; cursor: pointer; font-weight: 600; transition: all 0.2s;"
+                      : "padding: 7px 19px; background-color: #f5f5f5; border-radius: 20px; font-size: 14px; color: #333; cursor: pointer; transition: all 0.2s;";
+                  chip.onmouseover = () => { if (!isActive) chip.style.backgroundColor = '#e8e8e8'; };
+                  chip.onmouseout = () => { if (!isActive) chip.style.backgroundColor = '#f5f5f5'; };
+                  chip.onclick = () => {
+                      selectedSubject = s;
+                      renderProvinceModalContents();
+                  };
+                  subContainer.appendChild(chip);
+              });
+          }
+      }
+
+      function openProvinceModal() {
+          document.getElementById('provinceModal').style.display = 'flex';
+          renderProvinceModalContents();
+      }
+
+      function closeProvinceModal() {
+          document.getElementById('provinceModal').style.display = 'none';
+      }
+
+      function confirmProvinceSelection() {
+          closeProvinceModal();
+          const provinceTextEl = document.getElementById('subnav-province-text');
+          if (provinceTextEl) {
+              provinceTextEl.innerText = `${selectedProvince}-${selectedSubject}`;
+          }
+      }
+
+      document.getElementById('provinceModal').addEventListener('click', function(e) {
+          if (e.target === this) {
+              closeProvinceModal();
+          }
+      });
     </script>
   </body>
 </html>

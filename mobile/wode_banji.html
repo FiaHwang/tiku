@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我的班级</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // 清理 URL 中的 origin 参数
+        (function() {
+            const url = new URL(window.location.href);
+            if (url.searchParams.has('origin')) {
+                url.searchParams.delete('origin');
+                const newUrl = url.pathname + url.search + url.hash;
+                window.history.replaceState({}, '', newUrl);
+            }
+        })();
+    </script>
+    <style>
+        html {
+            background-color: #f1f5f9;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f8f9fa;
+            max-width: 480px !important;
+            margin: 0 auto !important;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 顶部毛玻璃和模糊底色背景效果 */
+        .blur-header-bg {
+            position: relative;
+            background: linear-gradient(135deg, #f43f5e 0%, #b91c1c 100%);
+            overflow: hidden;
+            padding: 16px 16px 24px 16px;
+        }
+
+        .blur-header-bg::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 80% 20%, rgba(253, 224, 71, 0.4) 0%, transparent 60%);
+            filter: blur(40px);
+            z-index: 1;
+        }
+
+        .blur-header-bg::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 24px;
+            background: linear-gradient(180deg, transparent 0%, #f8f9fa 100%);
+            z-index: 2;
+        }
+
+        /* 隐藏滚动条 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* 提示框 */
+        .toast {
+            display: none;
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0,0,0,0.85);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            z-index: 9999;
+            white-space: nowrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .toast.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translate(-50%, 20px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- 顶部导航 & 班级头图卡片 -->
+    <div id="header-container" class="blur-header-bg text-white relative">
+        <!-- 导航栏 -->
+        <div class="relative flex items-center justify-between z-10 mb-4">
+            <button class="w-10 h-10 flex items-center justify-start text-white focus:outline-none" onclick="history.back()">
+                <i class="fas fa-chevron-left text-lg"></i>
+            </button>
+            <h1 class="text-lg font-bold tracking-wide">我的班级</h1>
+            <div class="w-10"></div> <!-- 占位 -->
+        </div>
+
+        <!-- 课程班级卡片信息 -->
+        <div class="relative z-10 flex gap-4 items-start">
+            <!-- 卡片封面 -->
+            <div id="course-cover" class="w-[90px] h-[64px] rounded-xl flex-shrink-0 relative overflow-hidden bg-gradient-to-br from-rose-500 to-red-600 p-1.5 flex flex-col justify-between text-white shadow-md border border-white/20">
+                <div class="absolute inset-0 opacity-10 bg-[linear-gradient(45deg,rgba(0,0,0,0.1)_25%,transparent_25%,transparent_50%,rgba(0,0,0,0.1)_50%,rgba(0,0,0,0.1)_75%,transparent_75%,transparent)] bg-[length:12px_12px]"></div>
+                <div class="absolute top-1 left-1 bg-amber-500 text-[8px] font-bold px-1 py-0.5 rounded z-10 scale-90 origin-top-left">库课</div>
+                <div class="text-right text-[7px] font-medium opacity-80" id="cover-sub-tag">2026年</div>
+                <div class="flex flex-col mt-auto">
+                    <span class="text-[9px] font-extrabold leading-tight tracking-wide" id="cover-title-1">期中大联考</span>
+                    <span class="text-[8px] font-medium opacity-90 leading-none mt-0.5" id="cover-title-2">河南联考</span>
+                </div>
+            </div>
+
+            <!-- 卡片右侧信息 -->
+            <div class="flex-1 flex flex-col justify-center min-w-0">
+                <h2 id="course-title" class="text-base font-bold leading-snug line-clamp-2 drop-shadow-sm">2026年河南专升本期中大联考《英语+高等数学》</h2>
+                <div id="course-desc" class="text-xs text-white/90 mt-1 font-medium">2套网课/2套试卷/1个题库模块</div>
+                <div id="course-valid" class="text-[10px] text-white/70 mt-1">有效期至 2026.11.14 23:59</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 列表过滤和分类模块 -->
+    <div class="bg-white rounded-t-2xl -mt-4 relative z-20 shadow-[0_-8px_20px_rgba(0,0,0,0.02)]">
+        <!-- 科目筛选栏 -->
+        <div class="px-4 pt-4 pb-2 border-b border-slate-100 flex justify-between items-center">
+            <div class="flex gap-6 overflow-x-auto no-scrollbar py-1" id="subject-tabs">
+                <button class="subject-tab text-slate-900 font-bold border-b-2 border-red-500 pb-1.5 px-1 text-base transition-all whitespace-nowrap" data-subject="all">
+                    全部
+                </button>
+                <button class="subject-tab text-slate-500 font-medium pb-1.5 px-1 text-base transition-all whitespace-nowrap" data-subject="高等数学">
+                    高数
+                </button>
+                <button class="subject-tab text-slate-500 font-medium pb-1.5 px-1 text-base transition-all whitespace-nowrap" data-subject="英语">
+                    英语
+                </button>
+            </div>
+            
+            <!-- 筛选图标按钮 -->
+            <button class="flex items-center gap-1 text-slate-500 text-xs font-semibold pl-2 hover:text-slate-800 transition-colors" onclick="showToast('筛选功能暂未开放')">
+                <span>筛选</span>
+                <i class="fas fa-filter text-slate-400 text-[10px]"></i>
+            </button>
+        </div>
+
+        <!-- 资料类型二级筛选：全部、试卷包、网课、题库 -->
+        <div class="px-4 py-3 flex gap-2.5 overflow-x-auto no-scrollbar" id="type-tabs">
+            <button class="type-tab bg-red-50 text-red-500 font-semibold px-4 py-1.5 rounded-full text-xs transition-colors whitespace-nowrap" data-type="all">
+                全部
+            </button>
+            <button class="type-tab bg-slate-100 text-slate-600 px-4 py-1.5 rounded-full text-xs transition-colors whitespace-nowrap" data-type="试卷包">
+                试卷包
+            </button>
+            <button class="type-tab bg-slate-100 text-slate-600 px-4 py-1.5 rounded-full text-xs transition-colors whitespace-nowrap" data-type="网课">
+                网课
+            </button>
+            <button class="type-tab bg-slate-100 text-slate-600 px-4 py-1.5 rounded-full text-xs transition-colors whitespace-nowrap" data-type="题库">
+                题库
+            </button>
+        </div>
+    </div>
+
+    <!-- 列表内容区 -->
+    <div class="px-4 py-3 flex-1 overflow-y-auto" id="list-container">
+        <!-- 动态生成的卡片列表 -->
+    </div>
+
+    <!-- Toast 提示框 -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // 获取 URL 传参
+        const params = new URLSearchParams(window.location.search);
+        const courseId = parseInt(params.get('course') || '2');
+
+        // 课程模拟数据
+        const coursesData = {
+            1: {
+                title: "2014-2024年河南特岗历年真题汇编",
+                desc: "1套网课/12套试卷",
+                valid: "有效期至 2027.02.10 23:59",
+                gradient: "from-amber-400 to-orange-500",
+                subTag: "河南特岗",
+                title1: "历年真题",
+                title2: "特岗真题汇编",
+                subjects: ["全部", "专业知识", "教育综合"],
+                items: [
+                    {
+                        title: "2024年河南特岗教师招聘考试真题",
+                        type: "试卷包",
+                        subject: "专业知识",
+                        desc: "1套试卷",
+                        progressText: "已做完",
+                        progress: 100,
+                        ratio: "1/1",
+                        btnText: "查看试卷"
+                    },
+                    {
+                        title: "河南特岗教师招聘核心高频题库",
+                        type: "题库模块",
+                        subject: "专业知识",
+                        desc: "专业课高频重难点习题",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/1",
+                        btnText: "去刷题"
+                    },
+                    {
+                        title: "2026年河南特岗教育综合高频考点特训",
+                        type: "题库单品",
+                        subject: "教育综合",
+                        desc: "特岗专用高频必刷题库",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/100",
+                        btnText: "去刷题"
+                    },
+                    {
+                        title: "河南特岗教师历年真题高清直播课",
+                        type: "网课",
+                        subject: "教育综合",
+                        desc: "12节课时/5套讲义",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/12",
+                        btnText: "开始学习"
+                    }
+                ]
+            },
+            2: {
+                title: "2026年河南专升本期中大联考《英语+高等数学》",
+                desc: "2套网课/2套试卷",
+                valid: "有效期至 2026.11.14 23:59",
+                gradient: "from-rose-500 to-red-600",
+                subTag: "2026年",
+                title1: "期中大联考",
+                title2: "河南 联考试卷+直播",
+                subjects: ["全部", "高等数学", "英语"],
+                items: [
+                    {
+                        title: "2026年河南专升本期中联考-高等数学",
+                        type: "试卷包",
+                        subject: "高等数学",
+                        desc: "1套试卷",
+                        progressText: "已做完",
+                        progress: 100,
+                        ratio: "1/1",
+                        btnText: "查看试卷"
+                    },
+                    {
+                        title: "2026年河南专升本期中联考-英语",
+                        type: "题库模块",
+                        subject: "英语",
+                        desc: "",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/1",
+                        btnText: "去刷题"
+                    },
+                    {
+                        title: "2026年河南专升本英语高频题库单品",
+                        type: "题库单品",
+                        subject: "英语",
+                        desc: "",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/150",
+                        btnText: "去刷题"
+                    },
+                    {
+                        title: "2026年河南专升本期中大联考直播解析-高等数学",
+                        type: "网课",
+                        subject: "高等数学",
+                        desc: "1节课时/1套讲义",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/1",
+                        btnText: "开始学习"
+                    }
+                ]
+            },
+            3: {
+                title: "【专升本】破译阅读-英语高分突破强化营",
+                desc: "4套网课",
+                valid: "有效期至 2026.09.05 23:59",
+                gradient: "from-emerald-400 to-teal-500",
+                subTag: "英语高分突破",
+                title1: "破译阅读",
+                title2: "英语强化营",
+                subjects: ["全部", "阅读理解", "完形填空"],
+                items: [
+                    {
+                        title: "专升本英语阅读必刷核心真题精选",
+                        type: "题库模块",
+                        subject: "阅读理解",
+                        desc: "阅读理解核心精选",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/1",
+                        btnText: "去刷题"
+                    },
+                    {
+                        title: "专升本英语阅读必刷核心题库单品",
+                        type: "题库单品",
+                        subject: "阅读理解",
+                        desc: "阅读理解必刷单品",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/90",
+                        btnText: "去刷题"
+                    },
+                    {
+                        title: "专升本英语阅读精讲精练 - 基础篇",
+                        type: "网课",
+                        subject: "阅读理解",
+                        desc: "2节课时/1套讲义",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/2",
+                        btnText: "开始学习"
+                    },
+                    {
+                        title: "专升本英语阅读强化冲刺直播",
+                        type: "网课",
+                        subject: "阅读理解",
+                        desc: "2节课时",
+                        progressText: "未开始",
+                        progress: 0,
+                        ratio: "0/2",
+                        btnText: "开始学习"
+                    }
+                ]
+            }
+        };
+
+        const currentCourse = coursesData[courseId] || coursesData[2];
+
+        // 初始化头部渲染
+        document.getElementById('course-title').textContent = currentCourse.title;
+        document.getElementById('course-desc').textContent = currentCourse.desc;
+        document.getElementById('course-valid').textContent = currentCourse.valid;
+        
+        const coverEl = document.getElementById('course-cover');
+        coverEl.className = `w-[90px] h-[64px] rounded-xl flex-shrink-0 relative overflow-hidden bg-gradient-to-br ${currentCourse.gradient} p-1.5 flex flex-col justify-between text-white shadow-md border border-white/20`;
+        document.getElementById('cover-sub-tag').textContent = currentCourse.subTag;
+        document.getElementById('cover-title-1').textContent = currentCourse.title1;
+        document.getElementById('cover-title-2').textContent = currentCourse.title2;
+
+        // 根据课程动态重新渲染科目 Tabs
+        const subjectTabsContainer = document.getElementById('subject-tabs');
+        subjectTabsContainer.innerHTML = '';
+        currentCourse.subjects.forEach((sub, index) => {
+            const btn = document.createElement('button');
+            const subVal = sub === '全部' ? 'all' : sub;
+            btn.className = `subject-tab transition-all whitespace-nowrap pb-1.5 px-1 text-base ${index === 0 ? 'text-slate-900 font-bold border-b-2 border-red-500' : 'text-slate-500 font-medium'}`;
+            btn.setAttribute('data-subject', subVal);
+            btn.textContent = sub === '全部' ? '全部' : (sub.length > 2 ? sub.substring(0,2) : sub);
+            subjectTabsContainer.appendChild(btn);
+        });
+
+        // 统一Toast提示函数
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            if (toast) {
+                toast.textContent = msg;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            }
+        }
+
+        // 筛选状态
+        let currentSubject = 'all';
+        let currentType = 'all';
+
+        // 列表渲染逻辑
+        function renderList() {
+            const container = document.getElementById('list-container');
+            container.innerHTML = '';
+
+            const filteredItems = currentCourse.items.filter(item => {
+                const matchSubject = currentSubject === 'all' || item.subject === currentSubject || (currentSubject === '高等数学' && item.subject === '高等数学');
+                let matchType = currentType === 'all' || item.type === currentType;
+                if (currentType === '题库') {
+                    matchType = item.type === '题库模块' || item.type === '题库单品';
+                }
+                return matchSubject && matchType;
+            });
+
+            if (filteredItems.length === 0) {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-20 text-slate-400">
+                        <i class="fas fa-folder-open text-4xl mb-3 opacity-60"></i>
+                        <span class="text-sm">暂无匹配的资料内容</span>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredItems.forEach(item => {
+                // 确定进度条颜色与文案样式
+                const isCompleted = item.progress === 100;
+                const progressColor = isCompleted ? 'bg-emerald-500' : 'bg-slate-300';
+                const statusTextColor = isCompleted ? 'text-emerald-500' : 'text-slate-400';
+                
+                // 按钮点击跳转逻辑：若是题库模块，跳转至 yigou_mokuai_zhangjie.html 或者 mokuai_xiangqing_zhangjie.html
+                // 我们直接根据题库跳转到章节练习，让用户能去刷题！
+                let clickAction = `showToast('正在为您打开 ${item.title}...')`;
+                if (item.type === '题库模块') {
+                    clickAction = `window.location.href = 'yigou_mokuai_zhangjie.html'`;
+                } else if (item.type === '题库单品') {
+                    clickAction = `window.location.href = 'shuati_mulu.html'`;
+                } else if (item.type === '试卷包') {
+                    clickAction = `showToast('正在加载试卷：${item.title}')`;
+                } else if (item.type === '网课') {
+                    clickAction = `showToast('正在打开直播网课课件...')`;
+                }
+
+                // 卡片渐变背景或模拟缩略图
+                let thumbnailGradient = "from-red-400 to-rose-500";
+                if (item.subject.includes("英语")) {
+                    thumbnailGradient = "from-cyan-400 to-teal-500";
+                } else if (item.subject.includes("数学") || item.subject.includes("高等数学")) {
+                    thumbnailGradient = "from-blue-400 to-indigo-500";
+                } else {
+                    thumbnailGradient = "from-amber-400 to-orange-500";
+                }
+
+                const cardHTML = `
+                    <div class="bg-white rounded-2xl p-4 mb-4 shadow-[0_4px_15px_rgba(0,0,0,0.015)] border border-slate-100 flex flex-col gap-4">
+                        <div class="flex gap-4">
+                            <!-- 缩略图 -->
+                            <div class="w-[100px] h-[70px] rounded-xl flex-shrink-0 relative overflow-hidden bg-gradient-to-br ${thumbnailGradient} p-1.5 flex flex-col justify-between text-white shadow-sm">
+                                <div class="absolute inset-0 opacity-10 bg-[linear-gradient(45deg,rgba(0,0,0,0.1)_25%,transparent_25%,transparent_50%,rgba(0,0,0,0.1)_50%,rgba(0,0,0,0.1)_75%,transparent_75%,transparent)] bg-[length:8px_8px]"></div>
+                                <div class="absolute top-1 left-1 bg-black/40 text-[8px] font-bold px-1 py-0.5 rounded scale-90 origin-top-left">${item.type}</div>
+                                <div class="text-right text-[7px] opacity-80 mt-1">${item.subject}</div>
+                                <div class="text-[9px] font-bold truncate mt-auto leading-tight">${item.title.split('-')[1] || item.title}</div>
+                            </div>
+
+                            <!-- 右侧详情 -->
+                            <div class="flex-1 flex flex-col justify-between min-w-0">
+                                <h3 class="text-sm font-bold text-slate-800 leading-snug truncate" title="${item.title}">${item.title}</h3>
+                                ${(item.type === '题库模块' || item.type === '题库单品') ? '' : `<div class="text-xs text-slate-500 font-medium">${item.desc}</div>`}
+                                <div class="text-[10px] text-slate-400">有效期至 ${currentCourse.valid.split(' ')[1] || '2026.11.14'}</div>
+                            </div>
+                        </div>
+
+                        <!-- 底部进度和操作 -->
+                        <div class="flex justify-between items-center pt-2 border-t border-slate-50">
+                            <div class="flex items-center gap-3 flex-1 mr-4">
+                                <span class="text-xs font-semibold ${statusTextColor} whitespace-nowrap">${item.progressText}：</span>
+                                <!-- 进度条 -->
+                                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                    <div class="${progressColor} h-full rounded-full transition-all duration-300" style="width: ${item.progress}%;"></div>
+                                </div>
+                                <span class="text-[10px] font-bold text-slate-400 whitespace-nowrap">${item.ratio}</span>
+                            </div>
+                            <button class="bg-red-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs hover:bg-red-600 transition-colors shadow-sm focus:outline-none" onclick="${clickAction}">
+                                ${item.btnText}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHTML);
+            });
+        }
+
+        // 注册二级筛选事件
+        document.querySelectorAll('.type-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.type-tab').forEach(t => {
+                    t.classList.remove('bg-red-50', 'text-red-500', 'font-semibold');
+                    t.classList.add('bg-slate-100', 'text-slate-600');
+                });
+                tab.classList.add('bg-red-50', 'text-red-500', 'font-semibold');
+                tab.classList.remove('bg-slate-100', 'text-slate-600');
+                
+                currentType = tab.getAttribute('data-type');
+                renderList();
+            });
+        });
+
+        // 注册科目筛选事件委托
+        subjectTabsContainer.addEventListener('click', (e) => {
+            const tab = e.target.closest('.subject-tab');
+            if (!tab) return;
+
+            document.querySelectorAll('.subject-tab').forEach(t => {
+                t.className = "subject-tab transition-all whitespace-nowrap pb-1.5 px-1 text-base text-slate-500 font-medium";
+            });
+            tab.className = "subject-tab transition-all whitespace-nowrap pb-1.5 px-1 text-base text-slate-900 font-bold border-b-2 border-red-500";
+            
+            currentSubject = tab.getAttribute('data-subject');
+            renderList();
+        });
+
+        // 初次加载渲染列表
+        renderList();
+    </script>
+</body>
+</html>

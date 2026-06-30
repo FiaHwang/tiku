@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>章节练习 - 库课网校</title>
+    <title>章节练习-专升本 - 库课网校</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* 重置样式 */
@@ -301,6 +301,13 @@
             border-color: #d9d9d9;
         }
 
+        .action-btn.disabled-btn {
+            background-color: #f5f5f5;
+            color: #999;
+            border-color: #d9d9d9;
+            cursor: not-allowed;
+        }
+
         /* 顶部工具栏 */
         .toolbar {
             padding: 16px 20px;
@@ -556,13 +563,17 @@
     <!-- 模块标题 -->
     <div style="background-color: #fff; padding: 16px 0; border-bottom: 1px solid #f0f0f0;">
         <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; position: relative;">
-            <div onclick="window.location.href='tiku_pc.html'" style="cursor: pointer; color: #666; display: flex; align-items: center; transition: color 0.2s;" onmouseover="this.style.color='#ff4d4f'" onmouseout="this.style.color='#666'">
+            <div onclick="window.location.href='wode_banji_pc.html'" style="cursor: pointer; color: #666; display: flex; align-items: center; transition: color 0.2s;" onmouseover="this.style.color='#ff4d4f'" onmouseout="this.style.color='#666'">
                 <i class="fas fa-chevron-left" style="margin-right: 8px;"></i>
                 <span style="font-size: 14px;">返回</span>
             </div>
-            <!-- 调整标题位置，使其更靠近左侧 -->
-            <div style="position: absolute; left: 40%; transform: translateX(-50%);">
-                <span style="font-size: 18px; font-weight: 600; color: #333;">章节练习</span>
+            <!-- 调整标题位置，使其更靠近左侧并更新标题 -->
+            <div style="position: absolute; left: 40%; transform: translateX(-50%); display: flex; align-items: center;">
+                <span style="font-size: 18px; font-weight: 600; color: #333;">章节练习-</span>
+                <span id="subnav-major-text" onclick="openMajorModal()" style="font-size: 18px; font-weight: 600; color: #333; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: color 0.2s;" onmouseover="this.style.color='#ff4d4f'" onmouseout="this.style.color='#333'">
+                    专升本
+                    <i class="fas fa-chevron-down" style="font-size: 14px; color: #ccc;"></i>
+                </span>
             </div>
         </div>
     </div>
@@ -570,15 +581,14 @@
     <!-- 二级导航栏 -->
     <div class="sub-nav">
         <div class="sub-nav-content">
-            <div id="subnav-major-text" onclick="openMajorModal()" style="font-size: 16px; font-weight: 600; color: #333; display: flex; align-items: center; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#ff4d4f'" onmouseout="this.style.color='#333'">
-                专升本
-                <i class="fas fa-chevron-down" style="font-size: 12px; margin-left: 6px; color: #bbb;"></i>
-            </div>
-            <div onclick="openProvinceModal()" style="font-size: 14px; color: #888; background-color: #f5f5f5; padding: 4px 12px; border-radius: 14px; display: flex; align-items: center; gap: 4px; margin-left: 16px; cursor: pointer;">
+            <div onclick="openProvinceModal()" style="font-size: 14px; color: #888; background-color: #f5f5f5; padding: 4px 12px; border-radius: 14px; display: flex; align-items: center; gap: 4px; cursor: pointer;">
                 <span id="subnav-province-text">河南省-大学</span>
                 <i class="fas fa-chevron-down" style="font-size: 10px; color: #ccc;"></i>
             </div>
-            <button class="action-btn primary" style="margin-left: 16px; height: 28px; line-height: 28px; padding: 0 12px; font-size: 12px; border-radius: 14px; min-width: auto;">立即开通</button>
+            <!-- 立即开通改为已开通 -->
+            <button class="action-btn secondary" style="margin-left: 16px; height: 28px; line-height: 26px; padding: 0 12px; font-size: 12px; border-radius: 14px; min-width: auto; background-color: #f0f0f0; color: #666; border: 1px solid #d9d9d9;" disabled>
+                <i class="fas fa-unlock" style="margin-right: 4px;"></i>已开通
+            </button>
         </div>
     </div>
 
@@ -751,8 +761,6 @@
                 </div>
                 <div class="stat-rank">超过 97% 的学员</div>
             </div>
-
-
         </div>
     </div>
 
@@ -764,7 +772,6 @@
     <script>
         function toggleUnit(header) {
             const title = header.querySelector('.unit-title');
-            const summary = header.parentElement.querySelector('.unit-summary');
             const content = header.nextElementSibling;
             
             if (title.classList.contains('expanded')) {
@@ -950,9 +957,8 @@
                 } else {
                     const newIcon = document.createElement('i');
                     newIcon.className = 'fas fa-chevron-down';
-                    newIcon.style.fontSize = '12px';
-                    newIcon.style.marginLeft = '6px';
-                    newIcon.style.color = '#bbb';
+                    newIcon.style.fontSize = '14px';
+                    newIcon.style.color = '#ccc';
                     textEl.appendChild(newIcon);
                 }
             }
