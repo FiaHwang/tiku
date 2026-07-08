@@ -291,10 +291,12 @@
         const backBtn = document.getElementById('back-btn');
         if (backBtn) {
             backBtn.addEventListener('click', () => {
-                if (document.referrer) {
-                    window.location.href = document.referrer;
+                const ref = document.referrer;
+                // Avoid returning to report pages or quiz/analysis pages to prevent back-button loops
+                if (ref && !ref.includes('baogao') && !ref.includes('dati_yemian') && !ref.includes('jiexi')) {
+                    window.location.href = ref;
                 } else {
-                    window.location.href = 'tiku.html';
+                    window.location.href = 'zhishidian_zizhushua.html';
                 }
             });
         }
@@ -317,7 +319,13 @@
         }
 
         function viewReport(subject) {
-            window.location.href = 'zhishidian_lianxi-baogao.html?title=' + encodeURIComponent(subject);
+            const params = new URLSearchParams(window.location.search);
+            const from = params.get('from') || '';
+            let targetUrl = 'zhishidian_lianxi_baogao.html?title=' + encodeURIComponent(subject);
+            if (from) {
+                targetUrl += '&from=' + encodeURIComponent(from);
+            }
+            window.location.href = targetUrl;
         }
 
         // Block user zooming behaviors for solid design feel

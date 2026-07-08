@@ -39,7 +39,7 @@
 <body class="max-w-md mx-auto min-h-screen">
     <!-- Sticky Header -->
     <div class="sticky top-0 bg-[#fff5f0] z-50 px-4 py-4 flex items-center justify-between border-b border-orange-100/20 shadow-sm">
-        <i class="fas fa-chevron-left text-lg text-gray-700 cursor-pointer" onclick="history.back()"></i>
+        <i class="fas fa-chevron-left text-lg text-gray-700 cursor-pointer" onclick="goBack()"></i>
         <h1 class="text-lg font-bold text-gray-800">在线刷题</h1>
         <div class="w-10"></div> <!-- Placeholder to keep title centered -->
     </div>
@@ -290,6 +290,16 @@
     <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-gray-900/90 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 opacity-0 pointer-events-none z-50 shadow-lg flex items-center gap-2"></div>
 
     <script>
+        // Custom goBack to avoid sub-page loops
+        function goBack() {
+            const ref = document.referrer;
+            if (ref && !ref.includes('zhishidian_') && !ref.includes('zhangjie_') && !ref.includes('cuotiben') && !ref.includes('shoucangben') && !ref.includes('dati_yemian') && !ref.includes('jiexi') && !ref.includes('lishi')) {
+                window.location.href = ref;
+            } else {
+                window.location.href = 'tianyi_yunxiaoyuan.html';
+            }
+        }
+
         // Toast show helper
         function showToast(message, duration = 2000) {
             const toast = document.getElementById('toast');

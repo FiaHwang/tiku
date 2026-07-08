@@ -246,16 +246,16 @@
                     <h3 class="text-sm text-white/80 font-medium mb-4"><i class="fas fa-chart-bar mr-2"></i>整体概览</h3>
                     <div class="grid grid-cols-3 gap-4 mb-6 text-center">
                         <div>
+                            <div class="text-xs text-white/70 mb-1">今日练习</div>
+                            <div class="text-2xl font-bold" id="val-today-answered">18道</div>
+                        </div>
+                        <div>
                             <div class="text-xs text-white/70 mb-1">正确率</div>
                             <div class="text-2xl font-bold" id="val-accuracy">78%</div>
                         </div>
                         <div>
                             <div class="text-xs text-white/70 mb-1">累计已答</div>
                             <div class="text-2xl font-bold" id="val-total-answered">85道</div>
-                        </div>
-                        <div>
-                            <div class="text-xs text-white/70 mb-1">今日练习</div>
-                            <div class="text-2xl font-bold" id="val-today-answered">18道</div>
                         </div>
                     </div>
                 </div>
@@ -267,7 +267,7 @@
                     </div>
                     <div class="flex justify-between text-xs text-white/95 font-medium">
                         <span id="val-progress-left">总量126道</span>
-                        <span id="val-progress-right">已完成69%</span>
+                        <span id="val-progress-right">已完成68.99%</span>
                     </div>
                 </div>
             </div>
@@ -380,54 +380,68 @@
 
     <script>
         // 模拟章节数据库数据 (各20条)
+        // 需要加强的章节：正确率均小于 50%
         const weakChapters = [
-            { name: "古代文学", rate: "40%", count: "12次", tag: "练习" },
-            { name: "现代文阅读", rate: "48%", count: "9次", tag: "练习" },
-            { name: "文言文虚词辨析", rate: "50%", count: "8次", tag: "章节" },
-            { name: "文言文特殊句式", rate: "52%", count: "7次", tag: "练习" },
-            { name: "修辞手法及作用", rate: "55%", count: "6次", tag: "练习" },
-            { name: "汉语拼音与读音", rate: "56%", count: "6次", tag: "自选" },
-            { name: "现代汉语常考字形", rate: "58%", count: "5次", tag: "练习" },
-            { name: "标点符号规范运用", rate: "59%", count: "5次", tag: "核心" },
-            { name: "论述类文本阅读", rate: "61%", count: "4次", tag: "练习" },
-            { name: "文学类文本阅读", rate: "62%", count: "4次", tag: "练习" },
-            { name: "实用类文本阅读", rate: "64%", count: "4次", tag: "章节" },
-            { name: "古诗名句理解", rate: "65%", count: "3次", tag: "练习" },
-            { name: "名篇名句默写", rate: "67%", count: "3次", tag: "练习" },
-            { name: "作文材料立意分析", rate: "69%", count: "3次", tag: "核心" },
-            { name: "作文框架结构设计", rate: "70%", count: "2次", tag: "练习" },
-            { name: "病句修改与辨析", rate: "71%", count: "2次", tag: "练习" },
-            { name: "古汉语实词推断", rate: "72%", count: "2次", tag: "自选" },
-            { name: "诗歌表达技巧赏析", rate: "73%", count: "2次", tag: "练习" },
-            { name: "词类活用专项练习", rate: "74%", count: "2次", tag: "核心" },
-            { name: "文言句式翻译技巧", rate: "75%", count: "1次", tag: "练习" }
+            { name: "古代文学", rate: "15.3%", count: "12次", tag: "练习" },
+            { name: "现代文阅读", rate: "22.5%", count: "9次", tag: "练习" },
+            { name: "文言文虚词辨析", rate: "25%", count: "8次", tag: "章节" },
+            { name: "文言文特殊句式", rate: "28.6%", count: "7次", tag: "练习" },
+            { name: "修辞手法及作用", rate: "30%", count: "6次", tag: "练习" },
+            { name: "汉语拼音与读音", rate: "32.4%", count: "6次", tag: "自选" },
+            { name: "现代汉语常考字形", rate: "35%", count: "5次", tag: "练习" },
+            { name: "标点符号规范运用", rate: "36.8%", count: "5次", tag: "核心" },
+            { name: "论述类文本阅读", rate: "38%", count: "4次", tag: "练习" },
+            { name: "文学类文本阅读", rate: "40.5%", count: "4次", tag: "练习" },
+            { name: "实用类文本阅读", rate: "41.2%", count: "4次", tag: "章节" },
+            { name: "古诗名句理解", rate: "42%", count: "3次", tag: "练习" },
+            { name: "名篇名句默写", rate: "43.7%", count: "3次", tag: "练习" },
+            { name: "作文材料立意分析", rate: "44%", count: "3次", tag: "核心" },
+            { name: "作文框架结构设计", rate: "45.1%", count: "2次", tag: "练习" },
+            { name: "病句修改与辨析", rate: "46%", count: "2次", tag: "练习" },
+            { name: "古汉语实词推断", rate: "47.3%", count: "2次", tag: "自选" },
+            { name: "诗歌表达技巧赏析", rate: "48%", count: "2次", tag: "练习" },
+            { name: "词类活用专项练习", rate: "48.9%", count: "2次", tag: "核心" },
+            { name: "文言句式翻译技巧", rate: "49%", count: "1次", tag: "练习" }
         ];
 
+        // 掌握较好的章节：正确率均大于等于 50%
         const strongChapters = [
-            { name: "诗歌鉴赏", rate: "88%", count: "15次", tag: "" },
-            { name: "文言文断句", rate: "92%", count: "14次", tag: "" },
-            { name: "小说人物形象分析", rate: "90%", count: "12次", tag: "" },
-            { name: "散文意境赏析", rate: "89%", count: "11次", tag: "" },
-            { name: "新闻阅读方法要点", rate: "87%", count: "10次", tag: "" },
-            { name: "说明文说明方法", rate: "86%", count: "10次", tag: "" },
-            { name: "科技文逻辑性整合", rate: "85%", count: "9次", tag: "" },
-            { name: "叙事视角及作用", rate: "84%", count: "9次", tag: "" },
-            { name: "景物描写多角度", rate: "83%", count: "83%", tag: "" },
-            { name: "语言风格品味赏析", rate: "82%", count: "8次", tag: "" },
-            { name: "古诗修辞手法", rate: "81%", count: "8次", tag: "" },
-            { name: "戏剧矛盾冲突", rate: "80%", count: "7次", tag: "" },
-            { name: "文学常识高频点", rate: "80%", count: "7次", tag: "" },
-            { name: "熟语在语境中运用", rate: "79%", count: "7次", tag: "" },
-            { name: "同义词辨析", rate: "79%", count: "6次", tag: "" },
-            { name: "关联词的选用", rate: "78%", count: "6次", tag: "" },
-            { name: "表达简明连贯得体", rate: "78%", count: "5次", tag: "" },
-            { name: "经典句子仿写", rate: "77%", count: "5次", tag: "" },
-            { name: "语段压缩提炼", rate: "77%", count: "5次", tag: "" },
-            { name: "综合性学习实践", rate: "76%", count: "4次", tag: "" }
+            { name: "诗歌鉴赏", rate: "50.2%", count: "15次", tag: "" },
+            { name: "文言文断句", rate: "52%", count: "14次", tag: "" },
+            { name: "小说人物形象分析", rate: "55.4%", count: "12次", tag: "" },
+            { name: "散文意境赏析", rate: "58%", count: "11次", tag: "" },
+            { name: "新闻阅读方法要点", rate: "60.7%", count: "10次", tag: "" },
+            { name: "说明文说明方法", rate: "62%", count: "10次", tag: "" },
+            { name: "科技文逻辑性整合", rate: "65.5%", count: "9次", tag: "" },
+            { name: "叙事视角及作用", rate: "68%", count: "9次", tag: "" },
+            { name: "景物描写多角度", rate: "70.3%", count: "8次", tag: "" },
+            { name: "语言风格品味赏析", rate: "72%", count: "8次", tag: "" },
+            { name: "古诗修辞手法", rate: "75.4%", count: "8次", tag: "" },
+            { name: "戏剧矛盾冲突", rate: "78%", count: "7次", tag: "" },
+            { name: "文学常识高频点", rate: "80.1%", count: "7次", tag: "" },
+            { name: "熟语在语境中运用", rate: "82%", count: "7次", tag: "" },
+            { name: "同义词辨析", rate: "85.6%", count: "6次", tag: "" },
+            { name: "关联词的选用", rate: "88%", count: "6次", tag: "" },
+            { name: "表达简明连贯得体", rate: "90.2%", count: "5次", tag: "" },
+            { name: "经典句子仿写", rate: "92%", count: "5次", tag: "" },
+            { name: "语段压缩提炼", rate: "95.4%", count: "5次", tag: "" },
+            { name: "综合性学习实践", rate: "98%", count: "4次", tag: "" }
         ];
 
         let weakLimit = 10;
         let strongLimit = 10;
+
+        // 根据正确率数值返回对应的颜色 CSS 类
+        function getRateColorClass(rateStr) {
+            const val = parseInt(rateStr);
+            if (val < 33) {
+                return 'text-rose-500 font-bold'; // [0, 33%): 红色
+            } else if (val < 67) {
+                return 'text-amber-500 font-bold'; // [33%, 67%): 黄色/琥珀色
+            } else {
+                return 'text-emerald-600 font-bold'; // [67%, 100%]: 绿色
+            }
+        }
 
         function renderChapters(listId, data, limit) {
             const container = document.getElementById(listId);
@@ -440,21 +454,23 @@
                 const div = document.createElement('div');
                 div.className = 'flex justify-between items-center py-3.5 list-item-border hover:bg-gray-50/50 px-2 rounded-lg transition-colors';
                 
+                const colorClass = getRateColorClass(item.rate);
+                
                 if (isWeak) {
                     div.innerHTML = `
                         <div class="flex flex-col gap-1 pr-2">
                             <span class="text-sm text-gray-700 font-semibold">${item.name}</span>
-                            <span class="text-xs text-rose-500 font-medium">正确率 ${item.rate} | 答错${item.count}</span>
+                            <span class="text-xs text-gray-500 font-medium">正确率 <span class="${colorClass}">${item.rate}</span> | 答错${item.count}</span>
                         </div>
                         <div class="flex items-center gap-2 flex-shrink-0">
                             <button
-                                onclick="location.href='../mobile/cuotiben.html'"
+                                onclick="location.href='dati_yemian_pc.html'"
                                 class="bg-rose-50 text-rose-600 hover:bg-rose-100 border border-rose-200/50 px-3 py-1 text-xs font-medium rounded-full whitespace-nowrap active:scale-95 transition-all"
                             >
                                 错题重练
                             </button>
                             <button
-                                onclick="location.href='../mobile/boruo_tupo.html'"
+                                onclick="location.href='dati_yemian_pc.html'"
                                 class="bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200/50 px-3 py-1 text-xs font-medium rounded-full whitespace-nowrap active:scale-95 transition-all"
                             >
                                 专项练习
@@ -465,7 +481,7 @@
                     div.innerHTML = `
                         <div class="flex flex-col gap-1">
                             <span class="text-sm text-gray-700 font-semibold">${item.name}</span>
-                            <span class="text-xs text-emerald-600 font-medium">正确率 ${item.rate} | 答对${item.count}</span>
+                            <span class="text-xs text-gray-500 font-medium">正确率 <span class="${colorClass}">${item.rate}</span> | 答对${item.count}</span>
                         </div>
                     `;
                 }
@@ -491,12 +507,12 @@
                     anaCard.style.display = 'grid';
                     aiContainer.style.display = 'grid';
                     
-                    document.getElementById('val-accuracy').textContent = '78%';
+                    document.getElementById('val-accuracy').textContent = '78.3%';
                     document.getElementById('val-total-answered').textContent = '85道';
                     document.getElementById('val-today-answered').textContent = '18道';
                     document.getElementById('val-progress-bar').style.width = '68.99%';
                     document.getElementById('val-progress-left').textContent = '总量126道';
-                    document.getElementById('val-progress-right').textContent = '已完成69%';
+                    document.getElementById('val-progress-right').textContent = '已完成68.99%';
                     document.getElementById('val-correct-count').textContent = '100道';
                     document.getElementById('val-wrong-count').textContent = '26道';
                     document.getElementById('val-avg-time').textContent = '1分钟20秒';
@@ -519,7 +535,7 @@
                     document.getElementById('val-today-answered').textContent = '0道';
                     document.getElementById('val-progress-bar').style.width = '0%';
                     document.getElementById('val-progress-left').textContent = '总量126道';
-                    document.getElementById('val-progress-right').textContent = '已完成0%';
+                    document.getElementById('val-progress-right').textContent = '已完成0.00%';
                     document.getElementById('val-correct-count').textContent = '0道';
                     document.getElementById('val-wrong-count').textContent = '0道';
                     document.getElementById('val-avg-time').textContent = '0秒';

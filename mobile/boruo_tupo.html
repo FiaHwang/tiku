@@ -173,29 +173,8 @@
                         </p>
                         
                         <!-- List of weak topics inside -->
-                        <div class="space-y-3 pt-1 border-t border-dashed border-slate-200">
-                            <!-- Topic 1 -->
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-bold text-slate-800">数轴</span>
-                                <div class="flex text-gray-200 gap-0.5">
-                                    <i class="far fa-star text-xs"></i>
-                                    <i class="far fa-star text-xs"></i>
-                                    <i class="far fa-star text-xs"></i>
-                                    <i class="far fa-star text-xs"></i>
-                                    <i class="far fa-star text-xs"></i>
-                                </div>
-                            </div>
-                            <!-- Topic 2 -->
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-bold text-slate-800">复数</span>
-                                <div class="flex text-gray-200 gap-0.5">
-                                    <i class="far fa-star text-xs"></i>
-                                    <i class="far fa-star text-xs"></i>
-                                    <i class="far fa-star text-xs"></i>
-                                    <i class="far fa-star text-xs"></i>
-                                    <i class="far fa-star text-xs"></i>
-                                </div>
-                            </div>
+                        <div id="weak-topics-list" class="space-y-3 pt-1 border-t border-dashed border-slate-200">
+                            <!-- Dynamic Content -->
                         </div>
                     </div>
                 </div>
@@ -210,8 +189,8 @@
                     
                     <!-- Content Card box -->
                     <div class="bg-[#f8fafc] rounded-2xl p-4 pt-5 mt-1 border border-slate-50 flex flex-col justify-between">
-                        <p class="text-[13px] text-slate-600 font-medium leading-relaxed">
-                            掌握数轴上点的位置表示与复数在复平面上的几何意义，理解实数与复数的对应关系及运算的几何直观。
+                        <p id="training-target-text" class="text-[13px] text-slate-600 font-medium leading-relaxed">
+                            <!-- Dynamic Content -->
                         </p>
                         <button class="text-xs text-blue-500 font-bold self-end mt-2 flex items-center gap-0.5 hover:text-blue-600 active:scale-95 transition-all">
                             <span>查看全部</span>
@@ -233,22 +212,8 @@
         <div class="bg-white/90 backdrop-blur-sm rounded-[24px] p-5 border border-slate-100 shadow-sm space-y-4">
             
             <!-- Cards wrap: 17 Ease, 1 Medium, 2 hard/easy -->
-            <div class="grid grid-cols-3 gap-3">
-                <!-- Unit 1 -->
-                <div class="bg-blue-50/50 rounded-2xl p-4 text-center border border-blue-50 flex flex-col justify-between h-20">
-                    <div class="text-[26px] font-extrabold text-slate-800 leading-none">17</div>
-                    <div class="text-[11px] text-slate-500 font-semibold mt-1">易</div>
-                </div>
-                <!-- Unit 2 -->
-                <div class="bg-indigo-50/40 rounded-2xl p-4 text-center border border-indigo-50/50 flex flex-col justify-between h-20">
-                    <div class="text-[26px] font-extrabold text-slate-800 leading-none">1</div>
-                    <div class="text-[11px] text-slate-500 font-semibold mt-1">中</div>
-                </div>
-                <!-- Unit 3 -->
-                <div class="bg-purple-50/40 rounded-2xl p-4 text-center border border-purple-50/50 flex flex-col justify-between h-20">
-                    <div class="text-[26px] font-extrabold text-slate-800 leading-none">2</div>
-                    <div class="text-[11px] text-slate-500 font-semibold mt-1">较易</div>
-                </div>
+            <div id="stats-grid" class="grid grid-cols-3 gap-3">
+                <!-- Dynamic Content -->
             </div>
 
             <!-- Detailed counts -->
@@ -258,14 +223,87 @@
             </div>
         </div>
 
-    </div>
+        <!-- Bottom Action Button for Special Training -->
+        <div class="pt-1 pb-2">
+            <button class="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full text-white font-extrabold text-base tracking-wide shadow-md shadow-blue-500/20 active:scale-[0.98] active:brightness-95 transition-all text-center" onclick="startSpecialTraining()">
+                开始专项突破
+            </button>
+        </div>
 
-    <!-- Bottom Action Button bar -->
-    <div class="px-4 pt-4 pb-8">
-        <button class="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full text-white font-extrabold text-base tracking-wide shadow-md shadow-blue-500/20 active:scale-[0.98] active:brightness-95 transition-all text-center" onclick="startSpecialTraining()">
-            开始专项突破
-        </button>
-    </div>
+        <!-- High-frequency Common Mistake Consolidation Card -->
+        <div class="bg-white rounded-[28px] shadow-lg border border-slate-100 overflow-hidden mt-2">
+            <!-- Header section with soft purple gradient -->
+            <div class="bg-gradient-to-r from-[#eae6fa] to-[#dcd6f7] px-5 py-5 relative flex justify-between items-center">
+                <!-- Sparkle background elements -->
+                <div class="absolute left-4 top-2 text-violet-400 text-xs opacity-60">✦</div>
+                
+                <div class="space-y-1 relative z-10">
+                    <h3 class="text-xl font-extrabold text-violet-950 tracking-tight">高频易错点巩固</h3>
+                    <p id="mistake-desc-text" class="text-[11px] text-violet-700/80 font-semibold">针对你常错的2类题型进行强化</p>
+                </div>
+
+                <!-- Beautiful Notebook & Pencil SVG Illustration -->
+                <div class="w-16 h-16 relative z-10 -my-2 mr-1">
+                    <svg viewBox="0 0 100 100" fill="none" class="w-full h-full drop-shadow-md" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Notebook Shadow -->
+                        <rect x="18" y="18" width="60" height="68" rx="14" fill="#6d28d9" opacity="0.15" />
+                        <!-- Notebook Cover (Purple) -->
+                        <rect x="15" y="15" width="60" height="68" rx="12" fill="url(#purpleGrad)" />
+                        <!-- Spine / Rings (Left side) -->
+                        <rect x="11" y="24" width="8" height="6" rx="3" fill="#a78bfa" />
+                        <rect x="11" y="38" width="8" height="6" rx="3" fill="#a78bfa" />
+                        <rect x="11" y="52" width="8" height="6" rx="3" fill="#a78bfa" />
+                        <rect x="11" y="66" width="8" height="6" rx="3" fill="#a78bfa" />
+                        <!-- White Pages Stack -->
+                        <rect x="25" y="19" width="46" height="60" rx="8" fill="#ffffff" />
+                        <!-- Page lines (thin grey lines) -->
+                        <line x1="32" y1="32" x2="64" y2="32" stroke="#e2e8f0" stroke-width="2.5" stroke-linecap="round" />
+                        <line x1="32" y1="44" x2="64" y2="44" stroke="#e2e8f0" stroke-width="2.5" stroke-linecap="round" />
+                        <line x1="32" y1="56" x2="56" y2="56" stroke="#e2e8f0" stroke-width="2.5" stroke-linecap="round" />
+                        <line x1="32" y1="68" x2="48" y2="68" stroke="#e2e8f0" stroke-width="2.5" stroke-linecap="round" />
+                        <!-- Gold / Yellow Pencil on top -->
+                        <g transform="translate(48, 22) rotate(22)">
+                            <!-- Pencil Body (Yellow-Orange) -->
+                            <rect x="6" y="0" width="8" height="38" rx="2" fill="#f59e0b" />
+                            <!-- Pencil Eraser (Pink) -->
+                            <path d="M6 38C6 39.1 6.9 40 8 40H12C13.1 40 14 39.1 14 38V34H6V38Z" fill="#ec4899" />
+                            <!-- Silver collar -->
+                            <rect x="6" y="32" width="8" height="3" fill="#94a3b8" />
+                            <!-- Pencil Tip (Wood) -->
+                            <path d="M6 0L10 -12L14 0H6Z" fill="#fed7aa" />
+                            <!-- Pencil Graphite Lead (Dark Gray) -->
+                            <path d="M9.2 -9.6L10 -12L10.8 -9.6H9.2Z" fill="#1e293b" />
+                        </g>
+                        <!-- Gradients definition -->
+                        <defs>
+                            <linearGradient id="purpleGrad" x1="15" y1="15" x2="75" y2="83" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#a78bfa" />
+                                <stop offset="1" stop-color="#7c3aed" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Content details inside the card -->
+            <div class="p-5 space-y-4">
+                <!-- Two stats indicators grid -->
+                <div id="mistake-stats-grid" class="grid grid-cols-2 gap-4">
+                    <!-- Dynamic Content -->
+                </div>
+
+                <!-- Counts and estimations -->
+                <div class="flex items-center justify-between text-xs font-bold text-slate-500 px-2 mt-4">
+                    <span>共计 <strong class="text-slate-800 text-sm font-extrabold">20</strong> 题</span>
+                    <span>预计时间 <strong class="text-slate-800 text-sm font-extrabold">30</strong> 分钟</span>
+                </div>
+
+                <!-- Purple Start Consolidation Button inside card -->
+                <button class="w-full py-4 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-full text-white font-extrabold text-base tracking-wide shadow-md shadow-violet-500/20 active:scale-[0.98] active:brightness-95 transition-all text-center mt-3" onclick="startCommonMistakeConsolidation()">
+                    开始易错点巩固
+                </button>
+            </div>
+        </div>
 
     <!-- Toast Component -->
     <div id="toast" class="fixed top-12 left-1/2 -translate-x-1/2 bg-black/80 text-white text-xs font-bold px-4 py-2.5 rounded-full opacity-0 pointer-events-none transition-all duration-300 z-50 shadow-lg flex items-center gap-1.5">
@@ -298,6 +336,113 @@
 
         function startSpecialTraining() {
             showToast('正在为您智能组卷，即将开始专项练习...', false);
+            setTimeout(() => {
+                const params = new URLSearchParams(window.location.search);
+                const title = params.get('title') || '薄弱点专项突破';
+                window.location.href = 'dati_yemian.html?mode=knowledge&title=' + encodeURIComponent(title);
+            }, 1200);
+        }
+
+        function startCommonMistakeConsolidation() {
+            showToast('正在为您加载高频易错点巩固练习...', false);
+            setTimeout(() => {
+                window.location.href = 'dati_yemian.html?mode=knowledge&title=' + encodeURIComponent('易错点巩固');
+            }, 1200);
+        }
+
+        // Dynamic subject data configuration
+        const params = new URLSearchParams(window.location.search);
+        const subject = params.get('subject') || 'chinese'; // Default to Chinese (matches the screenshot)
+
+        const SUBJECT_DATA = {
+            chinese: {
+                topics: [
+                    { name: "《老子》", stars: 0 },
+                    { name: "《国语》", stars: 0 }
+                ],
+                target: "掌握《老子》与《国语》的思想内涵及文学特色，理解其在先秦思想与历史叙事中的地位与影响。",
+                stats: [
+                    { val: 11, label: "易", bg: "bg-blue-50/50", border: "border-blue-50" },
+                    { val: 2, label: "中", bg: "bg-indigo-50/40", border: "border-indigo-50/50" },
+                    { val: 7, label: "较易", bg: "bg-purple-50/40", border: "border-purple-50/50" }
+                ],
+                mistakes: [
+                    { val: 17, label: "单选题", bg: "bg-violet-50/50", border: "border-violet-50" },
+                    { val: 3, label: "判断题", bg: "bg-fuchsia-50/40", border: "border-fuchsia-50/50" }
+                ],
+                mistakeDesc: "针对你常错的2类题型进行强化"
+            },
+            math: {
+                topics: [
+                    { name: "数轴", stars: 0 },
+                    { name: "复数", stars: 0 }
+                ],
+                target: "掌握数轴上点的位置表示与复数在复平面上的几何意义，理解实数与复数的对应关系及运算的几何直观。",
+                stats: [
+                    { val: 17, label: "易", bg: "bg-blue-50/50", border: "border-blue-50" },
+                    { val: 1, label: "中", bg: "bg-indigo-50/40", border: "border-indigo-50/50" },
+                    { val: 2, label: "较易", bg: "bg-purple-50/40", border: "border-purple-50/50" }
+                ],
+                mistakes: [
+                    { val: 15, label: "选择题", bg: "bg-violet-50/50", border: "border-violet-50" },
+                    { val: 5, label: "填空题", bg: "bg-fuchsia-50/40", border: "border-fuchsia-50/50" }
+                ],
+                mistakeDesc: "针对你在代数与几何高频错题进行专项强化"
+            }
+        };
+
+        const currentData = SUBJECT_DATA[subject] || SUBJECT_DATA.chinese;
+
+        // Render topics
+        const topicsList = document.getElementById('weak-topics-list');
+        if (topicsList) {
+            topicsList.innerHTML = currentData.topics.map(topic => {
+                let starsHtml = '';
+                // 5 empty stars as shown in screenshot
+                for (let i = 0; i < 5; i++) {
+                    starsHtml += '<i class="far fa-star text-xs text-gray-200"></i>';
+                }
+                return `
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-bold text-slate-800">${topic.name}</span>
+                        <div class="flex text-gray-200 gap-0.5">${starsHtml}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render target
+        const targetText = document.getElementById('training-target-text');
+        if (targetText) {
+            targetText.textContent = currentData.target;
+        }
+
+        // Render stats
+        const statsGrid = document.getElementById('stats-grid');
+        if (statsGrid) {
+            statsGrid.innerHTML = currentData.stats.map(stat => `
+                <div class="${stat.bg} rounded-2xl p-4 text-center border ${stat.border} flex flex-col justify-between h-20">
+                    <div class="text-[26px] font-extrabold text-slate-800 leading-none">${stat.val}</div>
+                    <div class="text-[11px] text-slate-500 font-semibold mt-1">${stat.label}</div>
+                </div>
+            `).join('');
+        }
+
+        // Render mistake stats
+        const mistakeStatsGrid = document.getElementById('mistake-stats-grid');
+        if (mistakeStatsGrid) {
+            mistakeStatsGrid.innerHTML = currentData.mistakes.map(m => `
+                <div class="${m.bg} rounded-2xl p-4 text-center border ${m.border} flex flex-col justify-between h-20">
+                    <div class="text-[26px] font-extrabold text-slate-800 leading-none">${m.val}</div>
+                    <div class="text-[11px] text-slate-500 font-semibold mt-1">${m.label}</div>
+                </div>
+            `).join('');
+        }
+
+        // Render mistake desc
+        const mistakeDescEl = document.getElementById('mistake-desc-text');
+        if (mistakeDescEl) {
+            mistakeDescEl.textContent = currentData.mistakeDesc;
         }
     </script>
 </body>

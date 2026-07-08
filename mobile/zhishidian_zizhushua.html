@@ -18,6 +18,16 @@
                 window.history.replaceState({}, '', newUrl);
             }
         })();
+
+        // 统一返回上一页逻辑，避免循环退回到历史记录或报告页
+        function goBack() {
+            const ref = document.referrer;
+            if (ref && !ref.includes('zhishidian_lianxi_lishi') && !ref.includes('zhishidian_lianxi_baogao') && !ref.includes('dati_yemian') && !ref.includes('jiexi')) {
+                window.location.href = ref;
+            } else {
+                window.location.href = 'tianyi_yunxiaoyuan_shuati.html';
+            }
+        }
     </script>
     <style>
         /* 重置样式 */
@@ -594,7 +604,7 @@
     <!-- 顶部导航栏 -->
     <div class="header">
         <div class="header-top" style="position: relative; display: flex; align-items: center; justify-content: center;">
-            <i class="fas fa-chevron-left" onclick="history.back()" style="position: absolute; left: 0; font-size: 18px; color: #333; cursor: pointer;"></i>
+            <i class="fas fa-chevron-left" onclick="goBack()" style="position: absolute; left: 0; font-size: 18px; color: #333; cursor: pointer;"></i>
             <div class="header-title">知识点自主刷</div>
         </div>
     </div>
@@ -630,7 +640,7 @@
             <div style="padding: 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-around; align-items: center;">
                 <button onclick="window.location.href='dati_yemian.html?mode=knowledge&title=智能练习'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">智能练习</button>
                 <button onclick="window.location.href='zhishidian_zhengti_baogao.html'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">整体报告</button>
-                <button onclick="window.location.href='zhishidian_lianxi_lishi.html'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">练习历史</button>
+                <button onclick="window.location.href='zhishidian_lianxi_lishi.html?from=zizhushua'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">练习历史</button>
             </div>
 
             <!-- 知识分类列表 -->
@@ -643,13 +653,13 @@
                     </div>
                     <button class="action-btn-small primary" onclick="event.stopPropagation(); window.location.href='dati_yemian.html?mode=knowledge&type=1'">练习</button>
                 </div>
-                <div class="unit-progress">17/37 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">20%</span></div>
+                <div class="unit-progress">17/37 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">20.5%</span></div>
                 <div class="unit-content">
                     <!-- 练习项 -->
                     <div class="practice-item">
                         <div class="item-info">
                             <div class="item-title">文学常识基础</div>
-                            <div class="item-stats">17/37 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">20%</span></div>
+                            <div class="item-stats">17/37 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">20.5%</span></div>
                         </div>
                         <div class="item-actions">
                             <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=1_1'">练习</button>

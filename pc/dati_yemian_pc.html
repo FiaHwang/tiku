@@ -1746,7 +1746,11 @@
 
         // 返回上一页
         document.querySelector('.return-btn').addEventListener('click', function() {
-            window.location.href = 'tiku_pc.html';
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = 'tiku_pc.html';
+            }
         });
 
         // 功能标签点击

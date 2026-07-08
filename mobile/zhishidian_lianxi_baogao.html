@@ -791,7 +791,7 @@
             <i class="far fa-circle-xmark"></i>
             <span class="nav-lbl">错题解析</span>
         </button>
-        <button class="nav-action-btn purple-highlight" onclick="window.location.href='cuotiben.html'">
+        <button id="cuotiben-btn" class="nav-action-btn purple-highlight" onclick="window.location.href='cuotiben.html'">
             <i class="fas fa-book-dead"></i>
             <span class="nav-lbl">错题本</span>
         </button>
@@ -802,6 +802,18 @@
     </nav>
 
     <script>
+        // Dynamic Query String reading for flexible display
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Hide wrong-notebook (错题本) if entered from zhishidian_zizhushua
+        const fromSource = urlParams.get('from');
+        if (fromSource === 'zizhushua' || (document.referrer && document.referrer.includes('zhishidian_zizhushua.html'))) {
+            const cuotibenBtn = document.getElementById('cuotiben-btn');
+            if (cuotibenBtn) {
+                cuotibenBtn.style.display = 'none';
+            }
+        }
+
         // Back Button Functional Navigation
         const backBtn = document.getElementById('back-btn');
         if (backBtn) {
@@ -814,8 +826,6 @@
             });
         }
 
-        // Dynamic Query String reading for flexible display
-        const urlParams = new URLSearchParams(window.location.search);
         const urlTitle = urlParams.get('title');
         if (urlTitle) {
             const titleEl = document.getElementById('subject-title');
