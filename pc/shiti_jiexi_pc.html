@@ -1572,7 +1572,7 @@
                         <div class="question-answer">
                             <div class="answer-input" style="margin-bottom: 12px;">
                                 <span style="display: inline-block; width: 20px;">1</span>
-                                <input type="text" value="千里之行" disabled style="padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; width: calc(100% - 30px); background-color: #f5f5f5;">
+                                <input type="text" value="拭目以待" disabled style="padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; width: calc(100% - 30px); background-color: #f5f5f5; color: #333;">
                             </div>
                             <div class="answer-image-upload" style="margin-left: 20px; margin-bottom: 24px;">
                                 <div class="photo-thumbnail-grid" onclick="viewImage(this)" style="width: 120px; height: 90px; border-radius: 4px; overflow: hidden; cursor: pointer;">
@@ -1581,7 +1581,7 @@
                             </div>
                             <div class="answer-input" style="margin-bottom: 12px;">
                                 <span style="display: inline-block; width: 20px;">2</span>
-                                <input type="text" value="始于足下" disabled style="padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; width: calc(100% - 30px); background-color: #f5f5f5;">
+                                <input type="text" value="未答" disabled style="padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; width: calc(100% - 30px); background-color: #f5f5f5; color: #999;">
                             </div>
                             <div class="answer-image-upload" style="margin-left: 20px;">
                                 <div class="photo-thumbnail-grid" onclick="viewImage(this)" style="width: 120px; height: 90px; border-radius: 4px; overflow: hidden; cursor: pointer;">
@@ -1621,6 +1621,14 @@
                         <!-- 答案和解析 -->
                         <div class="answer-analysis">
                             <div class="analysis-section" style="border-top: none;">
+                                <div class="ai-correction" style="margin-bottom: 20px;">
+                                    <div style="font-size: 14px; font-weight: 500; color: #333; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                                        <i class="fas fa-robot" style="color: #1890ff;"></i>
+                                        <span>AI批改：10%得分率</span>
+                                        <span style="font-size: 12px; font-weight: normal; color: #999;">(内容由AI生成，分数仅供参考)</span>
+                                    </div>
+                                    <div style="width: 100%; padding: 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; color: #333; line-height: 1.5; background-color: #fafafa;">AI评语：第一空作答错误，填写的“拭目以待”并非古诗文原文，此处应填“千里之行”；第二空未作答，此处应填“始于足下”。整句话出自《老子》第六十四章，建议加强经典古诗文的背诵与识记，避免张冠黎戴。</div>
+                                </div>
                                 <div class="correct-answer" style="margin-bottom: 16px;">
                                     <span>参考答案：</span>
                                     <div style="color: #52c41a; margin-left: 8px; margin-top: 8px; padding: 8px; background-color: #f6ffed; border-radius: 4px;">
@@ -2445,7 +2453,7 @@
                 }
                 // 答题报告标签点击跳转到答题报告页面
                 else if (label === '答题报告') {
-                    console.log('跳转到答题报告页面');
+                    window.location.href = 'dati_baogao_pc.html';
                 }
                 // 答题排行标签点击跳转到答题排行页面
                 else if (label === '答题排行') {

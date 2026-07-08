@@ -1376,7 +1376,7 @@
                                 <span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; margin-right: 8px; white-space: nowrap; display: inline-block;">免费</span>
                                 第一章：极限与连续
                             </div>
-                            <div style="text-align: center; color: #666; font-size: 14px;">0%</div>
+                            <div style="text-align: center; color: #666; font-size: 14px;">75.5%</div>
                             <div style="text-align: center; color: #666; font-size: 14px;">30/200</div>
                             <div style="text-align: right; padding-right: 20px;">
                             </div>
@@ -1388,10 +1388,10 @@
                                      <span style="padding: 2px 8px; background-color: #52c41a; color: #fff; border-radius: 10px; font-size: 10px; margin-right: 8px; white-space: nowrap; display: inline-block;">免费</span>
                                      极限概念
                                  </div>
-                                 <div style="text-align: center; color: #666; font-size: 14px;">0%</div>
+                                 <div style="text-align: center; color: #666; font-size: 14px;">80%</div>
                                  <div style="text-align: center; color: #666; font-size: 14px;">15/100</div>
                                  <div style="display: flex; gap: 8px; justify-content: flex-end; padding-right: 20px;">
-                                     <button class="action-btn secondary" style="min-width: 70px;">查看报告</button>
+                                     <button class="action-btn secondary" style="min-width: 70px;" onclick="window.location.href='dati_baogao_pc.html'">查看报告</button>
                                      <button class="action-btn primary" style="min-width: 70px;" onclick="window.location.href='dati_yemian_pc.html'">继续答题</button>
                                  </div>
                              </div>
@@ -1400,17 +1400,17 @@
 
                     <div class="practice-item" style="display: grid; grid-template-columns: 2fr 100px 100px 200px; align-items: center; padding: 16px 0; border-bottom: 1px solid #f0f0f0;">
                         <div style="padding-left: 20px; font-size: 14px; color: #333;">第二章：导数与微分</div>
-                        <div style="text-align: center; color: #666; font-size: 14px;">0%</div>
+                        <div style="text-align: center; color: #666; font-size: 14px;">-</div>
                         <div style="text-align: center; color: #666; font-size: 14px;">0/150</div>
                         <div style="display: flex; gap: 8px; justify-content: flex-end; padding-right: 20px;">
-                            <button class="action-btn secondary" style="min-width: 70px;">查看报告</button>
+                            <button class="action-btn secondary" style="min-width: 70px;" onclick="window.location.href='dati_baogao_pc.html'">查看报告</button>
                             <button class="action-btn primary" style="min-width: 70px;" onclick="window.location.href='dati_yemian_pc.html'">继续答题</button>
                         </div>
                     </div>
                     
                     <div class="practice-item" style="display: grid; grid-template-columns: 2fr 100px 100px 200px; align-items: center; padding: 16px 0; border-bottom: 1px solid #f0f0f0;">
                         <div style="padding-left: 20px; font-size: 14px; color: #333;">第三章：一元函数积分学</div>
-                        <div style="text-align: center; color: #666; font-size: 14px;">0%</div>
+                        <div style="text-align: center; color: #666; font-size: 14px;">-</div>
                         <div style="text-align: center; color: #666; font-size: 14px;">0/150</div>
                         <div style="display: flex; gap: 8px; justify-content: flex-end; padding-right: 20px;">
                             <button class="action-btn primary" style="min-width: 70px;" onclick="window.location.href='dati_yemian_pc.html'">开始答题</button>
@@ -1481,6 +1481,8 @@
                     window.location.href = 'shoucangben_pc.html';
                 } else if (label === '练习历史') {
                     window.location.href = 'lianxi_lishi_pc.html';
+                } else if (label === '答题报告') {
+                    window.location.href = 'dati_baogao_pc.html';
                 }
             });
         });
