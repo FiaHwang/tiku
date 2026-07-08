@@ -374,7 +374,7 @@
             <!-- 统计范围提示 -->
             <div class="px-4 py-3 bg-blue-50/70 border border-blue-100/50 rounded-xl text-xs text-blue-600 flex items-center gap-2 font-medium">
                 <i class="fas fa-info-circle text-sm text-blue-500"></i>
-                <span>统计范围 （仅题库）：仅针对所选目标下的题库内做题记录。</span>
+                <span>统计范围 ：仅针对所选目标下的题库内做题记录。</span>
             </div>
 
             <!-- 4-Column Desktop Grid -->
@@ -551,7 +551,7 @@
             <div class="px-4 py-3 bg-blue-50/70 border border-blue-100/50 rounded-xl text-xs text-blue-600 flex items-center justify-between font-medium">
                 <div class="flex items-center gap-2">
                     <i class="fas fa-info-circle text-sm text-blue-500"></i>
-                    <span>统计范围 （仅题库）：仅针对所选目标下的题库内做题记录。</span>
+                    <span>统计范围 ：仅针对所选目标下的题库内做题记录。</span>
                 </div>
                 <!-- Date Range -->
                 <div id="date-range" class="text-xs text-blue-500 font-semibold bg-blue-100/60 px-3 py-1 rounded-full">
@@ -610,7 +610,7 @@
                     <!-- Charts row: side by side in desktop -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <!-- Answer Quantity Chart -->
-                        <div class="bg-white rounded-2xl p-4 card-shadow">
+                        <div class="bg-white rounded-2xl p-4 card-shadow min-w-0">
                             <div class="flex items-center justify-between mb-4">
                                 <h2 class="text-xs font-bold text-gray-800">答题量对比</h2>
                                 <div class="flex gap-2 text-[9px] text-gray-400">
@@ -619,13 +619,13 @@
                                     <span class="flex items-center gap-0.5"><span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>全站</span>
                                 </div>
                             </div>
-                            <div class="h-44">
+                            <div class="h-44 relative w-full overflow-hidden">
                                 <canvas id="quantityChart"></canvas>
                             </div>
                         </div>
 
                         <!-- Duration Contrast Chart -->
-                        <div class="bg-white rounded-2xl p-4 card-shadow">
+                        <div class="bg-white rounded-2xl p-4 card-shadow min-w-0">
                             <div class="flex items-center justify-between mb-4">
                                 <h2 class="text-xs font-bold text-gray-800">答题时长对比</h2>
                                 <div class="flex gap-2 text-[9px] text-gray-400">
@@ -634,13 +634,13 @@
                                     <span class="flex items-center gap-0.5"><span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>全站</span>
                                 </div>
                             </div>
-                            <div class="h-44">
+                            <div class="h-44 relative w-full overflow-hidden">
                                 <canvas id="durationChart"></canvas>
                             </div>
                         </div>
 
                         <!-- Accuracy Trend Chart -->
-                        <div class="bg-white rounded-2xl p-4 card-shadow">
+                        <div class="bg-white rounded-2xl p-4 card-shadow min-w-0">
                             <div class="flex items-center justify-between mb-4">
                                 <h2 class="text-xs font-bold text-gray-800">正确率趋势</h2>
                                 <div class="flex gap-2 text-[9px] text-gray-400">
@@ -649,7 +649,7 @@
                                     <span class="flex items-center gap-0.5"><span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>全站</span>
                                 </div>
                             </div>
-                            <div class="h-44">
+                            <div class="h-44 relative w-full overflow-hidden">
                                 <canvas id="accuracyChart"></canvas>
                             </div>
                         </div>
@@ -791,7 +791,7 @@
             <!-- 统计范围提示 -->
             <div class="px-4 py-3 bg-blue-50/70 border border-blue-100/50 rounded-xl text-xs text-blue-600 flex items-center gap-2 font-medium">
                 <i class="fas fa-info-circle text-sm text-blue-500"></i>
-                <span>统计范围 （仅题库）：仅针对所选目标下的题库内做题记录。</span>
+                <span>统计范围 ：仅针对所选目标下的题库内做题记录。</span>
             </div>
 
             <!-- 2-Column Desktop Grid -->
@@ -971,7 +971,7 @@
             <!-- 统计范围提示 -->
             <div class="px-4 py-3 bg-blue-50/70 border border-blue-100/50 rounded-xl text-xs text-blue-600 flex items-center gap-2 font-medium">
                 <i class="fas fa-info-circle text-sm text-blue-500"></i>
-                <span>统计范围 （全量）：覆盖所选目标下的全部做题记录，不限于题库。</span>
+                <span>统计范围 ：覆盖所选目标下的全部做题记录，不限于题库，每日凌晨更新。</span>
             </div>
 
 
@@ -1025,7 +1025,7 @@
                                 <div class="text-xl font-extrabold text-white tracking-tight" id="xq-val-accuracy">85%</div>
                             </div>
                             <div class="bg-white/10 backdrop-blur-sm p-3 rounded-xl border border-white/10 text-center">
-                                <div class="text-[10px] text-blue-100 mb-1">近7天答题</div>
+                                <div class="text-[10px] text-blue-100 mb-1">近7天客观题答题数量</div>
                                 <div class="text-lg font-extrabold text-white" id="xq-val-7day-count">132 题</div>
                             </div>
                             <div class="bg-white/10 backdrop-blur-sm p-3 rounded-xl border border-white/10 text-center">
@@ -1073,7 +1073,7 @@
                             通过热力图表现您每日的试题解算热度。格子颜色越深表示做题数量越多。
                         </p>
                         
-                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 overflow-x-auto">
                             <div style="display: grid; grid-template-columns: repeat(30, minmax(0, 1fr)); gap: 3px;" id="heatmap-grid"></div>
                             <div class="flex justify-between items-center text-[10px] text-gray-400 mt-4 pt-3 border-t border-gray-200/60">
                                 <span>最近 360 天做题表现 (时间轴)</span>
@@ -1124,7 +1124,7 @@
                                 <div class="w-6 h-6 bg-amber-100 rounded-lg flex items-center justify-center text-amber-600 border border-amber-200/50">
                                     <i class="far fa-lightbulb text-sm"></i>
                                 </div>
-                                <h2 class="text-xs font-black text-amber-950 tracking-wider">个性化学习智能指导建议</h2>
+                                <h2 class="text-xs font-black text-amber-950 tracking-wider">个性化学习指导</h2>
                                 <span class="text-[10px] text-amber-700 font-semibold">（内容由AI生成，每日凌晨更新）</span>
                             </div>
                         </div>
