@@ -2045,7 +2045,7 @@
                 } else if (action === '收藏') {
                     alert('收藏');
                 } else if (action === '答题卡') {
-                    alert('答题卡');
+                    showAnswerCard();
                 }
             });
 
@@ -2327,8 +2327,116 @@
             showCurrentQuestion();
         });
 
+        // 答题卡交互逻辑
+        window.showAnswerCard = function() {
+            const modal = document.getElementById('answer-card-modal');
+            const gridContainer = document.getElementById('answer-card-grid-container');
+            if (!modal || !gridContainer) return;
+
+            let html = '';
+            const totalQuestions = 15;
+            const correctIndices = [1, 3, 5, 8, 10, 12, 14];
+            const wrongIndices = [2, 6, 9, 13];
+            const halfIndices = [7, 11];
+            
+            for (let i = 1; i <= totalQuestions; i++) {
+                let statusClass = '';
+                if (correctIndices.includes(i)) {
+                    statusClass = 'correct';
+                } else if (wrongIndices.includes(i)) {
+                    statusClass = 'wrong';
+                } else if (halfIndices.includes(i)) {
+                    statusClass = 'half-correct';
+                } else {
+                    statusClass = 'unanswered';
+                }
+                
+                if (i === currentQuestionIndex + 1) {
+                    statusClass += ' active';
+                }
+                
+                html += `<div class="answer-item ${statusClass}" onclick="jumpToQuestion(${i})">${i}</div>`;
+            }
+            gridContainer.innerHTML = html;
+
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.add('active');
+            }, 10);
+        };
+
+        window.closeAnswerCard = function() {
+            const modal = document.getElementById('answer-card-modal');
+            if (!modal) return;
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        };
+
+        window.jumpToQuestion = function(i) {
+            currentQuestionIndex = i - 1;
+            showCurrentQuestion();
+            closeAnswerCard();
+        };
+
         // 初始化显示第一题
         showCurrentQuestion();
     </script>
+
+    <style>
+        #answer-card-grid-container .answer-item {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        #answer-card-grid-container .answer-item.active {
+            border: 2.5px solid #1f2937 !important;
+            box-shadow: 0 0 0 2px rgba(31, 41, 55, 0.15);
+        }
+    </style>
+
+    <!-- 答题卡弹窗 -->
+    <div id="answer-card-modal" class="modal bottom-drawer" onclick="closeAnswerCard()">
+        <div class="modal-content" onclick="event.stopPropagation()" style="height: auto; max-height: 80vh;">
+            <div class="modal-header">
+                <span class="modal-title" style="font-size: 18px; font-weight: 700; color: #333;">答题卡</span>
+                <span class="close-btn" onclick="closeAnswerCard()" style="cursor: pointer; font-size: 20px; color: #999;">&times;</span>
+            </div>
+            <div class="answer-card-content" style="padding: 20px;">
+                <!-- Legend -->
+                <div class="answer-card-stats" style="margin-bottom: 20px; justify-content: flex-start; gap: 12px;">
+                    <div class="stat-item" style="display: flex; align-items: center; gap: 6px;">
+                        <span class="answer-item correct" style="width: 14px; height: 14px; border-radius: 50%; display: inline-block;"></span>
+                        <span style="font-size: 12px; color: #666;">正确</span>
+                    </div>
+                    <div class="stat-item" style="display: flex; align-items: center; gap: 6px;">
+                        <span class="answer-item wrong" style="width: 14px; height: 14px; border-radius: 50%; display: inline-block;"></span>
+                        <span style="font-size: 12px; color: #666;">错误</span>
+                    </div>
+                    <div class="stat-item" style="display: flex; align-items: center; gap: 6px;">
+                        <span class="answer-item half-correct" style="width: 14px; height: 14px; border-radius: 50%; display: inline-block;"></span>
+                        <span style="font-size: 12px; color: #666;">半对</span>
+                    </div>
+                    <div class="stat-item" style="display: flex; align-items: center; gap: 6px;">
+                        <span class="answer-item answered" style="width: 14px; height: 14px; border-radius: 50%; display: inline-block;"></span>
+                        <span style="font-size: 12px; color: #666;">已答</span>
+                    </div>
+                    <div class="stat-item" style="display: flex; align-items: center; gap: 6px;">
+                        <span class="answer-item unanswered" style="width: 14px; height: 14px; border-radius: 50%; display: inline-block;"></span>
+                        <span style="font-size: 12px; color: #666;">未答</span>
+                    </div>
+                </div>
+                
+                <!-- Grid -->
+                <div class="answer-grid" id="answer-card-grid-container" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; justify-items: center;">
+                    <!-- Dynamically generated 1 - 15 -->
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

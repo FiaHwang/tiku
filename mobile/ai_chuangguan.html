@@ -158,6 +158,41 @@
             from { transform: translate(-50%, 20px); opacity: 0; }
             to { transform: translate(-50%, 0); opacity: 1; }
         }
+
+        /* Subject Tab Items */
+        .scrollbar-none::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-none {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .subject-tab-item {
+            position: relative;
+            flex-shrink: 0;
+            padding: 6px 2px 10px 2px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #555555;
+            cursor: pointer;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .subject-tab-item.active {
+            color: #ef4444; /* Red color matching the screenshot */
+            font-weight: 700;
+        }
+        .subject-tab-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 14px;
+            height: 3px;
+            background-color: #ef4444;
+            border-radius: 2px;
+        }
     </style>
 </head>
 <body class="max-w-md mx-auto min-h-screen flex flex-col bg-[#fafafa] relative shadow-lg">
@@ -165,30 +200,44 @@
     <!-- 顶部标题栏 -->
     <div class="sticky top-0 bg-white z-50 px-4 py-4 flex items-center justify-between border-b border-gray-100 shadow-sm">
         <i class="fas fa-chevron-left text-lg text-gray-700 cursor-pointer" onclick="history.back()"></i>
-        <h1 class="text-lg font-bold text-gray-800" id="page-title">AI闯关练</h1>
-        <button class="text-sm font-medium text-orange-500 hover:text-orange-600 cursor-pointer" onclick="showRules()">规则说明</button>
+        <h1 class="text-lg font-bold text-gray-800 mx-auto" id="page-title" style="transform: translateX(12px);">AI闯关练</h1>
+        <div style="width: 24px;"></div>
     </div>
 
     <!-- 筛选和版本切换区 -->
-    <div class="bg-white px-4 py-3 border-b border-gray-100 flex flex-col gap-2.5 text-sm text-gray-600 shadow-sm">
-        <div class="flex items-center justify-between w-full">
-            <div class="flex items-center gap-1 font-medium cursor-pointer" id="degree-selector-container">
-                <span id="degree-selected">专升本</span>
-                <i class="fas fa-chevron-down text-xs text-gray-400"></i>
-            </div>
-            
-            <div class="flex items-center gap-1 font-medium cursor-pointer" id="province-selector-container">
-                <span id="province-selected">河南 | 英语</span>
-                <i class="fas fa-chevron-down text-xs text-gray-400"></i>
-            </div>
+    <div class="bg-white px-4 py-3 border-b border-gray-100 flex items-center justify-between text-sm text-gray-600 shadow-sm">
+        <div class="flex items-center gap-1 font-medium cursor-pointer" id="degree-selector-container">
+            <span id="degree-selected">专升本</span>
+            <i class="fas fa-chevron-down text-xs text-gray-400"></i>
         </div>
         
-        <!-- 知识点体系 左右居中，放在下方 -->
-        <div class="flex justify-center w-full">
-            <button id="knowledge-textbook-switch" style="padding: 5px 12px; border: 1px solid #d9d9d9; border-radius: 15px; background-color: #fff; font-size: 12px; color: #666; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; cursor: pointer;" class="hover:bg-gray-50 select-none active:scale-95 shadow-sm font-bold">
-                <i class="fas fa-book" style="margin-right: 6px; color: #ff4d4f;"></i> <span id="current-version-text">知识点体系</span> <i class="fas fa-chevron-down" style="margin-left: 4px; font-size: 9px; color: #aaa;"></i>
-            </button>
+        <div class="flex items-center gap-1 font-medium cursor-pointer" id="province-selector-container">
+            <span id="province-selected">河南省</span>
+            <i class="fas fa-chevron-down text-xs text-gray-400"></i>
         </div>
+    </div>
+
+    <!-- 科目横向滚动选择 (Tab style) -->
+    <div class="bg-white border-b border-gray-100 px-4 flex items-center overflow-x-auto gap-6 scrollbar-none select-none" id="main-subject-tabbar">
+        <div class="subject-tab-item" data-value="语文">语文</div>
+        <div class="subject-tab-item" data-value="数学">数学</div>
+        <div class="subject-tab-item active" data-value="英语">英语</div>
+        <div class="subject-tab-item" data-value="政治">政治</div>
+        <div class="subject-tab-item" data-value="教育理论">教育理论</div>
+        <div class="subject-tab-item" data-value="民法">民法</div>
+        <div class="subject-tab-item" data-value="艺术概论">艺术概论</div>
+        <div class="subject-tab-item" data-value="物理">物理</div>
+        <div class="subject-tab-item" data-value="化学">化学</div>
+        <div class="subject-tab-item" data-value="生物">生物</div>
+        <div class="subject-tab-item" data-value="历史">历史</div>
+        <div class="subject-tab-item" data-value="地理">地理</div>
+    </div>
+
+    <!-- 知识点体系 左右居中，放在科目的下方 -->
+    <div class="bg-white px-4 py-2 flex justify-center w-full border-b border-gray-100 shadow-sm">
+        <button id="knowledge-textbook-switch" style="padding: 5px 12px; border: 1px solid #d9d9d9; border-radius: 15px; background-color: #fff; font-size: 12px; color: #666; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; cursor: pointer;" class="hover:bg-gray-50 select-none active:scale-95 shadow-sm font-bold">
+            <i class="fas fa-book" style="margin-right: 6px; color: #ff4d4f;"></i> <span id="current-version-text">知识点体系</span> <i class="fas fa-chevron-down" style="margin-left: 4px; font-size: 9px; color: #aaa;"></i>
+        </button>
     </div>
 
     <!-- 主体区域：闯关标签与快速导航 -->
@@ -343,32 +392,7 @@
         </div>
     </div>
 
-    <!-- 规则说明浮动弹窗 -->
-    <div id="rules-modal" class="modal" onclick="closeRules()">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-xs shadow-2xl relative" onclick="event.stopPropagation()">
-            <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-3">
-                <h3 class="font-bold text-gray-800 text-base">AI闯关练规则说明</h3>
-                <i class="fas fa-times text-gray-400 text-lg cursor-pointer hover:text-gray-600" onclick="closeRules()"></i>
-            </div>
-            <div class="space-y-3.5 text-xs text-gray-600 leading-relaxed">
-                <div class="flex gap-2">
-                    <span class="w-5 h-5 rounded-full bg-orange-50 text-orange-500 font-bold flex items-center justify-center shrink-0">1</span>
-                    <p>页面按照学科核心知识图谱自动生成递进式关卡，按顺序自上而下解锁。</p>
-                </div>
-                <div class="flex gap-2">
-                    <span class="w-5 h-5 rounded-full bg-orange-50 text-orange-500 font-bold flex items-center justify-center shrink-0">2</span>
-                    <p>每个关卡闯关成功后（正确率达 80% 或取得三星评价），即可开启下一级核心考点。</p>
-                </div>
-                <div class="flex gap-2">
-                    <span class="w-5 h-5 rounded-full bg-orange-50 text-orange-500 font-bold flex items-center justify-center shrink-0">3</span>
-                    <p>AI会利用智能算法和考点偏好为每个学员按薄弱项针对性推送个性化关卡习题。</p>
-                </div>
-            </div>
-            <button class="w-full mt-6 py-2.5 bg-orange-500 text-white rounded-xl text-xs font-semibold hover:bg-orange-600 transition-colors cursor-pointer" onclick="closeRules()">
-                我已知晓
-            </button>
-        </div>
-    </div>
+
 
     <!-- 版本选择底部弹窗 -->
     <div class="bottom-drawer-mask" id="version-mask"></div>
@@ -635,7 +659,22 @@
                 gap: 8px;
                 margin-bottom: 4px;
             }
+            .tags-container-scrollable {
+                display: flex;
+                flex-wrap: nowrap !important;
+                overflow-x: auto;
+                gap: 8px;
+                margin-bottom: 4px;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 6px;
+                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none; /* IE/Edge */
+            }
+            .tags-container-scrollable::-webkit-scrollbar {
+                display: none; /* Chrome/Safari/Opera */
+            }
             .province-pill {
+                flex-shrink: 0;
                 padding: 6px 14px;
                 border: 1px solid #d9d9d9;
                 border-radius: 18px;
@@ -693,7 +732,7 @@
         </style>
         
         <div class="bottom-drawer-header" style="border-bottom: none; display: flex; justify-content: center; align-items: center; padding: 18px 20px 10px 20px; position: relative; margin-bottom: 12px;">
-            <div class="bottom-drawer-title" id="province-drawer-title" style="font-size: 18px; font-weight: bold; color: #1e293b; text-align: center; flex: 1;">河南 - 笔试 - 英语</div>
+            <div class="bottom-drawer-title" id="province-drawer-title" style="font-size: 18px; font-weight: bold; color: #1e293b; text-align: center; flex: 1;">河南省 - 笔试 - 英语</div>
             <div class="bottom-drawer-close" id="close-province-drawer-btn" style="cursor: pointer; position: absolute; right: 20px; top: 18px; font-size: 18px; color: #94a3b8;">
                 <i class="fas fa-times"></i>
             </div>
@@ -701,10 +740,10 @@
 
         <div class="province-drawer-body">
             <!-- 标签项名称 1 -->
-            <div class="province-section-title">标签项名称</div>
+            <div class="province-section-title">省份</div>
             <div class="tags-container" id="province-region-group">
                 <div class="province-pill" data-value="最多2行" style="width: 100px; font-size: 10px; line-height: 1.2; padding: 2px 6px; text-align: center; white-space: normal; height: 32px;">最多2行字体缩<br/>小超出省略...</div>
-                <div class="province-pill selected" data-value="河南">河南</div>
+                <div class="province-pill selected" data-value="河南省">河南省</div>
                 <div class="province-pill" data-value="标签值3">标签值3</div>
                 <div class="province-pill" data-value="标签值4">标签值4</div>
                 <div class="province-pill" data-value="标签值5">标签值5</div>
@@ -713,17 +752,23 @@
             </div>
 
             <!-- 标签项名称 2 -->
-            <div class="province-section-title">标签项名称</div>
+            <div class="province-section-title">类型</div>
             <div class="tags-container" id="province-type-group">
                 <div class="province-pill selected" data-value="笔试">笔试</div>
             </div>
 
-            <!-- 标签项名称 3 -->
-            <div class="province-section-title">标签项名称</div>
-            <div class="tags-container" id="province-subject-group">
+            <!-- 科目 -->
+            <div class="province-section-title">科目</div>
+            <div class="tags-container-scrollable" id="province-subject-group">
                 <div class="province-pill text-xs selected" data-value="英语">英语</div>
                 <div class="province-pill text-xs" data-value="语文">语文</div>
                 <div class="province-pill text-xs" data-value="数学">数学</div>
+                <div class="province-pill text-xs" data-value="物理">物理</div>
+                <div class="province-pill text-xs" data-value="化学">化学</div>
+                <div class="province-pill text-xs" data-value="生物">生物</div>
+                <div class="province-pill text-xs" data-value="历史">历史</div>
+                <div class="province-pill text-xs" data-value="地理">地理</div>
+                <div class="province-pill text-xs" data-value="政治">政治</div>
             </div>
 
             <!-- 底部按钮 -->
@@ -906,7 +951,7 @@
                 const activeTypeEl = document.querySelector('#province-type-group .province-pill.selected');
                 const activeSubjectEl = document.querySelector('#province-subject-group .province-pill.selected');
 
-                const region = activeRegionEl ? activeRegionEl.getAttribute('data-value') : '河南';
+                const region = activeRegionEl ? activeRegionEl.getAttribute('data-value') : '河南省';
                 const type = activeTypeEl ? activeTypeEl.getAttribute('data-value') : '笔试';
                 const sub = activeSubjectEl ? activeSubjectEl.getAttribute('data-value') : '英语';
 
@@ -949,7 +994,7 @@
             gridItems.forEach(card => {
                 card.addEventListener('click', (e) => {
                     if (e.target.closest('.subject-card-delete')) return;
-                    const region = card.getAttribute('data-region') || '河南';
+                    const region = card.getAttribute('data-region') || '河南省';
                     const type = card.getAttribute('data-type') || '笔试';
                     const sub = card.getAttribute('data-sub') || '英语';
 
@@ -963,6 +1008,9 @@
                     subjectPills.forEach(p => { if (p.getAttribute('data-value') === sub) p.classList.add('selected'); });
 
                     updateProvinceDrawerTitle();
+                    if (window.syncMainTabbarToSubject) {
+                        window.syncMainTabbarToSubject(sub);
+                    }
                     showToast(`已切换组合: ${region} - ${type} - ${sub}`);
                 });
             });
@@ -992,6 +1040,9 @@
                         typePills.forEach(p => { if (p.getAttribute('data-value') === type) p.classList.add('selected'); else p.classList.remove('selected'); });
                         subjectPills.forEach(p => { if (p.getAttribute('data-value') === sub) p.classList.add('selected'); else p.classList.remove('selected'); });
                         updateProvinceDrawerTitle();
+                        if (window.syncMainTabbarToSubject) {
+                            window.syncMainTabbarToSubject(sub);
+                        }
                         showToast(`已切换组合: ${region} - ${type} - ${sub}`);
                     });
                     favoriteList.appendChild(newCard);
@@ -1003,7 +1054,10 @@
                 btnConfirmProvince.addEventListener('click', () => {
                     const { region, type, sub } = getSelectedProvinceCombination();
                     if (provinceSelectedText) {
-                        provinceSelectedText.textContent = `${region} | ${sub}`;
+                        provinceSelectedText.textContent = `${region}`;
+                    }
+                    if (window.syncMainTabbarToSubject) {
+                        window.syncMainTabbarToSubject(sub);
                     }
                     showToast(`已成功切换省份及科目为: ${region} - ${type} - ${sub}`);
                     closeProvinceDrawer();
@@ -1014,14 +1068,206 @@
     </script>
 
     <script>
-        // 显示规则框
-        function showRules() {
-            document.getElementById('rules-modal').classList.add('show');
+        // 学科核心关卡数据定义
+        const subjectNodesData = {
+            "英语": [
+                { name: "时态和语态", stars: 2.5, active: true },
+                { name: "主谓一致", stars: 0, active: true },
+                { name: "连词和介词", stars: 0, active: false },
+                { name: "形容词和副词", stars: 0, active: false },
+                { name: "名词和代词", stars: 0, active: false },
+                { name: "定语从句", stars: 0, active: false }
+            ],
+            "语文": [
+                { name: "现代文阅读", stars: 3, active: true },
+                { name: "古诗文默写", stars: 0, active: true },
+                { name: "文言文阅读", stars: 0, active: false },
+                { name: "字形与拼写", stars: 0, active: false },
+                { name: "病句修改", stars: 0, active: false },
+                { name: "文学常识", stars: 0, active: false }
+            ],
+            "数学": [
+                { name: "函数与极限", stars: 4, active: true },
+                { name: "一元函数积分", stars: 0, active: true },
+                { name: "不定积分", stars: 0, active: false },
+                { name: "定积分应用", stars: 0, active: false },
+                { name: "常微分方程", stars: 0, active: false },
+                { name: "空间解析几何", stars: 0, active: false }
+            ],
+            "政治": [
+                { name: "马克思主义哲学", stars: 2.5, active: true },
+                { name: "中国特色社会主义", stars: 0, active: true },
+                { name: "思想道德修养", stars: 0, active: false },
+                { name: "法律基础", stars: 0, active: false },
+                { name: "形势与政策", stars: 0, active: false },
+                { name: "马克思主义政治经济学", stars: 0, active: false }
+            ],
+            "教育理论": [
+                { name: "教育学原理", stars: 2, active: true },
+                { name: "教育心理学", stars: 0, active: true },
+                { name: "教师职业道德", stars: 0, active: false },
+                { name: "教育法律法规", stars: 0, active: false },
+                { name: "教学设计实施", stars: 0, active: false },
+                { name: "班级管理", stars: 0, active: false }
+            ],
+            "民法": [
+                { name: "民法总论", stars: 3, active: true },
+                { name: "物权法总则", stars: 0, active: true },
+                { name: "债权与合同", stars: 0, active: false },
+                { name: "人格权责任", stars: 0, active: false },
+                { name: "婚姻家庭继承", stars: 0, active: false },
+                { name: "侵权责任法", stars: 0, active: false }
+            ],
+            "艺术概论": [
+                { name: "艺术本质论", stars: 2.5, active: true },
+                { name: "艺术创作论", stars: 0, active: true },
+                { name: "艺术作品论", stars: 0, active: false },
+                { name: "艺术接受论", stars: 0, active: false },
+                { name: "艺术门类论", stars: 0, active: false },
+                { name: "艺术发展史", stars: 0, active: false }
+            ],
+            "物理": [
+                { name: "力学与运动学", stars: 2, active: true },
+                { name: "热学基础", stars: 0, active: true },
+                { name: "电磁学规律", stars: 0, active: false },
+                { name: "光学与波动", stars: 0, active: false },
+                { name: "原子物理", stars: 0, active: false },
+                { name: "相对论简介", stars: 0, active: false }
+            ],
+            "化学": [
+                { name: "原子结构与周期", stars: 2, active: true },
+                { name: "化学反应速率", stars: 0, active: true },
+                { name: "酸碱平衡", stars: 0, active: false },
+                { name: "有机化学基础", stars: 0, active: false },
+                { name: "配位化合物", stars: 0, active: false },
+                { name: "电化学原理", stars: 0, active: false }
+            ],
+            "生物": [
+                { name: "细胞生物学", stars: 3, active: true },
+                { name: "遗传与变异", stars: 0, active: true },
+                { name: "生物进化论", stars: 0, active: false },
+                { name: "植物生理学", stars: 0, active: false },
+                { name: "动物生理学", stars: 0, active: false },
+                { name: "生态系统", stars: 0, active: false }
+            ],
+            "历史": [
+                { name: "中国古代史", stars: 2, active: true },
+                { name: "中国近代史", stars: 0, active: true },
+                { name: "中国现代史", stars: 0, active: false },
+                { name: "世界古代史", stars: 0, active: false },
+                { name: "世界近代史", stars: 0, active: false },
+                { name: "世界现代史", stars: 0, active: false }
+            ],
+            "地理": [
+                { name: "自然地理基础", stars: 2, active: true },
+                { name: "人文地理概论", stars: 0, active: true },
+                { name: "区域可持续发展", stars: 0, active: false },
+                { name: "中国地理特征", stars: 0, active: false },
+                { name: "世界地理概况", stars: 0, active: false },
+                { name: "地理信息技术", stars: 0, active: false }
+            ]
+        };
+
+        // 动态生成关卡
+        function renderRoadmap(subjectName) {
+            const nodes = subjectNodesData[subjectName] || subjectNodesData["英语"];
+            const container = document.getElementById('roadmap-nodes');
+            if (!container) return;
+
+            let html = '';
+            nodes.forEach((node, idx) => {
+                const isOdd = (idx % 2 === 0);
+                const alignmentClass = isOdd ? 'self-start ml-8' : 'self-end mr-8';
+                const nodeNum = idx + 1;
+                const circleClass = node.active ? 'node-circle active' : 'node-circle locked';
+                const starColorClass = node.active ? 'text-[#ff4d4f]' : 'text-gray-300';
+                
+                let starsHtml = '';
+                const fullStars = Math.floor(node.stars);
+                const hasHalf = (node.stars % 1 !== 0);
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= fullStars) {
+                        starsHtml += `<i class="fas fa-star text-sm"></i>`;
+                    } else if (i === fullStars + 1 && hasHalf) {
+                        starsHtml += `<i class="fas fa-star-half-alt text-sm"></i>`;
+                    } else {
+                        starsHtml += `<i class="far fa-star text-sm ${node.active ? 'text-gray-300' : ''}"></i>`;
+                    }
+                }
+
+                let clickHandler = '';
+                if (node.active) {
+                    clickHandler = `location.href='dati_yemian.html?mode=ai_level&type=${nodeNum}&node=${nodeNum}&subject=${encodeURIComponent(subjectName)}'`;
+                } else {
+                    clickHandler = `lockNotice('${node.name}')`;
+                }
+
+                html += `
+                    <div class="node-wrapper ${alignmentClass}">
+                        <div class="${circleClass}" onclick="${clickHandler}" id="node-${nodeNum}">
+                            ${node.name}
+                        </div>
+                        <div class="flex items-center justify-center gap-0.5 mt-2 ${starColorClass}">
+                            ${starsHtml}
+                        </div>
+                        <button class="mt-2 px-4 py-1 text-xs ${node.active ? 'bg-[#1890ff] hover:bg-[#40a9ff]' : 'bg-gray-300 cursor-not-allowed'} text-white rounded-full font-bold transition-colors shadow-md" onclick="${clickHandler}">
+                            ${node.active ? 'AI练习' : '锁定中'}
+                        </button>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            setTimeout(drawRouteLines, 100);
         }
 
-        // 关闭规则框
-        function closeRules() {
-            document.getElementById('rules-modal').classList.remove('show');
+        // 同步主横滑科目栏的选择状态
+        window.syncMainTabbarToSubject = function(subjectName) {
+            const tabs = document.querySelectorAll('.subject-tab-item');
+            let targetTab = null;
+            tabs.forEach(tab => {
+                if (tab.getAttribute('data-value') === subjectName) {
+                    tab.classList.add('active');
+                    targetTab = tab;
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            if (targetTab) {
+                targetTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
+            renderRoadmap(subjectName);
+        };
+
+        // 初始化主界面的学科横向滚动栏事件监听
+        function initSubjectTabs() {
+            const tabs = document.querySelectorAll('.subject-tab-item');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const subName = tab.getAttribute('data-value');
+                    window.syncMainTabbarToSubject(subName);
+                    
+                    // 同时同步底部弹窗里的科目 pill 选中状态
+                    const drawerSubjectPills = document.querySelectorAll('#province-subject-group .province-pill');
+                    drawerSubjectPills.forEach(p => {
+                        if (p.getAttribute('data-value') === subName) {
+                            p.classList.add('selected');
+                        } else {
+                            p.classList.remove('selected');
+                        }
+                    });
+                    
+                    // 更新底部弹窗内部的标题组合文本
+                    const activeRegionEl = document.querySelector('#province-region-group .province-pill.selected');
+                    const activeTypeEl = document.querySelector('#province-type-group .province-pill.selected');
+                    const region = activeRegionEl ? activeRegionEl.getAttribute('data-value') : '河南省';
+                    const type = activeTypeEl ? activeTypeEl.getAttribute('data-value') : '笔试';
+                    const drawerTitle = document.getElementById('province-drawer-title');
+                    if (drawerTitle) {
+                        drawerTitle.textContent = `${region} - ${type} - ${subName}`;
+                    }
+                });
+            });
         }
 
         // 显示Toast提示
@@ -1093,7 +1339,7 @@
                     pathD += `M ${x1} ${y1} `;
                 }
 
-                // 添加控制点，创造平滑的 S 曲线
+                // 添加控制点，创造平滑之 S 曲线
                 const cpX1 = x1;
                 const cpY1 = y1 + (y2 - y1) * 0.5;
                 const cpX2 = x2;
@@ -1114,9 +1360,11 @@
             }
         }
 
-        // 页面初始化及重排时重新绘图线
+        // 页面初始化及重排时重新绘图线与生成路线关卡
         window.addEventListener('load', () => {
-            setTimeout(drawRouteLines, 100);
+            initSubjectTabs();
+            // 默认选中并初始化为英语
+            window.syncMainTabbarToSubject("英语");
         });
         window.addEventListener('resize', drawRouteLines);
     </script>

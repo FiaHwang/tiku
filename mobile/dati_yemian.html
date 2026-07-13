@@ -778,6 +778,198 @@
                 font-size: 12px;
             }
         }
+
+        /* 答题卡弹窗 (Bottom Sheet Drawer style) */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            align-items: flex-end; /* Slide up from bottom */
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            border-radius: 16px 16px 0 0;
+            width: 100%;
+            max-width: 480px; /* Same max-width as body */
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .answer-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid #f3f4f6;
+            background-color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .answer-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        /* 答题卡图例 (Legend) */
+        .answer-card-legend {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: #4b5563;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.correct {
+            background-color: #2dd4bf; /* Teal */
+        }
+
+        .legend-dot.wrong {
+            background-color: #ef4444; /* Red */
+        }
+
+        .legend-dot.half {
+            background: linear-gradient(135deg, #2dd4bf 50%, #e5e7eb 50%);
+            border: 1px solid #d1d5db;
+        }
+
+        .legend-dot.answered {
+            background-color: #fa8c16; /* Orange */
+        }
+
+        .legend-dot.unanswered {
+            background-color: #e5e7eb; /* Light gray */
+            border: 1px solid #d1d5db;
+        }
+
+        /* 答题卡网格 */
+        .answer-card-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .answer-card-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            justify-items: center;
+        }
+
+        .card-node {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 600;
+            color: #4b5563;
+            background-color: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .card-node:active {
+            transform: scale(0.9);
+        }
+
+        .card-node.correct {
+            background-color: #2dd4bf;
+            border-color: #2dd4bf;
+            color: #fff;
+        }
+
+        .card-node.wrong {
+            background-color: #ef4444;
+            border-color: #ef4444;
+            color: #fff;
+        }
+
+        .card-node.half {
+            background: linear-gradient(135deg, #2dd4bf 50%, #fff 50%);
+            border-color: #2dd4bf;
+            color: #1f2937;
+        }
+
+        .card-node.answered {
+            background-color: #fa8c16;
+            border-color: #fa8c16;
+            color: #fff;
+        }
+
+        .card-node.active {
+            border: 2.5px solid #1f2937;
+            box-shadow: 0 0 0 2px rgba(31, 41, 55, 0.15);
+        }
+
+        /* 底部交卷按钮 */
+        .answer-card-footer {
+            padding: 16px 20px;
+            border-top: 1px solid #f3f4f6;
+            background-color: #fff;
+        }
+
+        .submit-paper-btn {
+            width: 100%;
+            padding: 12px 0;
+            background-color: #ef4444;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            text-align: center;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .submit-paper-btn:active {
+            background-color: #dc2626;
+        }
     </style>
 </head>
 <body>
@@ -1080,7 +1272,13 @@
                 const actions = ['分享', '纠错', '收藏', '答题卡', '交卷'];
                 const action = actions[index];
                 console.log(action);
-                alert(action);
+                if (action === '答题卡') {
+                    showAnswerCard();
+                } else if (action === '交卷') {
+                    submitPaper();
+                } else {
+                    alert(action);
+                }
             });
 
             // 触摸事件（移动端优化）
@@ -1095,6 +1293,7 @@
         // 题目类型和当前题目索引
         let currentQuestionType = 'single-choice'; // 当前题目类型：single-choice、multi-choice、indefinite-choice、fill-blank、judgment、essay 或 material
         let currentQuestionIndex = 1; // 当前题目索引
+        window.userAnswers = Array(55).fill(false);
 
         // 获取 DOM 元素
         const questionTypeElement = document.querySelector('.question-type');
@@ -1120,6 +1319,7 @@
                     optionItems.forEach(i => i.classList.remove('selected'));
                     // 添加当前选项的选中状态
                     item.classList.add('selected');
+                    window.userAnswers[currentQuestionIndex] = true;
                     
                     // 检查是否是选项A
                     if (item.querySelector('.option-label').textContent === 'A') {
@@ -1164,6 +1364,8 @@
                 item.addEventListener('click', () => {
                     // 切换当前选项的选中状态（多选题可以多选）
                     item.classList.toggle('selected');
+                    const anySelected = Array.from(multiOptionItems).some(i => i.classList.contains('selected'));
+                    window.userAnswers[currentQuestionIndex] = anySelected;
                 });
 
                 // 触摸事件（移动端优化）
@@ -1179,6 +1381,8 @@
                 item.addEventListener('click', () => {
                     // 切换当前选项的选中状态（不定项选择题可以多选）
                     item.classList.toggle('selected');
+                    const anySelected = Array.from(indefiniteOptionItems).some(i => i.classList.contains('selected'));
+                    window.userAnswers[currentQuestionIndex] = anySelected;
                 });
 
                 // 触摸事件（移动端优化）
@@ -1196,6 +1400,7 @@
                     judgmentItems.forEach(i => i.classList.remove('selected'));
                     // 添加当前选项的选中状态
                     item.classList.add('selected');
+                    window.userAnswers[currentQuestionIndex] = true;
                 });
 
                 // 触摸事件（移动端优化）
@@ -1366,6 +1571,7 @@
                 materialAnswerInput.addEventListener('input', () => {
                     const length = materialAnswerInput.value.length;
                     materialAnswerCounter.textContent = `${length}/1000`;
+                    window.userAnswers[currentQuestionIndex] = length > 0;
                 });
             }
         }
@@ -1384,6 +1590,7 @@
                     input.addEventListener('input', () => {
                         const length = input.value.length;
                         counter.textContent = `${length}/1000`;
+                        window.userAnswers[currentQuestionIndex] = Array.from(answerInputs).some(i => i.value.trim().length > 0);
                     });
                 }
             });
@@ -1398,6 +1605,7 @@
                 essayTextarea.addEventListener('input', () => {
                     const length = essayTextarea.value.length;
                     essayCounter.textContent = `${length}/1000`;
+                    window.userAnswers[currentQuestionIndex] = length > 0;
                 });
             }
         }
@@ -1455,10 +1663,121 @@
         document.addEventListener('touchmove', function() {}, { passive: true });
         document.addEventListener('touchend', function() {}, { passive: true });
 
+        // 答题卡交互逻辑
+        window.showAnswerCard = function() {
+            const modal = document.getElementById('answer-card-modal');
+            const gridContainer = document.getElementById('answer-card-grid-container');
+            if (!modal || !gridContainer) return;
+
+            let html = '';
+            const totalQuestions = 54;
+            for (let i = 1; i <= totalQuestions; i++) {
+                let statusClass = '';
+                if (i === currentQuestionIndex) {
+                    statusClass = 'active';
+                }
+                if (window.userAnswers && window.userAnswers[i]) {
+                    statusClass += ' answered';
+                }
+                html += `<div class="card-node ${statusClass}" onclick="jumpToQuestion(${i})">${i}</div>`;
+            }
+            gridContainer.innerHTML = html;
+
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.add('active');
+            }, 10);
+        };
+
+        window.closeAnswerCard = function() {
+            const modal = document.getElementById('answer-card-modal');
+            if (!modal) return;
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        };
+
+        window.jumpToQuestion = function(i) {
+            currentQuestionIndex = i;
+            
+            // 更新进度
+            progressTextElement.textContent = `${currentQuestionIndex}/54`;
+            
+            // 切换题目类型
+            if (currentQuestionIndex % 7 === 1) {
+                switchQuestionType('single-choice');
+            } else if (currentQuestionIndex % 7 === 2) {
+                switchQuestionType('multi-choice');
+            } else if (currentQuestionIndex % 7 === 3) {
+                switchQuestionType('indefinite-choice');
+            } else if (currentQuestionIndex % 7 === 4) {
+                switchQuestionType('fill-blank');
+            } else if (currentQuestionIndex % 7 === 5) {
+                switchQuestionType('judgment');
+            } else if (currentQuestionIndex % 7 === 6) {
+                switchQuestionType('essay');
+            } else {
+                switchQuestionType('material');
+            }
+            
+            closeAnswerCard();
+        };
+
+        window.submitPaper = function() {
+            if (confirm('确定要提交试卷吗？')) {
+                window.location.href = 'shiti_jiexi.html';
+            }
+        };
+
         // 禁止双击缩放
         document.addEventListener('dblclick', function(event) {
             event.preventDefault();
         });
     </script>
+
+    <!-- 答题卡弹窗 -->
+    <div id="answer-card-modal" class="modal" onclick="closeAnswerCard()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <!-- 头部 -->
+            <div class="answer-card-header">
+                <span class="answer-card-title">答题卡</span>
+                <div class="answer-card-legend">
+                    <div class="legend-item">
+                        <span class="legend-dot correct"></span>
+                        <span>正确</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot wrong"></span>
+                        <span>错误</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot half"></span>
+                        <span>半对</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot answered"></span>
+                        <span>已答</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot unanswered"></span>
+                        <span>未答</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 内容网格 -->
+            <div class="answer-card-body">
+                <div class="answer-card-grid" id="answer-card-grid-container">
+                    <!-- 动态生成 1 - 54 -->
+                </div>
+            </div>
+            
+            <!-- 底部按钮 -->
+            <div class="answer-card-footer">
+                <button class="submit-paper-btn" onclick="submitPaper()">交卷</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
