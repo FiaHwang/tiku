@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学情分析 - 库课网校</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            padding-top: 60px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 顶部导航栏 */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 60px;
+            background-color: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo img {
+            height: 32px;
+            margin-right: 16px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-item {
+            font-size: 14px;
+            color: #333;
+            text-decoration: none;
+            padding: 4px 0;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: #ff4d4f;
+        }
+
+        .nav-item.active {
+            color: #ff4d4f;
+        }
+
+        .nav-item.active::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #ff4d4f;
+        }
+
+        .search-user {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            padding: 4px 8px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 4px 8px;
+            font-size: 14px;
+        }
+
+        .search-btn {
+            background-color: #ff4d4f;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 12px;
+            cursor: pointer;
+        }
+
+        .user-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-link {
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .notification {
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background-color: #ff4d4f;
+            color: #fff;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-shadow {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f0f0f0;
+        }
+
+        .footer {
+            height: 60px;
+            background-color: #fff;
+            border-top: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: auto;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            width: 90%;
+            max-width: 450px;
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .modal-close {
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .ability-item {
+            margin-bottom: 16px;
+        }
+
+        .ability-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .ability-desc {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            height: 44px;
+            background-color: #ff4d4f;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 24px;
+        }
+
+        .modal-footer {
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="top-nav">
+        <div class="logo" onclick="window.location.href = '../index.html'">
+            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=red%20background%20with%20white%20chinese%20characters%20%E5%BA%93%E8%AF%BE%20with%20registered%20trademark%20symbol%20simple%20clean%20logo&image_size=square" alt="库课网校" />
+            <span style="font-weight: bold; color: #333">库课网校</span>
+        </div>
+        <div class="nav-menu">
+            <a href="tiku_pc.html" class="nav-item">首页</a>
+            <a href="#" class="nav-item">课程中心</a>
+            <a href="tiku_pc.html" class="nav-item active">题库</a>
+            <a href="#" class="nav-item">资讯</a>
+            <a href="#" class="nav-item">直播日历</a>
+            <a href="#" class="nav-item">各地专升本</a>
+        </div>
+        <div class="search-user">
+            <div class="search-box">
+                <input type="text" placeholder="请输入搜索内容" />
+                <button class="search-btn">搜索</button>
+            </div>
+            <div class="user-links">
+                <a href="xuexi_zhongxin_pc.html" class="user-link">学习中心</a>
+                <div class="notification">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="user-avatar">
+                    <i class="fas fa-user" style="font-size: 18px; color: #666"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区域 -->
+    <div class="main-container max-w-[1200px] w-full mx-auto my-6 px-6 flex-1 flex flex-col">
+        <!-- 页面顶部导航 breadcrumb -->
+        <div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 32px; margin-bottom: 24px;">
+            <div onclick="window.location.href='xuexi_zhongxin_pc.html'" style="position: absolute; left: 0; cursor: pointer; color: #666; font-size: 14px; display: flex; align-items: center; gap: 4px; transition: color 0.2s;" onmouseover="this.style.color='#ff4d4f'" onmouseout="this.style.color='#666'">
+                <i class="fas fa-chevron-left" style="font-size: 12px;"></i>
+                <span>返回</span>
+            </div>
+            <div class="ver-title" style="font-size: 20px; font-weight: 600; color: #333; text-align: center;">
+                学情分析
+            </div>
+        </div>
+
+        <!-- 学情分析内容 -->
+        <div id="xueqing-report-content" class="space-y-6 pt-2">
+            <!-- 统计范围提示 -->
+            <div class="px-4 py-3 bg-blue-50/70 border border-blue-100/50 rounded-xl text-xs text-blue-600 flex items-center gap-2 font-medium">
+                <i class="fas fa-info-circle text-sm text-blue-500"></i>
+                <span>统计范围 ：覆盖所选目标下的全部做题记录，不限于题库，每日凌晨更新。</span>
+            </div>
+
+            <!-- 2-Column Desktop Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left 2 columns: Learning Profile, Trajectory chart, and Heatmap -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- 核心学情评估 (学习画像总览) -->
+                    <div class="bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-700 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+                        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+                        
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center border border-white/10 shadow-inner">
+                                    <i class="fas fa-brain text-base text-yellow-300"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-extrabold tracking-wide">智能学习画像</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 学习能力 0-1 游标指示 bar -->
+                        <div class="mb-5 bg-white/10 rounded-xl p-4 border border-white/10 backdrop-blur-sm">
+                            <div class="flex justify-between items-center text-xs mb-1">
+                                <span class="opacity-90 flex items-center gap-1">
+                                    <i class="fas fa-chart-line text-yellow-300 text-xs"></i> 学习能力能力值评估
+                                </span>
+                                <span class="font-extrabold text-yellow-300 tracking-wider text-sm" id="xq-val-ability-txt">0.80</span>
+                            </div>
+                            <div class="relative w-full h-2 bg-white/20 rounded-full my-3">
+                                <div class="absolute left-0 -top-1 w-0.5 h-4 bg-white/40"></div>
+                                <div class="absolute left-1/2 -top-1 w-0.5 h-4 bg-white/50 -translate-x-1/2"></div>
+                                <div class="absolute right-0 -top-1 w-0.5 h-4 bg-white/40"></div>
+                                <div id="xq-ability-pointer" class="absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-yellow-400 border-2 border-white shadow-md transition-all duration-500" style="left: 80%;"></div>
+                            </div>
+                            <div class="flex justify-between text-[9px] opacity-70">
+                                <span>需要加强 (0)</span>
+                                <span>常规水平 (0.5)</span>
+                                <span>杰出掌握 (1)</span>
+                            </div>
+                        </div>
+
+                        <!-- Metrics Grid -->
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                            <div class="bg-white/10 backdrop-blur-sm p-3 rounded-xl border border-white/10 text-center">
+                                <div class="text-[10px] text-blue-100 mb-1"><i class="fas fa-users text-[9px] mr-1"></i>能力百分位</div>
+                                <div class="text-xl font-extrabold text-yellow-300 tracking-tight" id="xq-val-percentile">89%</div>
+                            </div>
+                            <div class="bg-white/10 backdrop-blur-sm p-3 rounded-xl border border-white/10 text-center">
+                                <div class="text-[10px] text-blue-100 mb-1"><i class="fas fa-check-double text-[9px] mr-1"></i>总正确率</div>
+                                <div class="text-xl font-extrabold text-white tracking-tight" id="xq-val-accuracy">85%</div>
+                            </div>
+                            <div class="bg-white/10 backdrop-blur-sm p-3 rounded-xl border border-white/10 text-center">
+                                <div class="text-[10px] text-blue-100 mb-1">近7天客观题答题数量</div>
+                                <div class="text-lg font-extrabold text-white" id="xq-val-7day-count">132 题</div>
+                            </div>
+                            <div class="bg-white/10 backdrop-blur-sm p-3 rounded-xl border border-white/10 text-center">
+                                <div class="text-[10px] text-blue-100 mb-1">近7天正确率</div>
+                                <div class="text-lg font-extrabold text-white" id="xq-val-7day-accuracy">87%</div>
+                            </div>
+                            <div class="bg-white/10 backdrop-blur-sm p-3 rounded-xl border border-white/10 text-center col-span-2 md:col-span-1 flex flex-col justify-center">
+                                <div class="text-[10px] text-blue-100 mb-0.5">已掌握考点</div>
+                                <div class="text-xs font-extrabold text-green-300" id="xq-val-mastered-count">15 / 22 个</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 学习轨迹走势图 -->
+                    <div class="bg-white rounded-2xl p-5 card-shadow">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2">
+                                <div class="w-5 h-5 bg-purple-50 text-purple-600 rounded flex items-center justify-center text-xs border border-purple-100">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <h2 class="text-sm font-bold text-gray-800">正确率轨迹追踪</h2>
+                            </div>
+                            
+                            <!-- Time Period Picker -->
+                            <div class="flex bg-gray-100 rounded-lg p-0.5 text-xs font-bold gap-1">
+                                <button id="track-btn-day" onclick="switchTrackPeriod('day')" class="px-3 py-1 rounded bg-white shadow-sm text-blue-600">日</button>
+                                <button id="track-btn-week" onclick="switchTrackPeriod('week')" class="px-3 py-1 rounded text-gray-500">周</button>
+                                <button id="track-btn-month" onclick="switchTrackPeriod('month')" class="px-3 py-1 rounded text-gray-500">月</button>
+                            </div>
+                        </div>
+                        <div class="h-48">
+                            <canvas id="xueqingTrendChart" class="w-full h-full"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Heatmap Grid -->
+                    <div class="bg-white rounded-2xl p-5 card-shadow">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-5 h-5 bg-orange-50 text-orange-600 rounded flex items-center justify-center text-xs border border-orange-100">
+                                <i class="far fa-calendar-alt"></i>
+                            </div>
+                            <h2 class="text-sm font-bold text-gray-800">做题趋势热力图</h2>
+                        </div>
+                        <p class="text-xs text-gray-400 mb-4">
+                            通过热力图表现您每日的试题解算热度。格子颜色越深表示做题数量越多。
+                        </p>
+                        
+                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 overflow-x-auto">
+                            <div style="display: grid; grid-template-columns: repeat(30, minmax(0, 1fr)); gap: 3px;" id="heatmap-grid"></div>
+                            <div class="flex justify-between items-center text-[10px] text-gray-400 mt-4 pt-3 border-t border-gray-200/60">
+                                <span>最近 360 天做题表现 (时间轴)</span>
+                                <div class="flex items-center gap-1.5">
+                                    <span>少</span>
+                                    <span class="w-3 h-3 rounded bg-gray-100"></span>
+                                    <span class="w-3 h-3 rounded bg-blue-200"></span>
+                                    <span class="w-3 h-3 rounded bg-blue-400"></span>
+                                    <span class="w-3 h-3 rounded bg-indigo-600"></span>
+                                    <span>多</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 薄弱项 Top-50 (Needs Improvement List) -->
+                    <div class="bg-white rounded-2xl p-5 card-shadow">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2">
+                                <div class="w-5 h-5 bg-red-100 text-red-500 rounded flex items-center justify-center text-xs border border-red-200">
+                                    <i class="fas fa-bullseye"></i>
+                                </div>
+                                <h2 class="text-sm font-bold text-gray-800">薄弱项 Top-50 亟待攻克</h2>
+                            </div>
+                            <span class="text-[10px] bg-red-100 text-red-600 px-2 py-0.5 rounded font-bold shadow-sm animate-pulse">亟待提分</span>
+                        </div>
+
+                        <!-- 2-Column Grid of Weak Spots for PC space -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="xq-weak-spots-container"></div>
+
+                        <!-- Expand More Button -->
+                        <div class="mt-4 flex justify-center border-t border-gray-100 pt-4" id="weak-spots-more-container">
+                            <button id="weak-spots-toggle-btn" onclick="toggleWeakSpots()" class="flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50/50 hover:bg-blue-50 px-4 py-2 rounded-lg border border-blue-100/30 transition-all active:scale-95">
+                                <span>展开更多</span>
+                                <i class="fas fa-chevron-down text-xs transition-transform" id="weak-spots-toggle-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: AI Advice -->
+                <div class="space-y-6">
+                    <!-- AI Intelligence Advice block -->
+                    <div class="bg-amber-50/50 rounded-2xl p-5 border border-amber-100/70 relative overflow-hidden shadow-sm">
+                        <div class="absolute -right-6 -top-6 w-20 h-20 bg-amber-100/30 rounded-full blur-lg"></div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 bg-amber-100 rounded-lg flex items-center justify-center text-amber-600 border border-amber-200/50">
+                                    <i class="far fa-lightbulb text-sm"></i>
+                                </div>
+                                <h2 class="text-xs font-black text-amber-950 tracking-wider">个性化学习指导</h2>
+                                <span class="text-[10px] text-amber-700 font-semibold">（内容由AI生成，每日凌晨更新）</span>
+                            </div>
+                        </div>
+                        <div class="text-xs leading-relaxed text-amber-900 space-y-3.5" id="xq-ai-advice-block"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div>© 2026 库课网校 版权所有</div>
+    </footer>
+
+    <script>
+        // Formatter functions
+        function formatRate(val) {
+            if (typeof val === 'string' && val.endsWith('%')) {
+                let num = parseFloat(val);
+                if (!isNaN(num)) {
+                    return (Math.round(num * 10) / 10) + '%';
+                }
+            }
+            let numVal = typeof val === 'number' ? val : parseFloat(val);
+            if (isNaN(numVal)) return val;
+            return (Math.round(numVal * 10) / 10) + '%';
+        }
+
+
+
+        // Subject Data & Analytical values
+        let currentXqSubject = 'zh';
+        let currentXqPeriod = 'day';
+        let currentWeakSpotsToShow = 10;
+
+        const XUEQING_DATA = {
+            zh: {
+                ability: 0.8,
+                abilityText: "0.80",
+                pointerLeft: "80%",
+                accuracy: "85%",
+                percentile: "89%",
+                val7DayCount: "132 题",
+                val7DayAccuracy: "87%",
+                masteredCountText: "15 / 22 个知识点",
+                dimensionData: [85, 78, 80],
+                track: {
+                    day: {
+                        labels: ["12.1", "12.2", "12.3", "12.4", "12.5", "12.6", "12.7"],
+                        data: [75, 80, 82, 85, 83, 86, 85]
+                    },
+                    week: {
+                        labels: ["第1周", "第2周", "第3周", "第4周", "第5周", "第6周", "第7周"],
+                        data: [78, 82, 80, 84, 85, 83, 85]
+                    },
+                    month: {
+                        labels: ["11月", "12月", "01月", "02月", "03月", "04月", "05月"],
+                        data: [65, 70, 75, 78, 82, 84, 85]
+                    }
+                },
+                heatmapCells: [
+                    12, 18,  0, 24, 30,  8, 15,  5,  0, 35,
+                     0, 22, 14,  0, 18, 25,  0, 10,  6, 42,
+                    15,  0, 28, 20,  4, 16,  0, 24,  0, 18,
+                     0, 33, 12,  0,  8, 27,  0, 20, 13, 45,
+                    16,  0, 17, 14,  6,  0, 24, 10,  0, 30,
+                     0, 12, 20,  7,  0, 14, 22,  0, 10, 27,
+                    13,  5,  0, 18, 16,  0, 12, 24,  0, 14,
+                     8, 17,  0,  7, 22, 11,  0, 16, 10, 24,
+                     0, 14, 17,  6,  0, 12, 20,  0,  8, 23,
+                    11,  4,  0, 16, 13,  0, 10, 21,  0, 12
+                ],
+                aiAdvice: `
+                    <p>🔍 <strong class="text-amber-950">学情总结：</strong>您在语文科目的学习非常刻苦，特别是在文言阅读和名著常识积累方面，正确率达到了 <strong class="text-green-600 font-extrabold">85% 以上</strong>，展现了卓越的学习热情与词汇功底。</p>
+                    <p class="mt-2">⚠️ <strong class="text-amber-950">核心痛点：</strong>主要的失分点集中在“现代文阅读”中深层意蕴分析和“古代诗歌鉴赏”的意境题（由于发散和规范思维尚有欠缺，这两项的正确率约在 <strong class="text-red-500 font-extrabold">62%</strong> 左右）。</p>
+                    <p class="mt-2">🚀 <strong class="text-amber-950">提分攻略：</strong>建议在复习时重点加强文学常识主观大题的规范表述积累，训练分步骤作答。通过多刷 <strong class="text-blue-600 font-bold">【AI薄弱突破练】</strong> 定点突击，必定能将这一短板彻底扫除！</p>
+                `
+            },
+            math: {
+                ability: 0.65,
+                abilityText: "0.65",
+                pointerLeft: "65%",
+                accuracy: "73.2%",
+                percentile: "74.5%",
+                val7DayCount: "85 题",
+                val7DayAccuracy: "75.5%",
+                masteredCountText: "10 / 20 个知识点",
+                dimensionData: [73, 65, 70],
+                track: {
+                    day: {
+                        labels: ["12.1", "12.2", "12.3", "12.4", "12.5", "12.6", "12.7"],
+                        data: [65, 68, 70, 72, 71, 75, 73.2]
+                    },
+                    week: {
+                        labels: ["第1周", "第2周", "第3周", "第4周", "第5周", "第6周", "第7周"],
+                        data: [62, 65, 68, 70, 69, 72, 73.2]
+                    },
+                    month: {
+                        labels: ["11月", "12月", "01月", "02月", "03月", "04月", "05月"],
+                        data: [55, 58, 62, 65, 68, 71, 73.2]
+                    }
+                },
+                heatmapCells: [
+                     6, 10,  0, 15, 20,  5, 12,  2,  0, 22,
+                     0, 14,  8,  0, 12, 18,  0,  6,  4, 28,
+                    10,  0, 18, 14,  2, 10,  0, 15,  0, 12,
+                     0, 22,  8,  0,  5, 18,  0, 14,  9, 30,
+                    11,  0, 12,  9,  4,  0, 16,  7,  0, 20,
+                     0,  8, 14,  5,  0, 10, 15,  0,  6, 18,
+                     9,  3,  0, 12, 11,  0,  8, 16,  0, 10,
+                     5, 11,  0,  4, 15,  8,  0, 11,  7, 16,
+                     0,  9, 12,  4,  0,  8, 14,  0,  5, 15,
+                     8,  3,  0, 11,  9,  0,  7, 14,  0,  8
+                ],
+                aiAdvice: `
+                    <p>🔍 <strong class="text-amber-950">学情总结：</strong>数学科目的基础计算、二次函数展开及简单的分式方程推演表现正常。基本法则的运用速度极快，正确率达到了 <strong class="text-green-600 font-extrabold">75%</strong> 左右。</p>
+                    <p class="mt-2">⚠️ <strong class="text-amber-950">核心痛点：</strong>但由于空间几何属于全新挑战章节，特别是“几何动点最值问题”属于高阶探究性附加难关，您的理解和解题深度掌握不充足（目前处于正确率较低的攻坚区，正确率约为 <strong class="text-red-500 font-extrabold">55%</strong>）。</p>
+                    <p class="mt-2">🚀 <strong class="text-amber-950">提分攻略：</strong>建议在几何大题和辅助线思路方面重点攻坚。每周日在错题本上将相关经典图形重新推演一遍，并利用 <strong class="text-blue-600 font-bold">【AI薄弱突破练】</strong> 进行高频次自适应冲刺关卡的定点打击，极佳的功底配合高强度查缺补漏将确保满分无阻！</p>
+                `
+            },
+            en: {
+                ability: 0.7,
+                abilityText: "0.70",
+                pointerLeft: "70%",
+                accuracy: "77.6%",
+                percentile: "81.7%",
+                val7DayCount: "98 题",
+                val7DayAccuracy: "78.4%",
+                masteredCountText: "14 / 20 个知识点",
+                dimensionData: [77, 70, 68],
+                track: {
+                    day: {
+                        labels: ["12.1", "12.2", "12.3", "12.4", "12.5", "12.6", "12.7"],
+                        data: [70, 72, 75, 74, 78, 82, 81]
+                    },
+                    week: {
+                        labels: ["第1周", "第2周", "第3周", "第4周", "第5周", "第6周", "第7周"],
+                        data: [75, 78, 80, 81, 79, 81, 83]
+                    },
+                    month: {
+                        labels: ["11月", "12月", "01月", "02月", "03月", "04月", "05月"],
+                        data: [62, 65, 70, 72, 75, 77, 80]
+                    }
+                },
+                heatmapCells: [
+                     8, 12, 15,  0, 22,  0,  4,  5, 30,  0,
+                    12,  0, 24, 18,  2, 14,  0, 22,  0, 16,
+                     0, 31, 10,  0,  6, 25,  0, 18, 11, 40,
+                    14,  0, 15, 12,  5,  0, 22,  8,  0, 28,
+                     0, 10, 18,  5,  0, 12, 20,  0,  8, 25,
+                    11,  3,  0, 16, 14,  0, 10, 22,  0, 12,
+                     6, 15,  0,  5, 20,  9,  0, 14,  8, 22,
+                     0, 12, 15,  4,  0, 10, 18,  0,  6, 21,
+                     9,  2,  0, 14, 11,  0,  8, 19,  0, 10,
+                     5, 12,  0,  4, 18,  8,  0, 11,  6, 18
+                ],
+                aiAdvice: `
+                    <p>🔍 <strong class="text-amber-950">学情总结：</strong>英语语言整体学习节奏良好，听力理解方面尤为突出（正确率达到 <strong class="text-green-600 font-extrabold">85% 以上</strong>），基础日常词汇多义项词义辨析有较好的积累储备。</p>
+                    <p class="mt-2">⚠️ <strong class="text-amber-950">核心痛点：</strong>当前主要的拦路难题在高级复合句法结构（限制性定语从句、非谓语动词时态与语态）上，导致长难阅读和完型填空中语义逻辑判断发生偏差，平均正确率仅在 <strong class="text-red-500 font-extrabold">60%</strong> 水平线徘徊。</p>
+                    <p class="mt-2">🚀 <strong class="text-amber-950">提分攻略：</strong>定语从句与非谓语是您攻坚省市重点线分差的胜负手。每天晚读时可划出5分钟在 <strong class="text-blue-600 font-bold">【AI薄弱突破练】</strong> 进行专属的结构语法强化。结合语法框架卡片并常看您的错题库，必定可轻松点亮定语从句这枚高贵星章！</p>
+                `
+            }
+        };
+
+        let xueqingTrendChartInstance = null;
+
+        function selectSubject(subject) {
+            currentXqSubject = subject;
+            
+            // Update button styles
+            const btnZh = document.getElementById("subject-btn-zh");
+            const btnMath = document.getElementById("subject-btn-math");
+            const btnEn = document.getElementById("subject-btn-en");
+
+            const normalClass = "flex-1 py-2.5 text-xs font-bold rounded-lg text-center transition-all text-gray-500 hover:text-gray-800 bg-gray-50 border border-gray-100 hover:bg-gray-100 cursor-pointer";
+            const activeClass = "flex-1 py-2.5 text-xs font-bold rounded-lg text-center transition-all bg-blue-600 text-white shadow-sm shadow-blue-100 cursor-pointer border border-blue-600";
+
+            if (btnZh) btnZh.className = normalClass;
+            if (btnMath) btnMath.className = normalClass;
+            if (btnEn) btnEn.className = normalClass;
+
+            if (subject === 'zh' && btnZh) btnZh.className = activeClass;
+            else if (subject === 'math' && btnMath) btnMath.className = activeClass;
+            else if (subject === 'en' && btnEn) btnEn.className = activeClass;
+
+            const data = XUEQING_DATA[subject];
+            if (!data) return;
+
+            // Populate text metrics
+            document.getElementById("xq-val-ability-txt").innerText = data.abilityText;
+            document.getElementById("xq-ability-pointer").style.left = data.pointerLeft;
+            document.getElementById("xq-val-accuracy").innerText = formatRate(data.accuracy);
+            document.getElementById("xq-val-percentile").innerText = formatRate(data.percentile);
+            document.getElementById("xq-val-7day-count").innerText = data.val7DayCount;
+            document.getElementById("xq-val-7day-accuracy").innerText = formatRate(data.val7DayAccuracy);
+            document.getElementById("xq-val-mastered-count").innerText = data.masteredCountText;
+
+            // Heatmap rendering
+            const heatmapGrid = document.getElementById("heatmap-grid");
+            if (heatmapGrid) {
+                heatmapGrid.innerHTML = "";
+                const cells360 = [];
+                const seedCells = data.heatmapCells && data.heatmapCells.length > 0 ? data.heatmapCells : [12, 18, 0, 24, 30, 8, 15, 5, 0, 35];
+                for (let i = 0; i < 360; i++) {
+                    const seedIndex = i % seedCells.length;
+                    let volume = seedCells[seedIndex];
+                    if (volume > 0) {
+                        const noise = ((i * 17 + 11) % 15) - 7;
+                        volume = Math.max(1, volume + noise);
+                    } else if (((i * 23 + 7) % 100) < 12) {
+                        volume = ((i * 3) % 10) + i % 3 + 1;
+                    }
+                    cells360.push(volume);
+                }
+
+                cells360.forEach((volume, idx) => {
+                    let colorClass = "bg-gray-100";
+                    if (volume > 40) colorClass = "bg-indigo-700 shadow-inner";
+                    else if (volume > 20) colorClass = "bg-blue-500";
+                    else if (volume > 5) colorClass = "bg-blue-200";
+                    heatmapGrid.innerHTML += `<div class="aspect-square rounded-[1px] ${colorClass} transition-all duration-300 flex items-center justify-center relative group cursor-pointer" title="第 ${idx + 1} 天 做题 ${volume} 题"><span class="absolute hidden group-hover:block bg-black text-white text-[9px] px-1.5 py-0.5 rounded -top-8 z-10 whitespace-nowrap">第${idx + 1}天: ${volume}题</span></div>`;
+                });
+            }
+
+            // Reset Weak Spots display count to 10 on subject switch
+            currentWeakSpotsToShow = 10;
+            renderWeakSpots();
+
+            // Advice block
+            document.getElementById("xq-ai-advice-block").innerHTML = data.aiAdvice;
+
+            // Refresh charts
+            drawXueqingCharts();
+        }
+
+        function get50WeakSpots(subject) {
+            const spots = [];
+            let baseTopics = [];
+            if (subject === 'zh') {
+                baseTopics = [
+                    "字音字形辨析", "文言虚词理解", "常考文言实词", "现代文自然段意",
+                    "现代文中心思想", "古诗词情感倾向", "诗歌炼字意境分析", "成语辨析运用",
+                    "错别字自检判定", "修辞手法鉴赏", "名著人物性格情节", "名著核心主旨探究",
+                    "文言特殊句式翻译", "说明文信息提炼", "议论文写作结构", "记叙文细节描写",
+                    "文言文停顿虚词", "科普文逻辑推断", "标点符号规范使用", "修辞手法关联转换"
+                ];
+            } else if (subject === 'math') {
+                baseTopics = [
+                    "几何动点最值", "不等式解集区间", "一次方程实际应用", "反比例函数常数考查",
+                    "二次函数对称轴最值", "全等三角形辅助线", "相似三角形比例判定", "勾股定理极值计算",
+                    "因式分解交叉相乘", "分式方程增根排除", "实数混合混合运算", "整式乘法公式展开",
+                    "平面轴对称变换", "反比例函数k值计算", "圆的切线判定定理", "圆周角与弦长关联",
+                    "复杂概率树状图计算", "平行四边形性质题", "等腰梯形与直角图形"
+                ];
+            } else { // en
+                baseTopics = [
+                    "定语从句连接代词", "主谓一致高级规则", "完形填空语意推断", "阅读细节理解抓取",
+                    "常考介词动词搭配", "听力时间点敏感度", "听力对话态度理解", "阅读长难句指代推断",
+                    "阅读任务型表格填补", "短文改错动词时态", "名词性从句连接词", "状语从句时态主将从现",
+                    "常考固定短语运用", "情态动词基本意涵", "虚拟语气过去式变体", "主语从句It作主语",
+                    "反意疑问句肯定否定", "常考被动语态构造", "强调句It is elements", "情景交际委婉用语"
+                ];
+            }
+
+            for (let i = 1; i <= 50; i++) {
+                const topic = baseTopics[(i - 1) % baseTopics.length];
+                let name = topic;
+                const val = (40 + ((i * 13 + 17) % 35) + (i % 5) + ((i * 7) % 10) / 10) / 100;
+                spots.push({
+                    name: name,
+                    level: val,
+                    route: 'dati_yemian_pc.html?mode=knowledge&title=' + encodeURIComponent(name)
+                });
+            }
+            return spots;
+        }
+
+        function renderWeakSpots() {
+            const subject = currentXqSubject;
+            const allWeakSpots = get50WeakSpots(subject);
+            const weakSpotsContainer = document.getElementById("xq-weak-spots-container");
+            if (!weakSpotsContainer) return;
+            
+            weakSpotsContainer.innerHTML = "";
+            const visibleSpots = allWeakSpots.slice(0, currentWeakSpotsToShow);
+            visibleSpots.forEach(pt => {
+                weakSpotsContainer.innerHTML += `
+                    <div class="flex items-center justify-between p-3.5 bg-red-50/40 rounded-xl border border-red-100/50 hover:bg-red-50/70 transition-colors">
+                        <div class="flex flex-col gap-0.5">
+                            <span class="text-xs font-bold text-gray-800">${pt.name}</span>
+                            <span class="text-[11px] text-red-500 font-medium">预测正确率: ${formatRate(pt.level * 100)}</span>
+                        </div>
+                        <a href="${pt.route}" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-[10px] font-bold rounded-lg transition-transform text-center shadow-sm">
+                            去薄弱突破
+                        </a>
+                    </div>
+                `;
+            });
+
+            // Update Toggle Button State
+            const toggleBtn = document.getElementById("weak-spots-toggle-btn");
+            if (toggleBtn) {
+                if (currentWeakSpotsToShow >= 50) {
+                    toggleBtn.innerHTML = `<span>收起</span> <i id="weak-spots-toggle-icon" class="fas fa-chevron-up text-xs transition-transform ml-1"></i>`;
+                } else {
+                    toggleBtn.innerHTML = `<span>展开更多</span> <i id="weak-spots-toggle-icon" class="fas fa-chevron-down text-xs transition-transform ml-1"></i>`;
+                }
+            }
+        }
+
+        function toggleWeakSpots() {
+            if (currentWeakSpotsToShow >= 50) {
+                currentWeakSpotsToShow = 10;
+            } else {
+                currentWeakSpotsToShow += 10;
+            }
+            renderWeakSpots();
+        }
+
+        function switchTrackPeriod(period) {
+            currentXqPeriod = period;
+            
+            const btnDay = document.getElementById("track-btn-day");
+            const btnWeek = document.getElementById("track-btn-week");
+            const btnMonth = document.getElementById("track-btn-month");
+
+            btnDay.className = "px-3 py-1 rounded text-gray-500";
+            btnWeek.className = "px-3 py-1 rounded text-gray-500";
+            btnMonth.className = "px-3 py-1 rounded text-gray-500";
+
+            if (period === 'day') btnDay.className = "px-3 py-1 rounded bg-white shadow-sm text-blue-600";
+            else if (period === 'week') btnWeek.className = "px-3 py-1 rounded bg-white shadow-sm text-blue-600";
+            else if (period === 'month') btnMonth.className = "px-3 py-1 rounded bg-white shadow-sm text-blue-600";
+
+            updateTrendChartOnly();
+        }
+
+        function drawXueqingCharts() {
+            updateTrendChartOnly();
+        }
+
+        function updateTrendChartOnly() {
+            const data = XUEQING_DATA[currentXqSubject];
+            if (!data) return;
+            const periodData = data.track[currentXqPeriod] || data.track['day'];
+
+            try {
+                const trendCanvas = document.getElementById("xueqingTrendChart");
+                if (trendCanvas) {
+                    if (xueqingTrendChartInstance) {
+                        xueqingTrendChartInstance.destroy();
+                    }
+
+                    const ctxTrend = trendCanvas.getContext("2d");
+                    xueqingTrendChartInstance = new Chart(ctxTrend, {
+                        type: "line",
+                        data: {
+                            labels: periodData.labels,
+                            datasets: [
+                                {
+                                    label: "正确率轨迹",
+                                    data: periodData.data,
+                                    backgroundColor: "rgba(99, 102, 241, 0.1)",
+                                    borderColor: "rgba(99, 102, 241, 1)",
+                                    borderWidth: 2,
+                                    tension: 0.3,
+                                    fill: true,
+                                    pointBackgroundColor: "rgba(99, 102, 241, 1)"
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { display: false }
+                            },
+                            scales: {
+                                y: {
+                                    suggestedMin: 0,
+                                    suggestedMax: 100,
+                                    ticks: {
+                                        callback: function(val) { return val + "%"; }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            } catch (e) {
+                console.error("Failed to build xueqingTrendChart:", e);
+            }
+        }
+
+        // Auto initialize on load
+        window.addEventListener("DOMContentLoaded", () => {
+            selectSubject('zh');
+        });
+    </script>
+</body>
+</html>

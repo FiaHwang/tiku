@@ -364,9 +364,6 @@
             <button id="tab-overall" class="tab-item flex-1 text-center py-3" onclick="switchTab('overall')">
                 <i class="fas fa-file-invoice mr-2"></i>整体报告
             </button>
-            <button id="tab-xueqing" class="tab-item flex-1 text-center py-3" onclick="switchTab('xueqing')">
-                <i class="fas fa-graduation-cap mr-2"></i>学情分析
-            </button>
         </div>
 
         <!-- 1. 实时统计内容 -->
@@ -377,8 +374,8 @@
                 <span>统计范围 ：仅针对所选目标下的题库内做题记录。</span>
             </div>
 
-            <!-- 4-Column Desktop Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- 3-Column Desktop Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- 今日实时统计 Card -->
                     <div class="bg-white rounded-2xl p-5 card-shadow transition-all hover:shadow-md">
                         <div class="flex items-center gap-2 mb-4">
@@ -437,7 +434,7 @@
                             </div>
                             <div class="text-center">
                                 <div class="text-xs text-gray-400 mb-1">本周答题时长</div>
-                                <div class="text-xl font-bold text-gray-800">1<span class="text-xs font-normal text-gray-400 mx-0.5">时</span>30<span class="text-xs font-normal text-gray-400 ml-0.5">分</span></div>
+                                <div class="text-xl font-bold text-gray-800">1<span class="text-xs font-normal text-gray-400 mx-0.5">小时</span>30<span class="text-xs font-normal text-gray-400 ml-0.5">分钟</span></div>
                                 <div class="text-[10px] mt-1.5 flex items-center justify-center gap-0.5 text-red-500 font-medium">
                                     <i class="fas fa-caret-down"></i>
                                     <span>较上周下降 20分钟</span>
@@ -452,7 +449,7 @@
                             </div>
                             <div class="text-center border-t border-gray-50 pt-4">
                                 <div class="text-xs text-gray-400 mb-1">本周平均用时</div>
-                                <div class="text-xl font-bold text-gray-800">1<span class="text-xs font-normal text-gray-400 mx-0.5">分</span>15<span class="text-xs font-normal text-gray-400 ml-0.5">秒</span></div>
+                                <div class="text-xl font-bold text-gray-800">1<span class="text-xs font-normal text-gray-400 mx-0.5">分钟</span>15<span class="text-xs font-normal text-gray-400 ml-0.5">秒</span></div>
                                 <div class="text-[10px] mt-1.5 flex items-center justify-center gap-0.5 text-green-500 font-medium">
                                     <i class="fas fa-caret-down"></i>
                                     <span>较上周下降 15秒</span>
@@ -501,47 +498,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- 本年实时统计 Card -->
-                    <div class="bg-white rounded-2xl p-5 card-shadow transition-all hover:shadow-md">
-                        <div class="flex items-center gap-2 mb-4">
-                            <div class="w-1.5 h-4 bg-pink-500 rounded-full"></div>
-                            <h2 class="text-sm font-bold text-gray-800">本年实时统计</h2>
-                        </div>
-                        <div class="grid grid-cols-2 gap-y-4 pt-2 border-t border-gray-50">
-                            <div class="text-center border-r border-gray-100">
-                                <div class="text-xs text-gray-400 mb-1">本年答题量</div>
-                                <div class="text-xl font-bold text-gray-800">2,850<span class="text-xs font-normal text-gray-400 ml-0.5">道</span></div>
-                                <div class="text-[10px] mt-1.5 flex items-center justify-center gap-0.5 text-green-500 font-medium">
-                                    <i class="fas fa-caret-up"></i>
-                                    <span>较上年上升 450道</span>
-                                </div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-xs text-gray-400 mb-1">本年答题时长</div>
-                                <div class="text-xl font-bold text-gray-800">38<span class="text-xs font-normal text-gray-400 ml-0.5">小时</span></div>
-                                <div class="text-[10px] mt-1.5 text-gray-400 font-medium">
-                                    <span>较上年持平</span>
-                                </div>
-                            </div>
-                            <div class="text-center border-r border-gray-100 border-t border-gray-50 pt-4">
-                                <div class="text-xs text-gray-400 mb-1">本年正确率</div>
-                                <div class="text-xl font-bold text-gray-800">81.4<span class="text-xs font-normal text-gray-400 ml-0.5">%</span></div>
-                                <div class="text-[10px] mt-1.5 flex items-center justify-center gap-0.5 text-green-500 font-medium">
-                                    <i class="fas fa-caret-up"></i>
-                                    <span>较上年上升 2.4%</span>
-                                </div>
-                            </div>
-                            <div class="text-center border-t border-gray-50 pt-4">
-                                <div class="text-xs text-gray-400 mb-1">本年平均用时</div>
-                                <div class="text-xl font-bold text-gray-800">1<span class="text-xs font-normal text-gray-400 mx-0.5">分</span>05<span class="text-xs font-normal text-gray-400 ml-0.5">秒</span></div>
-                                <div class="text-[10px] mt-1.5 flex items-center justify-center gap-0.5 text-green-500 font-medium">
-                                    <i class="fas fa-caret-down"></i>
-                                    <span>较上年下降 10秒</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -580,7 +536,7 @@
                                 <i class="far fa-clock text-sm"></i>
                                 <span class="text-xs font-semibold">答题时长</span>
                             </div>
-                            <div class="text-lg font-bold text-gray-800">12h 30m</div>
+                            <div class="text-lg font-bold text-gray-800">12小时 30分钟</div>
                             <div class="text-[10px] text-gray-400 mt-1">
                                 <i class="fas fa-equals"></i> 较上周持平
                             </div>
@@ -600,7 +556,7 @@
                                 <i class="far fa-hourglass text-sm"></i>
                                 <span class="text-xs font-semibold">平均每题用时</span>
                             </div>
-                            <div class="text-lg font-bold text-gray-800">2分37秒</div>
+                            <div class="text-lg font-bold text-gray-800">2分钟37秒</div>
                             <div class="text-[10px] text-green-500 mt-1">
                                 <i class="fas fa-arrow-down"></i> 较上周下降8秒
                             </div>
@@ -627,7 +583,7 @@
                         <!-- Duration Contrast Chart -->
                         <div class="bg-white rounded-2xl p-4 card-shadow min-w-0">
                             <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-xs font-bold text-gray-800">答题时长对比</h2>
+                                <h2 class="text-xs font-bold text-gray-800">答题时长对比 (分钟)</h2>
                                 <div class="flex gap-2 text-[9px] text-gray-400">
                                     <span class="flex items-center gap-0.5"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>本周</span>
                                     <span class="flex items-center gap-0.5"><span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>上周</span>
@@ -642,7 +598,7 @@
                         <!-- Accuracy Trend Chart -->
                         <div class="bg-white rounded-2xl p-4 card-shadow min-w-0">
                             <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-xs font-bold text-gray-800">正确率趋势</h2>
+                                <h2 class="text-xs font-bold text-gray-800">正确率趋势 (%)</h2>
                                 <div class="flex gap-2 text-[9px] text-gray-400">
                                     <span class="flex items-center gap-0.5"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>本周</span>
                                     <span class="flex items-center gap-0.5"><span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>上周</span>
@@ -812,7 +768,7 @@
                                 <i class="far fa-clock text-sm"></i>
                                 <span class="text-xs font-semibold">累计答题时长</span>
                             </div>
-                            <div class="text-lg font-bold text-gray-800">1h 8m</div>
+                            <div class="text-lg font-bold text-gray-800">1小时 8分钟</div>
                             <div class="text-[10px] text-gray-400 mt-1">等于全站平均</div>
                         </div>
                         <div class="bg-white p-4 rounded-2xl card-shadow text-center">
@@ -828,7 +784,7 @@
                                 <i class="far fa-hourglass text-sm"></i>
                                 <span class="text-xs font-semibold">平均每题用时</span>
                             </div>
-                            <div class="text-lg font-bold text-gray-800">1分20秒</div>
+                            <div class="text-lg font-bold text-gray-800">1分钟20秒</div>
                             <div class="text-[10px] text-green-500 mt-1">低于全站平均</div>
                         </div>
                     </div>
@@ -931,7 +887,8 @@
                                     <i class="fas fa-rocket text-sm"></i>
                                 </div>
                                 <h2 class="text-sm font-bold text-gray-800">提分攻略</h2>
-                                <span class="text-[10px] text-gray-400 font-normal">（内容由AI生成，每日凌晨更新）</span>
+                                <span class="px-1.5 py-0.5 text-[10px] font-normal text-amber-600 bg-amber-50 rounded-md flex items-center gap-1 border border-amber-100/50"><span class="w-1 h-1 rounded-full bg-amber-500 animate-pulse"></span>更新中</span>
+                                <span class="text-[10px] text-gray-400 font-normal">（内容由AI生成）</span>
                             </div>
                         </div>
                         <div class="bg-indigo-50/40 p-4 rounded-xl text-xs leading-relaxed text-gray-700 space-y-3">
@@ -955,7 +912,8 @@
                                     <i class="far fa-lightbulb text-sm"></i>
                                 </div>
                                 <h2 class="text-sm font-bold text-gray-800">学习建议</h2>
-                                <span class="text-[10px] text-gray-400 font-normal">（内容由AI生成，每日凌晨更新）</span>
+                                <span class="px-1.5 py-0.5 text-[10px] font-normal text-amber-600 bg-amber-50 rounded-md flex items-center gap-1 border border-amber-100/50"><span class="w-1 h-1 rounded-full bg-amber-500 animate-pulse"></span>更新中</span>
+                                <span class="text-[10px] text-gray-400 font-normal">（内容由AI生成）</span>
                             </div>
                         </div>
                         <div class="ai-suggestion-box p-4 rounded-xl text-xs leading-relaxed text-orange-800">
@@ -966,215 +924,7 @@
             </div>
         </div>
 
-        <!-- 4. 学情分析内容 -->
-        <div id="xueqing-report-content" class="space-y-6 pt-2" style="display: none;">
-            <!-- 统计范围提示 -->
-            <div class="px-4 py-3 bg-blue-50/70 border border-blue-100/50 rounded-xl text-xs text-blue-600 flex items-center gap-2 font-medium">
-                <i class="fas fa-info-circle text-sm text-blue-500"></i>
-                <span>统计范围 ：覆盖所选目标下的全部做题记录，不限于题库，每日凌晨更新。</span>
-            </div>
 
-
-
-            <!-- 2-Column Desktop Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Left 2 columns: Learning Profile, Trajectory chart, and Heatmap -->
-                <div class="lg:col-span-2 space-y-6">
-                    <!-- 核心学情评估 (学习画像总览) -->
-                    <div class="bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-700 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
-                        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
-                        
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center border border-white/10 shadow-inner">
-                                <i class="fas fa-brain text-base text-yellow-300"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-sm font-extrabold tracking-wide">智能学习画像</h3>
-                            </div>
-                        </div>
-
-                        <!-- 学习能力 0-1 游标指示 bar -->
-                        <div class="mb-5 bg-white/10 rounded-xl p-4 border border-white/10 backdrop-blur-sm">
-                            <div class="flex justify-between items-center text-xs mb-1">
-                                <span class="opacity-90 flex items-center gap-1">
-                                    <i class="fas fa-chart-line text-yellow-300 text-xs"></i> 学习能力能力值评估
-                                </span>
-                                <span class="font-extrabold text-yellow-300 tracking-wider text-sm" id="xq-val-ability-txt">0.80</span>
-                            </div>
-                            <div class="relative w-full h-2 bg-white/20 rounded-full my-3">
-                                <div class="absolute left-0 -top-1 w-0.5 h-4 bg-white/40"></div>
-                                <div class="absolute left-1/2 -top-1 w-0.5 h-4 bg-white/50 -translate-x-1/2"></div>
-                                <div class="absolute right-0 -top-1 w-0.5 h-4 bg-white/40"></div>
-                                <div id="xq-ability-pointer" class="absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-yellow-400 border-2 border-white shadow-md transition-all duration-500" style="left: 80%;"></div>
-                            </div>
-                            <div class="flex justify-between text-[9px] opacity-70">
-                                <span>需要加强 (0)</span>
-                                <span>常规水平 (0.5)</span>
-                                <span>杰出掌握 (1)</span>
-                            </div>
-                        </div>
-
-                        <!-- Metrics Grid -->
-                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                            <div class="bg-white/10 backdrop-blur-sm p-3 rounded-xl border border-white/10 text-center">
-                                <div class="text-[10px] text-blue-100 mb-1"><i class="fas fa-users text-[9px] mr-1"></i>能力百分位</div>
-                                <div class="text-xl font-extrabold text-yellow-300 tracking-tight" id="xq-val-percentile">89%</div>
-                            </div>
-                            <div class="bg-white/10 backdrop-blur-sm p-3 rounded-xl border border-white/10 text-center">
-                                <div class="text-[10px] text-blue-100 mb-1"><i class="fas fa-check-double text-[9px] mr-1"></i>总正确率</div>
-                                <div class="text-xl font-extrabold text-white tracking-tight" id="xq-val-accuracy">85%</div>
-                            </div>
-                            <div class="bg-white/10 backdrop-blur-sm p-3 rounded-xl border border-white/10 text-center">
-                                <div class="text-[10px] text-blue-100 mb-1">近7天客观题答题数量</div>
-                                <div class="text-lg font-extrabold text-white" id="xq-val-7day-count">132 题</div>
-                            </div>
-                            <div class="bg-white/10 backdrop-blur-sm p-3 rounded-xl border border-white/10 text-center">
-                                <div class="text-[10px] text-blue-100 mb-1">近7天正确率</div>
-                                <div class="text-lg font-extrabold text-white" id="xq-val-7day-accuracy">87%</div>
-                            </div>
-                            <div class="bg-white/10 backdrop-blur-sm p-3 rounded-xl border border-white/10 text-center col-span-2 md:col-span-1 flex flex-col justify-center">
-                                <div class="text-[10px] text-blue-100 mb-0.5">已掌握考点</div>
-                                <div class="text-xs font-extrabold text-green-300" id="xq-val-mastered-count">15 / 22 个</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 学习轨迹走势图 -->
-                    <div class="bg-white rounded-2xl p-5 card-shadow">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center gap-2">
-                                <div class="w-5 h-5 bg-purple-50 text-purple-600 rounded flex items-center justify-center text-xs border border-purple-100">
-                                    <i class="fas fa-chart-line"></i>
-                                </div>
-                                <h2 class="text-sm font-bold text-gray-800">正确率轨迹追踪</h2>
-                            </div>
-                            
-                            <!-- Time Period Picker -->
-                            <div class="flex bg-gray-100 rounded-lg p-0.5 text-xs font-bold gap-1">
-                                <button id="track-btn-day" onclick="switchTrackPeriod('day')" class="px-3 py-1 rounded bg-white shadow-sm text-blue-600">日</button>
-                                <button id="track-btn-week" onclick="switchTrackPeriod('week')" class="px-3 py-1 rounded text-gray-500">周</button>
-                                <button id="track-btn-month" onclick="switchTrackPeriod('month')" class="px-3 py-1 rounded text-gray-500">月</button>
-                            </div>
-                        </div>
-                        <div class="h-48">
-                            <canvas id="xueqingTrendChart" class="w-full h-full"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Heatmap Grid -->
-                    <div class="bg-white rounded-2xl p-5 card-shadow">
-                        <div class="flex items-center gap-2 mb-2">
-                            <div class="w-5 h-5 bg-orange-50 text-orange-600 rounded flex items-center justify-center text-xs border border-orange-100">
-                                <i class="far fa-calendar-alt"></i>
-                            </div>
-                            <h2 class="text-sm font-bold text-gray-800">做题趋势热力图</h2>
-                        </div>
-                        <p class="text-xs text-gray-400 mb-4">
-                            通过热力图表现您每日的试题解算热度。格子颜色越深表示做题数量越多。
-                        </p>
-                        
-                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 overflow-x-auto">
-                            <div style="display: grid; grid-template-columns: repeat(30, minmax(0, 1fr)); gap: 3px;" id="heatmap-grid"></div>
-                            <div class="flex justify-between items-center text-[10px] text-gray-400 mt-4 pt-3 border-t border-gray-200/60">
-                                <span>最近 360 天做题表现 (时间轴)</span>
-                                <div class="flex items-center gap-1.5">
-                                    <span>少</span>
-                                    <span class="w-3 h-3 rounded bg-gray-100"></span>
-                                    <span class="w-3 h-3 rounded bg-blue-200"></span>
-                                    <span class="w-3 h-3 rounded bg-blue-400"></span>
-                                    <span class="w-3 h-3 rounded bg-indigo-600"></span>
-                                    <span>多</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 薄弱项 Top-50 (Needs Improvement List) -->
-                    <div class="bg-white rounded-2xl p-5 card-shadow">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center gap-2">
-                                <div class="w-5 h-5 bg-red-100 text-red-500 rounded flex items-center justify-center text-xs border border-red-200">
-                                    <i class="fas fa-bullseye"></i>
-                                </div>
-                                <h2 class="text-sm font-bold text-gray-800">薄弱项 Top-50 亟待攻克</h2>
-                            </div>
-                            <span class="text-[10px] bg-red-100 text-red-600 px-2 py-0.5 rounded font-bold shadow-sm animate-pulse">亟待提分</span>
-                        </div>
-
-                        <!-- 2-Column Grid of Weak Spots for PC space -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="xq-weak-spots-container"></div>
-
-                        <!-- Expand More Button -->
-                        <div class="mt-4 flex justify-center border-t border-gray-100 pt-4" id="weak-spots-more-container">
-                            <button id="weak-spots-toggle-btn" onclick="toggleWeakSpots()" class="flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50/50 hover:bg-blue-50 px-4 py-2 rounded-lg border border-blue-100/30 transition-all active:scale-95">
-                                <span>展开更多</span>
-                                <i class="fas fa-chevron-down text-xs transition-transform" id="weak-spots-toggle-icon"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right Column: AI Advice -->
-                <div class="space-y-6">
-                    <!-- AI Intelligence Advice block -->
-                    <div class="bg-amber-50/50 rounded-2xl p-5 border border-amber-100/70 relative overflow-hidden shadow-sm">
-                        <div class="absolute -right-6 -top-6 w-20 h-20 bg-amber-100/30 rounded-full blur-lg"></div>
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center gap-2">
-                                <div class="w-6 h-6 bg-amber-100 rounded-lg flex items-center justify-center text-amber-600 border border-amber-200/50">
-                                    <i class="far fa-lightbulb text-sm"></i>
-                                </div>
-                                <h2 class="text-xs font-black text-amber-950 tracking-wider">个性化学习指导</h2>
-                                <span class="text-[10px] text-amber-700 font-semibold">（内容由AI生成，每日凌晨更新）</span>
-                            </div>
-                        </div>
-                        <div class="text-xs leading-relaxed text-amber-900 space-y-3.5" id="xq-ai-advice-block"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 能力指标说明弹窗 -->
-    <div class="modal-overlay" id="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">学情核心能力指标说明</div>
-                <i class="fas fa-times modal-close" id="close-modal-icon"></i>
-            </div>
-            <div class="modal-body space-y-4">
-                <div class="ability-item p-3 bg-gray-50 rounded-xl">
-                    <div class="ability-title flex items-center gap-1.5 text-blue-600"><i class="fas fa-fire"></i>毅力</div>
-                    <div class="ability-desc">
-                        由最近30天答题天数及历史累计答题天数综合计算得出，第二天更新。
-                    </div>
-                </div>
-                <div class="ability-item p-3 bg-gray-50 rounded-xl">
-                    <div class="ability-title flex items-center gap-1.5 text-blue-600"><i class="fas fa-pencil-alt"></i>答题量</div>
-                    <div class="ability-desc">
-                        由最近30天答题量及历史累计答题量综合计算得出，第二天更新。
-                    </div>
-                </div>
-                <div class="ability-item p-3 bg-gray-50 rounded-xl">
-                    <div class="ability-title flex items-center gap-1.5 text-blue-600"><i class="fas fa-check-double"></i>正确率</div>
-                    <div class="ability-desc">由历史答对题量和历史答题总量得出。</div>
-                </div>
-                <div class="ability-item p-3 bg-gray-50 rounded-xl">
-                    <div class="ability-title flex items-center gap-1.5 text-blue-600"><i class="fas fa-running"></i>答题速度</div>
-                    <div class="ability-desc">
-                        由用户平均答题用时和所有用户中最少答题用时对比得出。
-                    </div>
-                </div>
-                <div class="ability-item p-3 bg-gray-50 rounded-xl">
-                    <div class="ability-title flex items-center gap-1.5 text-blue-600"><i class="fas fa-brain"></i>掌握程度</div>
-                    <div class="ability-desc">由知识点的平均掌握程度计算得出。</div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="confirm-btn" id="close-modal-btn">知道了</button>
-            </div>
-        </div>
-    </div>
 
     <!-- 页脚 -->
     <footer class="footer">
@@ -1207,37 +957,11 @@
             }
         }
 
-        // Modal Logic
-        const modalOverlay = document.getElementById("modal-overlay");
-        function initModal() {
-            const openModalBtn = document.getElementById("open-modal");
-            const closeModalIcon = document.getElementById("close-modal-icon");
-            const closeModalBtn = document.getElementById("close-modal-btn");
 
-            if (openModalBtn) {
-                openModalBtn.addEventListener("click", () => {
-                    modalOverlay.style.display = "flex";
-                    document.body.style.overflow = "hidden";
-                });
-            }
-
-            const closeModal = () => {
-                modalOverlay.style.display = "none";
-                document.body.style.overflow = "auto";
-            };
-
-            if (closeModalIcon) closeModalIcon.addEventListener("click", closeModal);
-            if (closeModalBtn) closeModalBtn.addEventListener("click", closeModal);
-            if (modalOverlay) {
-                modalOverlay.addEventListener("click", (e) => {
-                    if (e.target === modalOverlay) closeModal();
-                });
-            }
-        }
 
         // Seeds for different list categories
         const staticWeeklyWeakKnowledgeSeed = [
-            { name: "末级知识点名称", rate: "32.5%", count: "答错88次", isWeak: true },
+            { name: "知识点名称", rate: "32.5%", count: "答错88次", isWeak: true },
             { name: "知识点B-知识点B", rate: "35%", count: "答错65次", isWeak: true },
             { name: "知识点C-知识点C-知识点C", rate: "38.2%", count: "答错52次", isWeak: true },
             { name: "知识点D", rate: "40%", count: "答错48次", isWeak: true },
@@ -1257,7 +981,7 @@
         ];
 
         const staticOverallWeakKnowledgeSeed = [
-            { name: "末级知识点名称", rate: "32.5%", count: "答错88次", isWeak: true },
+            { name: "知识点名称", rate: "32.5%", count: "答错88次", isWeak: true },
             { name: "知识点B-知识点B", rate: "35%", count: "答错65次", isWeak: true },
             { name: "知识点C-知识点C-知识点C", rate: "38.2%", count: "答错52次", isWeak: true },
             { name: "知识点D", rate: "40%", count: "答错48次", isWeak: true },
@@ -1333,6 +1057,7 @@
                     : item.name;
 
                 if (item.isWeak) {
+                    const showSpecialPractice = !key.includes("knowledge");
                     container.innerHTML += `
                         <div class="flex justify-between items-center py-3 list-item-border">
                             <div class="flex flex-col gap-1 pr-2">
@@ -1345,7 +1070,9 @@
                             </div>
                             <div class="flex items-center gap-2 flex-shrink-0">
                                 <button onclick="location.href='dati_yemian_pc.html'" class="bg-rose-50 hover:bg-rose-100 text-rose-500 border border-rose-100 px-3 py-1 text-xs rounded-full whitespace-nowrap transition-all active:scale-95">错题重练</button>
+                                ${showSpecialPractice ? `
                                 <button onclick="location.href='dati_yemian_pc.html'" class="bg-blue-50 hover:bg-blue-100 text-blue-500 border border-blue-100 px-3 py-1 text-xs rounded-full whitespace-nowrap transition-all active:scale-95">专项练习</button>
+                                ` : ''}
                             </div>
                         </div>
                     `;
@@ -1364,7 +1091,6 @@
                     `;
                 }
             });
-
             if (toggleBtn) {
                 const maxLimit = key.startsWith("weekly_") ? 20 : 50;
                 if (currentLimit >= maxLimit) {
@@ -1394,473 +1120,31 @@
         // Initial rendering of lists
         setTimeout(renderAllReportLists, 50);
 
-        let radarInitialized = false;
-        let xueqingRadarInitialized = false;
-
         function switchTab(type) {
             localStorage.setItem("dati_baogao_pc_active_tab", type);
-            const tabRealtime = document.getElementById("tab-realtime");
-            const tabWeekly = document.getElementById("tab-weekly");
-            const tabOverall = document.getElementById("tab-overall");
-            const tabXueqing = document.getElementById("tab-xueqing");
 
-            const realtimeContent = document.getElementById("realtime-report-content");
-            const weeklyContent = document.getElementById("weekly-report-content");
-            const overallContent = document.getElementById("overall-report-content");
-            const xueqingContent = document.getElementById("xueqing-report-content");
-
-            // Reset active classes
-            if (tabRealtime) tabRealtime.classList.remove("active");
-            if (tabWeekly) tabWeekly.classList.remove("active");
-            if (tabOverall) tabOverall.classList.remove("active");
-            if (tabXueqing) tabXueqing.classList.remove("active");
-
-            // Hide all
-            if (realtimeContent) realtimeContent.style.display = "none";
-            if (weeklyContent) weeklyContent.style.display = "none";
-            if (overallContent) overallContent.style.display = "none";
-            if (xueqingContent) xueqingContent.style.display = "none";
-
-            if (type === "realtime") {
-                if (tabRealtime) tabRealtime.classList.add("active");
-                if (realtimeContent) realtimeContent.style.display = "block";
-            } else if (type === "weekly") {
-                if (tabWeekly) tabWeekly.classList.add("active");
-                if (weeklyContent) weeklyContent.style.display = "block";
-                setTimeout(initWeeklyCharts, 50);
-            } else if (type === "overall") {
-                if (tabOverall) tabOverall.classList.add("active");
-                if (overallContent) overallContent.style.display = "block";
-
-                if (!radarInitialized) {
-                    setTimeout(initOverallRadarChart, 50);
-                    radarInitialized = true;
-                }
-            } else if (type === "xueqing") {
-                if (tabXueqing) tabXueqing.classList.add("active");
-                if (xueqingContent) xueqingContent.style.display = "block";
-
-                if (!xueqingRadarInitialized) {
-                    setTimeout(() => {
-                        selectSubject(currentXqSubject);
-                    }, 50);
-                    xueqingRadarInitialized = true;
-                }
-            }
-        }
-
-        // Subject Data & Analytical values
-        let currentXqSubject = 'zh';
-        let currentXqPeriod = 'day';
-        let currentWeakSpotsToShow = 10;
-
-        const XUEQING_DATA = {
-            zh: {
-                ability: 0.8,
-                abilityText: "0.80",
-                pointerLeft: "80%",
-                accuracy: "85.4%",
-                percentile: "89.3%",
-                val7DayCount: "132 题",
-                val7DayAccuracy: "87.5%",
-                masteredCountText: "15 / 22 个知识点",
-                dimensionData: [85, 68, 75],
-                track: {
-                    day: {
-                        labels: ["12.1", "12.2", "12.3", "12.4", "12.5", "12.6", "12.7"],
-                        data: [72, 75, 74, 82, 80, 85, 92]
-                    },
-                    week: {
-                        labels: ["第1周", "第2周", "第3周", "第4周", "第5周", "第6周", "第7周"],
-                        data: [84, 82, 86, 88, 85, 87, 89]
-                    },
-                    month: {
-                        labels: ["11月", "12月", "01月", "02月", "03月", "04月", "05月"],
-                        data: [68, 70, 74, 76, 80, 82, 85]
-                    }
-                },
-                heatmapCells: [
-                    12, 18,  0, 24, 30,  8, 15,  5,  0, 35,
-                    10,  2, 40,  0, 18, 22,  0, 14, 28,  0,
-                     5, 30, 12,  0,  6, 32,  0, 25, 11, 45,
-                    16,  0, 20, 15,  0,  8, 26, 12,  3, 33,
-                     0, 15, 22,  9,  0, 18, 24,  0, 12, 30,
-                    14,  5,  0, 28, 20,  0, 16, 27,  0, 19,
-                    11, 23,  0,  8, 35, 14,  0, 21,  9, 31,
-                     0, 18, 25,  6,  0, 15, 22,  0, 10, 28,
-                    12,  4,  0, 22, 18,  0, 14, 25,  0, 16,
-                     8, 20,  0,  5, 32, 12,  0, 19,  7, 27
-                ],
-                aiAdvice: `
-                    <p>🔍 <strong class="text-amber-950">学情总结：</strong>您在选择题及基础记忆类考点（如“文言文实词”）中的正确率始终保持在 <strong class="text-green-600 font-extrabold">92.4% 以上</strong>，具有扎实的基础功底。</p>
-                    <p class="mt-2">⚠️ <strong class="text-amber-950">核心痛点：</strong>但在探究与论述题型、字音字形（极易失分的基础点）中仍面临一定阻力，平均正确率仅为 <strong class="text-red-500 font-extrabold">45%</strong>，是您的关键学习瓶颈。</p>
-                    <p class="mt-2">🚀 <strong class="text-amber-950">提分攻略：</strong>最近在“现代文阅读”和“字形拼写”方面投入的时间较少，建议增加每天答题时长15分钟，并重点通过专属的 <strong class="text-blue-600 font-bold">【AI薄弱突破练】</strong> 进行高性价比提分，配合错题本进行滚动复习，可以有效提升百分位等级和整体学习。此外建议适当增加周末错题回顾，巩固错题深度解析。</p>
-                `
-            },
-            math: {
-                ability: 0.9,
-                abilityText: "0.90",
-                pointerLeft: "90%",
-                accuracy: "88.2%",
-                percentile: "95.1%",
-                val7DayCount: "185 题",
-                val7DayAccuracy: "91.2%",
-                masteredCountText: "28 / 35 个知识点",
-                dimensionData: [88, 80, 92],
-                track: {
-                    day: {
-                        labels: ["12.1", "12.2", "12.3", "12.4", "12.5", "12.6", "12.7"],
-                        data: [80, 82, 81, 89, 90, 92, 95]
-                    },
-                    week: {
-                        labels: ["第1周", "第2周", "第3周", "第4周", "第5周", "第6周", "第7周"],
-                        data: [83, 88, 90, 89, 91, 92, 94]
-                    },
-                    month: {
-                        labels: ["11月", "12月", "01月", "02月", "03月", "04月", "05月"],
-                        data: [72, 75, 79, 82, 86, 89, 92]
-                    }
-                },
-                heatmapCells: [
-                    25, 33, 40,  0, 28,  5, 52, 12, 19, 44,
-                     0, 18, 30, 22,  0, 14, 25, 48,  0, 10,
-                    12, 50,  0, 15, 32,  6,  0, 39, 21, 60,
-                     5, 22, 16,  0, 41, 12, 18,  0, 35, 27,
-                     0, 30, 45,  8,  0, 22, 38,  0, 15, 50,
-                    28, 12,  0, 42, 31,  0, 20, 55,  0, 18,
-                    14, 33,  0, 19, 48, 24,  0, 37, 15, 42,
-                     0, 25, 38,  6,  0, 18, 32,  0, 12, 45,
-                    22, 10,  0, 35, 28,  0, 16, 48,  0, 15,
-                    11, 29,  0, 14, 40, 20,  0, 33, 12, 38
-                ],
-                aiAdvice: `
-                    <p>🔍 <strong class="text-amber-950">学情总结：</strong>数学综合学习评级极佳，数学空间思维与代数计算底子较厚，数与代数及有理数方面获得 <strong class="text-green-600 font-extrabold">95.2% 的综合高分正确率</strong>，远超班级平均分。</p>
-                    <p class="mt-2">⚠️ <strong class="text-amber-950">核心痛点：</strong>但由于空间几何属于全新挑战章节，特别是“几何动点最值问题”属于高阶探究性附加难关，您的理解和解题深度掌握不充足（目前处于正确率较低的攻坚区，正确率约为 <strong class="text-red-500 font-extrabold">55%</strong>）。</p>
-                    <p class="mt-2">🚀 <strong class="text-amber-950">提分攻略：</strong>建议在几何大题和辅助线思路方面重点攻坚。每周日在错题本上将相关经典图形重新推演一遍，并利用 <strong class="text-blue-600 font-bold">【AI薄弱突破练】</strong> 进行高频次自适应冲刺关卡的定点打击，极佳的功底配合高强度查缺补漏将确保满分无阻！</p>
-                `
-            },
-            en: {
-                ability: 0.7,
-                abilityText: "0.70",
-                pointerLeft: "70%",
-                accuracy: "77.6%",
-                percentile: "81.7%",
-                val7DayCount: "98 题",
-                val7DayAccuracy: "78.4%",
-                masteredCountText: "14 / 20 个知识点",
-                dimensionData: [77, 70, 68],
-                track: {
-                    day: {
-                        labels: ["12.1", "12.2", "12.3", "12.4", "12.5", "12.6", "12.7"],
-                        data: [70, 72, 75, 74, 78, 82, 81]
-                    },
-                    week: {
-                        labels: ["第1周", "第2周", "第3周", "第4周", "第5周", "第6周", "第7周"],
-                        data: [75, 78, 80, 81, 79, 81, 83]
-                    },
-                    month: {
-                        labels: ["11月", "12月", "01月", "02月", "03月", "04月", "05月"],
-                        data: [62, 65, 70, 72, 75, 77, 80]
-                    }
-                },
-                heatmapCells: [
-                     8, 12, 15,  0, 22,  0,  4,  5, 30,  0,
-                    12,  0, 24, 18,  2, 14,  0, 22,  0, 16,
-                     0, 31, 10,  0,  6, 25,  0, 18, 11, 40,
-                    14,  0, 15, 12,  5,  0, 22,  8,  0, 28,
-                     0, 10, 18,  5,  0, 12, 20,  0,  8, 25,
-                    11,  3,  0, 16, 14,  0, 10, 22,  0, 12,
-                     6, 15,  0,  5, 20,  9,  0, 14,  8, 22,
-                     0, 12, 15,  4,  0, 10, 18,  0,  6, 21,
-                     9,  2,  0, 14, 11,  0,  8, 19,  0, 10,
-                     5, 12,  0,  4, 18,  8,  0, 11,  6, 18
-                ],
-                aiAdvice: `
-                    <p>🔍 <strong class="text-amber-950">学情总结：</strong>英语语言整体学习节奏良好，听力理解方面尤为突出（正确率达到 <strong class="text-green-600 font-extrabold">85% 以上</strong>），基础日常词汇多义项词义辨析有较好的积累储备。</p>
-                    <p class="mt-2">⚠️ <strong class="text-amber-950">核心痛点：</strong>当前主要的拦路难题在高级复合句法结构（限制性定语从句、非谓语动词时态与语态）上，导致长难阅读和完型填空中语义逻辑判断发生偏差，平均正确率仅在 <strong class="text-red-500 font-extrabold">60%</strong> 水平线徘徊。</p>
-                    <p class="mt-2">🚀 <strong class="text-amber-950">提分攻略：</strong>定语从句与非谓语是您攻坚省市重点线分差的胜负手。每天晚读时可划出5分钟在 <strong class="text-blue-600 font-bold">【AI薄弱突破练】</strong> 进行专属的结构语法强化。结合语法框架卡片并常看您的错题库，必定可轻松点亮定语从句这枚高贵星章！</p>
-                `
-            }
-        };
-
-        let xueqingDimensionRadarChartInstance = null;
-        let xueqingTrendChartInstance = null;
-
-        function selectSubject(subject) {
-            currentXqSubject = subject;
-            
-            // Update button styles
-            const btnZh = document.getElementById("subject-btn-zh");
-            const btnMath = document.getElementById("subject-btn-math");
-            const btnEn = document.getElementById("subject-btn-en");
-
-            const normalClass = "flex-1 py-2 text-xs font-bold rounded-lg text-center transition-all text-gray-500 hover:text-gray-800";
-            const activeClass = "flex-1 py-2 text-xs font-bold rounded-lg text-center transition-all bg-white text-blue-600 shadow-sm";
-
-            if (btnZh) btnZh.className = normalClass;
-            if (btnMath) btnMath.className = normalClass;
-            if (btnEn) btnEn.className = normalClass;
-
-            if (subject === 'zh' && btnZh) btnZh.className = activeClass;
-            else if (subject === 'math' && btnMath) btnMath.className = activeClass;
-            else if (subject === 'en' && btnEn) btnEn.className = activeClass;
-
-            const data = XUEQING_DATA[subject];
-            if (!data) return;
-
-            // Populate text metrics
-            document.getElementById("xq-val-ability-txt").innerText = data.abilityText;
-            document.getElementById("xq-ability-pointer").style.left = data.pointerLeft;
-            document.getElementById("xq-val-accuracy").innerText = formatRate(data.accuracy);
-            document.getElementById("xq-val-percentile").innerText = formatRate(data.percentile);
-            document.getElementById("xq-val-7day-count").innerText = data.val7DayCount;
-            document.getElementById("xq-val-7day-accuracy").innerText = formatRate(data.val7DayAccuracy);
-            document.getElementById("xq-val-mastered-count").innerText = data.masteredCountText;
-
-            // Heatmap rendering
-            const heatmapGrid = document.getElementById("heatmap-grid");
-            if (heatmapGrid) {
-                heatmapGrid.innerHTML = "";
-                const cells360 = [];
-                const seedCells = data.heatmapCells && data.heatmapCells.length > 0 ? data.heatmapCells : [12, 18, 0, 24, 30, 8, 15, 5, 0, 35];
-                for (let i = 0; i < 360; i++) {
-                    const seedIndex = i % seedCells.length;
-                    let volume = seedCells[seedIndex];
-                    if (volume > 0) {
-                        const noise = ((i * 17 + 11) % 15) - 7;
-                        volume = Math.max(1, volume + noise);
-                    } else if (((i * 23 + 7) % 100) < 12) {
-                        volume = ((i * 3) % 10) + i % 3 + 1;
-                    }
-                    cells360.push(volume);
-                }
-
-                cells360.forEach((volume, idx) => {
-                    let colorClass = "bg-gray-100";
-                    if (volume > 40) colorClass = "bg-indigo-700 shadow-inner";
-                    else if (volume > 20) colorClass = "bg-blue-500";
-                    else if (volume > 5) colorClass = "bg-blue-200";
-                    heatmapGrid.innerHTML += `<div class="aspect-square rounded-[1px] ${colorClass} transition-all duration-300 flex items-center justify-center relative group" title="第 ${idx + 1} 天 做题 ${volume} 题"><span class="absolute hidden group-hover:block bg-black text-white text-[9px] px-1.5 py-0.5 rounded -top-8 z-10 whitespace-nowrap">第${idx + 1}天: ${volume}题</span></div>`;
-                });
-            }
-
-            // Reset Weak Spots display count to 10 on subject switch
-            currentWeakSpotsToShow = 10;
-            renderWeakSpots();
-
-            // Advice block
-            document.getElementById("xq-ai-advice-block").innerHTML = data.aiAdvice;
-
-            // Refresh charts
-            drawXueqingCharts();
-        }
-
-        function get50WeakSpots(subject) {
-            const spots = [];
-            let baseTopics = [];
-            if (subject === 'zh') {
-                baseTopics = [
-                    "字音字形辨析", "文言虚词理解", "常考文言实词", "现代文自然段意",
-                    "现代文中心思想", "古诗词情感倾向", "诗歌炼字意境分析", "成语辨析运用",
-                    "错别字自检判定", "修辞手法鉴赏", "名著人物性格情节", "名著核心主旨探究",
-                    "文言特殊句式翻译", "说明文信息提炼", "议论文写作结构", "记叙文细节描写",
-                    "文言文停顿虚词", "科普文逻辑推断", "标点符号规范使用", "修辞手法关联转换"
-                ];
-            } else if (subject === 'math') {
-                baseTopics = [
-                    "几何动点最值", "不等式解集区间", "一次方程实际应用", "反比例函数常数考查",
-                    "二次函数对称轴最值", "全等三角形辅助线", "相似三角形比例判定", "勾股定理极值计算",
-                    "因式分解交叉相乘", "分式方程增根排除", "实数混合混合运算", "整式乘法公式展开",
-                    "平面轴对称变换", "反比例函数k值计算", "圆的切线判定定理", "圆周角与弦长关联",
-                    "统计极差与标准差", "复杂概率树状图计算", "平行四边形性质题", "等腰梯形与直角图形"
-                ];
-            } else { // en
-                baseTopics = [
-                    "定语从句连接代词", "主谓一致高级规则", "完形填空语意推断", "阅读细节理解抓取",
-                    "常考介词动词搭配", "听力时间点敏感度", "听力对话态度理解", "阅读长难句指代推断",
-                    "阅读任务型表格填补", "短文改错动词时态", "名词性从句连接词", "状语从句时态主将从现",
-                    "常考固定短语运用", "情态动词基本意涵", "虚拟语气过去式变体", "主语从句It作主语",
-                    "反意疑问句肯定否定", "常考被动语态构造", "强调句It is elements", "情景交际委婉用语"
-                ];
-            }
-
-            for (let i = 1; i <= 50; i++) {
-                const topic = baseTopics[(i - 1) % baseTopics.length];
-                let name = topic;
-                const val = (40 + ((i * 13 + 17) % 35) + (i % 5) + ((i * 7) % 10) / 10) / 100;
-                spots.push({
-                    name: name,
-                    level: val,
-                    route: 'dati_yemian_pc.html?mode=knowledge&title=' + encodeURIComponent(name)
-                });
-            }
-            return spots;
-        }
-
-        function renderWeakSpots() {
-            const subject = currentXqSubject;
-            const allWeakSpots = get50WeakSpots(subject);
-            const weakSpotsContainer = document.getElementById("xq-weak-spots-container");
-            if (!weakSpotsContainer) return;
-            
-            weakSpotsContainer.innerHTML = "";
-            const visibleSpots = allWeakSpots.slice(0, currentWeakSpotsToShow);
-            visibleSpots.forEach(pt => {
-                weakSpotsContainer.innerHTML += `
-                    <div class="flex items-center justify-between p-3.5 bg-red-50/40 rounded-xl border border-red-100/50 hover:bg-red-50/70 transition-colors">
-                        <div class="flex flex-col gap-0.5">
-                            <span class="text-xs font-bold text-gray-800">${pt.name}</span>
-                            <span class="text-[11px] text-red-500 font-medium">预测正确率: ${formatRate(pt.level * 100)}</span>
-                        </div>
-                        <a href="${pt.route}" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-[10px] font-bold rounded-lg transition-transform text-center shadow-sm">
-                            去薄弱突破
-                        </a>
-                    </div>
-                `;
+            // Hide all tab contents
+            const tabs = ["realtime", "weekly", "overall"];
+            tabs.forEach(t => {
+                const content = document.getElementById(`${t}-report-content`);
+                const btn = document.getElementById(`tab-${t}`);
+                if (content) content.style.display = "none";
+                if (btn) btn.classList.remove("active");
             });
 
-            // Update Toggle Button State
-            const toggleBtn = document.getElementById("weak-spots-toggle-btn");
-            const toggleIcon = document.getElementById("weak-spots-toggle-icon");
-            if (toggleBtn && toggleIcon) {
-                if (currentWeakSpotsToShow >= 50) {
-                    toggleBtn.innerHTML = `<span>收起</span> <i id="weak-spots-toggle-icon" class="fas fa-chevron-up text-xs transition-transform"></i>`;
-                } else {
-                    toggleBtn.innerHTML = `<span>展开更多</span> <i id="weak-spots-toggle-icon" class="fas fa-chevron-down text-xs transition-transform"></i>`;
-                }
+            // Show current tab content
+            const activeContent = document.getElementById(`${type}-report-content`);
+            const activeBtn = document.getElementById(`tab-${type}`);
+            if (activeContent) {
+                activeContent.style.display = "block";
             }
-        }
+            if (activeBtn) activeBtn.classList.add("active");
 
-        function toggleWeakSpots() {
-            if (currentWeakSpotsToShow >= 50) {
-                currentWeakSpotsToShow = 10;
-            } else {
-                currentWeakSpotsToShow += 10;
-            }
-            renderWeakSpots();
-        }
-
-        function switchTrackPeriod(period) {
-            currentXqPeriod = period;
-            
-            const btnDay = document.getElementById("track-btn-day");
-            const btnWeek = document.getElementById("track-btn-week");
-            const btnMonth = document.getElementById("track-btn-month");
-
-            btnDay.className = "px-3 py-1 rounded text-gray-500";
-            btnWeek.className = "px-3 py-1 rounded text-gray-500";
-            btnMonth.className = "px-3 py-1 rounded text-gray-500";
-
-            if (period === 'day') btnDay.className = "px-3 py-1 rounded bg-white shadow-sm text-blue-600";
-            else if (period === 'week') btnWeek.className = "px-3 py-1 rounded bg-white shadow-sm text-blue-600";
-            else if (period === 'month') btnMonth.className = "px-3 py-1 rounded bg-white shadow-sm text-blue-600";
-
-            updateTrendChartOnly();
-        }
-
-        function drawXueqingCharts() {
-            const data = XUEQING_DATA[currentXqSubject];
-            if (!data) return;
-
-            // 1. Learning Dimension Radar Chart
-            try {
-                const radarCanvas = document.getElementById("xueqingDimensionRadarChart");
-                if (radarCanvas) {
-                    if (xueqingDimensionRadarChartInstance) {
-                        xueqingDimensionRadarChartInstance.destroy();
-                    }
-
-                    const ctxDim = radarCanvas.getContext("2d");
-                    xueqingDimensionRadarChartInstance = new Chart(ctxDim, {
-                        type: "radar",
-                        data: {
-                            labels: ["成功率", "多样性", "活跃度"],
-                            datasets: [
-                                {
-                                    label: "维度数值",
-                                    data: data.dimensionData || [80, 70, 75],
-                                    backgroundColor: "rgba(16, 185, 129, 0.15)",
-                                    borderColor: "rgba(16, 185, 129, 0.8)",
-                                    borderWidth: 2,
-                                    pointBackgroundColor: "rgba(16, 185, 129, 1)",
-                                    pointBorderColor: "#fff",
-                                }
-                            ]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: { display: false }
-                            },
-                            scales: {
-                                r: {
-                                    angleLines: { display: true },
-                                    suggestedMin: 0,
-                                    suggestedMax: 100,
-                                    ticks: { stepSize: 20, font: { size: 9 } }
-                                }
-                            }
-                        }
-                    });
-                }
-            } catch (e) {
-                console.error("Failed to build xueqingDimensionRadarChart:", e);
-            }
-
-            updateTrendChartOnly();
-        }
-
-        function updateTrendChartOnly() {
-            const data = XUEQING_DATA[currentXqSubject];
-            if (!data) return;
-            const periodData = data.track[currentXqPeriod] || data.track['day'];
-
-            try {
-                const trendCanvas = document.getElementById("xueqingTrendChart");
-                if (trendCanvas) {
-                    if (xueqingTrendChartInstance) {
-                        xueqingTrendChartInstance.destroy();
-                    }
-
-                    const ctxTrend = trendCanvas.getContext("2d");
-                    xueqingTrendChartInstance = new Chart(ctxTrend, {
-                        type: "line",
-                        data: {
-                            labels: periodData.labels,
-                            datasets: [
-                                {
-                                    label: "正确率轨迹",
-                                    data: periodData.data,
-                                    backgroundColor: "rgba(99, 102, 241, 0.1)",
-                                    borderColor: "rgba(99, 102, 241, 1)",
-                                    borderWidth: 2,
-                                    tension: 0.3,
-                                    fill: true,
-                                    pointBackgroundColor: "rgba(99, 102, 241, 1)"
-                                }
-                            ]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: { display: false }
-                            },
-                            scales: {
-                                y: {
-                                    suggestedMin: 0,
-                                    suggestedMax: 100,
-                                    ticks: {
-                                        callback: function(val) { return val + "%"; }
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }
-            } catch (e) {
-                console.error("Failed to build xueqingTrendChart:", e);
+            // Initialize charts or update if needed
+            if (type === 'weekly') {
+                initWeeklyCharts();
+            } else if (type === 'overall') {
+                initOverallRadarChart();
             }
         }
 
@@ -1943,8 +1227,34 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: { y: { beginAtZero: true } }
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        label = label.replace(/\s*\(分钟\)/g, '');
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += context.parsed.y + '分钟';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '分钟';
+                                    }
+                                }
+                            }
+                        }
                     }
                 });
             }
@@ -1983,8 +1293,34 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: { y: { suggestedMin: 0, suggestedMax: 100 } }
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += context.parsed.y + '%';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                suggestedMin: 0,
+                                suggestedMax: 100,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        }
                     }
                 });
             }
@@ -2036,10 +1372,10 @@
         }
 
         // Restore active tab from localStorage on load
-        const cachedTab = localStorage.getItem("dati_baogao_pc_active_tab") || "realtime";
+        let cachedTab = localStorage.getItem("dati_baogao_pc_active_tab") || "realtime";
+        if (cachedTab === "xueqing") cachedTab = "realtime";
         setTimeout(() => {
             switchTab(cachedTab);
-            initModal();
         }, 100);
     </script>
 </body>

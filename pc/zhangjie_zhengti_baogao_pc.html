@@ -306,8 +306,9 @@
                             <i class="fas fa-rocket"></i>
                         </div>
                         <h2 class="text-base font-bold text-gray-800">提分攻略</h2>
+                        <span class="px-1.5 py-0.5 text-[10px] font-normal text-amber-600 bg-amber-50 rounded-md flex items-center gap-1 border border-amber-100/50"><span class="w-1 h-1 rounded-full bg-amber-500 animate-pulse"></span>更新中</span>
                     </div>
-                    <span class="text-xs text-gray-400">内容由AI生成，每日凌晨更新</span>
+                    <span class="text-xs text-gray-400">内容由AI生成</span>
                 </div>
                 <div class="bg-indigo-50/40 rounded-xl p-4 text-sm leading-relaxed text-gray-600 space-y-3">
                     <p><strong class="text-indigo-600">1. 夯实章节核心考点：</strong>本章节中“古代文学”部分失分较多。建议针对该章节的常考人物、文化常识进行专项突破。</p>
@@ -324,8 +325,9 @@
                             <i class="far fa-lightbulb"></i>
                         </div>
                         <h2 class="text-base font-bold text-gray-800">学习建议</h2>
+                        <span class="px-1.5 py-0.5 text-[10px] font-normal text-amber-600 bg-amber-50 rounded-md flex items-center gap-1 border border-amber-100/50"><span class="w-1 h-1 rounded-full bg-amber-500 animate-pulse"></span>更新中</span>
                     </div>
-                    <span class="text-xs text-gray-400">内容由AI生成，每日凌晨更新</span>
+                    <span class="text-xs text-gray-400">内容由AI生成</span>
                 </div>
                 <div class="bg-orange-50/40 rounded-xl p-5 text-sm leading-relaxed text-orange-900 border border-orange-100/50">
                     你在本章节的基础题型上表现稳健，整体完成度已达69%。接下来的任务是攻克章节内的“深水区”知识点，通过精读解析来提升思维深度。
@@ -460,7 +462,11 @@
                     div.innerHTML = `
                         <div class="flex flex-col gap-1 pr-2">
                             <span class="text-sm text-gray-700 font-semibold">${item.name}</span>
-                            <span class="text-xs text-gray-500 font-medium">正确率 <span class="${colorClass}">${item.rate}</span> | 答错${item.count}</span>
+                            <span class="text-xs text-gray-500 font-medium flex items-center gap-2">
+                                <span class="inline-block w-24">正确率 <span class="${colorClass}">${item.rate}</span></span>
+                                <span class="text-gray-300">|</span>
+                                <span>答错${item.count}</span>
+                            </span>
                         </div>
                         <div class="flex items-center gap-2 flex-shrink-0">
                             <button
@@ -481,7 +487,11 @@
                     div.innerHTML = `
                         <div class="flex flex-col gap-1">
                             <span class="text-sm text-gray-700 font-semibold">${item.name}</span>
-                            <span class="text-xs text-gray-500 font-medium">正确率 <span class="${colorClass}">${item.rate}</span> | 答对${item.count}</span>
+                            <span class="text-xs text-gray-500 font-medium flex items-center gap-2">
+                                <span class="inline-block w-24">正确率 <span class="${colorClass}">${item.rate}</span></span>
+                                <span class="text-gray-300">|</span>
+                                <span>答对${item.count}</span>
+                            </span>
                         </div>
                     `;
                 }
