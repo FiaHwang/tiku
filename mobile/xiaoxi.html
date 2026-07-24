@@ -143,7 +143,7 @@
                 <i class="fa-solid fa-paintbrush text-lg"></i>
             </button>
             <!-- 设置按钮 -->
-            <button onclick="toggleSettings(true)" class="flex items-center justify-center text-slate-500 hover:text-slate-800 active:scale-95 transition-transform">
+            <button onclick="window.location.href='xiaoxi_shezhi.html'" class="flex items-center justify-center text-slate-500 hover:text-slate-800 active:scale-95 transition-transform">
                 <i class="fa-solid fa-gear text-lg"></i>
             </button>
         </div>
@@ -166,7 +166,26 @@
                 </div>
             </div>
             <div class="text-xs text-slate-400 font-medium ml-4">
-                23年11月11日 12:12
+                2023年11月11日 12:12
+            </div>
+        </div>
+
+        <!-- 做题提醒 -->
+        <div class="message-item" onclick="openPracticeAlerts()">
+            <div class="flex items-center gap-4.5 flex-1">
+                <div class="relative flex-shrink-0">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-amber-500">
+                        <i class="fa-solid fa-clock text-xl"></i>
+                    </div>
+                    <span id="badge-6" class="badge absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-[18px] h-[18px] flex items-center justify-center rounded-full leading-none border border-white">1</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <span class="text-sm font-bold text-slate-800">做题提醒</span>
+                    <span class="text-xs text-slate-500 line-clamp-1">今日做题时间到，快来做题啦～</span>
+                </div>
+            </div>
+            <div class="text-xs text-slate-400 font-medium ml-4">
+                2023年11月11日 12:20
             </div>
         </div>
 
@@ -185,7 +204,7 @@
                 </div>
             </div>
             <div class="text-xs text-slate-400 font-medium ml-4">
-                23年11月11日 12:12
+                2023年11月11日 12:12
             </div>
         </div>
 
@@ -204,7 +223,7 @@
                 </div>
             </div>
             <div class="text-xs text-slate-400 font-medium ml-4">
-                23年11月11日 12:12
+                2023年11月11日 12:12
             </div>
         </div>
 
@@ -223,7 +242,7 @@
                 </div>
             </div>
             <div class="text-xs text-slate-400 font-medium ml-4">
-                23年11月11日 12:12
+                2023年11月11日 12:12
             </div>
         </div>
 
@@ -242,7 +261,7 @@
                 </div>
             </div>
             <div class="text-xs text-slate-400 font-medium ml-4">
-                23年11月11日 12:12
+                2023年11月11日 12:12
             </div>
         </div>
     </div>
@@ -301,12 +320,10 @@
         // 初始化状态
         const readStates = JSON.parse(localStorage.getItem('messages_read') || '{}');
 
-        // 应用初始化状态：检查是否已被读
-        for (let i = 1; i <= 5; i++) {
-            if (readStates[i]) {
-                const badge = document.getElementById(`badge-${i}`);
-                if (badge) badge.classList.add('hide');
-            }
+        // 应用初始化状态：按照要求，移动端未读消息数和小红点已读后不要消失，要一直在，所以不隐藏它们
+        for (let i = 1; i <= 6; i++) {
+            const badge = document.getElementById(`badge-${i}`);
+            if (badge) badge.classList.remove('hide');
         }
 
         function showToast(text) {
@@ -319,43 +336,25 @@
         }
 
         function openLearningAlerts() {
-            const badge = document.getElementById('badge-1');
-            if (badge && !badge.classList.contains('hide')) {
-                badge.classList.add('hide');
-                readStates[1] = true;
-                localStorage.setItem('messages_read', JSON.stringify(readStates));
-            }
             window.location.href = 'xuexi_tixing.html';
         }
 
+        function openPracticeAlerts() {
+            window.location.href = 'zuoti_tixing.html';
+        }
+
         function readMsg(id) {
-            const badge = document.getElementById(`badge-${id}`);
-            if (badge && !badge.classList.contains('hide')) {
-                badge.classList.add('hide');
-                readStates[id] = true;
-                localStorage.setItem('messages_read', JSON.stringify(readStates));
-                showToast('已标记该条消息为已读');
-            } else {
-                showToast('该条消息已阅读过');
-            }
+            readStates[id] = true;
+            localStorage.setItem('messages_read', JSON.stringify(readStates));
+            showToast('已标记该条消息为已读');
         }
 
         function markAllAsRead() {
-            let hasUnread = false;
-            for (let i = 1; i <= 5; i++) {
-                const badge = document.getElementById(`badge-${i}`);
-                if (badge && !badge.classList.contains('hide')) {
-                    badge.classList.add('hide');
-                    readStates[i] = true;
-                    hasUnread = true;
-                }
+            for (let i = 1; i <= 6; i++) {
+                readStates[i] = true;
             }
-            if (hasUnread) {
-                localStorage.setItem('messages_read', JSON.stringify(readStates));
-                showToast('消息已全部置为已读');
-            } else {
-                showToast('暂无未读消息');
-            }
+            localStorage.setItem('messages_read', JSON.stringify(readStates));
+            showToast('消息已全部置为已读');
         }
 
         function toggleSettings(show) {

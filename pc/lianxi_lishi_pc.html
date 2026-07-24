@@ -175,426 +175,132 @@
             color: #ff4d4f;
         }
 
-        /* 题型标签 */
-        .question-type-tabs {
-            background-color: #fff;
-            border-bottom: 1px solid #e8e8e8;
-            display: flex;
-            align-items: center;
-            padding: 12px 24px;
-            gap: 24px;
-        }
-
-        .question-type-tab {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            color: #666;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .question-type-tab:hover {
-            background-color: #f5f5f5;
-        }
-
-        .question-type-tab.active {
-            background-color: #fff1f0;
-            color: #ff4d4f;
-        }
-
-        .question-count {
-            font-size: 12px;
-            color: #999;
-        }
-
-        /* 错题详情 */
-        .error-detail {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-
-        /* 题目头部 */
-        .question-header {
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .question-number {
-            font-weight: 500;
-        }
-
-        .question-content {
-            font-weight: 400;
-        }
-
-        /* 选项 */
-        .question-options {
-            margin-bottom: 24px;
-        }
-
-        .option {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            margin-bottom: 12px;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-            transition: all 0.3s ease;
-        }
-
-        .option:hover {
-            background-color: #f0f0f0;
-        }
-
-        .option.correct {
-            background-color: #f6ffed;
-            border-left: 4px solid #52c41a;
-        }
-
-        .option.wrong {
-            background-color: #fff1f0;
-            border-left: 4px solid #ff4d4f;
-        }
-
-        .option-label {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background-color: #e8e8e8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 500;
-            color: #666;
-        }
-
-        .option.correct .option-label {
-            background-color: #52c41a;
-            color: #fff;
-        }
-
-        .option.wrong .option-label {
-            background-color: #ff4d4f;
-            color: #fff;
-        }
-
-        .option-content {
-            font-size: 14px;
-            color: #333;
-        }
-
-        /* 题目操作 */
-        .question-actions {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
-            padding: 16px;
-            background-color: #fafafa;
-            border-radius: 4px;
-        }
-
-        .action-btn {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border: 1px solid #d9d9d9;
-            border-radius: 4px;
-            background-color: #fff;
-            color: #666;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .action-btn:hover {
-            border-color: #ff4d4f;
-            color: #ff4d4f;
-        }
-
-        /* 答案和解析 */
-        .answer-analysis {
-            margin-bottom: 24px;
-            padding: 16px;
-            background-color: #fafafa;
-            border-radius: 4px;
-        }
-
-        .answer-info {
-            margin-bottom: 16px;
-        }
-
-        .answer-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            color: #ff4d4f;
-            margin-bottom: 8px;
-        }
-
-        .answer-detail {
-            font-size: 14px;
-            color: #666;
-            display: flex;
-            gap: 16px;
-        }
-
-        .analysis-section {
-            border-top: 1px solid #e8e8e8;
-            padding-top: 16px;
-        }
-
-        .analysis-header {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 12px;
-        }
-
-        .analysis-content {
-            font-size: 14px;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        .analysis-content p {
-            margin-bottom: 8px;
-        }
-
-        /* 上下题导航 */
-        .question-navigation {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 16px;
-            border-top: 1px solid #e8e8e8;
-        }
-
-        .nav-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            border: 1px solid #d9d9d9;
-            border-radius: 4px;
-            background-color: #fff;
-            color: #666;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .nav-btn:hover {
-            border-color: #ff4d4f;
-            color: #ff4d4f;
-        }
-
-        /* 主内容区域 */
+        /* 练习历史卡片样式 */
         .main-container {
-            display: flex;
-            padding: 24px;
-            gap: 24px;
+            max-width: 1000px;
+            margin: 24px auto;
+            padding: 0 24px;
             min-height: calc(100vh - 184px);
         }
 
-        /* 左侧内容 */
-        .left-content {
-            flex: 1;
-            min-width: 0;
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
         }
 
-        /* 右侧边栏 */
-        .right-sidebar {
-            width: 320px;
-            min-width: 320px;
-        }
-
-        /* 答题卡 */
-        .answer-card {
+        .history-card {
             background-color: #fff;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-
-        .answer-card-header {
+            padding: 20px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 20px;
-            background-color: #fafafa;
-            border-bottom: 1px solid #e8e8e8;
-        }
-
-        .answer-card-header span {
-            font-size: 14px;
-            font-weight: 500;
-            color: #333;
-        }
-
-        .collapse-btn {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            background: transparent;
-            border: none;
-            font-size: 12px;
-            color: #999;
-            cursor: pointer;
-            padding: 4px;
-        }
-
-        .collapse-btn:hover {
-            color: #666;
-        }
-
-        /* 答题卡内容 */
-        .answer-card-content {
-            padding: 20px;
-        }
-
-        .answer-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .answer-item {
-            width: 48px;
-            height: 48px;
-            border-radius: 4px;
-            background-color: #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            color: #666;
-            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e8e8e8;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
-        .answer-item:hover {
-            background-color: #e0e0e0;
+        .history-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: #ff4d4f;
+            transform: translateY(-2px);
         }
 
-        .answer-item.wrong {
-            background-color: #ff4d4f;
-            color: #fff;
-        }
-
-        .answer-item.correct {
-            background-color: #52c41a;
-            color: #fff;
-        }
-
-        .answer-item.half-correct {
-            background: linear-gradient(to right, #52c41a 50%, #fff 50%);
-            color: #333;
-            border: 1px solid #d9d9d9;
-        }
-
-        .answer-item.answered {
-            background-color: #fa8c16;
-            color: #fff;
-        }
-
-        .answer-item.unanswered {
-            background-color: #f0f0f0;
-            color: #666;
-            border: 1px solid #d9d9d9;
-        }
-
-        /* 答题卡统计 */
-        .answer-card-stats {
+        .card-left {
             display: flex;
+            align-items: center;
             gap: 16px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
         }
 
-        .stat-item {
+        .module-badge {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid;
+            white-space: nowrap;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .card-right {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: #666;
+            gap: 20px;
         }
 
-        .stat-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
+        .status-badge {
+            font-size: 13px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 500;
         }
 
-        .stat-dot.wrong {
-            background-color: #ff4d4f;
+        .status-completed {
+            color: #52c41a;
+            background-color: #f6ffed;
+            border: 1px solid #b7eb8f;
         }
 
-        .stat-dot.correct {
-            background-color: #52c41a;
+        .status-uncompleted {
+            color: #fa8c16;
+            background-color: #fff7e6;
+            border: 1px solid #ffd591;
         }
 
-        .stat-dot.half-correct {
-            background: linear-gradient(to right, #52c41a 50%, #fff 50%);
-            border: 1px solid #d9d9d9;
+        .status-reviewing {
+            color: #1890ff;
+            background-color: #e6f7ff;
+            border: 1px solid #91d5ff;
         }
 
-        .stat-dot.answered {
-            background-color: #fa8c16;
+        .status-reviewed {
+            color: #722ed1;
+            background-color: #f9f0ff;
+            border: 1px solid #d3adf7;
         }
 
-        .stat-dot.unanswered {
-            background-color: #f0f0f0;
-            border: 1px solid #d9d9d9;
+        .card-time {
+            font-size: 13px;
+            color: #999;
+            min-width: 100px;
+            text-align: right;
         }
 
-        /* 重测按钮 */
-        .retest-btn {
-            width: 100%;
-            padding: 12px;
-            background-color: #ff4d4f;
-            color: #fff;
-            border: none;
+        .action-btn-link {
+            padding: 6px 16px;
             border-radius: 4px;
             font-size: 14px;
-            font-weight: 500;
             cursor: pointer;
-            margin-bottom: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .retest-btn:hover {
-            background-color: #ff7875;
-        }
-
-        /* 返回按钮 */
-        .return-btn {
-            width: 100%;
-            padding: 12px;
+            border: 1px solid #d9d9d9;
             background-color: #fff;
             color: #666;
-            border: 1px solid #d9d9d9;
-            border-radius: 4px;
-            font-size: 14px;
-            cursor: pointer;
             transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
-        .return-btn:hover {
-            border-color: #ff4d4f;
+        .action-btn-link.btn-report:hover {
+            background-color: #fff1f0;
             color: #ff4d4f;
+            border-color: #ff4d4f;
+        }
+
+        .action-btn-link.btn-continue {
+            background-color: #ff4d4f;
+            color: #fff;
+            border-color: #ff4d4f;
+        }
+
+        .action-btn-link.btn-continue:hover {
+            background-color: #ff7875;
+            border-color: #ff7875;
         }
 
         /* 页脚 */
@@ -607,44 +313,7 @@
             justify-content: center;
             font-size: 12px;
             color: #999;
-        }
-
-        /* 图片查看弹窗 */
-        .image-viewer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .image-viewer.active {
-            display: flex;
-        }
-
-        .image-viewer-content {
-            max-width: 90%;
-            max-height: 90%;
-            position: relative;
-        }
-
-        .image-viewer img {
-            max-width: 100%;
-            max-height: 100%;
-        }
-
-        .image-viewer-close {
-            position: absolute;
-            top: -40px;
-            right: 0;
-            color: #fff;
-            font-size: 30px;
-            cursor: pointer;
+            margin-top: 40px;
         }
     </style>
 </head>
@@ -686,131 +355,95 @@
         <div class="sub-nav-item">错题本</div>
         <div class="sub-nav-item">收藏本</div>
         <div class="sub-nav-item active">练习历史</div>
-        <div class="sub-nav-item" style="margin-left: 20px; color: #999; font-size: 12px;">仅展示所选目标下近一年的数据</div>
-    </div>
-
-    <!-- 题型标签 -->
-    <div class="question-type-tabs">
-        <div class="question-type-tab active">
-            <span>单选题</span>
-            <span class="question-count">(5)</span>
-        </div>
-        <div class="question-type-tab">
-            <span>多选题</span>
-            <span class="question-count">(2)</span>
-        </div>
-        <div class="question-type-tab">
-            <span>不定项选择题</span>
-            <span class="question-count">(2)</span>
-        </div>
-        <div class="question-type-tab">
-            <span>填空题</span>
-            <span class="question-count">(3)</span>
-        </div>
-        <div class="question-type-tab">
-            <span>判断题</span>
-            <span class="question-count">(1)</span>
-        </div>
-        <div class="question-type-tab">
-            <span>简答题</span>
-            <span class="question-count">(1)</span>
-        </div>
-        <div class="question-type-tab">
-            <span>材料题</span>
-            <span class="question-count">(2)</span>
-        </div>
+        <div class="sub-nav-item" style="margin-left: 20px; color: #999; font-size: 12px; pointer-events: none;">仅展示所选目标下近一年的数据</div>
     </div>
 
     <!-- 主内容区域 -->
     <div class="main-container">
-        <!-- 左侧内容 -->
-        <div class="left-content">
-            <div class="question-bank-content">
-                <!-- 单选题内容 -->
-                <div class="question-content-tab" id="single-choice-content" style="display: block;">
-                    <div class="error-detail">
-                        <div class="question-header">
-                            <span class="question-number">1、</span>
-                            <span class="question-content">成语"多行不义必自毙"出自下列哪部著作 ( )</span>
-                        </div>
-                        <div class="question-options">
-                            <div class="option">
-                                <span class="option-label">A</span>
-                                <span class="option-content">《尚书》</span>
-                            </div>
-                            <div class="option">
-                                <span class="option-label">B</span>
-                                <span class="option-content">《论语》</span>
-                            </div>
-                            <div class="option correct">
-                                <span class="option-label">C</span>
-                                <span class="option-content">《左传》</span>
-                            </div>
-                            <div class="option wrong">
-                                <span class="option-label">D</span>
-                                <span class="option-content">《战国策》</span>
-                            </div>
-                        </div>
-                        <div class="question-actions">
-                            <button class="action-btn"><i class="fas fa-arrows-alt"></i><span>移除</span></button>
-                            <button class="action-btn"><i class="fas fa-share-alt"></i><span>分享</span></button>
-                            <button class="action-btn"><i class="fas fa-flag"></i><span>纠错</span></button>
-                            <button class="action-btn"><i class="fas fa-star"></i><span>收藏</span></button>
-                            <div style="flex: 1;"></div>
-                            <button class="action-btn"><i class="fas fa-robot"></i><span>AI答疑</span></button>
-                            <button class="action-btn"><i class="fas fa-user"></i><span>人工答疑</span></button>
-                        </div>
-                        <div class="answer-analysis">
-                            <div class="answer-info">
-                                <div class="answer-label"><i class="fas fa-times-circle"></i><span>回答错误</span></div>
-                                <div class="answer-detail"><span>参考答案：C</span><span>你的答案：D</span></div>
-                            </div>
-                            <div class="analysis-section">
-                                <div class="analysis-header">试题统计：正确率 63%，易错项 D，作答次数 112 次，作答时长2秒</div>
-                                <div class="analysis-content">
-                                    <p><strong>文字解析：</strong>"多行不义必自毙"出自《左传·郑伯克段于鄢》，是郑庄公评价共叔段的话。</p>
-                                    <p><strong>知识点：</strong>成语出处、古代文学、春秋左传</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="question-navigation">
-                            <button class="nav-btn"><i class="fas fa-chevron-left"></i><span>上一题</span></button>
-                            <button class="nav-btn"><span>下一题</span><i class="fas fa-chevron-right"></i></button>
-                        </div>
-                    </div>
-                </div>
+        <!-- 返回键 -->
+        <div style="margin-bottom: 20px; display: flex; align-items: center;">
+            <div onclick="window.history.back()" style="cursor: pointer; color: #666; display: flex; align-items: center; gap: 8px; font-size: 14px; transition: color 0.2s; font-weight: 500;" onmouseover="this.style.color='#ff4d4f'" onmouseout="this.style.color='#666'">
+                <i class="fas fa-arrow-left"></i>
+                <span>返回</span>
             </div>
         </div>
 
-        <!-- 右侧边栏 -->
-        <div class="right-sidebar">
-            <div class="answer-card">
-                <div class="answer-card-header">
-                    <span>答题卡</span>
-                    <button class="collapse-btn"><span>收起</span><i class="fas fa-chevron-up"></i></button>
+        <div class="history-list">
+            <!-- 1. 章节练习 -->
+            <div class="history-card" onclick="viewAnalysis('章节练习');">
+                <div class="card-left">
+                    <span class="module-badge" style="color: #3b82f6; background-color: #eff6ff; border-color: #bfdbfe;">章节练习</span>
+                    <span class="card-title">第一章：文言文阅读与实词虚词推断</span>
                 </div>
-                <div class="answer-card-content">
-                    <div class="answer-grid">
-                        <div class="answer-item wrong">1</div>
-                        <div class="answer-item correct">2</div>
-                        <div class="answer-item half-correct">3</div>
-                        <div class="answer-item answered">4</div>
-                        <div class="answer-item unanswered">5</div>
-                        <div class="answer-item wrong">6</div>
-                        <div class="answer-item correct">7</div>
-                        <div class="answer-item half-correct">8</div>
-                        <div class="answer-item answered">9</div>
-                        <div class="answer-item unanswered">10</div>
-                    </div>
-                    <div class="answer-card-stats">
-                        <div class="stat-item"><div class="stat-dot correct"></div><span>正确</span></div>
-                        <div class="stat-item"><div class="stat-dot wrong"></div><span>错误</span></div>
-                        <div class="stat-item"><div class="stat-dot half-correct"></div><span>半对</span></div>
-                        <div class="stat-item"><div class="stat-dot answered"></div><span>已答</span></div>
-                        <div class="stat-item"><div class="stat-dot unanswered"></div><span>未答</span></div>
-                    </div>
-                    <button class="retest-btn"><i class="fas fa-redo"></i><span>重新刷题</span></button>
-                    <button class="return-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i><span>返回</span></button>
+                <div class="card-right">
+                    <span class="status-badge status-completed">已完成</span>
+                    <span class="card-time">今天 14:30</span>
+                    <button class="action-btn-link btn-report" onclick="event.stopPropagation(); viewAnalysis('章节练习');">查看解析</button>
+                </div>
+            </div>
+
+            <!-- 2. 每日一练 -->
+            <div class="history-card" onclick="viewAnalysis('每日一练');">
+                <div class="card-left">
+                    <span class="module-badge" style="color: #10b981; background-color: #ecfdf5; border-color: #a7f3d0;">每日一练</span>
+                    <span class="card-title">2026年6月17日 基础语基与古诗词鉴赏专项</span>
+                </div>
+                <div class="card-right">
+                    <span class="status-badge status-completed">已完成</span>
+                    <span class="card-time">今天 08:15</span>
+                    <button class="action-btn-link btn-report" onclick="event.stopPropagation(); viewAnalysis('每日一练');">查看解析</button>
+                </div>
+            </div>
+
+            <!-- 3. 历年真题 -->
+            <div class="history-card" onclick="startPractice('历年真题');">
+                <div class="card-left">
+                    <span class="module-badge" style="color: #eab308; background-color: #fef9c3; border-color: #fef08a;">历年真题</span>
+                    <span class="card-title">2025年高考语文全国甲卷全真套卷训练</span>
+                </div>
+                <div class="card-right">
+                    <span class="status-badge status-uncompleted">未完成</span>
+                    <span class="card-time">昨天 16:45</span>
+                    <button class="action-btn-link btn-continue" onclick="event.stopPropagation(); startPractice('历年真题');">继续答题</button>
+                </div>
+            </div>
+
+            <!-- 4. 大联考 -->
+            <div class="history-card" onclick="viewReport('大联考');">
+                <div class="card-left">
+                    <span class="module-badge" style="color: #f43f5e; background-color: #fff1f2; border-color: #fecdd3;">大联考</span>
+                    <span class="card-title">2026届卓越联盟联合学业水准测试语文试卷</span>
+                </div>
+                <div class="card-right">
+                    <span class="status-badge status-reviewing">AI批改中</span>
+                    <span class="card-time">2026年6月12日</span>
+                    <button class="action-btn-link btn-report" onclick="event.stopPropagation(); viewReport('大联考');">查看报告</button>
+                </div>
+            </div>
+
+            <!-- 5. 估分试卷 -->
+            <div class="history-card" onclick="viewReport('估分试卷');">
+                <div class="card-left">
+                    <span class="module-badge" style="color: #8b5cf6; background-color: #f5f3ff; border-color: #ddd6fe;">估分试卷</span>
+                    <span class="card-title">2026年高考语文考前押题与估分预测卷（一）</span>
+                </div>
+                <div class="card-right">
+                    <span class="status-badge status-completed">已完成</span>
+                    <span class="card-time">2026年6月01日</span>
+                    <button class="action-btn-link btn-report" onclick="event.stopPropagation(); viewReport('估分试卷');">查看报告</button>
+                </div>
+            </div>
+
+            <!-- 6. 统考试卷 -->
+            <div class="history-card" onclick="viewReport('统考试卷');">
+                <div class="card-left">
+                    <span class="module-badge" style="color: #0d9488; background-color: #f0fdfa; border-color: #ccfbf1;">统考试卷</span>
+                    <span class="card-title">2026年普通高等学校招生全国统一考试高三学业诊断（一）</span>
+                </div>
+                <div class="card-right">
+                    <span class="status-badge status-reviewed">AI批改完成</span>
+                    <span class="card-time">2026年5月28日</span>
+                    <button class="action-btn-link btn-report" onclick="event.stopPropagation(); viewReport('统考试卷');">查看报告</button>
                 </div>
             </div>
         </div>
@@ -827,7 +460,7 @@
             item.addEventListener('click', () => {
                 const label = item.textContent.trim();
                 
-                if (label === '题库') {
+                if (label.includes('返回') || label === '题库') {
                     window.location.href = 'tiku_pc.html';
                 } else if (label === '错题本') {
                     window.location.href = 'cuotiben_pc.html';
@@ -839,13 +472,18 @@
             });
         });
 
-        // 简单的题型切换逻辑
-        document.querySelectorAll('.question-type-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.question-type-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-            });
-        });
+        // 动作处理器
+        function startPractice(subject) {
+            window.location.href = 'dati_yemian_pc.html?mode=knowledge&title=' + encodeURIComponent(subject);
+        }
+
+        function viewReport(subject) {
+            window.location.href = 'dati_baogao_pc.html?title=' + encodeURIComponent(subject);
+        }
+
+        function viewAnalysis(subject) {
+            window.location.href = 'shiti_jiexi_pc.html';
+        }
     </script>
 </body>
 </html>

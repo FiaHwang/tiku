@@ -525,25 +525,13 @@
     <!-- 顶部导航栏 -->
     <header class="header">
         <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
-        <div class="nav-tabs">
-            <div class="nav-tab" onclick="window.location.href='cuotiben.html'">错题本</div>
-            <div class="nav-tab" onclick="window.location.href='shoucangben.html'">收藏本</div>
-            <div class="nav-tab active">练习历史</div>
-        </div>
+        <div class="page-title" style="font-size: 17px; font-weight: 600; color: #1a1a1a;">练习历史</div>
     </header>
-
-    <!-- 子Tab导航栏 -->
-    <div class="sub-tabs-container">
-        <div class="sub-tab active" id="sub-tab-module" onclick="switchSubTab('module')">按模块</div>
-        <div class="sub-tab" id="sub-tab-type" onclick="switchSubTab('type')">按题型</div>
-    </div>
 
     <!-- 提示信息 -->
     <div class="tip" id="tip-info">*仅展示所选目标下近一年的数据</div>
 
-    <!-- 1. 按模块内容 (默认显示) -->
-    <div class="sub-tab-content" id="content-module">
-        <div class="history-list">
+    <div class="history-list">
             <!-- 1. 章节练习 -->
             <div class="history-card" onclick="viewAnalysis('章节练习');">
                 <div class="card-header">
@@ -633,71 +621,6 @@
                     <button class="action-btn btn-report" onclick="event.stopPropagation(); viewReport('统考试卷');">查看报告</button>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- 2. 按题型内容 (默认隐藏) -->
-    <div class="sub-tab-content" id="content-type" style="display: none;">
-        <!-- 错题分类容器 -->
-        <div class="error-category-container">
-            <div class="error-category-grid">
-                <!-- 单选题 -->
-                <div class="error-category-card">
-                    <div class="error-category-title">单选题</div>
-                    <div class="error-category-count">共9999道</div>
-                    <button class="view-btn">查看</button>
-                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
-                </div>
-
-                <!-- 多选题 -->
-                <div class="error-category-card">
-                    <div class="error-category-title">多选题</div>
-                    <div class="error-category-count">共8888道</div>
-                    <button class="view-btn">查看</button>
-                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
-                </div>
-
-                <!-- 不定项选择题 -->
-                <div class="error-category-card">
-                    <div class="error-category-title">不定项选择题</div>
-                    <div class="error-category-count">共7777道</div>
-                    <button class="view-btn">查看</button>
-                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
-                </div>
-
-                <!-- 判断题 -->
-                <div class="error-category-card">
-                    <div class="error-category-title">判断题</div>
-                    <div class="error-category-count">共6666道</div>
-                    <button class="view-btn">查看</button>
-                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
-                </div>
-
-                <!-- 填空题 -->
-                <div class="error-category-card">
-                    <div class="error-category-title">填空题</div>
-                    <div class="error-category-count">共5555道</div>
-                    <button class="view-btn">查看</button>
-                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
-                </div>
-
-                <!-- 问答题 -->
-                <div class="error-category-card">
-                    <div class="error-category-title">问答题</div>
-                    <div class="error-category-count">共4444道</div>
-                    <button class="view-btn">查看</button>
-                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
-                </div>
-
-                <!-- 材料题 -->
-                <div class="error-category-card">
-                    <div class="error-category-title">材料题</div>
-                    <div class="error-category-count">共3333道</div>
-                    <button class="view-btn">查看</button>
-                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- toast 提示 -->
@@ -706,28 +629,7 @@
     <script>
         // DOM元素获取
         const navTabs = document.querySelectorAll('.nav-tab');
-        const viewBtns = document.querySelectorAll('.view-btn');
         const backBtn = document.querySelector('.back-btn');
-
-        // 子Tab切换功能
-        function switchSubTab(type) {
-            const tabModule = document.getElementById('sub-tab-module');
-            const tabType = document.getElementById('sub-tab-type');
-            const contentModule = document.getElementById('content-module');
-            const contentType = document.getElementById('content-type');
-
-            if (type === 'module') {
-                tabModule.classList.add('active');
-                tabType.classList.remove('active');
-                contentModule.style.display = 'block';
-                contentType.style.display = 'none';
-            } else if (type === 'type') {
-                tabType.classList.add('active');
-                tabModule.classList.remove('active');
-                contentModule.style.display = 'none';
-                contentType.style.display = 'block';
-            }
-        }
 
         // Action Handlers for Module Practice List
         function startPractice(subject) {
@@ -758,21 +660,6 @@
             tab.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 tab.click();
-            }, { passive: false });
-        });
-
-        // 查看按钮功能 (按题型)
-        viewBtns.forEach((btn, index) => {
-            btn.addEventListener('click', () => {
-                const categories = ['单选题', '多选题', '不定项选择题', '判断题', '填空题', '问答题', '材料题'];
-                const category = categories[index];
-                console.log('查看:', category);
-                window.location.href = 'cuotiben_shiti_chakan.html';
-            });
-
-            btn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                btn.click();
             }, { passive: false });
         });
 

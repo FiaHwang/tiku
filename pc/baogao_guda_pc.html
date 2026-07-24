@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>试卷报告 - 库课网校</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            padding-top: 60px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 顶部导航栏 */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 60px;
+            background-color: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo img {
+            height: 32px;
+            margin-right: 16px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-item {
+            font-size: 14px;
+            color: #333;
+            text-decoration: none;
+            padding: 4px 0;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: #ff4d4f;
+        }
+
+        .nav-item.active {
+            color: #ff4d4f;
+        }
+
+        .nav-item.active::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #ff4d4f;
+        }
+
+        .search-user {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            padding: 4px 8px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 4px 8px;
+            font-size: 14px;
+        }
+
+        .search-btn {
+            background-color: #ff4d4f;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 12px;
+            cursor: pointer;
+        }
+
+        .user-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-link {
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .notification {
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background-color: #ff4d4f;
+            color: #fff;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+
+        .footer {
+            height: 60px;
+            background-color: #fff;
+            border-top: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航栏 -->
+    <header class="top-nav">
+        <div class="logo" onclick="window.location.href = '../index.html'">
+            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=red%20background%20with%20white%20chinese%20characters%20%E5%BA%93%E8%AF%BE%20with%20registered%20trademark%20symbol%20simple%20clean%20logo&image_size=square" alt="库课网校" />
+            <span style="font-weight: bold; color: #333; margin-left: 8px;">库课网校</span>
+        </div>
+        <div class="nav-menu">
+            <a href="tiku_pc.html" class="nav-item">首页</a>
+            <a href="#" class="nav-item">课程中心</a>
+            <a href="tiku_pc.html" class="nav-item active">题库</a>
+            <a href="#" class="nav-item">资讯</a>
+            <a href="#" class="nav-item">直播日历</a>
+            <a href="#" class="nav-item">各地专升本</a>
+        </div>
+        <div class="search-user">
+            <div class="search-box">
+                <input type="text" placeholder="请输入搜索内容" />
+                <button class="search-btn">搜索</button>
+            </div>
+            <div class="user-links">
+                <a href="xuexi_zhongxin_pc.html" class="user-link">学习中心</a>
+                <div class="notification">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="user-avatar">
+                    <i class="fas fa-user" style="font-size: 18px; color: #666"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container max-w-[1200px] w-full mx-auto my-6 px-6 flex-1 flex flex-col">
+        
+        <!-- Breadcrumb & Title -->
+        <div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 32px; margin-bottom: 24px;">
+            <div onclick="window.location.href='tiku_pc.html'" style="position: absolute; left: 0; cursor: pointer; color: #666; font-size: 14px; display: flex; align-items: center; gap: 4px; transition: color 0.2s;" onmouseover="this.style.color='#ff4d4f'" onmouseout="this.style.color='#666'">
+                <i class="fas fa-chevron-left" style="font-size: 12px;"></i>
+                <span>返回</span>
+            </div>
+            <div class="ver-title" style="font-size: 22px; font-weight: 600; color: #333; text-align: center;">
+                试卷报告
+            </div>
+        </div>
+
+        <!-- Desktop Split Layout (Left: Stats & Breakdown, Right: Answer Sheet) -->
+        <div class="grid grid-cols-12 gap-6 items-start">
+            
+            <!-- Left Side: Stats and Analysis (7/12 width) -->
+            <div class="col-span-12 lg:col-span-7 space-y-6">
+                
+                <!-- Exam Info Card -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm space-y-5">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800 leading-snug mb-2">2023年山东专升本《高数》模考试卷（大一）</h2>
+                        <div class="text-xs text-gray-400">交卷时间：2023.08.28 18:05</div>
+                    </div>
+
+                    <div class="border-t border-dashed border-gray-200"></div>
+
+                    <!-- Stats Dashboard Grid -->
+                    <div class="grid grid-cols-4 gap-4">
+                        <div class="text-center p-3 bg-gray-50 rounded-xl">
+                            <div class="text-xs text-gray-500 mb-1">试卷得分</div>
+                            <div class="text-2xl font-bold text-red-500">95<span class="text-xs font-normal text-gray-500 ml-0.5">分</span></div>
+                        </div>
+                        <div class="text-center p-3 bg-gray-50 rounded-xl">
+                            <div class="text-xs text-gray-500 mb-1">得分排名</div>
+                            <div class="text-2xl font-bold text-gray-800">897<span class="text-xs font-normal text-gray-500 ml-0.5">名</span></div>
+                        </div>
+                        <div class="text-center p-3 bg-gray-50 rounded-xl">
+                            <div class="text-xs text-gray-500 mb-1">已击败考生</div>
+                            <div class="text-2xl font-bold text-gray-800">81.3<span class="text-xs font-normal text-gray-500 ml-0.5">%</span></div>
+                        </div>
+                        <div class="text-center p-3 bg-gray-50 rounded-xl">
+                            <div class="text-xs text-gray-500 mb-1">答题总时长</div>
+                            <div class="text-2xl font-bold text-gray-800">101<span class="text-xs font-normal text-gray-500 ml-0.5">min</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Station Data box -->
+                    <div class="flex items-center gap-6 bg-gray-50 rounded-xl p-5 border border-gray-100">
+                        <!-- Left Wireframe placeholder -->
+                        <div class="relative w-28 h-28 flex-shrink-0 bg-white border border-gray-300 flex flex-col items-center justify-center overflow-hidden rounded-md">
+                            <div class="absolute inset-0 border-b border-gray-300"></div>
+                            <svg class="absolute inset-0 w-full h-full text-gray-300" xmlns="http://www.w3.org/2000/svg">
+                                <line x1="0" y1="0" x2="100%" y2="100%" stroke="currentColor" stroke-width="1"></line>
+                                <line x1="100%" y1="0" x2="0" y2="100%" stroke="currentColor" stroke-width="1"></line>
+                            </svg>
+                            <span class="relative z-10 text-[11px] text-gray-400 font-semibold text-center leading-tight px-1 bg-white">当前试卷<br>全站数据</span>
+                        </div>
+                        <!-- Right stats details -->
+                        <div class="space-y-3 text-sm text-gray-600 flex-1">
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-chart-line text-blue-500 text-base w-5 text-center"></i>
+                                <span>全站最高分：<strong class="text-gray-800 text-base">100分</strong></span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-chart-area text-green-500 text-base w-5 text-center"></i>
+                                <span>全站平均分：<strong class="text-gray-800 text-base">83分</strong></span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-clock text-amber-500 text-base w-5 text-center"></i>
+                                <span>答题平均用时：<strong class="text-gray-800 text-base">93min</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Teacher notice banner -->
+                <div class="bg-amber-50 border border-amber-100 rounded-2xl p-4 flex items-center justify-center gap-3 text-sm text-amber-800 font-medium shadow-sm">
+                    <i class="fas fa-hourglass-half text-amber-600"></i>
+                    <span>主观题老师批改中，请稍后再来查看...</span>
+                </div>
+
+                <!-- Question type analysis -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm space-y-4">
+                    <h3 class="text-base font-bold text-gray-800 mb-2">题型分析</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Single Choice -->
+                        <div class="bg-gray-50 rounded-xl p-4 space-y-2">
+                            <div class="flex justify-between items-center text-xs text-gray-600">
+                                <span class="font-bold text-gray-800 text-sm">单选题</span>
+                                <span>答对: 2/10 &nbsp; 得分: 4.0/20.0</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="flex-1 bg-gray-200 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-gray-600 h-full rounded-full" style="width: 20%;"></div>
+                                </div>
+                                <span class="text-xs font-bold text-gray-700 w-8 text-right">20%</span>
+                            </div>
+                        </div>
+
+                        <!-- Multiple Choice -->
+                        <div class="bg-gray-50 rounded-xl p-4 space-y-2">
+                            <div class="flex justify-between items-center text-xs text-gray-600">
+                                <span class="font-bold text-gray-800 text-sm">多选题</span>
+                                <span>答对: 6/10 &nbsp; 得分: 18.0/30.0</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="flex-1 bg-gray-200 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-gray-600 h-full rounded-full" style="width: 60%;"></div>
+                                </div>
+                                <span class="text-xs font-bold text-gray-700 w-8 text-right">60%</span>
+                            </div>
+                        </div>
+
+                        <!-- Uncertain Choice -->
+                        <div class="bg-gray-50 rounded-xl p-4 space-y-2">
+                            <div class="flex justify-between items-center text-xs text-gray-600">
+                                <span class="font-bold text-gray-800 text-sm">不定项选择题</span>
+                                <span>答对: 8/10 &nbsp; 得分: 24.0/30.0</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="flex-1 bg-gray-200 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-gray-600 h-full rounded-full" style="width: 80%;"></div>
+                                </div>
+                                <span class="text-xs font-bold text-gray-700 w-8 text-right">80%</span>
+                            </div>
+                        </div>
+
+                        <!-- Judgment -->
+                        <div class="bg-gray-50 rounded-xl p-4 space-y-2">
+                            <div class="flex justify-between items-center text-xs text-gray-600">
+                                <span class="font-bold text-gray-800 text-sm">判断题</span>
+                                <span>答对: 10/10 &nbsp; 得分: 20.0/20.0</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="flex-1 bg-gray-200 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-gray-600 h-full rounded-full" style="width: 100%;"></div>
+                                </div>
+                                <span class="text-xs font-bold text-gray-700 w-8 text-right">100%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Side: Answer Card & Controls (5/12 width) -->
+            <div class="col-span-12 lg:col-span-5 space-y-6">
+                
+                <!-- Answer Sheet (答题卡) -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm space-y-5">
+                    <div class="pb-3 border-b border-gray-100 flex justify-between items-center">
+                        <h3 class="text-base font-bold text-gray-800">答题卡</h3>
+                    </div>
+
+                    <!-- Legend indicators -->
+                    <div class="flex flex-wrap gap-x-4 gap-y-2 text-xs text-gray-500">
+                        <div class="flex items-center gap-1.5">
+                            <div class="w-4 h-4 bg-gray-600 rounded"></div>
+                            <span>正确</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <div class="w-4 h-4 bg-gray-400 rounded"></div>
+                            <span>错误</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <div class="w-4 h-4 bg-gray-300 rounded"></div>
+                            <span>半对</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <div class="w-4 h-4 bg-white border border-gray-400 rounded"></div>
+                            <span>已答</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <div class="w-4 h-4 bg-white border border-gray-200 rounded"></div>
+                            <span>未答</span>
+                        </div>
+                    </div>
+
+                    <!-- Section 1 -->
+                    <div class="space-y-4">
+                        <h4 class="text-sm font-bold text-gray-800 border-l-4 border-gray-600 pl-2">第一部分</h4>
+                        
+                        <div class="space-y-2">
+                            <div class="text-xs text-gray-500 font-medium">一、单选题</div>
+                            <div class="flex flex-wrap gap-2.5">
+                                <!-- Numbers 1 to 15 -->
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">1</div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">2</div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">3</div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">4</div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">5</div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">6</div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">7</div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">8</div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">9</div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">10</div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">11</div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">12</div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">13</div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">14</div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">15</div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 mt-4">
+                            <div class="text-xs text-gray-500 font-medium">二、填空题</div>
+                            <div class="flex flex-wrap gap-2.5">
+                                <!-- 16 with small blue tag -->
+                                <div class="relative w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">
+                                    <span class="absolute -top-1 -left-1 bg-sky-500 text-[8px] text-white px-1 rounded-sm transform scale-75 font-normal leading-tight origin-top-left">已批改</span>
+                                    16
+                                </div>
+                                <div class="w-10 h-10 bg-white text-gray-800 border-2 border-gray-400 rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:bg-gray-50">17</div>
+                                <div class="w-10 h-10 bg-white text-gray-800 border-2 border-gray-400 rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:bg-gray-50">18</div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">19</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2 -->
+                    <div class="space-y-4 pt-2">
+                        <h4 class="text-sm font-bold text-gray-800 border-l-4 border-gray-600 pl-2">第二部分</h4>
+                        
+                        <div class="space-y-2">
+                            <div class="text-xs text-gray-500 font-medium">三、简答题</div>
+                            <div class="flex flex-wrap gap-2.5">
+                                <!-- 20 with "已批改" tag -->
+                                <div class="relative w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">
+                                    <span class="absolute -top-1 -left-1 bg-sky-500 text-[8px] text-white px-1 rounded-sm transform scale-75 font-normal leading-tight origin-top-left">已批改</span>
+                                    20
+                                </div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">21</div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">22</div>
+                                <div class="w-10 h-10 bg-gray-600 text-white rounded-lg flex items-center justify-center font-semibold text-sm cursor-pointer hover:opacity-90">23</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Controls nested directly inside the Sidebar card -->
+                    <div class="pt-4 border-t border-gray-100 flex gap-4">
+                        <button onclick="window.location.href='shiti_jiexi_pc.html'" class="flex-1 h-12 border-2 border-red-500 text-red-500 hover:bg-red-50 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2">
+                            <i class="fas fa-file-invoice"></i> 查看解析
+                        </button>
+                        <button onclick="window.location.href='dati_yemian_pc.html'" class="flex-1 h-12 bg-gray-200 hover:bg-red-500 hover:text-white text-gray-700 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2">
+                            <i class="fas fa-redo"></i> 再次答题
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <span>© 2026 库课网校. All Rights Reserved.</span>
+    </footer>
+
+</body>
+</html>

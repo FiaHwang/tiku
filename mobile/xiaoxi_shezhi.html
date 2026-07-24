@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>消息设置</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // 清理 URL 中的 origin 参数，保持地址栏整洁
+        (function() {
+            const url = new URL(window.location.href);
+            if (url.searchParams.has('origin')) {
+                url.searchParams.delete('origin');
+                const newUrl = url.pathname + url.search + url.hash;
+                window.history.replaceState({}, '', newUrl);
+            }
+        })();
+    </script>
+    <style>
+        html {
+            background-color: #f8f9fa;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f8f9fa;
+            max-width: 480px !important;
+            margin: 0 auto !important;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            background-color: #ffffff;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        /* 统一卡片行高和阴影 */
+        .setting-item {
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid #f5f5f5;
+            transition: background-color 0.2s ease;
+        }
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        /* 自定义 iOS 风格开关 */
+        .switch-container {
+            position: relative;
+            width: 52px;
+            height: 32px;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .switch-input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .switch-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e5e5e5;
+            border-radius: 32px;
+            transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .switch-slider::before {
+            position: absolute;
+            content: "";
+            height: 28px;
+            width: 28px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .switch-input:checked + .switch-slider {
+            background-color: #ff4d4f; /* 库课网校品牌红色 */
+        }
+        .switch-input:checked + .switch-slider::before {
+            transform: translateX(20px);
+        }
+
+        /* 提示弹窗 (Toast) */
+        .toast {
+            position: fixed;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 13px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 2000;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航栏 -->
+    <div class="header">
+        <button onclick="window.history.back()" class="flex items-center justify-center w-8 h-8 text-slate-800 active:scale-95 transition-transform">
+            <i class="fas fa-chevron-left text-[20px]"></i>
+        </button>
+        <span class="text-[18px] font-semibold text-slate-900">消息设置</span>
+        <div class="w-8"></div> <!-- 占位用于居中 -->
+    </div>
+
+    <!-- 设置列表 -->
+    <div class="flex-1 mt-2">
+        <!-- 消息推送 -->
+        <div class="setting-item">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500">
+                    <i class="fa-solid fa-circle-arrow-right text-[18px]"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-[15px] font-medium text-slate-800">消息推送</span>
+                    <span class="text-[12px] text-slate-400 mt-0.5">第一时间收到您关注的消息</span>
+                </div>
+            </div>
+            <label class="switch-container">
+                <input type="checkbox" id="switch-push" class="switch-input" onchange="toggleSetting('push', this)">
+                <span class="switch-slider"></span>
+            </label>
+        </div>
+
+        <!-- 学习提醒 -->
+        <div class="setting-item">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-400">
+                    <i class="fa-solid fa-book-bookmark text-[17px]"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-[15px] font-medium text-slate-800">学习提醒</span>
+                    <span class="text-[12px] text-slate-400 mt-0.5">直播上课提醒、课程更新提醒等</span>
+                </div>
+            </div>
+            <label class="switch-container">
+                <input type="checkbox" id="switch-study" class="switch-input" onchange="toggleSetting('study', this)">
+                <span class="switch-slider"></span>
+            </label>
+        </div>
+
+        <!-- 做题提醒 -->
+        <div class="bg-white border-b border-slate-100">
+            <div class="setting-item border-none">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500">
+                        <i class="fa-solid fa-clock text-[18px]"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[15px] font-medium text-slate-800">做题提醒</span>
+                        <span class="text-[12px] text-slate-400 mt-0.5">督促您按时进行每日刷题练习</span>
+                    </div>
+                </div>
+                <label class="switch-container">
+                    <input type="checkbox" id="switch-practice" class="switch-input" onchange="togglePracticeSetting(this)">
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
+            
+            <!-- 做题提醒配置子面板 -->
+            <div id="practice-panel" class="px-5 pb-5 pt-1 bg-slate-50 border-t border-slate-100 hidden">
+                <!-- 时间选择 -->
+                <div class="flex items-center justify-between py-2.5 border-b border-slate-200/60">
+                    <span class="text-[14px] text-slate-600">提醒时间</span>
+                    <input type="time" id="practice-time" onchange="savePracticeConfig()" class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-slate-700 text-[14px] font-medium focus:outline-none focus:border-red-500 cursor-pointer">
+                </div>
+                
+                <!-- 星期多选 -->
+                <div class="py-3">
+                    <span class="text-[14px] text-slate-600 block mb-2.5">重复周期 (支持多选)</span>
+                    <div class="flex justify-between gap-1.5">
+                        <button onclick="toggleDay(1)" data-day="1" class="day-btn flex-1 h-9 rounded-full bg-white border border-slate-200 text-[13px] text-slate-600 font-medium transition-all active:scale-95">一</button>
+                        <button onclick="toggleDay(2)" data-day="2" class="day-btn flex-1 h-9 rounded-full bg-white border border-slate-200 text-[13px] text-slate-600 font-medium transition-all active:scale-95">二</button>
+                        <button onclick="toggleDay(3)" data-day="3" class="day-btn flex-1 h-9 rounded-full bg-white border border-slate-200 text-[13px] text-slate-600 font-medium transition-all active:scale-95">三</button>
+                        <button onclick="toggleDay(4)" data-day="4" class="day-btn flex-1 h-9 rounded-full bg-white border border-slate-200 text-[13px] text-slate-600 font-medium transition-all active:scale-95">四</button>
+                        <button onclick="toggleDay(5)" data-day="5" class="day-btn flex-1 h-9 rounded-full bg-white border border-slate-200 text-[13px] text-slate-600 font-medium transition-all active:scale-95">五</button>
+                        <button onclick="toggleDay(6)" data-day="6" class="day-btn flex-1 h-9 rounded-full bg-white border border-slate-200 text-[13px] text-slate-600 font-medium transition-all active:scale-95">六</button>
+                        <button onclick="toggleDay(7)" data-day="7" class="day-btn flex-1 h-9 rounded-full bg-white border border-slate-200 text-[13px] text-slate-600 font-medium transition-all active:scale-95">日</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 交易提醒 -->
+        <div class="setting-item">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500">
+                    <i class="fa-solid fa-sack-dollar text-[17px]"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-[15px] font-medium text-slate-800">交易提醒</span>
+                    <span class="text-[12px] text-slate-400 mt-0.5">发货通知、支付成功、同意退款等</span>
+                </div>
+            </div>
+            <label class="switch-container">
+                <input type="checkbox" id="switch-trade" class="switch-input" onchange="toggleSetting('trade', this)">
+                <span class="switch-slider"></span>
+            </label>
+        </div>
+
+        <!-- 活动提醒 -->
+        <div class="setting-item">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-400">
+                    <i class="fa-solid fa-gift text-[17px]"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-[15px] font-medium text-slate-800">活动提醒</span>
+                    <span class="text-[12px] text-slate-400 mt-0.5">拼团成功、失败，获得优惠券等</span>
+                </div>
+            </div>
+            <label class="switch-container">
+                <input type="checkbox" id="switch-activity" class="switch-input" onchange="toggleSetting('activity', this)">
+                <span class="switch-slider"></span>
+            </label>
+        </div>
+
+        <!-- 系统公告 -->
+        <div class="setting-item">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500">
+                    <i class="fa-solid fa-bell text-[17px]"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-[15px] font-medium text-slate-800">系统公告</span>
+                    <span class="text-[12px] text-slate-400 mt-0.5">系统级重要通知</span>
+                </div>
+            </div>
+            <label class="switch-container">
+                <input type="checkbox" id="switch-system" class="switch-input" onchange="toggleSetting('system', this)">
+                <span class="switch-slider"></span>
+            </label>
+        </div>
+
+        <!-- 精选活动 -->
+        <div class="setting-item">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-400">
+                    <i class="fa-solid fa-bullseye text-[17px]"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-[15px] font-medium text-slate-800">精选活动</span>
+                    <span class="text-[12px] text-slate-400 mt-0.5">精选优惠活动通知</span>
+                </div>
+            </div>
+            <label class="switch-container">
+                <input type="checkbox" id="switch-featured" class="switch-input" onchange="toggleSetting('featured', this)">
+                <span class="switch-slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <!-- 提示框 (Toast) -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // 定义初始配置状态 (同步图片：前两个关闭，后四个开启)
+        const defaultSettings = {
+            push: false,
+            study: false,
+            trade: true,
+            activity: true,
+            system: true,
+            featured: true
+        };
+
+        // 做题提醒特定配置
+        const defaultPracticeConfig = {
+            enabled: false,
+            time: '20:00',
+            days: [1, 2, 3, 4, 5] // 默认周一到周五
+        };
+
+        // 读取当前设置
+        const currentSettings = JSON.parse(localStorage.getItem('message_settings') || JSON.stringify(defaultSettings));
+        const practiceConfig = JSON.parse(localStorage.getItem('practice_reminder_config') || JSON.stringify(defaultPracticeConfig));
+
+        // 初始化页面开关状态
+        document.addEventListener('DOMContentLoaded', () => {
+            Object.keys(currentSettings).forEach(key => {
+                const checkbox = document.getElementById(`switch-${key}`);
+                if (checkbox) {
+                    checkbox.checked = currentSettings[key];
+                }
+            });
+
+            // 初始化做题提醒配置
+            const practiceCheckbox = document.getElementById('switch-practice');
+            if (practiceCheckbox) {
+                practiceCheckbox.checked = practiceConfig.enabled;
+            }
+            const timeInput = document.getElementById('practice-time');
+            if (timeInput) {
+                timeInput.value = practiceConfig.time;
+            }
+            
+            // 渲染面板和星期状态
+            updatePracticePanel(practiceConfig.enabled);
+            renderDays();
+        });
+
+        function updatePracticePanel(enabled) {
+            const panel = document.getElementById('practice-panel');
+            if (panel) {
+                if (enabled) {
+                    panel.classList.remove('hidden');
+                } else {
+                    panel.classList.add('hidden');
+                }
+            }
+        }
+
+        function renderDays() {
+            document.querySelectorAll('.day-btn').forEach(btn => {
+                const day = parseInt(btn.getAttribute('data-day'));
+                if (practiceConfig.days.includes(day)) {
+                    btn.classList.add('bg-[#ff4d4f]', 'border-[#ff4d4f]', 'text-white');
+                    btn.classList.remove('bg-white', 'border-slate-200', 'text-slate-600');
+                } else {
+                    btn.classList.remove('bg-[#ff4d4f]', 'border-[#ff4d4f]', 'text-white');
+                    btn.classList.add('bg-white', 'border-slate-200', 'text-slate-600');
+                }
+            });
+        }
+
+        // 切换设置处理器
+        function toggleSetting(key, checkbox) {
+            currentSettings[key] = checkbox.checked;
+            localStorage.setItem('message_settings', JSON.stringify(currentSettings));
+            
+            // 显示 Toast 提示
+            const nameMap = {
+                push: '消息推送',
+                study: '学习提醒',
+                trade: '交易提醒',
+                activity: '活动提醒',
+                system: '系统公告',
+                featured: '精选活动'
+            };
+            showToast(`${nameMap[key]}已${checkbox.checked ? '开启' : '关闭'}`);
+        }
+
+        function togglePracticeSetting(checkbox) {
+            practiceConfig.enabled = checkbox.checked;
+            updatePracticePanel(checkbox.checked);
+            localStorage.setItem('practice_reminder_config', JSON.stringify(practiceConfig));
+            showToast(`做题提醒已${checkbox.checked ? '开启' : '关闭'}`);
+        }
+
+        function toggleDay(day) {
+            const index = practiceConfig.days.indexOf(day);
+            if (index > -1) {
+                practiceConfig.days.splice(index, 1);
+            } else {
+                practiceConfig.days.push(day);
+                practiceConfig.days.sort((a, b) => a - b);
+            }
+            renderDays();
+            localStorage.setItem('practice_reminder_config', JSON.stringify(practiceConfig));
+        }
+
+        function savePracticeConfig() {
+            const timeInput = document.getElementById('practice-time');
+            if (timeInput) {
+                practiceConfig.time = timeInput.value;
+            }
+            localStorage.setItem('practice_reminder_config', JSON.stringify(practiceConfig));
+            showToast('提醒时间已更新');
+        }
+
+        // 显示 Toast 提示函数
+        function showToast(text) {
+            const t = document.getElementById('toast');
+            t.innerText = text;
+            t.classList.add('show');
+            setTimeout(() => {
+                t.classList.remove('show');
+            }, 1800);
+        }
+    </script>
+</body>
+</html>

@@ -380,8 +380,10 @@
         .footer {
             position: fixed;
             bottom: 0;
-            left: 0;
-            right: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
             height: 60px;
             background-color: #fff;
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
@@ -599,8 +601,10 @@
         box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
         position: fixed;
         bottom: 0;
-        left: 0;
-        right: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 480px;
         z-index: 99;
     }
 
@@ -795,8 +799,8 @@
         // 返回按钮功能
         backBtn.addEventListener('click', () => {
             console.log('返回');
-            // 跳转到拍照错题列表页面
-            window.location.href = 'paizhao_cuoti_liebiao.html';
+            // 返回到错题本的拍错题Tab
+            window.location.href = 'cuotiben.html?tab=photo';
         });
 
         // 触摸事件（移动端优化）

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>试题榜单</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f5f6f9;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.08);
+            padding-bottom: 30px;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: #fff;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 48px;
+            padding: 0 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            font-size: 18px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .back-btn:active {
+            background-color: #f5f5f5;
+        }
+
+        .page-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .header-actions {
+            width: 36px;
+        }
+
+        /* 主榜单切换 (错题榜 vs 收藏榜) */
+        .main-tabs {
+            display: flex;
+            background-color: #fff;
+            padding: 0 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .main-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px 0;
+            font-size: 15px;
+            font-weight: 500;
+            color: #666;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .main-tab.active {
+            color: #f5222d;
+            font-weight: 600;
+        }
+
+        .main-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 32px;
+            height: 3px;
+            background-color: #f5222d;
+            border-radius: 2px;
+        }
+
+        /* 子榜单切换 */
+        .sub-tabs {
+            display: flex;
+            justify-content: center;
+            background-color: #fff;
+            padding: 10px 16px;
+            gap: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .sub-tab {
+            padding: 6px 16px;
+            font-size: 13px;
+            border-radius: 16px;
+            background-color: #f5f5f5;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .sub-tab.active {
+            background-color: #fff1f0;
+            color: #f5222d;
+            border: 1px solid #ffa39e;
+            font-weight: 600;
+        }
+
+        /* 列表容器 */
+        .question-list {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .question-card {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            border: 1px solid #f0f0f0;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            position: relative;
+        }
+
+        .question-card:active {
+            background-color: #fafafa;
+        }
+
+        /* 排名序号样式 */
+        .rank-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            flex-shrink: 0;
+            color: #8c8c8c;
+            background-color: #f5f5f5;
+        }
+
+        .rank-badge.top-1 {
+            background: linear-gradient(135deg, #ffec3d 0%, #faad14 100%);
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(250, 173, 20, 0.35);
+            font-size: 14px;
+        }
+
+        .rank-badge.top-2 {
+            background: linear-gradient(135deg, #e6f7ff 0%, #1890ff 100%);
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(24, 144, 255, 0.35);
+            font-size: 14px;
+        }
+
+        .rank-badge.top-3 {
+            background: linear-gradient(135deg, #fff7e6 0%, #fa8c16 100%);
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(250, 140, 22, 0.35);
+            font-size: 14px;
+        }
+
+        .question-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .question-stem {
+            font-size: 14px;
+            font-weight: 500;
+            color: #262626;
+            line-height: 1.5;
+            word-break: break-all;
+        }
+
+        .question-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #8c8c8c;
+            margin-top: 2px;
+        }
+
+        .meta-tags {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stat-tag {
+            color: #ff4d4f;
+            background-color: #fff1f0;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .stat-tag.fav {
+            color: #fa8c16;
+            background-color: #fff7e6;
+        }
+
+        .stat-tag.rate-red {
+            color: #f5222d;
+            background-color: #fff1f0;
+            border: 1px solid #ffa39e;
+        }
+
+        .stat-tag.rate-yellow {
+            color: #d48806;
+            background-color: #fffbe6;
+            border: 1px solid #ffe58f;
+        }
+
+        /* 底部提示 */
+        .empty-tips {
+            text-align: center;
+            padding: 40px 20px;
+            color: #bfbfbf;
+            font-size: 13px;
+            display: none;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translate(-50%, 10px);
+            background-color: rgba(0, 0, 0, 0.82);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            transform: translate(-50%, 0);
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航栏 -->
+    <div class="header">
+        <div class="nav-bar">
+            <button class="back-btn" onclick="window.location.href='tiku.html'" title="返回">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="page-title">试题榜单</div>
+            <div class="header-actions"></div>
+        </div>
+
+        <!-- 错题榜 vs 收藏榜 主Tab -->
+        <div class="main-tabs">
+            <div class="main-tab active" id="tab-wrong" onclick="switchMainTab('wrong')">
+                <i class="fas fa-times-circle" style="margin-right: 4px;"></i>错题榜
+            </div>
+            <div class="main-tab" id="tab-favorite" onclick="switchMainTab('favorite')">
+                <i class="fas fa-bookmark" style="margin-right: 4px;"></i>收藏榜
+            </div>
+        </div>
+
+        <!-- 子榜单 Tab (错题榜: 上周错题榜, 历史错题榜; 收藏榜: 上周收藏榜, 历史收藏榜) -->
+        <div class="sub-tabs" id="sub-tabs">
+            <!-- 动态渲染子Tab -->
+        </div>
+    </div>
+
+    <!-- 题目列表 Container -->
+    <div class="question-list" id="question-list">
+        <!-- JS 动态渲染题目 -->
+    </div>
+
+    <!-- 无结果提示 -->
+    <div class="empty-tips" id="empty-tips">
+        <i class="fas fa-inbox" style="font-size: 32px; margin-bottom: 8px; display: block;"></i>
+        暂无榜单题目
+    </div>
+
+    <!-- Toast 提示圈 -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const chineseStems = [
+            '《张中丞传后叙》中，贯穿全篇并体现张巡、许远英雄气概的细节描写是？',
+            '下列各组句中，加点字含义相同的一组是？',
+            '“落霞与孤鹜齐飞，秋水共长天一色”出自哪篇名篇作品？',
+            '李清照《声声慢》（寻寻觅觅）中，借景抒情的典型意象包括？',
+            '杜甫《蜀相》中“丞相祠堂何处寻，锦官城外柏森森”抒发的思想感情是？',
+            '《季氏将伐颛臾》中孔子引用的“危而不持，颠而不扶，则将焉用彼相”运用了什么论证方法？',
+            '下列文学常识表述有误的一项是？',
+            '《前赤壁赋》中“主客问答”的哲学内涵及主旨是？',
+            '白居易《长恨歌》中描写杨贵妃死后唐玄宗思念之情的名句是？',
+            '《选择批判》中关于文风与思想的关系阐述正确的是？'
+        ];
+
+        const mathStems = [
+            '求极限 lim(x->0) (sin 3x / tan 2x) 的结果是？',
+            '若函数 f(x) 在 x=0 处连续，则常数 k 的取值为？',
+            '定积分 ∫(0 to π/2) sin^2(x) dx 的准确计算结果是？',
+            '曲线 y = x^3 - 3x 在点 (1, -2) 处的切线方程为？',
+            '设矩阵 A 为 3阶可逆方阵，其行列式 |A|=2，则 |2A^-1| 的值为？',
+            '微分方程 y\'\' - 4y\' + 4y = 0 的通解形式为？',
+            '级数 ∑(n=1 to ∞) (1/n^2) 的收敛性判断为？',
+            '二元函数 z = x^2 + y^2 - 2x + 4y 的极小值点坐标为？',
+            '已知向量 a=(1, 2, -1) 与 b=(2, k, 2) 垂直，则 k 的值为？',
+            '设 f(x) 的原函数为 ln(x)，则 ∫ f\'(x) dx 等于？'
+        ];
+
+        const englishStems = [
+            'Which of the following words best completes the sentence: "The meeting was _____ due to bad weather"?',
+            'Identify the sentence that uses correct subjunctive mood grammar.',
+            'What is the main idea of paragraph 3 in the passage regarding AI development?',
+            'Choose the correct vocabulary pair to fill in the blanks: "Neither the manager nor the employees _____ present."',
+            'Which idiom best expresses "to achieve two goals with one single effort"?',
+            'Select the word closest in meaning to "reluctant":',
+            'The phrase "take something for granted" most nearly means:',
+            'Complete the sentence: "No sooner had he entered the room _____ the phone rang."',
+            'Identify the error in the sentence: "Despite of the heavy rain, they arrived on time."',
+            'Which preposition correctly fits in "be capable _____ doing something"?'
+        ];
+
+        const politicsStems = [
+            '习近平新时代中国特色社会主义思想的核心要义和指导地位是？',
+            '中国共产党人的初心和使命是？',
+            '决定社会主义本质和根本任务的关键在于？',
+            '新发展理念中，作为引领发展第一动力的是？',
+            '党的二十大报告中指出，全面建成社会主义现代化强国的总的战略安排是？',
+            '辩证唯物主义认为，物质的唯一特性是？',
+            '实事求是思想路线的核心和实质是？',
+            '我国社会主义初级阶段的基本经济制度包括？',
+            '人类社会发展的根本动力是？',
+            '中华民族伟大复兴的基石和根本保证是？'
+        ];
+
+        const csStems = [
+            '在计算机体系结构中，CPU 内部用于暂时存放指令和数据的部件是？',
+            '操作系统中，解决死锁问题的主要策略和 Banker 算法原理是？',
+            '在 TCP/IP 协议栈中，负责端到端可靠传输的协议是？',
+            '数据结构中，在单链表中查找第 i 个节点的时间复杂度为？',
+            '关系型数据库中，第三范式（3NF）要求消除了哪种依赖关系？',
+            '在二进制补码运算中，8位有符号整数可表示的数值范围是？',
+            'HTTP 与 HTTPS 协议的核心区别在于增加了哪一层加密保障？',
+            '二叉树的前序遍历序列为 ABC，则其中序遍历序列不可能为？',
+            '计算机网络中，子网掩码 255.255.255.192 对应的 CIDR 表示法为？',
+            '进程与线程的主要区别及资源分配方式在于？'
+        ];
+
+        // 历史错题/收藏题量为100，上周为50
+        const wrongQuestionsWeek = generateQuestions('lastWeekWrong', 50);
+        const wrongQuestionsHistory = generateQuestions('historyWrong', 100);
+        const favoriteQuestionsWeek = generateQuestions('lastWeekFavorite', 50);
+        const favoriteQuestionsHistory = generateQuestions('historyFavorite', 100);
+
+        const boardDataMap = {
+            'lastWeekWrong': {
+                title: '上周错题榜',
+                type: 'wrong',
+                items: wrongQuestionsWeek
+            },
+            'historyWrong': {
+                title: '历史错题榜',
+                type: 'wrong',
+                items: wrongQuestionsHistory
+            },
+            'lastWeekFavorite': {
+                title: '上周收藏榜',
+                type: 'favorite',
+                items: favoriteQuestionsWeek
+            },
+            'historyFavorite': {
+                title: '历史收藏榜',
+                type: 'favorite',
+                items: favoriteQuestionsHistory
+            }
+        };
+
+        let currentBoardKey = 'lastWeekWrong';
+
+        function generateQuestions(boardType, count) {
+            const list = [];
+            const allStems = [
+                ...chineseStems,
+                ...mathStems,
+                ...englishStems,
+                ...politicsStems,
+                ...csStems
+            ];
+
+            for (let i = 1; i <= count; i++) {
+                const rawStem = allStems[(i - 1) % allStems.length];
+
+                let countVal = 0;
+                let accuracyVal = null;
+                if (boardType === 'lastWeekWrong' || boardType === 'historyWrong') {
+                    if (boardType === 'lastWeekWrong') {
+                        countVal = Math.floor(3500 - i * 30 + Math.random() * 20);
+                    } else {
+                        countVal = Math.floor(18000 - i * 120 + Math.random() * 50);
+                    }
+                    // 正确率生成：必须是50%以下，33%以下为红色，33-50%为黄色
+                    const baseAcc = 8 + (i / count) * 38; // 8% - 46%
+                    const noise = (Math.random() - 0.5) * 6;
+                    let rawAcc = Math.max(5.0, Math.min(49.5, baseAcc + noise));
+                    accuracyVal = (Math.round(rawAcc * 10) / 10).toFixed(1);
+                } else if (boardType === 'lastWeekFavorite') {
+                    countVal = Math.floor(2800 - i * 25 + Math.random() * 15);
+                } else {
+                    countVal = Math.floor(12000 - i * 85 + Math.random() * 30);
+                }
+
+                list.push({
+                    rank: i,
+                    stem: rawStem,
+                    count: countVal,
+                    accuracyRate: accuracyVal,
+                    boardType: boardType
+                });
+            }
+
+            return list;
+        }
+
+        // 初始化页面
+        window.addEventListener('DOMContentLoaded', () => {
+            renderBoard();
+        });
+
+        // 渲染榜单
+        function renderBoard() {
+            const boardInfo = boardDataMap[currentBoardKey];
+            if (!boardInfo) return;
+
+            // 渲染/更新子Tab列表
+            renderSubTabs(boardInfo.type);
+
+            let questions = boardInfo.items;
+
+            const container = document.getElementById('question-list');
+            const emptyTips = document.getElementById('empty-tips');
+
+            if (questions.length === 0) {
+                container.innerHTML = '';
+                emptyTips.style.display = 'block';
+                return;
+            }
+
+            emptyTips.style.display = 'none';
+
+            let html = '';
+            questions.forEach(q => {
+                let badgeClass = 'rank-badge';
+                if (q.rank === 1) badgeClass += ' top-1';
+                else if (q.rank === 2) badgeClass += ' top-2';
+                else if (q.rank === 3) badgeClass += ' top-3';
+
+                const isFav = boardInfo.type === 'favorite';
+                const countText = isFav ? `收藏人数: ${q.count.toLocaleString()}` : `答错次数: ${q.count.toLocaleString()}`;
+                const tagClass = isFav ? 'stat-tag fav' : 'stat-tag';
+                const tagIcon = isFav ? 'fa-bookmark' : 'fa-times-circle';
+
+                let accuracyTagHtml = '';
+                if (!isFav && q.accuracyRate !== null && q.accuracyRate !== undefined) {
+                    const rateNum = parseFloat(q.accuracyRate);
+                    const rateClass = rateNum < 33 ? 'rate-red' : 'rate-yellow';
+                    accuracyTagHtml = `<span class="stat-tag ${rateClass}"><i class="fas fa-chart-pie"></i> 正确率: ${q.accuracyRate}%</span>`;
+                }
+
+                html += `
+                    <div class="question-card" onclick="onQuestionClick(${q.rank})">
+                        <div class="${badgeClass}">
+                            ${q.rank <= 3 ? '<i class="fas fa-crown" style="font-size: 11px; margin-right: 2px;"></i>' : ''}${q.rank}
+                        </div>
+                        <div class="question-content">
+                            <div class="question-stem">${q.stem}</div>
+                            <div class="question-meta">
+                                <div class="meta-tags">
+                                    <span class="${tagClass}"><i class="fas ${tagIcon}"></i> ${countText}</span>
+                                    ${accuracyTagHtml}
+                                </div>
+                                <div><i class="fas fa-chevron-right" style="color: #ccc; font-size: 11px;"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // 动态渲染子Tab
+        function renderSubTabs(type) {
+            const container = document.getElementById('sub-tabs');
+            if (type === 'wrong') {
+                container.innerHTML = `
+                    <div class="sub-tab ${currentBoardKey === 'lastWeekWrong' ? 'active' : ''}" onclick="selectBoard('lastWeekWrong')">
+                        <i class="fas fa-fire" style="color: #f5222d;"></i> 上周错题榜
+                    </div>
+                    <div class="sub-tab ${currentBoardKey === 'historyWrong' ? 'active' : ''}" onclick="selectBoard('historyWrong')">
+                        <i class="fas fa-history" style="color: #f5222d;"></i> 历史错题榜
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="sub-tab ${currentBoardKey === 'lastWeekFavorite' ? 'active' : ''}" onclick="selectBoard('lastWeekFavorite')">
+                        <i class="fas fa-star" style="color: #fa8c16;"></i> 上周收藏榜
+                    </div>
+                    <div class="sub-tab ${currentBoardKey === 'historyFavorite' ? 'active' : ''}" onclick="selectBoard('historyFavorite')">
+                        <i class="fas fa-award" style="color: #fa8c16;"></i> 历史收藏榜
+                    </div>
+                `;
+            }
+        }
+
+        // 切换错题榜 vs 收藏榜
+        function switchMainTab(type) {
+            const wrongTab = document.getElementById('tab-wrong');
+            const favTab = document.getElementById('tab-favorite');
+            if (wrongTab) wrongTab.classList.toggle('active', type === 'wrong');
+            if (favTab) favTab.classList.toggle('active', type === 'favorite');
+
+            if (type === 'wrong') {
+                currentBoardKey = 'lastWeekWrong';
+            } else {
+                currentBoardKey = 'lastWeekFavorite';
+            }
+            renderBoard();
+        }
+
+        // 选择具体子榜单
+        function selectBoard(key) {
+            currentBoardKey = key;
+            renderBoard();
+            showToast('已切换至: ' + boardDataMap[key].title);
+        }
+
+        // 题目点击事件
+        function onQuestionClick(rank) {
+            window.location.href = `dati_yemian.html?id=${rank}&from=bangdan`;
+        }
+
+        // Toast 提示
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

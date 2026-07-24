@@ -109,7 +109,7 @@
     <div class="flex flex-col" id="alerts-container">
         <!-- 提醒 4 - 预约考试 (大联考) -->
         <div class="noti-item flex flex-col gap-1.5" onclick="readAlert(this, 4)">
-            <span class="text-xs text-slate-400 font-medium">23年11月11日 12:11</span>
+            <span class="text-xs text-slate-400 font-medium">2023年11月11日 12:11</span>
             <div>
                 <span class="unread-dot" id="dot-4"></span>
                 <span class="text-base font-bold text-slate-800 leading-snug">预约考试提醒</span>
@@ -121,7 +121,7 @@
 
         <!-- 提醒 5 - 预约考试 (统考) -->
         <div class="noti-item flex flex-col gap-1.5" onclick="readAlert(this, 5)">
-            <span class="text-xs text-slate-400 font-medium">23年11月11日 12:10</span>
+            <span class="text-xs text-slate-400 font-medium">2023年11月11日 12:10</span>
             <div>
                 <span class="unread-dot" id="dot-5"></span>
                 <span class="text-base font-bold text-slate-800 leading-snug">预约估分提醒</span>
@@ -133,7 +133,7 @@
 
         <!-- 提醒 1 -->
         <div class="noti-item flex flex-col gap-1.5" onclick="readAlert(this, 1)">
-            <span class="text-xs text-slate-400 font-medium">23年11月11日 12:12</span>
+            <span class="text-xs text-slate-400 font-medium">2023年11月11日 12:12</span>
             <div>
                 <span class="unread-dot" id="dot-1"></span>
                 <span class="text-base font-bold text-slate-800 leading-snug">直播上课提醒</span>
@@ -145,7 +145,7 @@
 
         <!-- 提醒 2 -->
         <div class="noti-item flex flex-col gap-1.5" onclick="readAlert(this, 2)">
-            <span class="text-xs text-slate-400 font-medium">23年11月11日 12:12</span>
+            <span class="text-xs text-slate-400 font-medium">2023年11月11日 12:12</span>
             <div>
                 <span class="unread-dot" id="dot-2"></span>
                 <span class="text-base font-bold text-slate-800 leading-snug">面授上课提醒</span>
@@ -157,7 +157,7 @@
 
         <!-- 提醒 3 -->
         <div class="noti-item flex flex-col gap-1.5" onclick="readAlert(this, 3)">
-            <span class="text-xs text-slate-400 font-medium">23年11月11日 12:12</span>
+            <span class="text-xs text-slate-400 font-medium">2023年11月11日 12:12</span>
             <div>
                 <span class="unread-dot" id="dot-3"></span>
                 <span class="text-base font-bold text-slate-800 leading-snug">课程更新提醒</span>
@@ -175,12 +175,10 @@
         // 初始化读取状态
         const alertReadStates = JSON.parse(localStorage.getItem('alerts_read_states') || '{}');
 
-        // 应用初始化状态：检查是否已被读
+        // 应用初始化状态：按照要求，小红点点击后不要消失，要一直在，所以不隐藏它们
         for (let i = 1; i <= 5; i++) {
-            if (alertReadStates[i]) {
-                const dot = document.getElementById(`dot-${i}`);
-                if (dot) dot.classList.add('read');
-            }
+            const dot = document.getElementById(`dot-${i}`);
+            if (dot) dot.classList.remove('read');
         }
 
         function showToast(text) {
@@ -193,31 +191,17 @@
         }
 
         function readAlert(element, id) {
-            const dot = document.getElementById(`dot-${id}`);
-            if (dot && !dot.classList.contains('read')) {
-                dot.classList.add('read');
-                alertReadStates[id] = true;
-                localStorage.setItem('alerts_read_states', JSON.stringify(alertReadStates));
-                showToast('已标记该提醒为已读');
-            }
+            alertReadStates[id] = true;
+            localStorage.setItem('alerts_read_states', JSON.stringify(alertReadStates));
+            showToast('已标记该提醒为已读');
         }
 
         function markAllAsRead() {
-            let hasUnread = false;
             for (let i = 1; i <= 5; i++) {
-                const dot = document.getElementById(`dot-${i}`);
-                if (dot && !dot.classList.contains('read')) {
-                    dot.classList.add('read');
-                    alertReadStates[i] = true;
-                    hasUnread = true;
-                }
+                alertReadStates[i] = true;
             }
-            if (hasUnread) {
-                localStorage.setItem('alerts_read_states', JSON.stringify(alertReadStates));
-                showToast('已将所有提醒消息标记为已读');
-            } else {
-                showToast('暂无未读消息');
-            }
+            localStorage.setItem('alerts_read_states', JSON.stringify(alertReadStates));
+            showToast('已将所有提醒消息标记为已读');
         }
     </script>
 </body>

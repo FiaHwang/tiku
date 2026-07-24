@@ -175,6 +175,45 @@
             color: #ff4d4f;
         }
 
+        
+        /* 错题来源导航 */
+        .error-source-nav {
+            background-color: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            gap: 24px;
+        }
+
+        .error-source-item {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .error-source-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .error-source-item.active {
+            background-color: #fff1f0;
+            color: #ff4d4f;
+        }
+        
+        .left-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .right-actions {
+            display: flex;
+            gap: 12px;
+        }
+
         /* 题型标签 */
         .question-type-tabs {
             background-color: #fff;
@@ -1090,7 +1129,7 @@
             </div>
             <div class="user-links">
                 <a href="xuexi_zhongxin_pc.html" class="user-link">学习中心</a>
-                <div class="notification">
+                <div class="notification" style="cursor: pointer;" onclick="window.location.href='xiaoxi_pc.html'">
                     <i class="fas fa-bell"></i>
                     <span class="notification-badge">3</span>
                 </div>
@@ -1109,9 +1148,19 @@
         <div class="sub-nav-item" style="margin-left: 20px; color: #999; font-size: 12px;">仅展示所选目标下近一年的数据</div>
     </div>
 
+    <!-- 错题来源导航 -->
+    <div class="error-source-nav">
+        <div class="error-source-item active">题型分类</div>
+        <div class="error-source-item">知识点分类</div>
+    </div>
+
     <!-- 题型标签 -->
     <div class="question-type-tabs">
         <div class="question-type-tab active">
+            <span>新一级题型</span>
+            <span class="question-count">(10)</span>
+        </div>
+        <div class="question-type-tab">
             <span>单选题</span>
             <span class="question-count">(12)</span>
         </div>
@@ -1153,8 +1202,110 @@
 
             <!-- 收藏内容 -->
             <div class="question-bank-content">
+                <!-- 新一级题型内容 -->
+                <div class="question-content-tab" id="new-level-type-content" style="display: block;">
+                    <!-- 错题详情 -->
+                    <div class="error-detail">
+                        <!-- 题目编号和内容 -->
+                        <div class="question-header">
+                            <span class="question-number">1、</span>
+                            <span class="question-content">【新一级题型】这是一个新增的一级题型示例题目 ( )</span>
+                        </div>
+
+                        <!-- 选项 -->
+                        <div class="question-options">
+                            <div class="option correct">
+                                <span class="option-label">A</span>
+                                <span class="option-content">正确选项示例</span>
+                            </div>
+                            <div class="option">
+                                <span class="option-label">B</span>
+                                <span class="option-content">错误选项一</span>
+                            </div>
+                            <div class="option">
+                                <span class="option-label">C</span>
+                                <span class="option-content">错误选项二</span>
+                            </div>
+                            <div class="option">
+                                <span class="option-label">D</span>
+                                <span class="option-content">错误选项三</span>
+                            </div>
+                        </div>
+
+                        <!-- 题目操作 -->
+                        <div class="question-actions" style="margin-top: 36px; display: flex; justify-content: space-between; align-items: center;">
+                            <div class="left-actions">
+                                <button class="action-btn move">
+                                    <i class="fas fa-arrows-alt"></i>
+                                    <span>移除</span>
+                                </button>
+                                <button class="action-btn share">
+                                    <i class="fas fa-share-alt"></i>
+                                    <span>分享</span>
+                                </button>
+                                <button class="action-btn report">
+                                    <i class="fas fa-flag"></i>
+                                    <span>纠错</span>
+                                </button>
+                                <button class="action-btn collect">
+                                    <i class="fas fa-star"></i>
+                                    <span>收藏</span>
+                                </button>
+                            </div>
+                            <div class="right-actions">
+                                <button class="action-btn ai-help">
+                                    <i class="fas fa-robot"></i>
+                                    <span>AI答疑</span>
+                                </button>
+                                <button class="action-btn human-help">
+                                    <i class="fas fa-user"></i>
+                                    <span>人工答疑</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 答案和解析 -->
+                        <div class="answer-analysis">
+                            <div class="answer-info">
+                                <div class="answer-label">
+                                    <i class="fas fa-times-circle" style="color: #ff4d4f;"></i>
+                                    <span>回答错误</span>
+                                </div>
+                                <div class="answer-detail">
+                                    <span>参考答案：A</span>
+                                    <span>你的答案：B</span>
+                                </div>
+                            </div>
+
+                            <div class="analysis-section">
+                                <div class="analysis-header">
+                                    <span>试题统计：</span>
+                                    <span>正确率 85%，易错项 B，作答次数 50 次，作答时长3秒</span>
+                                </div>
+                                <div class="analysis-content">
+                                    <p><strong>文字解析：</strong>本题是新增一级题型的示例题目，用于展示全新的一级题型功能。</p>
+                                    <p><strong>知识点：</strong>新一级题型、功能测试</p>
+                                    <p><strong>试题难度：</strong>易</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 上下题导航 -->
+                        <div class="question-navigation">
+                            <button class="nav-btn prev">
+                                <i class="fas fa-chevron-left"></i>
+                                <span>上一题</span>
+                            </button>
+                            <button class="nav-btn next">
+                                <span>下一题</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 单选题内容 -->
-                <div class="question-content-tab" id="single-choice-content" style="display: block;">
+                <div class="question-content-tab" id="single-choice-content" style="display: none;">
                     <!-- 错题详情 -->
                     <div class="error-detail">
                         <!-- 题目编号和内容 -->
@@ -1922,8 +2073,75 @@
                     </div>
                 </div>
             </div>
+
+<!-- 知识点分类内容 -->
+            <div class="knowledge-point-content" style="display: none; padding: 24px;">
+                <!-- 内部样式 -->
+                <style>
+                    /* 下拉式体系选择器样式 */
+                    .pc-dropdown-option {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: 12px 16px;
+                        font-size: 14px;
+                        color: #555;
+                        cursor: pointer;
+                        transition: background 0.2s, color 0.2s;
+                    }
+                    .pc-dropdown-option:hover {
+                        background-color: #f5f5f5;
+                        color: #ff4d4f;
+                    }
+                    .pc-dropdown-option.active {
+                        background-color: #fff1f0;
+                        color: #ff4d4f;
+                        font-weight: 600;
+                    }
+                    .pc-dropdown-option-check {
+                        color: #ff4d4f;
+                        font-size: 12px;
+                        display: none;
+                    }
+                    .pc-dropdown-option.active .pc-dropdown-option-check {
+                        display: block;
+                    }
+
+                    @keyframes dropdownFadeIn {
+                        from {
+                            opacity: 0;
+                            transform: translateY(-8px);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
+                </style>
+                
+                <!-- 折叠式知识点体系选择器 (PC 风格) -->
+                <div class="pc-knowledge-selector-wrapper" style="position: relative; margin-bottom: 20px;">
+                    <button class="pc-selector-trigger" onclick="togglePcSystemDropdown(event)" style="display: flex; justify-content: space-between; align-items: center; width: 280px; padding: 10px 16px; background: #fff; border: 1px solid #d9d9d9; border-radius: 6px; font-size: 14px; color: #333; font-weight: 500; cursor: pointer; transition: all 0.3s; outline: none; box-shadow: 0 1px 4px rgba(0,0,0,0.02); text-align: left;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-layer-group" style="color: #ff4d4f; font-size: 15px;"></i>
+                            <span id="pc-current-system-name">高考人教A版</span>
+                        </div>
+                        <i class="fas fa-chevron-down pc-dropdown-arrow" style="color: #bfbfbf; font-size: 12px; transition: transform 0.3s;"></i>
+                    </button>
+                    <!-- 下拉弹窗列表 -->
+                    <div id="pc-system-dropdown" style="display: none; position: absolute; top: calc(100% + 6px); left: 0; width: 280px; background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 100; overflow: hidden; transform-origin: top; animation: dropdownFadeIn 0.25s ease;">
+                        <!-- 动态渲染体系选项 -->
+                    </div>
+                </div>
+
+                <!-- 知识点单元列表 -->
+                <div id="pc-knowledge-units-list" style="background: transparent; border: none; box-shadow: none; overflow: visible;">
+                    <!-- 动态渲染 -->
+                </div>
+            </div>
         </div>
 
+            
         <!-- 右侧边栏 -->
         <div class="right-sidebar">
             <!-- 答题卡 -->
@@ -2006,6 +2224,156 @@
             });
         });
 
+        
+        // 错题来源切换事件
+        document.querySelectorAll('.error-source-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.error-source-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                
+                const text = item.textContent.trim();
+                
+                if (text === '题型分类' || text === '知识点分类') {
+                    localStorage.setItem('shoucangben_active_tab_pc', text);
+                }
+                
+                if (text === '题型分类') {
+                    document.querySelector('.question-bank-content').style.display = 'block';
+                    if (document.querySelector('.knowledge-point-content')) {
+                        document.querySelector('.knowledge-point-content').style.display = 'none';
+                    }
+                    document.querySelector('.question-type-tabs').style.display = 'flex';
+                    if (document.querySelector('.right-sidebar')) document.querySelector('.right-sidebar').style.display = 'block';
+                } else if (text === '知识点分类') {
+                    document.querySelector('.question-bank-content').style.display = 'none';
+                    if (document.querySelector('.knowledge-point-content')) {
+                        document.querySelector('.knowledge-point-content').style.display = 'block';
+                    }
+                    document.querySelector('.question-type-tabs').style.display = 'none';
+                    if (document.querySelector('.right-sidebar')) document.querySelector('.right-sidebar').style.display = 'none';
+                }
+            });
+        });
+        
+        // 页面加载完成后，恢复 tab
+        window.addEventListener('load', () => {
+            if(typeof renderPcKnowledgeSystem === 'function') renderPcKnowledgeSystem();
+            let savedTab = localStorage.getItem('shoucangben_active_tab_pc') || '题型分类';
+            if (savedTab === '按题型') savedTab = '题型分类';
+            if (savedTab === '按知识点') savedTab = '知识点分类';
+            const items = document.querySelectorAll('.error-source-item');
+            let matchedTab = null;
+            items.forEach(item => {
+                if (item.textContent.trim() === savedTab) {
+                    matchedTab = item;
+                }
+            });
+            if (matchedTab) {
+                matchedTab.click();
+            }
+        });
+        
+        function toggleKnowledgeUnit(header) {
+            const icon = header.querySelector('.fa-chevron-right') || header.querySelector('.fa-chevron-down');
+            const content = header.parentElement.querySelector('.unit-content');
+            
+            if (content.style.display === 'none' || !content.style.display) {
+                content.style.display = 'block';
+                if (icon) {
+                    icon.classList.remove('fa-chevron-right');
+                    icon.classList.add('fa-chevron-down');
+                }
+            } else {
+                content.style.display = 'none';
+                if (icon) {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-right');
+                }
+            }
+        }
+
+        function showKnowledgeCategory(name, count) {
+            if (count === 0) {
+                alert('该知识点目前没有收藏哦！');
+                return;
+            }
+            window.location.href = 'cuotiben_shiti_chakan_pc.html?type=' + encodeURIComponent(name);
+        }
+        
+        // 错题来源切换事件
+        document.querySelectorAll('.error-source-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.error-source-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                
+                const text = item.textContent.trim();
+                
+                if (text === '题型分类' || text === '知识点分类') {
+                    localStorage.setItem('shoucangben_active_tab_pc', text);
+                }
+                
+                if (text === '题型分类') {
+                    document.querySelector('.question-bank-content').style.display = 'block';
+                    if (document.querySelector('.knowledge-point-content')) {
+                        document.querySelector('.knowledge-point-content').style.display = 'none';
+                    }
+                    document.querySelector('.question-type-tabs').style.display = 'flex';
+                    if (document.querySelector('.right-sidebar')) document.querySelector('.right-sidebar').style.display = 'block';
+                } else if (text === '知识点分类') {
+                    document.querySelector('.question-bank-content').style.display = 'none';
+                    if (document.querySelector('.knowledge-point-content')) {
+                        document.querySelector('.knowledge-point-content').style.display = 'block';
+                    }
+                    document.querySelector('.question-type-tabs').style.display = 'none';
+                    if (document.querySelector('.right-sidebar')) document.querySelector('.right-sidebar').style.display = 'none';
+                }
+            });
+        });
+        
+        // 页面加载完成后，恢复 tab
+        window.addEventListener('load', () => {
+            if(typeof renderPcKnowledgeSystem === 'function') renderPcKnowledgeSystem();
+            let savedTab = localStorage.getItem('shoucangben_active_tab_pc') || '题型分类';
+            if (savedTab === '按题型') savedTab = '题型分类';
+            if (savedTab === '按知识点') savedTab = '知识点分类';
+            const items = document.querySelectorAll('.error-source-item');
+            let matchedTab = null;
+            items.forEach(item => {
+                if (item.textContent.trim() === savedTab) {
+                    matchedTab = item;
+                }
+            });
+            if (matchedTab) {
+                matchedTab.click();
+            }
+        });
+        
+        function toggleKnowledgeUnit(header) {
+            const icon = header.querySelector('.fa-chevron-right') || header.querySelector('.fa-chevron-down');
+            const content = header.parentElement.querySelector('.unit-content');
+            
+            if (content.style.display === 'none' || !content.style.display) {
+                content.style.display = 'block';
+                if (icon) {
+                    icon.classList.remove('fa-chevron-right');
+                    icon.classList.add('fa-chevron-down');
+                }
+            } else {
+                content.style.display = 'none';
+                if (icon) {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-right');
+                }
+            }
+        }
+
+        function showKnowledgeCategory(name, count) {
+            if (count === 0) {
+                alert('该知识点目前没有收藏哦！');
+                return;
+            }
+            window.location.href = 'cuotiben_shiti_chakan_pc.html?type=' + encodeURIComponent(name);
+        }
         // 题型标签点击事件
         document.querySelectorAll('.question-type-tab').forEach(tab => {
             tab.addEventListener('click', () => {
@@ -2026,7 +2394,9 @@
                 });
                 
                 // 根据点击的题型显示对应内容
-                if (type === '单选题') {
+                if (type === '新一级题型') {
+                    document.getElementById('new-level-type-content').style.display = 'block';
+                } else if (type === '单选题') {
                     document.getElementById('single-choice-content').style.display = 'block';
                 } else if (type === '多选题') {
                     document.getElementById('multiple-choice-content').style.display = 'block';
@@ -2055,6 +2425,304 @@
                 </div>
             `;
             document.body.appendChild(viewer);
+        }
+
+// 知识点体系数据 (最多支持展开5层)
+        const KNOWLEDGE_SYSTEMS = [
+            {
+                name: "高考人教A版",
+                units: [
+                    {
+                        name: "第一板块：数与代数",
+                        count: 14,
+                        items: [
+                            {
+                                name: "集合与常用逻辑用语",
+                                count: 8,
+                                items: [
+                                    {
+                                        name: "集合的含义及其基本关系",
+                                        count: 4,
+                                        items: [
+                                            {
+                                                name: "集合的基本概念与表示法",
+                                                count: 2,
+                                                items: [
+                                                    { name: "元素与集合的从属关系", count: 1 },
+                                                    { name: "集合的常用表示方法(列举法、描述法)", count: 1 }
+                                                ]
+                                            },
+                                            {
+                                                name: "集合之间的包含与相等关系",
+                                                count: 2,
+                                                items: [
+                                                    { name: "子集与真子集的判定", count: 1 },
+                                                    { name: "集合相等及参数求解问题", count: 1 }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        name: "常用逻辑用语",
+                                        count: 4,
+                                        items: [
+                                            { name: "充分条件与必要条件", count: 2 },
+                                            { name: "全称量词与存在量词及否定", count: 2 },
+                                            { name: "命题的否定与复合命题", count: 0 }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                name: "一元二次函数、方程和不等式",
+                                count: 6,
+                                items: [
+                                    { name: "等式性质与不等式性质", count: 2 },
+                                    { name: "基本不等式及最值求解", count: 2 },
+                                    { name: "一元二次不等式及其解法", count: 2 }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        name: "第二板块：函数与导数",
+                        count: 12,
+                        items: [
+                            {
+                                name: "指数函数与对数函数",
+                                count: 7,
+                                items: [
+                                    { name: "对数的概念与对数运算", count: 4 },
+                                    { name: "指数函数与对数函数的性质", count: 3 },
+                                    { name: "指数与对数方程及不等式", count: 0 }
+                                ]
+                            },
+                            {
+                                name: "函数的基本性质",
+                                count: 5,
+                                items: [
+                                    { name: "函数的单调性与最值", count: 3 },
+                                    { name: "函数的奇偶性与周期性", count: 2 }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: "新高考通用版",
+                units: [
+                    {
+                        name: "核心专题一：函数与导数综合",
+                        count: 10,
+                        items: [
+                            {
+                                name: "导数的实际应用",
+                                count: 6,
+                                items: [
+                                    {
+                                        name: "利用导数研究函数的单调性",
+                                        count: 3,
+                                        items: [
+                                            { name: "单调区间的求解与证明", count: 2 },
+                                            { name: "含参函数的单调性分类讨论", count: 1 }
+                                        ]
+                                    },
+                                    {
+                                        name: "利用导数研究函数的极值与最值",
+                                        count: 3
+                                    }
+                                ]
+                            },
+                            {
+                                name: "函数的几何意义",
+                                count: 4,
+                                items: [
+                                    { name: "导数的切线方程问题", count: 4 }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        name: "核心专题二：数列与不等式",
+                        count: 5,
+                        items: [
+                            { name: "等差数列与等比数列的性质", count: 3 },
+                            { name: "数列求和的常用技巧与方法", count: 2 },
+                            { name: "不等式的证明方法与归纳法", count: 0 }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: "高等数学体系",
+                units: [
+                    {
+                        name: "核心板块：微积分基础",
+                        count: 11,
+                        items: [
+                            {
+                                name: "极限与连续",
+                                count: 6,
+                                items: [
+                                    {
+                                        name: "函数的极限计算",
+                                        count: 4,
+                                        items: [
+                                            { name: "极限存在的判定准则", count: 2 },
+                                            { name: "两个重要极限的应用", count: 2 }
+                                        ]
+                                    },
+                                    {
+                                        name: "函数的连续性与间断点",
+                                        count: 2
+                                    }
+                                ]
+                            },
+                            {
+                                name: "导数与微分",
+                                count: 5,
+                                items: [
+                                    { name: "一元函数导数的定义及物理意义", count: 3 },
+                                    { name: "高阶导数与隐函数求导", count: 2 }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        let currentSystemIndex = 0;
+
+        function renderPcNodeRecursive(node, depth = 0) {
+            const hasItems = node.items && node.items.length > 0;
+
+            if (hasItems) {
+                return `
+                    <div class="pc-practice-unit-node" style="border-bottom: 1px solid #f0f0f0;">
+                        <div class="pc-unit-header" style="padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none;" onclick="togglePcUnit(this)">
+                            <div style="font-size: 15px; font-weight: 600; color: #333; display: flex; align-items: center; gap: 12px;">
+                                <i class="fas fa-chevron-right pc-chevron" style="color: #999; font-size: 13px; width: 13px; display: inline-block; text-align: center; transition: transform 0.2s;"></i>
+                                <div style="display: flex; flex-direction: column; gap: 4px;">
+                                    <span style="font-size: 14px; font-weight: 600; color: #333;">${node.name}</span>
+                                    <span style="font-size: 12px; color: #999; font-weight: 500;">共 ${node.count} 道</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 16px;" onclick="event.stopPropagation();">
+                                <button style="background: #fff; border: 1px solid #ff4d4f; color: #ff4d4f; border-radius: 4px; padding: 6px 16px; font-size: 13px; cursor: pointer; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#fff1f0'" onmouseout="this.style.backgroundColor='#fff'" onclick="showKnowledgeCategory('${node.name}', ${node.count})">查看</button>
+                            </div>
+                        </div>
+                        <div class="pc-unit-content" style="display: none; background: #fafafa; border-top: 1px solid #f9f9f9;">
+                            ${node.items.map(child => renderPcNodeRecursive(child, depth + 1)).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="pc-practice-item" style="display: flex; justify-content: space-between; align-items: center; padding: 14px 24px; border-bottom: 1px solid #f5f5f5;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span style="width: 13px; display: inline-block;"></span>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <div style="font-size: 14px; font-weight: 500; color: #555;">${node.name}</div>
+                                <span style="font-size: 12px; color: #999; font-weight: 500;">共 ${node.count} 道</span>
+                            </div>
+                        </div>
+                        <button style="background: #fff; border: 1px solid #ff4d4f; color: #ff4d4f; border-radius: 4px; padding: 6px 16px; font-size: 13px; cursor: pointer; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#fff1f0'" onmouseout="this.style.backgroundColor='#fff'" onclick="showKnowledgeCategory('${node.name}', ${node.count})">查看</button>
+                    </div>
+                `;
+            }
+        }
+
+        function renderPcKnowledgeSystem() {
+            const unitsListContainer = document.getElementById('pc-knowledge-units-list');
+            if (!unitsListContainer) return;
+
+            // 1. 更新顶部显示的知识点体系名称
+            const systemNameSpan = document.getElementById('pc-current-system-name');
+            if (systemNameSpan) {
+                systemNameSpan.textContent = KNOWLEDGE_SYSTEMS[currentSystemIndex].name;
+            }
+
+            // 2. 渲染对应的单元和知识点列表，支持多层级
+            const activeSystem = KNOWLEDGE_SYSTEMS[currentSystemIndex];
+            unitsListContainer.innerHTML = activeSystem.units.map(unit => `
+                <div class="pc-practice-unit" style="background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; margin-bottom: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                    ${renderPcNodeRecursive(unit, 0)}
+                </div>
+            `).join('');
+        }
+
+        // PC 下拉菜单逻辑
+        function togglePcSystemDropdown(event) {
+            if (event) event.stopPropagation();
+            const dropdown = document.getElementById('pc-system-dropdown');
+            const arrow = document.querySelector('.pc-dropdown-arrow');
+            if (!dropdown) return;
+
+            if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+                dropdown.style.display = 'block';
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
+                
+                // 渲染选项列表
+                dropdown.innerHTML = KNOWLEDGE_SYSTEMS.map((sys, idx) => `
+                    <div class="pc-dropdown-option ${idx === currentSystemIndex ? 'active' : ''}" onclick="selectPcSystem(${idx}, event)">
+                        <span>${sys.name}</span>
+                        <i class="fas fa-check pc-dropdown-option-check"></i>
+                    </div>
+                `).join('');
+            } else {
+                dropdown.style.display = 'none';
+                if (arrow) arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function selectPcSystem(index, event) {
+            if (event) event.stopPropagation();
+            currentSystemIndex = index;
+            renderPcKnowledgeSystem();
+            
+            const dropdown = document.getElementById('pc-system-dropdown');
+            const arrow = document.querySelector('.pc-dropdown-arrow');
+            if (dropdown) dropdown.style.display = 'none';
+            if (arrow) arrow.style.transform = 'rotate(0deg)';
+        }
+
+        // 点击空白处关闭下拉菜单
+        document.addEventListener('click', () => {
+            const dropdown = document.getElementById('pc-system-dropdown');
+            const arrow = document.querySelector('.pc-dropdown-arrow');
+            if (dropdown && dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+                if (arrow) arrow.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        function togglePcUnit(header) {
+            const icon = header.querySelector('.pc-chevron');
+            const content = header.parentElement.querySelector('.pc-unit-content');
+            if (!content) return;
+
+            if (content.style.display === 'none' || content.style.display === '') {
+                content.style.display = 'block';
+                if (icon) {
+                    icon.style.transform = 'rotate(90deg)';
+                }
+            } else {
+                content.style.display = 'none';
+                if (icon) {
+                    icon.style.transform = 'rotate(0deg)';
+                }
+            }
+        }
+
+        
+        function showKnowledgeCategory(name, count) {
+            if (count === 0) {
+                showPcToast('该知识点目前没有收藏哦！');
+                return;
+            }
+            window.location.href = 'shiti_jiexi_pc.html?type=' + encodeURIComponent(name);
         }
 
         // 初始化图片查看弹窗

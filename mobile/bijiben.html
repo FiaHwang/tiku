@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>笔记本</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 重置样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f5f5f5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            /* 移动端适配容器 */
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* 移动端适配 */
+        @media screen and (max-width: 768px) {
+            html {
+                font-size: 14px;
+            }
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 56px;
+            padding: 0 16px;
+            background-color: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 100;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 101;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .back-btn:active {
+            opacity: 0.7;
+        }
+
+        /* 来源切换Tab */
+        .source-tabs {
+            display: flex;
+            background-color: #fff;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .source-tab {
+            flex: 1;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            cursor: pointer;
+            position: relative;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .source-tab:active {
+            background-color: #f5f5f5;
+        }
+
+        .source-tab.active {
+            color: #722ed1;
+        }
+
+        .source-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 24%;
+            right: 24%;
+            height: 2px;
+            background-color: #722ed1;
+        }
+
+        /* 提示信息 */
+        .tip {
+            padding: 8px 16px;
+            font-size: 12px;
+            color: #999;
+            background-color: #fafafa;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        /* 错题/笔记分类容器 */
+        .error-category-container {
+            padding: 16px;
+        }
+
+        /* 分类网格 */
+        .error-category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        /* 分类卡片 */
+        .error-category-card {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            position: relative;
+            overflow: hidden;
+            touch-action: manipulation;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 110px;
+        }
+
+        .error-category-card:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .error-category-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .error-category-count {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 12px;
+        }
+
+        .view-btn {
+            align-self: flex-start;
+            padding: 4px 12px;
+            background-color: #f9f0ff;
+            color: #722ed1;
+            border: 1px solid #d3ade6;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .view-btn:active {
+            background-color: #efdbff;
+        }
+
+        .book-icon {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            font-size: 28px;
+            color: #f9f0ff;
+            z-index: 1;
+        }
+
+        .action-btn-small {
+            padding: 4px 12px;
+            background-color: #f9f0ff;
+            color: #722ed1;
+            border: 1px solid #d3ade6;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .action-btn-small:active {
+            background-color: #efdbff;
+        }
+
+        .system-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .system-option.active {
+            background: #f9f0ff;
+            color: #722ed1;
+            border: 1px solid #d3ade6;
+        }
+
+        .system-option-check {
+            display: none;
+            color: #722ed1;
+        }
+
+        .system-option.active .system-option-check {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="page-title" style="font-size: 17px; font-weight: 600; color: #1a1a1a;">笔记本</div>
+    </header>
+
+    <!-- 来源切换Tab -->
+    <div class="source-tabs">
+        <div class="source-tab active">题型分类</div>
+        <div class="source-tab">知识点分类</div>
+    </div>
+
+    <!-- 提示信息 -->
+    <div class="tip">*展示您添加的所有试题笔记与错题解析心得</div>
+
+    <!-- 笔记分类容器 -->
+    <div class="error-category-container">
+        <!-- 题型分类部分 -->
+        <div class="error-category-grid" id="by-type-section">
+            <!-- 新一级题型 -->
+            <div class="error-category-card">
+                <div>
+                    <div class="error-category-title">新一级题型</div>
+                    <div class="error-category-count">共8条笔记</div>
+                </div>
+                <button class="view-btn">查看</button>
+                <div class="book-icon"><i class="fas fa-sticky-note"></i></div>
+            </div>
+
+            <!-- 单选题 -->
+            <div class="error-category-card">
+                <div>
+                    <div class="error-category-title">单选题</div>
+                    <div class="error-category-count">共18条笔记</div>
+                </div>
+                <button class="view-btn">查看</button>
+                <div class="book-icon"><i class="fas fa-sticky-note"></i></div>
+            </div>
+
+            <!-- 多选题 -->
+            <div class="error-category-card">
+                <div>
+                    <div class="error-category-title">多选题</div>
+                    <div class="error-category-count">共5条笔记</div>
+                </div>
+                <button class="view-btn">查看</button>
+                <div class="book-icon"><i class="fas fa-sticky-note"></i></div>
+            </div>
+
+            <!-- 填空题 -->
+            <div class="error-category-card">
+                <div>
+                    <div class="error-category-title">填空题</div>
+                    <div class="error-category-count">共9条笔记</div>
+                </div>
+                <button class="view-btn">查看</button>
+                <div class="book-icon"><i class="fas fa-sticky-note"></i></div>
+            </div>
+
+            <!-- 解答题 -->
+            <div class="error-category-card">
+                <div>
+                    <div class="error-category-title">解答题</div>
+                    <div class="error-category-count">共14条笔记</div>
+                </div>
+                <button class="view-btn">查看</button>
+                <div class="book-icon"><i class="fas fa-sticky-note"></i></div>
+            </div>
+
+            <!-- 判断题 -->
+            <div class="error-category-card">
+                <div>
+                    <div class="error-category-title">判断题</div>
+                    <div class="error-category-count">共3条笔记</div>
+                </div>
+                <button class="view-btn">查看</button>
+                <div class="book-icon"><i class="fas fa-sticky-note"></i></div>
+            </div>
+        </div>
+
+        <!-- 知识点分类部分 -->
+        <div id="by-knowledge-section" style="display: none;">
+            <!-- 折叠式知识点体系选择器 -->
+            <div class="knowledge-selector-trigger" onclick="openSystemSelector()" style="display: flex; justify-content: space-between; align-items: center; background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.02); -webkit-tap-highlight-color: transparent;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-layer-group" style="color: #722ed1;"></i>
+                    <span id="current-system-name" style="font-size: 14px; font-weight: 600; color: #333;">高考人教A版</span>
+                </div>
+                <div style="color: #999; font-size: 12px;">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+            <!-- 知识点单元列表 -->
+            <div id="knowledge-units-list">
+                <!-- 动态渲染 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 知识点体系选择弹窗 -->
+    <div id="system-selector-modal" class="system-modal" style="display: none; position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; height: 100%; z-index: 1000; background: rgba(0, 0, 0, 0.5); justify-content: flex-end; flex-direction: column;">
+        <div class="modal-backdrop" onclick="closeSystemSelector()" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
+        <div class="modal-body" style="position: relative; background: #fff; border-top-left-radius: 20px; border-top-right-radius: 20px; padding: 12px 20px 24px 20px; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); transform: translateY(100%); transition: transform 0.3s ease-out; display: flex; flex-direction: column; max-height: 75%; z-index: 1001;">
+            <div style="width: 36px; height: 5px; background: #e0e0e0; border-radius: 3px; margin: 0 auto 16px auto; flex-shrink: 0;"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; flex-shrink: 0;">
+                <span style="font-size: 16px; font-weight: 600; color: #333;">选择知识点体系</span>
+                <i class="fas fa-times" onclick="closeSystemSelector()" style="color: #999; font-size: 16px; cursor: pointer; padding: 4px;"></i>
+            </div>
+            <div id="system-list-container" style="display: flex; flex-direction: column; gap: 10px; overflow-y: auto; padding-bottom: 20px;">
+                <!-- 动态渲染体系列表 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM元素获取
+        const backBtn = document.querySelector('.back-btn');
+        const sourceTabs = document.querySelectorAll('.source-tab');
+
+        // 切换Tab功能
+        sourceTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                sourceTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                const text = tab.textContent.trim();
+                if (text === '题型分类') {
+                    document.getElementById('by-type-section').style.display = 'grid';
+                    document.getElementById('by-knowledge-section').style.display = 'none';
+                    localStorage.setItem('bijiben_active_tab', '题型分类');
+                } else if (text === '知识点分类') {
+                    document.getElementById('by-type-section').style.display = 'none';
+                    document.getElementById('by-knowledge-section').style.display = 'block';
+                    localStorage.setItem('bijiben_active_tab', '知识点分类');
+                }
+            });
+        });
+
+        // 返回按钮功能
+        backBtn.addEventListener('click', () => {
+            window.location.href = 'tiku.html';
+        });
+
+        // 知识点体系数据
+        const KNOWLEDGE_SYSTEMS = [
+            {
+                name: "高考人教A版",
+                units: [
+                    {
+                        name: "第一板块：数与代数",
+                        count: 12,
+                        items: [
+                            {
+                                name: "集合与常用逻辑用语",
+                                count: 7,
+                                items: [
+                                    {
+                                        name: "集合的含义及其基本关系",
+                                        count: 4,
+                                        items: [
+                                            {
+                                                name: "集合的基本概念与表示法",
+                                                count: 2
+                                            },
+                                            {
+                                                name: "集合之间的包含与相等关系",
+                                                count: 2
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        name: "常用逻辑用语",
+                                        count: 3
+                                    }
+                                ]
+                            },
+                            {
+                                name: "一元二次函数、方程和不等式",
+                                count: 5
+                            }
+                        ]
+                    },
+                    {
+                        name: "第二板块：函数与导数",
+                        count: 15,
+                        items: [
+                            {
+                                name: "指数函数与对数函数",
+                                count: 8
+                            },
+                            {
+                                name: "函数的基本性质",
+                                count: 7
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: "新高考通用版",
+                units: [
+                    {
+                        name: "核心专题一：函数与导数综合",
+                        count: 10,
+                        items: [
+                            {
+                                name: "导数的实际应用",
+                                count: 6
+                            },
+                            {
+                                name: "函数的几何意义",
+                                count: 4
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        let currentSystemIndex = 0;
+
+        function renderNodeRecursive(node, depth = 0) {
+            const hasItems = node.items && node.items.length > 0;
+
+            if (hasItems) {
+                return `
+                    <div class="practice-unit-node" style="border-bottom: 1px solid #f5f5f5;">
+                        <div class="node-header" style="display: flex; justify-content: space-between; align-items: center; padding: 12px; cursor: pointer;" onclick="toggleUnit(this)">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-chevron-right" style="color: #999; font-size: 11px; width: 11px; display: inline-block; text-align: center; transition: transform 0.2s;"></i>
+                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                    <span style="font-size: 14px; font-weight: 600; color: #333;">${node.name}</span>
+                                    <span style="font-size: 12px; color: #999; font-weight: 500;">共 ${node.count} 条笔记</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;" onclick="event.stopPropagation();">
+                                <button class="action-btn-small" onclick="viewKnowledgeNotes('${node.name}', ${node.count})">查看</button>
+                            </div>
+                        </div>
+                        <div class="unit-content" style="display: none; background: #fafafa; border-top: 1px solid #f9f9f9;">
+                            ${node.items.map(child => renderNodeRecursive(child, depth + 1)).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="practice-item" style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #f5f5f5;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="width: 11px; display: inline-block;"></span>
+                            <div style="display: flex; flex-direction: column; gap: 2px;">
+                                <div class="item-title" style="margin-bottom: 0; font-size: 13px; font-weight: 500; color: #555;">${node.name}</div>
+                                <span style="font-size: 12px; color: #999; font-weight: 500;">共 ${node.count} 条笔记</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+                            <button class="action-btn-small" onclick="viewKnowledgeNotes('${node.name}', ${node.count})">查看</button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function renderKnowledgeSystem() {
+            const unitsListContainer = document.getElementById('knowledge-units-list');
+            if (!unitsListContainer) return;
+
+            const triggerName = document.getElementById('current-system-name');
+            if (triggerName) {
+                triggerName.textContent = KNOWLEDGE_SYSTEMS[currentSystemIndex].name;
+            }
+
+            const activeSystem = KNOWLEDGE_SYSTEMS[currentSystemIndex];
+            unitsListContainer.innerHTML = activeSystem.units.map(unit => `
+                <div class="practice-unit" style="background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                    ${renderNodeRecursive(unit, 0)}
+                </div>
+            `).join('');
+        }
+
+        function openSystemSelector() {
+            const modal = document.getElementById('system-selector-modal');
+            const body = modal.querySelector('.modal-body');
+            modal.style.display = 'flex';
+            
+            const container = document.getElementById('system-list-container');
+            if (container) {
+                container.innerHTML = KNOWLEDGE_SYSTEMS.map((sys, idx) => `
+                    <div class="system-option ${idx === currentSystemIndex ? 'active' : ''}" onclick="selectSystem(${idx})">
+                        <span>${sys.name}</span>
+                        <i class="fas fa-check system-option-check"></i>
+                    </div>
+                `).join('');
+            }
+
+            setTimeout(() => {
+                body.style.transform = 'translateY(0)';
+            }, 10);
+        }
+
+        function closeSystemSelector() {
+            const modal = document.getElementById('system-selector-modal');
+            const body = modal.querySelector('.modal-body');
+            if (!body || !modal) return;
+            body.style.transform = 'translateY(100%)';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        function selectSystem(index) {
+            currentSystemIndex = index;
+            renderKnowledgeSystem();
+            closeSystemSelector();
+        }
+
+        // 展开/收起单元
+        function toggleUnit(header) {
+            const icon = header.querySelector('.fa-chevron-right') || header.querySelector('.fa-chevron-down');
+            const content = header.parentElement.querySelector('.unit-content');
+            if (!content) return;
+
+            if (content.style.display === 'none' || content.style.display === '') {
+                content.style.display = 'block';
+                if (icon) {
+                    icon.style.transform = 'rotate(90deg)';
+                }
+            } else {
+                content.style.display = 'none';
+                if (icon) {
+                    icon.style.transform = 'rotate(0deg)';
+                }
+            }
+        }
+
+        function viewKnowledgeNotes(title, count) {
+            if (count === 0) {
+                showToast('该知识点目前没有笔记哦！');
+                return;
+            }
+            window.location.href = 'cuotiben_shiti_chakan.html?type=' + encodeURIComponent(title);
+        }
+
+        // 查看卡片笔记按钮
+        document.querySelectorAll('.error-category-card').forEach(card => {
+            const btn = card.querySelector('.view-btn');
+            if (btn) {
+                const title = card.querySelector('.error-category-title').textContent.trim();
+                btn.addEventListener('click', () => {
+                    window.location.href = 'cuotiben_shiti_chakan.html?type=' + encodeURIComponent(title);
+                });
+            }
+        });
+
+        // 初始化
+        renderKnowledgeSystem();
+
+        window.addEventListener('load', () => {
+            if (sourceTabs && sourceTabs.length > 0) {
+                let savedTab = localStorage.getItem('bijiben_active_tab') || '题型分类';
+                const matchedTab = Array.from(sourceTabs).find(t => t.textContent.trim() === savedTab);
+                if (matchedTab) {
+                    matchedTab.click();
+                }
+            }
+        });
+    </script>
+
+    <!-- Toast提示 -->
+    <div id="toast" style="display: none; position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: white; padding: 10px 20px; border-radius: 20px; z-index: 2000; font-size: 14px; white-space: nowrap;"></div>
+    <script>
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+        }
+    </script>
+</body>
+</html>

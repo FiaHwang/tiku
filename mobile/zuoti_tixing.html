@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>做题提醒</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // 清理 URL 中的 origin 参数，保持地址栏整洁
+        (function() {
+            const url = new URL(window.location.href);
+            if (url.searchParams.has('origin')) {
+                url.searchParams.delete('origin');
+                const newUrl = url.pathname + url.search + url.hash;
+                window.history.replaceState({}, '', newUrl);
+            }
+        })();
+    </script>
+    <style>
+        html {
+            background-color: #f6f7f9;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f6f7f9;
+            max-width: 480px !important;
+            margin: 0 auto !important;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+            color: #333333;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            background-color: #ffffff;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* 提醒消息卡片 */
+        .noti-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 18px;
+            margin: 14px 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            position: relative;
+            transition: all 0.25s ease;
+            border: 1px solid #f1f3f5;
+        }
+        .noti-card:active {
+            transform: scale(0.98);
+            background-color: #fafafa;
+        }
+
+        /* 未读状态红点 */
+        .unread-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ff4d4f;
+            border-radius: 50%;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .unread-dot.read {
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        /* Toast 气泡 */
+        .toast {
+            position: fixed;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(0, 0, 0, 0.82);
+            color: #fff;
+            padding: 10px 22px;
+            border-radius: 24px;
+            font-size: 13px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 2000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航栏 -->
+    <div class="header">
+        <button onclick="window.location.href='xiaoxi.html'" class="flex items-center justify-center w-9 h-9 text-slate-800 active:scale-95 transition-transform">
+            <i class="fas fa-chevron-left text-[20px]"></i>
+        </button>
+        <span class="text-[18px] font-semibold text-slate-900">做题提醒</span>
+        <!-- 清除按钮：使用精美明显扫帚图标 -->
+        <button onclick="clearAllUnread()" class="flex items-center justify-center w-9 h-9 text-slate-700 hover:text-red-500 active:scale-90 transition-transform" title="清除所有未读">
+            <i class="fa-solid fa-broom text-[20px]"></i>
+        </button>
+    </div>
+
+    <!-- 消息列表 -->
+    <div class="flex-1 overflow-y-auto pb-6" id="message-list-container">
+        <!-- 提醒卡片 1 -->
+        <div class="noti-card" onclick="markAsRead(1)">
+            <span class="unread-dot" id="dot-1"></span>
+            <div class="text-[17px] font-bold text-slate-800 mb-2">做题提醒</div>
+            <div class="text-[14px] text-slate-600 leading-relaxed mb-3">今日做题时间到，快来做题啦～</div>
+            <div class="text-[12px] text-slate-400 font-medium">2026-07-20 20:00</div>
+        </div>
+
+        <!-- 提醒卡片 2 -->
+        <div class="noti-card" onclick="markAsRead(2)">
+            <span class="unread-dot" id="dot-2"></span>
+            <div class="text-[17px] font-bold text-slate-800 mb-2">做题提醒</div>
+            <div class="text-[14px] text-slate-600 leading-relaxed mb-3">今日做题时间到，快来做题啦～</div>
+            <div class="text-[12px] text-slate-400 font-medium">2026-07-19 12:30</div>
+        </div>
+
+        <!-- 提醒卡片 3 -->
+        <div class="noti-card" onclick="markAsRead(3)">
+            <span class="unread-dot" id="dot-3"></span>
+            <div class="text-[17px] font-bold text-slate-800 mb-2">做题提醒</div>
+            <div class="text-[14px] text-slate-600 leading-relaxed mb-3">今日做题时间到，快来做题啦～</div>
+            <div class="text-[12px] text-slate-400 font-medium">2026-07-18 10:15</div>
+        </div>
+
+        <!-- 提醒卡片 4 -->
+        <div class="noti-card" onclick="markAsRead(4)">
+            <span class="unread-dot" id="dot-4"></span>
+            <div class="text-[17px] font-bold text-slate-800 mb-2">做题提醒</div>
+            <div class="text-[14px] text-slate-600 leading-relaxed mb-3">今日做题时间到，快来做题啦～</div>
+            <div class="text-[12px] text-slate-400 font-medium">2026-07-17 14:00</div>
+        </div>
+    </div>
+
+    <!-- Toast 提示 -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // 定义消息列表未读状态的持久化 key
+        const LOCAL_STORAGE_KEY = 'practice_list_unread_states_v2';
+        const totalItems = 4;
+
+        // 默认所有消息都是未读的
+        const defaultUnreadStates = {
+            1: true,
+            2: true,
+            3: true,
+            4: true
+        };
+
+        const unreadStates = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || JSON.stringify(defaultUnreadStates));
+
+        // 页面载入时渲染未读红点
+        document.addEventListener('DOMContentLoaded', () => {
+            renderDots();
+        });
+
+        function renderDots() {
+            // 按照要求，小红点点击后不要消失，要一直在，所以清除 read 类以确保红点常亮
+            for (let i = 1; i <= totalItems; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (dot) {
+                    dot.classList.remove('read');
+                }
+            }
+        }
+
+        // 点击卡片标记已读（但红点不消失）
+        function markAsRead(id) {
+            unreadStates[id] = false;
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(unreadStates));
+            renderDots();
+            showToast('已标记该条消息为已读');
+        }
+
+        // 点击右上角的清除按钮移除列表中的所有小红点 - 按照要求，红点也不再消失，只给出已读提示
+        function clearAllUnread() {
+            for (let i = 1; i <= totalItems; i++) {
+                unreadStates[i] = false;
+            }
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(unreadStates));
+            renderDots();
+            showToast('已全部标记为已读');
+        }
+
+        // 显示 Toast 提示
+        function showToast(text) {
+            const t = document.getElementById('toast');
+            t.innerText = text;
+            t.classList.add('show');
+            setTimeout(() => {
+                t.classList.remove('show');
+            }, 1800);
+        }
+    </script>
+</body>
+</html>

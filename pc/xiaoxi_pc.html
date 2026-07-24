@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>消息中心 - 库课网校</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            padding-top: 60px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f5f6f9;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* 顶部导航栏 */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 60px;
+            background-color: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 32px;
+            margin-right: 16px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-item {
+            font-size: 14px;
+            color: #333;
+            text-decoration: none;
+            padding: 4px 0;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: #ff4d4f;
+        }
+
+        .nav-item.active {
+            color: #ff4d4f;
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #ff4d4f;
+        }
+
+        .search-user {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            padding: 4px 8px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 4px 8px;
+            font-size: 14px;
+        }
+
+        .search-btn {
+            background-color: #ff4d4f;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 12px;
+            cursor: pointer;
+        }
+
+        .user-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-link {
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .user-link:hover {
+            color: #ff4d4f;
+        }
+
+        .notification {
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background-color: #ff4d4f;
+            color: #fff;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 侧边菜单和主区域 */
+        .menu-tab-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .menu-tab-btn.active {
+            background-color: #fff1f0;
+            color: #ff4d4f;
+        }
+
+        .menu-tab-btn:not(.active):hover {
+            background-color: #f5f5f5;
+        }
+
+        /* 未读标记红点 */
+        .unread-dot-indicator {
+            width: 8px;
+            height: 8px;
+            background-color: #ff4d4f;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* Toast 气泡 */
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(30, 41, 59, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 2000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* 页脚 */
+        .footer {
+            height: 60px;
+            background-color: #fff;
+            border-top: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- 顶部导航栏 -->
+    <header class="top-nav" id="top-nav">
+        <div class="logo" onclick="window.location.href='tiku_pc.html'" style="cursor: pointer;">
+            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=red%20background%20with%20white%20chinese%20characters%20%E5%BA%93%E8%AF%BE%20with%20registered%20trademark%20symbol%20simple%20clean%20logo&image_size=square" alt="库课网校">
+            <span style="font-weight: bold; color: #333; font-size: 16px;">库课网校</span>
+        </div>
+        <div class="nav-menu">
+            <a href="tiku_pc.html" class="nav-item">首页</a>
+            <a href="#" class="nav-item" onclick="showToast('课程中心功能建设中，先去刷题吧~')">课程中心</a>
+            <a href="tiku_pc.html" class="nav-item">题库</a>
+            <a href="#" class="nav-item" onclick="showToast('资讯中心功能建设中~')">资讯</a>
+            <a href="#" class="nav-item" onclick="showToast('直播日历功能建设中~')">直播日历</a>
+            <a href="#" class="nav-item" onclick="showToast('专升本专题建设中~')">各地专升本</a>
+        </div>
+        <div class="search-user">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="请输入搜索内容">
+                <button class="search-btn" onclick="handleSearch()">搜索</button>
+            </div>
+            <div class="user-links">
+                <a href="xuexi_zhongxin_pc.html" class="user-link">学习中心</a>
+                <div class="notification" style="cursor: pointer;" onclick="window.location.reload();">
+                    <i class="fas fa-bell text-rose-600" style="font-size: 16px;"></i>
+                    <span class="notification-badge" id="top-nav-badge">0</span>
+                </div>
+                <div class="user-avatar" style="cursor: pointer;" onclick="showToast('欢迎回来，技术-黄飞亚！')">
+                    <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 font-bold text-sm">
+                        亚
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-[1200px] w-full mx-auto px-6 py-8 flex gap-6 mt-[20px]">
+        <!-- 左侧导航边栏 -->
+        <aside class="w-[240px] h-fit bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex-shrink-0 flex flex-col">
+            <div class="flex items-center gap-3 px-3 pb-4 mb-4 border-b border-gray-100">
+                <div class="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-500">
+                    <i class="fa-solid fa-envelope text-lg"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-slate-800 text-base">消息中心</h3>
+                </div>
+            </div>
+
+            <!-- 消息频道分类 -->
+            <div class="flex flex-col gap-1.5" id="menu-container">
+                <button onclick="switchTab('study')" id="menu-btn-study" class="menu-tab-btn active w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-left transition-all">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-graduation-cap text-slate-400 w-5 text-center"></i>
+                        <span>学习提醒</span>
+                    </div>
+                    <span id="menu-badge-study" class="bg-rose-500 text-white text-[10px] w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full font-bold aspect-square leading-none">0</span>
+                </button>
+
+                <button onclick="switchTab('practice')" id="menu-btn-practice" class="menu-tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-slate-600 text-left transition-all">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-clock text-slate-400 w-5 text-center"></i>
+                        <span>做题提醒</span>
+                    </div>
+                    <span id="menu-badge-practice" class="bg-rose-500 text-white text-[10px] w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full font-bold aspect-square leading-none">0</span>
+                </button>
+
+                <button onclick="switchTab('trade')" id="menu-btn-trade" class="menu-tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-slate-600 text-left transition-all">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-credit-card text-slate-400 w-5 text-center"></i>
+                        <span>交易提醒</span>
+                    </div>
+                    <span id="menu-badge-trade" class="bg-rose-500 text-white text-[10px] w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full font-bold aspect-square leading-none">0</span>
+                </button>
+
+                <button onclick="switchTab('activity')" id="menu-btn-activity" class="menu-tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-slate-600 text-left transition-all">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-gift text-slate-400 w-5 text-center"></i>
+                        <span>活动提醒</span>
+                    </div>
+                    <span id="menu-badge-activity" class="bg-rose-500 text-white text-[10px] w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full font-bold aspect-square leading-none">0</span>
+                </button>
+
+                <button onclick="switchTab('announce')" id="menu-btn-announce" class="menu-tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-slate-600 text-left transition-all">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-bullhorn text-slate-400 w-5 text-center"></i>
+                        <span>系统公告</span>
+                    </div>
+                    <span id="menu-badge-announce" class="bg-rose-500 text-white text-[10px] w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full font-bold aspect-square leading-none">0</span>
+                </button>
+
+                <button onclick="switchTab('featured')" id="menu-btn-featured" class="menu-tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-slate-600 text-left transition-all">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-fire text-slate-400 w-5 text-center"></i>
+                        <span>精选活动</span>
+                    </div>
+                    <span id="menu-badge-featured" class="bg-rose-500 text-white text-[10px] w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full font-bold aspect-square leading-none">0</span>
+                </button>
+
+                <div class="w-full border-t border-gray-100 my-2"></div>
+
+                <button onclick="switchTab('settings')" id="menu-btn-settings" class="menu-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-600 text-left transition-all">
+                    <i class="fa-solid fa-gear text-slate-400 w-5 text-center"></i>
+                    <span>消息设置</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- 右侧内容区域 -->
+        <section class="flex-grow min-w-0 flex flex-col gap-5">
+            <!-- 工具栏：一键已读等 -->
+            <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800" id="tab-title">学习提醒</h2>
+                    <p class="text-xs text-slate-400 mt-1" id="tab-desc">直播上课提醒、课程更新提醒等</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="markAllAsRead()" id="read-all-btn" class="flex items-center gap-2 px-4 py-2 border border-gray-200 hover:border-rose-500 hover:text-rose-500 rounded-xl text-sm font-medium text-slate-600 active:scale-95 transition-all">
+                        <i class="fa-solid fa-paintbrush"></i>
+                        <span>一键已读</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 消息主体卡片容器 -->
+            <div id="messages-list-wrapper" class="flex flex-col gap-4">
+                <!-- 动态内容渲染在此 -->
+            </div>
+        </section>
+    </main>
+
+    <!-- 弹窗展示消息详情 -->
+    <div id="detail-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[2000] hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-[500px] w-full p-6 shadow-xl border border-gray-100 flex flex-col gap-4 transform scale-95 opacity-0 transition-all duration-300" id="modal-content">
+            <div class="flex justify-between items-start">
+                <div class="flex items-center gap-3">
+                    <div id="modal-icon-container" class="w-10 h-10 rounded-full flex items-center justify-center">
+                        <i id="modal-icon" class="text-lg"></i>
+                    </div>
+                    <div>
+                        <h4 id="modal-title" class="font-bold text-slate-800 text-base">消息详情</h4>
+                        <span id="modal-time" class="text-xs text-slate-400">时间</span>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 min-h-[100px] flex items-center">
+                <p id="modal-body" class="text-slate-600 text-sm leading-relaxed whitespace-pre-wrap"></p>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-2">
+                <button onclick="closeModal()" class="px-5 py-2 border border-gray-200 hover:bg-slate-50 text-slate-600 font-medium text-sm rounded-xl transition-colors">
+                    我知道了
+                </button>
+                <button id="modal-action-btn" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white font-medium text-sm rounded-xl transition-colors hidden">
+                    立即前往
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 简易Toast -->
+    <div id="toast" class="toast"></div>
+
+    <footer class="footer">
+        <p>© 2026 库课网校 京ICP备12345678号-1</p>
+    </footer>
+
+    <script>
+        // 初始化状态
+        const LOCAL_CHANNELS_KEY = 'messages_read';
+        const LOCAL_ALERTS_KEY = 'alerts_read_states';
+        const LOCAL_PRACTICE_KEY = 'practice_list_unread_states_v2';
+
+        // 默认主频道已读状态 (false = 未读, true = 已读)
+        let channelReadStates = JSON.parse(localStorage.getItem(LOCAL_CHANNELS_KEY) || '{}');
+        // 学习提醒子状态 (false = 未读, true = 已读)
+        let alertReadStates = JSON.parse(localStorage.getItem(LOCAL_ALERTS_KEY) || '{}');
+        // 做题提醒子状态 (true = 未读, false = 已读 - 匹配原移动端逻辑)
+        const defaultPracticeStates = { 1: true, 2: true, 3: true, 4: true };
+        let practiceReadStates = JSON.parse(localStorage.getItem(LOCAL_PRACTICE_KEY) || JSON.stringify(defaultPracticeStates));
+
+        // 默认通知渠道配置
+        const defaultSettings = {
+            push: false,
+            study: false,
+            trade: true,
+            activity: true,
+            system: true,
+            featured: true
+        };
+
+        // 默认做题提醒配置
+        const defaultPracticeConfig = {
+            enabled: false,
+            time: '20:00',
+            days: [1, 2, 3, 4, 5]
+        };
+
+        let currentSettings = JSON.parse(localStorage.getItem('message_settings') || JSON.stringify(defaultSettings));
+        let practiceConfig = JSON.parse(localStorage.getItem('practice_reminder_config') || JSON.stringify(defaultPracticeConfig));
+
+        // 消息静态数据
+        const channelsData = {
+            1: { id: 1, title: '学习提醒', desc: '直播提醒', icon: 'fa-graduation-cap', color: 'text-blue-500 bg-blue-50', count: 3, time: '2023年11月11日 12:12' },
+            6: { id: 6, title: '做题提醒', desc: '今日做题时间到，快来做题啦～', icon: 'fa-clock', color: 'text-amber-500 bg-amber-50', count: 1, time: '2023年11月11日 12:20' },
+            2: { id: 2, title: '交易提醒', desc: '支付成功', icon: 'fa-credit-card', color: 'text-orange-400 bg-orange-50', count: 3, time: '2023年11月11日 12:12', body: '您的订单已成功支付！库课网校已为您成功开通相应的班课学习权益。快去学习中心看看吧！' },
+            3: { id: 3, title: '活动提醒', desc: '拼团成功', icon: 'fa-gift', color: 'text-pink-500 bg-pink-50', count: 3, time: '2023年11月11日 12:12', body: '恭喜您！您发起的「2026专升本王牌特训班」拼团活动已顺利成团。优惠价已生效，快去开启您的备考之旅吧！' },
+            4: { id: 4, title: '系统公告', desc: '因版本升级，在9:00-12:00不可用', icon: 'fa-bullhorn', color: 'text-purple-500 bg-purple-50', count: 3, time: '2023年11月11日 12:12', body: '尊敬的用户：为了提供更好的产品体验，库课网校定于本周日凌晨 09:00 - 12:00 进行服务器架构升级维护。届时系统及APP/电脑端可能无法正常访问，请您合理安排学习及做题计划。给您带来的不便敬请谅解！' },
+            5: { id: 5, title: '精选活动', desc: '尊敬的客户，现邀请您参与大赢家活动，活动...', icon: 'fa-fire', color: 'text-red-500 bg-red-50', count: 3, time: '2023年11月11日 12:12', body: '【尊贵专享】库课网校金秋十月“备考大赢家”通关夺金挑战赛现已正式拉开帷幕！完成指定科目的知识点闯关及真题刷题，即可解锁万元助学大礼包，更有机会赢取高额全额返学费特权，快戳详情参与吧！' }
+        };
+
+        const studyAlertsData = [
+            { id: 4, title: '预约考试提醒', desc: '您预约的《2026年北航专业课万人大联考·一模》距离考试还有10分钟！请提前做好准备～', time: '2023年11月11日 12:11' },
+            { id: 5, title: '预约估分提醒', desc: '您预约的《全国统一考试综合科目估分试卷（一）》距离估分还有10分钟！请提前做好准备～', time: '2023年11月11日 12:10' },
+            { id: 1, title: '直播上课提醒', desc: '您的课程《课程名称》-课时名称 将于8月23日 19:00开始直播，请按时上课哦~', time: '2023年11月11日 12:12' },
+            { id: 2, title: '面授上课提醒', desc: '您的课程《班次名称》将于8月23日 19:00在上课地点+教室开始上课，请按时上课哦~', time: '2023年11月11日 12:12' },
+            { id: 3, title: '课程更新提醒', desc: '您的课程《班次名称》将于8月23日 19:00在上课地点+教室开始上课，请按时上课哦~', time: '2023年11月11日 12:12' }
+        ];
+
+        const practiceAlertsData = [
+            { id: 1, title: '做题提醒', desc: '今日做题时间到，快来做题啦～', time: '2026-07-20 20:00' },
+            { id: 2, title: '做题提醒', desc: '今日做题时间到，快来做题啦～', time: '2026-07-19 12:30' },
+            { id: 3, title: '做题提醒', desc: '今日做题时间到，快来做题啦～', time: '2026-07-18 10:15' },
+            { id: 4, title: '做题提醒', desc: '今日做题时间到，快来做题啦～', time: '2026-07-17 14:00' }
+        ];
+
+        // 当前选中的 Tab
+        let currentTab = 'study';
+
+        // 统一Toast提示
+        function showToast(text) {
+            const t = document.getElementById('toast');
+            t.innerText = text;
+            t.classList.add('show');
+            setTimeout(() => {
+                t.classList.remove('show');
+            }, 1800);
+        }
+
+        // 计算各类红点/徽章数目
+        function updateBadges() {
+            // 按照要求，学习提醒等各类型未读消息数以及小红点已读后不要消失，要一直在
+            document.getElementById('menu-badge-study').innerText = 3;
+            document.getElementById('menu-badge-study').classList.remove('hidden');
+
+            document.getElementById('menu-badge-practice').innerText = 1;
+            document.getElementById('menu-badge-practice').classList.remove('hidden');
+
+            const singleChannels = [2, 3, 4, 5];
+            const channelMenuIds = {
+                2: 'menu-badge-trade',
+                3: 'menu-badge-activity',
+                4: 'menu-badge-announce',
+                5: 'menu-badge-featured'
+            };
+
+            singleChannels.forEach(id => {
+                const badgeEl = document.getElementById(channelMenuIds[id]);
+                if (badgeEl) {
+                    badgeEl.innerText = channelsData[id].count;
+                    badgeEl.classList.remove('hidden');
+                }
+            });
+
+            // 顶部导航栏徽章也保持常亮
+            const topNavBadge = document.getElementById('top-nav-badge');
+            if (topNavBadge) {
+                topNavBadge.classList.remove('hidden');
+                topNavBadge.innerText = "3";
+            }
+        }
+
+        // 切换 Tab 页面
+        function switchTab(tabId) {
+            currentTab = tabId;
+            
+            // 更新左侧侧边栏高亮
+            document.querySelectorAll('.menu-tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'font-semibold');
+                btn.classList.add('font-medium', 'text-slate-600');
+            });
+            const activeBtn = document.getElementById(`menu-btn-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('active', 'font-semibold');
+                activeBtn.classList.remove('font-medium', 'text-slate-600');
+            }
+
+            // 更新工具栏文字
+            const titleEl = document.getElementById('tab-title');
+            const descEl = document.getElementById('tab-desc');
+            const readAllBtn = document.getElementById('read-all-btn');
+
+            readAllBtn.classList.remove('hidden');
+
+            if (tabId === 'study') {
+                titleEl.innerText = '学习提醒';
+                descEl.innerText = '直播上课提醒、课程更新提醒等';
+            } else if (tabId === 'practice') {
+                titleEl.innerText = '做题提醒';
+                descEl.innerText = '督促您按时进行每日刷题练习';
+            } else if (tabId === 'trade') {
+                titleEl.innerText = '交易提醒';
+                descEl.innerText = '发货通知、支付成功、同意退款等';
+            } else if (tabId === 'activity') {
+                titleEl.innerText = '活动提醒';
+                descEl.innerText = '拼团成功、失败，获得优惠券等';
+            } else if (tabId === 'announce') {
+                titleEl.innerText = '系统公告';
+                descEl.innerText = '系统级重要通知';
+            } else if (tabId === 'featured') {
+                titleEl.innerText = '精选活动';
+                descEl.innerText = '精选优惠活动通知';
+            } else if (tabId === 'settings') {
+                titleEl.innerText = '消息设置';
+                descEl.innerText = '';
+                readAllBtn.classList.add('hidden');
+            }
+
+            renderContent();
+        }
+
+        // 渲染右侧内容
+        function renderContent() {
+            const wrapper = document.getElementById('messages-list-wrapper');
+            wrapper.innerHTML = '';
+
+            if (currentTab === 'study') {
+                // 学习提醒列表 - 按照要求，小红点点击后也不消失，一直存在
+                studyAlertsData.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = `bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col gap-2 cursor-pointer hover:shadow-md hover:border-rose-300 transition-all`;
+                    card.onclick = () => readStudyAlert(item.id, item);
+
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="unread-dot-indicator"></span>
+                                <span class="text-sm font-bold text-slate-800">${item.title}</span>
+                            </div>
+                            <span class="text-xs text-slate-400">${item.time}</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed pl-3.5">${item.desc}</p>
+                        <div class="flex justify-end gap-2 mt-1">
+                            <button class="text-xs text-rose-500 font-semibold flex items-center gap-1 hover:underline">
+                                查看详情 <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                            </button>
+                        </div>
+                    `;
+                    wrapper.appendChild(card);
+                });
+
+                if (studyAlertsData.length === 0) {
+                    showEmpty(wrapper);
+                }
+
+            } else if (currentTab === 'practice') {
+                // 做题提醒列表 - 小红点点击后不消失
+                practiceAlertsData.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = `bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col gap-2 cursor-pointer hover:shadow-md hover:border-rose-300 transition-all`;
+                    card.onclick = () => readPracticeAlert(item.id, item);
+
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="unread-dot-indicator" style="background-color: #ffaa00;"></span>
+                                <span class="text-sm font-bold text-slate-800">${item.title}</span>
+                            </div>
+                            <span class="text-xs text-slate-400">${item.time}</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed pl-3.5">${item.desc}</p>
+                    `;
+                    wrapper.appendChild(card);
+                });
+
+            } else if (['trade', 'activity', 'announce', 'featured'].includes(currentTab)) {
+                // 交易题型、活动提醒、系统公告、精选活动样式先保持空白
+                showEmpty(wrapper);
+
+            } else if (currentTab === 'settings') {
+                // 消息设置
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex flex-col gap-5";
+                
+                // 读取最新设置
+                currentSettings = JSON.parse(localStorage.getItem('message_settings') || JSON.stringify(defaultSettings));
+                practiceConfig = JSON.parse(localStorage.getItem('practice_reminder_config') || JSON.stringify(defaultPracticeConfig));
+
+                card.innerHTML = `
+                    <!-- 消息推送 -->
+                    <div class="flex justify-between items-center py-2">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500">
+                                <i class="fa-solid fa-circle-arrow-right text-[18px]"></i>
+                            </div>
+                            <div class="flex flex-col gap-0.5">
+                                <span class="text-sm font-semibold text-slate-700">消息推送</span>
+                                <span class="text-xs text-slate-400">第一时间收到您关注的消息</span>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="switch-push" ${currentSettings.push ? 'checked' : ''} class="sr-only peer" onchange="togglePCSetting('push', this)">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff4d4f]"></div>
+                        </label>
+                    </div>
+
+                    <div class="w-full border-t border-gray-100"></div>
+
+                    <!-- 学习提醒 -->
+                    <div class="flex justify-between items-center py-2">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-400">
+                                <i class="fa-solid fa-book-bookmark text-[17px]"></i>
+                            </div>
+                            <div class="flex flex-col gap-0.5">
+                                <span class="text-sm font-semibold text-slate-700">学习提醒</span>
+                                <span class="text-xs text-slate-400">直播上课提醒、课程更新提醒等</span>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="switch-study" ${currentSettings.study ? 'checked' : ''} class="sr-only peer" onchange="togglePCSetting('study', this)">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff4d4f]"></div>
+                        </label>
+                    </div>
+
+                    <div class="w-full border-t border-gray-100"></div>
+
+                    <!-- 做题提醒 -->
+                    <div class="flex flex-col py-2">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500">
+                                    <i class="fa-solid fa-clock text-[18px]"></i>
+                                </div>
+                                <div class="flex flex-col gap-0.5">
+                                    <span class="text-sm font-semibold text-slate-700">做题提醒</span>
+                                    <span class="text-xs text-slate-400">督促您按时进行每日刷题练习</span>
+                                </div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="switch-practice" ${practiceConfig.enabled ? 'checked' : ''} class="sr-only peer" onchange="togglePCPracticeSetting(this)">
+                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff4d4f]"></div>
+                            </label>
+                        </div>
+
+                        <!-- 做题提醒配置子面板 -->
+                        <div id="practice-panel" class="bg-slate-50 border border-slate-100 rounded-xl p-4 mt-3 ml-14 flex flex-col gap-3 ${practiceConfig.enabled ? '' : 'hidden'}">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-slate-600">提醒时间</span>
+                                <input type="time" id="practice-time" value="${practiceConfig.time}" onchange="savePCPracticeConfig()" class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-slate-700 text-sm font-medium focus:outline-none focus:border-red-500 cursor-pointer">
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <span class="text-sm text-slate-600">重复周期 (支持多选)</span>
+                                <div class="flex gap-2">
+                                    <button onclick="togglePCDay(1)" data-day="1" class="day-btn w-9 h-9 rounded-full bg-white border border-slate-200 text-sm text-slate-600 font-medium transition-all active:scale-95">一</button>
+                                    <button onclick="togglePCDay(2)" data-day="2" class="day-btn w-9 h-9 rounded-full bg-white border border-slate-200 text-sm text-slate-600 font-medium transition-all active:scale-95">二</button>
+                                    <button onclick="togglePCDay(3)" data-day="3" class="day-btn w-9 h-9 rounded-full bg-white border border-slate-200 text-sm text-slate-600 font-medium transition-all active:scale-95">三</button>
+                                    <button onclick="togglePCDay(4)" data-day="4" class="day-btn w-9 h-9 rounded-full bg-white border border-slate-200 text-sm text-slate-600 font-medium transition-all active:scale-95">四</button>
+                                    <button onclick="togglePCDay(5)" data-day="5" class="day-btn w-9 h-9 rounded-full bg-white border border-slate-200 text-sm text-slate-600 font-medium transition-all active:scale-95">五</button>
+                                    <button onclick="togglePCDay(6)" data-day="6" class="day-btn w-9 h-9 rounded-full bg-white border border-slate-200 text-sm text-slate-600 font-medium transition-all active:scale-95">六</button>
+                                    <button onclick="togglePCDay(7)" data-day="7" class="day-btn w-9 h-9 rounded-full bg-white border border-slate-200 text-sm text-slate-600 font-medium transition-all active:scale-95">日</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full border-t border-gray-100"></div>
+
+                    <!-- 交易提醒 -->
+                    <div class="flex justify-between items-center py-2">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500">
+                                <i class="fa-solid fa-sack-dollar text-[17px]"></i>
+                            </div>
+                            <div class="flex flex-col gap-0.5">
+                                <span class="text-sm font-semibold text-slate-700">交易提醒</span>
+                                <span class="text-xs text-slate-400">发货通知、支付成功、同意退款等</span>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="switch-trade" ${currentSettings.trade ? 'checked' : ''} class="sr-only peer" onchange="togglePCSetting('trade', this)">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff4d4f]"></div>
+                        </label>
+                    </div>
+
+                    <div class="w-full border-t border-gray-100"></div>
+
+                    <!-- 活动提醒 -->
+                    <div class="flex justify-between items-center py-2">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-400">
+                                <i class="fa-solid fa-gift text-[17px]"></i>
+                            </div>
+                            <div class="flex flex-col gap-0.5">
+                                <span class="text-sm font-semibold text-slate-700">活动提醒</span>
+                                <span class="text-xs text-slate-400">拼团成功、失败，获得优惠券等</span>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="switch-activity" ${currentSettings.activity ? 'checked' : ''} class="sr-only peer" onchange="togglePCSetting('activity', this)">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff4d4f]"></div>
+                        </label>
+                    </div>
+
+                    <div class="w-full border-t border-gray-100"></div>
+
+                    <!-- 系统公告 -->
+                    <div class="flex justify-between items-center py-2">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500">
+                                <i class="fa-solid fa-bell text-[17px]"></i>
+                            </div>
+                            <div class="flex flex-col gap-0.5">
+                                <span class="text-sm font-semibold text-slate-700">系统公告</span>
+                                <span class="text-xs text-slate-400">系统级重要通知</span>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="switch-system" ${currentSettings.system ? 'checked' : ''} class="sr-only peer" onchange="togglePCSetting('system', this)">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff4d4f]"></div>
+                        </label>
+                    </div>
+
+                    <div class="w-full border-t border-gray-100"></div>
+
+                    <!-- 精选活动 -->
+                    <div class="flex justify-between items-center py-2">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-400">
+                                <i class="fa-solid fa-bullseye text-[17px]"></i>
+                            </div>
+                            <div class="flex flex-col gap-0.5">
+                                <span class="text-sm font-semibold text-slate-700">精选活动</span>
+                                <span class="text-xs text-slate-400">精选优惠活动通知</span>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="switch-featured" ${currentSettings.featured ? 'checked' : ''} class="sr-only peer" onchange="togglePCSetting('featured', this)">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff4d4f]"></div>
+                        </label>
+                    </div>
+                `;
+                wrapper.appendChild(card);
+                
+                // 渲染星期状态样式
+                setTimeout(renderPCDays, 0);
+            }
+        }
+
+        function showEmpty(container) {
+            container.innerHTML = `
+                <div class="bg-white rounded-2xl p-12 border border-gray-100 shadow-sm flex flex-col items-center justify-center text-center gap-3">
+                    <i class="fa-solid fa-folder-open text-slate-300 text-5xl"></i>
+                    <p class="text-slate-400 text-sm">暂无消息通知</p>
+                </div>
+            `;
+        }
+
+        // 单击学习提醒子项
+        function readStudyAlert(alertId, item) {
+            if (!alertReadStates[alertId]) {
+                alertReadStates[alertId] = true;
+                localStorage.setItem(LOCAL_ALERTS_KEY, JSON.stringify(alertReadStates));
+                updateBadges();
+                renderContent();
+                showToast('已标记该条学习提醒为已读');
+            }
+            openModal('fa-graduation-cap', 'text-blue-500 bg-blue-50', item.title, item.time, item.desc, 'xuexi_zhongxin_pc.html');
+        }
+
+        // 单击做题提醒子项
+        function readPracticeAlert(alertId, item) {
+            if (practiceReadStates[alertId]) { // true 是未读
+                practiceReadStates[alertId] = false;
+                localStorage.setItem(LOCAL_PRACTICE_KEY, JSON.stringify(practiceReadStates));
+                updateBadges();
+                renderContent();
+                showToast('已标记该条做题提醒为已读');
+            }
+            openModal('fa-clock', 'text-amber-500 bg-amber-50', item.title, item.time, item.desc, 'tiku_pc.html');
+        }
+
+        // 单击非详情单子项 (交易、活动、系统公告、精选)
+        function clickSingleChannel(chId) {
+            if (!channelReadStates[chId]) {
+                channelReadStates[chId] = true;
+                localStorage.setItem(LOCAL_CHANNELS_KEY, JSON.stringify(channelReadStates));
+                updateBadges();
+                renderContent();
+                showToast('已标记该分类消息为已读');
+            }
+            
+            const ch = channelsData[chId];
+            openModal(ch.icon, ch.color, ch.title, ch.time, ch.body, 'tiku_pc.html');
+        }
+
+        // 详情模态弹窗控制
+        function openModal(icon, colorClass, title, time, body, actionUrl) {
+            const modal = document.getElementById('detail-modal');
+            const content = document.getElementById('modal-content');
+            
+            document.getElementById('modal-icon').className = `fa-solid ${icon}`;
+            document.getElementById('modal-icon-container').className = `w-10 h-10 rounded-full flex items-center justify-center ${colorClass}`;
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-time').innerText = time;
+            document.getElementById('modal-body').innerText = body;
+
+            const actionBtn = document.getElementById('modal-action-btn');
+            if (actionUrl) {
+                actionBtn.onclick = () => {
+                    window.location.href = actionUrl;
+                };
+                actionBtn.classList.remove('hidden');
+            } else {
+                actionBtn.classList.add('hidden');
+            }
+
+            modal.classList.add('flex');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('detail-modal');
+            const content = document.getElementById('modal-content');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        // 一键已读全部
+        function markAllAsRead() {
+            let changed = false;
+
+            // 1. 各主分类置为已读
+            const channels = [1, 2, 3, 4, 5, 6];
+            channels.forEach(id => {
+                if (!channelReadStates[id]) {
+                    channelReadStates[id] = true;
+                    changed = true;
+                }
+            });
+
+            // 2. 学习子项置为已读
+            studyAlertsData.forEach(item => {
+                if (!alertReadStates[item.id]) {
+                    alertReadStates[item.id] = true;
+                    changed = true;
+                }
+            });
+
+            // 3. 做题子项置为已读 (false是已读)
+            practiceAlertsData.forEach(item => {
+                if (practiceReadStates[item.id]) {
+                    practiceReadStates[item.id] = false;
+                    changed = true;
+                }
+            });
+
+            if (changed) {
+                localStorage.setItem(LOCAL_CHANNELS_KEY, JSON.stringify(channelReadStates));
+                localStorage.setItem(LOCAL_ALERTS_KEY, JSON.stringify(alertReadStates));
+                localStorage.setItem(LOCAL_PRACTICE_KEY, JSON.stringify(practiceReadStates));
+                updateBadges();
+                renderContent();
+                showToast('已全部标记为已读');
+            } else {
+                showToast('暂无未读消息');
+            }
+        }
+
+        // 接收开关控制
+        function togglePCSetting(key, checkbox) {
+            currentSettings[key] = checkbox.checked;
+            localStorage.setItem('message_settings', JSON.stringify(currentSettings));
+            
+            const nameMap = {
+                push: '消息推送',
+                study: '学习提醒',
+                trade: '交易提醒',
+                activity: '活动提醒',
+                system: '系统公告',
+                featured: '精选活动'
+            };
+            showToast(`${nameMap[key]}已${checkbox.checked ? '开启' : '关闭'}`);
+        }
+
+        function togglePCPracticeSetting(checkbox) {
+            practiceConfig.enabled = checkbox.checked;
+            const panel = document.getElementById('practice-panel');
+            if (panel) {
+                if (checkbox.checked) {
+                    panel.classList.remove('hidden');
+                } else {
+                    panel.classList.add('hidden');
+                }
+            }
+            localStorage.setItem('practice_reminder_config', JSON.stringify(practiceConfig));
+            showToast(`做题提醒已${checkbox.checked ? '开启' : '关闭'}`);
+        }
+
+        function togglePCDay(day) {
+            const index = practiceConfig.days.indexOf(day);
+            if (index > -1) {
+                practiceConfig.days.splice(index, 1);
+            } else {
+                practiceConfig.days.push(day);
+                practiceConfig.days.sort((a, b) => a - b);
+            }
+            renderPCDays();
+            localStorage.setItem('practice_reminder_config', JSON.stringify(practiceConfig));
+        }
+
+        function renderPCDays() {
+            document.querySelectorAll('.day-btn').forEach(btn => {
+                const day = parseInt(btn.getAttribute('data-day'));
+                if (practiceConfig.days.includes(day)) {
+                    btn.classList.add('bg-[#ff4d4f]', 'border-[#ff4d4f]', 'text-white');
+                    btn.classList.remove('bg-white', 'border-slate-200', 'text-slate-600');
+                } else {
+                    btn.classList.remove('bg-[#ff4d4f]', 'border-[#ff4d4f]', 'text-white');
+                    btn.classList.add('bg-white', 'border-slate-200', 'text-slate-600');
+                }
+            });
+        }
+
+        function savePCPracticeConfig() {
+            const timeInput = document.getElementById('practice-time');
+            if (timeInput) {
+                practiceConfig.time = timeInput.value;
+            }
+            localStorage.setItem('practice_reminder_config', JSON.stringify(practiceConfig));
+            showToast('提醒时间已更新');
+        }
+
+        // 搜索模拟
+        function handleSearch() {
+            const val = document.getElementById('search-input').value.trim();
+            if (val) {
+                showToast(`正在为您搜索“${val}”相关的通知及公告...`);
+            } else {
+                showToast('请输入搜索内容~');
+            }
+        }
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            updateBadges();
+            renderContent();
+        });
+    </script>
+</body>
+</html>

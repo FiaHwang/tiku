@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>试卷报告</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Centering and background styles for mobile layout on all screen sizes */
+        html {
+            background-color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        /* Base styles matching the mobile layout of the app */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto !important;
+            min-height: 100vh;
+            background-color: #f8fafc !important;
+            color: #333;
+            position: relative;
+            padding-bottom: 80px; /* Space for the bottom action bar */
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        /* Customize scrollbars */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Keyframes for a smooth fade-in */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+
+    <!-- Top Sticky Header -->
+    <header class="sticky top-0 z-50 bg-white h-12 flex items-center justify-between px-4 border-b border-slate-200/80 shadow-xs">
+        <button onclick="window.location.href='tiku.html'" class="w-8 h-8 flex items-center justify-start text-gray-700 text-lg focus:outline-none" id="back-button">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <h1 class="text-base font-semibold text-gray-800">报告</h1>
+        <div class="w-8"></div> <!-- Spacer to center the title -->
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="p-4 space-y-4 animate-fade-in">
+        
+        <!-- Exam Header Card -->
+        <div class="bg-white rounded-2xl p-5 shadow-xs border border-slate-200/60 space-y-4">
+            <div class="space-y-1">
+                <h2 class="text-base font-bold text-gray-800 leading-snug">试卷名称</h2>
+                <div class="text-xs text-gray-400">交卷时间: 2023.08.28 18:05</div>
+            </div>
+
+            <div class="border-t border-dashed border-slate-200 my-3"></div>
+
+            <!-- Dashboard Grid -->
+            <!-- Row 1 -->
+            <div class="grid grid-cols-3 gap-2">
+                <div class="text-center p-2 rounded-xl bg-sky-50/60 border border-sky-100/50">
+                    <div class="text-xl sm:text-2xl font-extrabold text-[#0ea5e9]">33.5<span class="text-xs font-normal text-[#0ea5e9]">/100</span></div>
+                    <div class="text-[10px] text-gray-500 mt-0.5">得分</div>
+                </div>
+                <div class="text-center p-2 rounded-xl bg-sky-50/60 border border-sky-100/50">
+                    <div class="text-xl sm:text-2xl font-extrabold text-[#0ea5e9]">33.3%</div>
+                    <div class="text-[10px] text-gray-500 mt-0.5">正确率</div>
+                </div>
+                <div class="text-center p-2 rounded-xl bg-sky-50/60 border border-sky-100/50">
+                    <div class="text-xl sm:text-2xl font-extrabold text-[#0ea5e9]">90<span class="text-xs font-normal text-[#0ea5e9]">分钟</span></div>
+                    <div class="text-[10px] text-gray-500 mt-0.5">用时</div>
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="grid grid-cols-2 gap-3 pt-1">
+                <div class="text-center p-2 rounded-xl bg-teal-50/60 border border-teal-100/50">
+                    <div class="text-xl sm:text-2xl font-extrabold text-teal-600">33<span class="text-xs font-normal text-teal-600">/89</span></div>
+                    <div class="text-[10px] text-gray-500 mt-0.5">排名位次</div>
+                </div>
+                <div class="text-center p-2 rounded-xl bg-teal-50/60 border border-teal-100/50">
+                    <div class="text-xl sm:text-2xl font-extrabold text-teal-600">40.05%</div>
+                    <div class="text-[10px] text-gray-500 mt-0.5">排名百分比</div>
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="grid grid-cols-5 gap-1 pt-2 text-center bg-slate-50 rounded-xl p-2.5 border border-slate-100">
+                <div>
+                    <div class="text-xs font-bold text-[#0ea5e9]">10 题</div>
+                    <div class="text-[10px] text-gray-500 mt-0.5">题量</div>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-teal-600">3 题</div>
+                    <div class="text-[10px] text-gray-500 mt-0.5">正确</div>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-red-500">3 题</div>
+                    <div class="text-[10px] text-gray-500 mt-0.5">错误</div>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-orange-500">3 题</div>
+                    <div class="text-[10px] text-gray-500 mt-0.5">已答</div>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-gray-400">3 题</div>
+                    <div class="text-[10px] text-gray-500 mt-0.5">未答</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subjective Correction Notices Card -->
+        <div class="bg-white rounded-2xl p-4 shadow-xs border border-slate-200/60 space-y-3 text-xs text-gray-700">
+            <div class="grid grid-cols-1 gap-2.5">
+                <div class="flex items-center gap-2 p-2 rounded-lg bg-amber-50/60 text-amber-800 border border-amber-100/80">
+                    <i class="fas fa-spinner fa-spin text-amber-500"></i>
+                    <span>主观题AI批改中，请稍后再查看...</span>
+                </div>
+                <div class="flex items-center gap-2 p-2 rounded-lg bg-emerald-50/60 text-emerald-800 border border-emerald-100/80">
+                    <i class="fas fa-check-circle text-emerald-500"></i>
+                    <span class="font-medium">主观题AI批改完毕，分数仅供参考</span>
+                </div>
+                <div class="flex items-center gap-2 p-2 rounded-lg bg-amber-50/60 text-amber-800 border border-amber-100/80">
+                    <i class="fas fa-spinner fa-spin text-amber-500"></i>
+                    <span>主观题老师批改中，请稍后再查看...</span>
+                </div>
+                <div class="flex items-center gap-2 p-2 rounded-lg bg-emerald-50/60 text-emerald-800 border border-emerald-100/80">
+                    <i class="fas fa-check-circle text-emerald-500"></i>
+                    <span class="font-medium">主观题老师批改完毕</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Study Recommendation Card -->
+        <div class="bg-white rounded-2xl p-5 shadow-xs border border-slate-200/60 space-y-2.5">
+            <div class="text-sm font-bold text-gray-800 flex items-center gap-1.5">
+                <span class="w-2 h-4 bg-sky-500 rounded-full"></span>
+                <span>学习建议</span>
+                <span class="text-xs font-normal text-gray-400">(内容由AI生成)</span>
+            </div>
+            <div class="p-3 bg-slate-50/80 rounded-xl border border-slate-100">
+                <p class="text-xs sm:text-sm text-gray-700 leading-relaxed font-normal">
+                    建议优先复习微积分和树与图章节，这两个章节的正确率低于平均水平，是提升空间最大的部分。
+                </p>
+            </div>
+        </div>
+
+        <!-- Global statistics Card -->
+        <div class="bg-white rounded-2xl p-5 shadow-xs border border-slate-200/60 space-y-4">
+            <h3 class="text-sm font-bold text-gray-800 flex items-center gap-2">
+                <span class="w-2 h-4 bg-teal-500 rounded-full"></span>
+                <span>全站数据</span>
+            </h3>
+            <div class="grid grid-cols-2 gap-3 text-center">
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                    <div class="text-2xl font-bold text-teal-600">100</div>
+                    <div class="text-xs text-gray-500 mt-1">最高分</div>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                    <div class="text-2xl font-bold text-teal-600">45.5</div>
+                    <div class="text-xs text-gray-500 mt-1">平均分</div>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                    <div class="text-2xl font-bold text-teal-600">33.3%</div>
+                    <div class="text-xs text-gray-500 mt-1">平均正确率</div>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                    <div class="text-2xl font-bold text-teal-600">45<span class="text-xs font-normal text-teal-600">分钟</span></div>
+                    <div class="text-xs text-gray-500 mt-1">平均用时</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 1 Card: Global Score Distribution -->
+        <div class="bg-white rounded-2xl p-5 shadow-xs border border-slate-200/60 space-y-3">
+            <div class="flex justify-between items-center">
+                <h3 class="text-sm font-bold text-gray-800 flex items-center gap-2">
+                    <span class="w-2 h-4 bg-red-500 rounded-full"></span>
+                    <span>全站得分分布</span>
+                </h3>
+                <span class="text-[10px] text-gray-400">单位：人数</span>
+            </div>
+            
+            <div class="relative w-full bg-slate-50/60 rounded-xl p-2 border border-slate-100 overflow-visible">
+                <svg viewBox="0 0 380 220" class="w-full h-auto overflow-visible">
+                    <!-- Horizontal Grid Lines -->
+                    <line x1="35" y1="15" x2="365" y2="15" stroke="#e4e4e7" stroke-dasharray="2 2" />
+                    <line x1="35" y1="41.6" x2="365" y2="41.6" stroke="#e4e4e7" stroke-dasharray="2 2" />
+                    <line x1="35" y1="68.3" x2="365" y2="68.3" stroke="#e4e4e7" stroke-dasharray="2 2" />
+                    <line x1="35" y1="95" x2="365" y2="95" stroke="#e4e4e7" stroke-dasharray="2 2" />
+                    <line x1="35" y1="121.6" x2="365" y2="121.6" stroke="#e4e4e7" stroke-dasharray="2 2" />
+                    <line x1="35" y1="148.3" x2="365" y2="148.3" stroke="#e4e4e7" stroke-dasharray="2 2" />
+                    <line x1="35" y1="175" x2="365" y2="175" stroke="#e4e4e7" stroke-dasharray="2 2" />
+
+                    <!-- Y-Axis Labels -->
+                    <text x="25" y="19" font-size="10" fill="#a1a1aa" text-anchor="end">700</text>
+                    <text x="25" y="45.6" font-size="10" fill="#a1a1aa" text-anchor="end">600</text>
+                    <text x="25" y="72.3" font-size="10" fill="#a1a1aa" text-anchor="end">500</text>
+                    <text x="25" y="99" font-size="10" fill="#a1a1aa" text-anchor="end">400</text>
+                    <text x="25" y="125.6" font-size="10" fill="#a1a1aa" text-anchor="end">300</text>
+                    <text x="25" y="152.3" font-size="10" fill="#a1a1aa" text-anchor="end">200</text>
+                    <text x="25" y="179" font-size="10" fill="#a1a1aa" text-anchor="end">100</text>
+
+                    <!-- X-Axis Labels -->
+                    <text x="40" y="200" font-size="10" fill="#71717a" text-anchor="middle">0分</text>
+                    <text x="85" y="200" font-size="10" fill="#71717a" text-anchor="middle">20分</text>
+                    <text x="130" y="200" font-size="10" fill="#71717a" text-anchor="middle">40分</text>
+                    <text x="175" y="200" font-size="10" fill="#71717a" text-anchor="middle">60分</text>
+                    <text x="220" y="200" font-size="10" fill="#71717a" text-anchor="middle">80分</text>
+                    <text x="265" y="200" font-size="10" fill="#71717a" text-anchor="middle">100分</text>
+                    <text x="310" y="200" font-size="10" fill="#71717a" text-anchor="middle">120分</text>
+                    <text x="355" y="200" font-size="10" fill="#71717a" text-anchor="middle">140分</text>
+
+                    <!-- Red Line Curve -->
+                    <path d="M 40,125 C 65,110 100,105 130,105 C 150,105 160,80 175,80 C 190,80 205,145 220,145 C 240,145 250,135 265,135 C 285,135 295,160 310,160 C 325,160 340,145 355,145" fill="none" stroke="#ef4444" stroke-width="3" />
+
+                    <!-- Highlighted Point -->
+                    <circle cx="175" cy="80" r="7" fill="#ef4444" stroke="#ffffff" stroke-width="2.5" />
+                </svg>
+
+                <!-- Tooltip Box positioned exactly under X=175 (60分), Y=80. -->
+                <div class="absolute bg-zinc-800/90 text-white text-[10px] px-3 py-1.5 rounded-lg shadow-md flex flex-col gap-0.5" style="left: calc(46% - 40px); top: 48%;">
+                    <div class="font-medium whitespace-nowrap">得分：20分</div>
+                    <div class="font-medium whitespace-nowrap">人数：50人</div>
+                    <!-- Small pointing triangle pointing up -->
+                    <div class="absolute -top-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-b-[4px] border-b-zinc-800/90"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 2 Card: Recent 5 Reports -->
+        <div id="recent-reports-card" class="bg-white rounded-2xl p-5 shadow-xs border border-slate-200/60 space-y-3">
+            <div class="flex justify-between items-center">
+                <h3 class="text-sm font-bold text-gray-800 flex items-center gap-2">
+                    <span class="w-2 h-4 bg-sky-500 rounded-full"></span>
+                    <span>最近5次报告</span>
+                </h3>
+                
+                <!-- Legend -->
+                <div class="flex items-center gap-3 text-xs text-gray-500">
+                    <div class="flex items-center gap-1">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#0ea5e9]"></span>
+                        <span>得分</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#84cc16]"></span>
+                        <span>用时</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative w-full bg-slate-50/60 rounded-xl p-2 border border-slate-100 overflow-visible">
+                <svg viewBox="0 0 380 220" class="w-full h-auto overflow-visible">
+                    <!-- Horizontal Grid Lines -->
+                    <line x1="35" y1="15" x2="365" y2="15" stroke="#e4e4e7" stroke-dasharray="2 2" />
+                    <line x1="35" y1="65" x2="365" y2="65" stroke="#e4e4e7" stroke-dasharray="2 2" />
+                    <line x1="35" y1="115" x2="365" y2="115" stroke="#e4e4e7" stroke-dasharray="2 2" />
+                    <line x1="35" y1="165" x2="365" y2="165" stroke="#e4e4e7" stroke-dasharray="2 2" />
+
+                    <!-- Y-Axis Labels -->
+                    <text x="25" y="19" font-size="10" fill="#a1a1aa" text-anchor="end">150</text>
+                    <text x="25" y="69" font-size="10" fill="#a1a1aa" text-anchor="end">100</text>
+                    <text x="25" y="119" font-size="10" fill="#a1a1aa" text-anchor="end">50</text>
+                    <text x="25" y="169" font-size="10" fill="#a1a1aa" text-anchor="end">0</text>
+
+                    <!-- X-Axis Labels -->
+                    <text x="55" y="195" font-size="10" fill="#3f3f46" text-anchor="middle">第1次</text>
+                    <text x="125" y="195" font-size="10" fill="#3f3f46" text-anchor="middle">第2次</text>
+                    <text x="195" y="195" font-size="10" fill="#3f3f46" text-anchor="middle">第3次</text>
+                    <text x="265" y="195" font-size="10" fill="#3f3f46" text-anchor="middle">第4次</text>
+                    <text x="335" y="195" font-size="10" fill="#3f3f46" text-anchor="middle">第5次</text>
+
+                    <!-- Blue Line (得分) -->
+                    <path d="M 55,115 L 125,80 L 195,80 L 265,120 L 335,35" fill="none" stroke="#0ea5e9" stroke-width="2.5" />
+
+                    <!-- Green Line (用时) -->
+                    <path d="M 55,95 L 125,115 L 195,115 L 265,140 L 335,125" fill="none" stroke="#84cc16" stroke-width="2.5" />
+
+                    <!-- Blue Dots -->
+                    <circle cx="55" cy="115" r="5" fill="#0ea5e9" stroke="#ffffff" stroke-width="1.5" />
+                    <circle cx="125" cy="80" r="5" fill="#0ea5e9" stroke="#ffffff" stroke-width="1.5" />
+                    <circle cx="195" cy="80" r="5" fill="#0ea5e9" stroke="#ffffff" stroke-width="1.5" />
+                    <circle cx="265" cy="120" r="5" fill="#0ea5e9" stroke="#ffffff" stroke-width="1.5" />
+                    <circle cx="335" cy="35" r="5" fill="#0ea5e9" stroke="#ffffff" stroke-width="1.5" />
+
+                    <!-- Green Dots -->
+                    <circle cx="55" cy="95" r="5" fill="#84cc16" stroke="#ffffff" stroke-width="1.5" />
+                    <circle cx="125" cy="115" r="5" fill="#84cc16" stroke="#ffffff" stroke-width="1.5" />
+                    <circle cx="195" cy="115" r="5" fill="#84cc16" stroke="#ffffff" stroke-width="1.5" />
+                    <circle cx="265" cy="140" r="5" fill="#84cc16" stroke="#ffffff" stroke-width="1.5" />
+                    <circle cx="335" cy="125" r="5" fill="#84cc16" stroke="#ffffff" stroke-width="1.5" />
+                </svg>
+
+                <!-- White Tooltip Overlay at Point 1 -->
+                <div class="absolute bg-white text-[10px] p-2 rounded-lg border border-gray-300 shadow-md flex flex-col gap-0.5" style="left: 16%; top: 10%;">
+                    <div class="font-semibold text-gray-400">第1次</div>
+                    <div class="font-medium text-gray-700 mt-0.5">得分：50分</div>
+                    <div class="font-medium text-gray-700">用时：40分钟</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer Status Card -->
+        <div class="bg-white rounded-2xl p-5 shadow-xs border border-slate-200/60 space-y-4">
+            <div class="flex justify-between items-center pb-1">
+                <h3 class="text-sm font-bold text-gray-800 flex items-center gap-2">
+                    <span class="w-2 h-4 bg-amber-500 rounded-full"></span>
+                    <span>答题情况</span>
+                </h3>
+                <button onclick="window.location.href='cuotiben.html'" class="border border-slate-200 rounded-lg px-2.5 py-1 text-xs text-slate-600 bg-slate-50 font-medium hover:bg-slate-100 active:bg-slate-200 transition-colors">
+                    查看错题本
+                </button>
+            </div>
+            
+            <div class="border-t border-dashed border-slate-200 my-2"></div>
+
+            <h4 class="text-sm font-extrabold text-gray-800 pt-1">第一部分</h4>
+
+            <!-- 一、新一级题型客观题 -->
+            <div class="space-y-1.5 pt-1 p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                <h5 class="text-xs font-bold text-gray-700">一、新一级题型客观题</h5>
+                <div class="grid grid-cols-4 gap-2 text-center py-1">
+                    <div>
+                        <div class="text-sm font-bold text-gray-800">20.5%</div>
+                        <div class="text-[10px] text-gray-500">正确率</div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-gray-800">2/10</div>
+                        <div class="text-[10px] text-gray-500">答对</div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-gray-800">3.5/10</div>
+                        <div class="text-[10px] text-gray-500">得分</div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-gray-800">2分钟20秒</div>
+                        <div class="text-[10px] text-gray-500">用时</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 二、简答题/填空题主观题 -->
+            <div class="space-y-1.5 pt-1 p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                <h5 class="text-xs font-bold text-gray-700">二、简答题/填空题主观题</h5>
+                <div class="grid grid-cols-3 gap-2 text-center py-1">
+                    <div>
+                        <div class="text-sm font-bold text-gray-800">2/10</div>
+                        <div class="text-[10px] text-gray-500">已答</div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-gray-800">3.5/10</div>
+                        <div class="text-[10px] text-gray-500">得分</div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-gray-800">2分钟20秒</div>
+                        <div class="text-[10px] text-gray-500">用时</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 三、材料题（包含主观题和客观题） -->
+            <div class="space-y-1.5 pt-1 p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                <h5 class="text-xs font-bold text-gray-700">三、材料题（包含主观题和客观题）</h5>
+                <div class="grid grid-cols-5 gap-1 text-center py-1">
+                    <div>
+                        <div class="text-sm font-bold text-gray-800 text-[11px] sm:text-sm">20.5%</div>
+                        <div class="text-[10px] text-gray-500">正确率</div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-gray-800">2/10</div>
+                        <div class="text-[10px] text-gray-500">答对</div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-gray-800">0/10</div>
+                        <div class="text-[10px] text-gray-500">已答</div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-gray-800">3.5/10</div>
+                        <div class="text-[10px] text-gray-500">得分</div>
+                    </div>
+                    <div class="whitespace-nowrap overflow-visible">
+                        <div class="text-sm font-bold text-gray-800 text-[11px] sm:text-sm">2分钟20秒</div>
+                        <div class="text-[10px] text-gray-500">用时</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 四、材料题（只包含客观题） -->
+            <div class="space-y-1.5 pt-1 p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                <h5 class="text-xs font-bold text-gray-700">四、材料题（只包含客观题）</h5>
+                <div class="grid grid-cols-4 gap-2 text-center py-1">
+                    <div>
+                        <div class="text-sm font-bold text-gray-800">20.5%</div>
+                        <div class="text-[10px] text-gray-500">正确率</div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-gray-800">2/10</div>
+                        <div class="text-[10px] text-gray-500">答对</div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-gray-800">3.5/10</div>
+                        <div class="text-[10px] text-gray-500">得分</div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-gray-800">2分钟20秒</div>
+                        <div class="text-[10px] text-gray-500">用时</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 五、材料题（只包含主观题） -->
+            <div class="space-y-1.5 pt-1 p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                <h5 class="text-xs font-bold text-gray-700">五、材料题（只包含主观题）</h5>
+                <div class="grid grid-cols-3 gap-2 text-center py-1">
+                    <div>
+                        <div class="text-sm font-bold text-gray-800">2/10</div>
+                        <div class="text-[10px] text-gray-500">已答</div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-gray-800">3.5/10</div>
+                        <div class="text-[10px] text-gray-500">得分</div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-gray-800">2分钟20秒</div>
+                        <div class="text-[10px] text-gray-500">用时</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer Sheet Card (答题卡) -->
+        <div class="bg-white rounded-2xl p-5 shadow-xs border border-slate-200/60 space-y-4">
+            <h3 class="text-sm font-bold text-gray-800 flex items-center gap-2">
+                <span class="w-2 h-4 bg-indigo-500 rounded-full"></span>
+                <span>答题卡</span>
+            </h3>
+
+            <!-- Legend -->
+            <div class="flex flex-wrap gap-x-3 gap-y-1.5 text-xs text-gray-500 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                <div class="flex items-center gap-1">
+                    <div class="w-4 h-4 bg-zinc-500 rounded"></div>
+                    <span>正确</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <div class="w-4 h-4 bg-zinc-700 rounded"></div>
+                    <span>半对</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <div class="w-4 h-4 bg-zinc-400 rounded"></div>
+                    <span>错误</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <div class="w-4 h-4 bg-white border border-gray-400 rounded"></div>
+                    <span>已答</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <div class="w-4 h-4 bg-white border border-gray-200 rounded"></div>
+                    <span>未答</span>
+                </div>
+            </div>
+
+            <!-- Part 1 -->
+            <div class="space-y-4">
+                <h4 class="text-sm font-bold text-gray-800 text-center pt-2">第一部分</h4>
+                
+                <div class="space-y-2">
+                    <div class="text-xs text-gray-600">一、二级题型</div>
+                    <div class="grid grid-cols-5 gap-3">
+                        <!-- Numbers 1 to 15 correctly answered (zinc-500) -->
+                        <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">1</div>
+                        <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">2</div>
+                        <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">3</div>
+                        <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">4</div>
+                        <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">5</div>
+                        <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">6</div>
+                        <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">7</div>
+                        <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">8</div>
+                        <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">9</div>
+                        <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">10</div>
+                        <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">11</div>
+                        <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">12</div>
+                        <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">13</div>
+                        <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">14</div>
+                        <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">15</div>
+                    </div>
+                </div>
+
+                <div class="space-y-2 mt-4">
+                    <div class="text-xs text-gray-600">二、填空题</div>
+                    <div class="grid grid-cols-5 gap-3">
+                        <!-- 16: Answered with full points (5分, green) below -->
+                        <div class="flex flex-col items-center gap-1">
+                            <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">16</div>
+                            <span class="text-[10px] font-bold text-green-500 leading-none">5分</span>
+                        </div>
+                        <!-- 17: Unanswered (0分, red) below -->
+                        <div class="flex flex-col items-center gap-1">
+                            <div class="w-11 h-11 bg-white text-zinc-400 border border-zinc-300 rounded-lg flex items-center justify-center font-bold text-sm">17</div>
+                            <span class="text-[10px] font-bold text-red-500 leading-none">0分</span>
+                        </div>
+                        <!-- 18: Unanswered (0分, red) below -->
+                        <div class="flex flex-col items-center gap-1">
+                            <div class="w-11 h-11 bg-white text-zinc-400 border border-zinc-300 rounded-lg flex items-center justify-center font-bold text-sm">18</div>
+                            <span class="text-[10px] font-bold text-red-500 leading-none">0分</span>
+                        </div>
+                        <!-- 19: Answered with full points (5分, green) below -->
+                        <div class="flex flex-col items-center gap-1">
+                            <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">19</div>
+                            <span class="text-[10px] font-bold text-green-500 leading-none">5分</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Part 2 -->
+            <div class="space-y-4 pt-2">
+                <h4 class="text-sm font-bold text-gray-800 text-center">第二部分</h4>
+                
+                <div class="space-y-2">
+                    <div class="text-xs text-gray-600">三、简答题</div>
+                    <div class="grid grid-cols-5 gap-3">
+                        <!-- 20: Answered with partial points (2分, yellow) below -->
+                        <div class="flex flex-col items-center gap-1">
+                            <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">20</div>
+                            <span class="text-[10px] font-bold text-amber-500 leading-none">2分</span>
+                        </div>
+                        <!-- 21: Answered with 0 points (0分, red) below -->
+                        <div class="flex flex-col items-center gap-1">
+                            <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">21</div>
+                            <span class="text-[10px] font-bold text-red-500 leading-none">0分</span>
+                        </div>
+                        <!-- 22: Answered with partial points (2分, yellow) below -->
+                        <div class="flex flex-col items-center gap-1">
+                            <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">22</div>
+                            <span class="text-[10px] font-bold text-amber-500 leading-none">2分</span>
+                        </div>
+                        <!-- 23: Unanswered (0分, red) below -->
+                        <div class="flex flex-col items-center gap-1">
+                            <div class="w-11 h-11 bg-white text-zinc-400 border border-zinc-300 rounded-lg flex items-center justify-center font-bold text-sm">23</div>
+                            <span class="text-[10px] font-bold text-red-500 leading-none">0分</span>
+                        </div>
+                        <!-- 24: Answered with partial points (2分, yellow) below -->
+                        <div class="flex flex-col items-center gap-1">
+                            <div class="w-11 h-11 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">24</div>
+                            <span class="text-[10px] font-bold text-amber-500 leading-none">2分</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Fixed Bottom Actions Bar -->
+    <div class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[480px] h-16 bg-white border-t border-gray-200 px-4 flex items-center justify-between gap-3 z-50">
+        <button onclick="window.location.href='shiti_jiexi.html'" class="flex-1 h-11 border border-sky-500 text-sky-500 bg-white rounded-lg font-medium text-sm hover:bg-sky-50 transition-colors active:bg-sky-100">
+            全部解析
+        </button>
+        <button onclick="window.location.href='shiti_jiexi.html'" class="flex-1 h-11 border border-sky-500 text-sky-500 bg-white rounded-lg font-medium text-sm hover:bg-sky-50 transition-colors active:bg-sky-100">
+            错题解析
+        </button>
+        <button id="btn-reanswer" onclick="window.location.href='dati_yemian.html'" class="flex-1 h-11 border border-sky-500 text-sky-500 bg-white rounded-lg font-medium text-sm hover:bg-sky-50 transition-colors active:bg-sky-100">
+            再次答题/继续答题
+        </button>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const from = urlParams.get('from');
+            if (from === 'tongkao' || from === 'daliankao' || from === '统考试卷' || from === '大联考') {
+                const card = document.getElementById('recent-reports-card');
+                if (card) {
+                    card.style.display = 'none';
+                }
+                const btn = document.getElementById('btn-reanswer');
+                if (btn) {
+                    btn.style.display = 'none';
+                }
+            }
+        })();
+    </script>
+</body>
+</html>
