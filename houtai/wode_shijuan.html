@@ -276,9 +276,9 @@
                     <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
                         刷题版本
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <a href="ai_caozuo_rizhi.html" class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer block">
                         AI操作日志
-                    </div>
+                    </a>
                 </div>
             </div>
 
@@ -346,10 +346,29 @@
                 </div>
                 <div class="space-y-0.5" id="group-4">
                     <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
-                        分类管理
+                        知识点体系
                     </div>
                     <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
-                        标签管理
+                        教材章节
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 5: 题库设置 -->
+            <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleMenu('group-5')">
+                    <span>题库设置</span>
+                    <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-5"></i>
+                </div>
+                <div class="space-y-0.5" id="group-5">
+                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                        题型管理
+                    </div>
+                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                        试题难度
+                    </div>
+                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                        试卷类型
                     </div>
                 </div>
             </div>
@@ -468,9 +487,6 @@
                     <button onclick="openAiModal()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs px-3.5 py-1.5 rounded-lg font-medium transition-colors shadow-2xs">
                         <span>智能组卷</span>
                     </button>
-                    <button onclick="openAiTypesetModal()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs px-3.5 py-1.5 rounded-lg font-medium transition-colors shadow-2xs">
-                        <span>AI排版组卷</span>
-                    </button>
                 </div>
 
                 <!-- 试卷列表 Table -->
@@ -487,7 +503,7 @@
                                 <th class="py-2.5 px-3">作答时长(min)</th>
                                 <th class="py-2.5 px-3">创建人</th>
                                 <th class="py-2.5 px-3">创建时间</th>
-                                <th class="py-2.5 px-3 text-right pr-4 sticky right-0 bg-slate-50 z-20 shadow-[-4px_0_8px_-2px_rgba(0,0,0,0.06)]">操作</th>
+                <th class="py-2.5 px-3 text-left pl-3 sticky right-0 bg-slate-50 z-20 shadow-[-4px_0_8px_-2px_rgba(0,0,0,0.06)] min-w-[280px]">操作</th>
                             </tr>
                         </thead>
                         <tbody id="paperTableBody" class="divide-y divide-slate-100 text-slate-700">
@@ -645,9 +661,62 @@
         </div>
     </div>
 
-    <!-- AI排版组卷 - 添加试卷 Modal -->
+    <!-- Share Paper Modal -->
+    <div id="shareModal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-backdrop">
+        <div class="bg-white rounded-xl shadow-2xl border border-slate-200 w-11/12 max-w-md max-h-[85vh] flex flex-col overflow-hidden">
+            <div class="px-5 py-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                    <i class="fas fa-share-nodes text-blue-600"></i>
+                    <span>试卷共享设置</span>
+                </h3>
+                <button onclick="closeShareModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fas fa-times text-base"></i>
+                </button>
+            </div>
+            <div class="p-5 overflow-y-auto custom-scrollbar space-y-4 text-xs">
+                <div>
+                    <label class="text-slate-500 font-medium block mb-1">当前试卷</label>
+                    <div id="shareModalPaperTitle" class="font-bold text-slate-800 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+                        2027学年河南省第一次大联考(B) 卷
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-slate-700 font-medium block mb-1.5">共享范围</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="shareScope" value="all" checked class="text-blue-600 focus:ring-blue-500">
+                            <span class="text-slate-700">全校教师可见（可引用、可练习）</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="shareScope" value="dept" class="text-blue-600 focus:ring-blue-500">
+                            <span class="text-slate-700">仅教研组/同科目教师可见</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="shareScope" value="private" class="text-blue-600 focus:ring-blue-500">
+                            <span class="text-slate-700">仅限指定教师协作</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-slate-700 font-medium block mb-1.5">共享链接</label>
+                    <div class="flex items-center gap-1.5">
+                        <input type="text" readonly value="https://kuke.admin.com/paper/share/v2/12441842" class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-600 font-mono">
+                        <button onclick="copyShareLink()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">复制</button>
+                    </div>
+                </div>
+            </div>
+            <div class="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-end gap-2">
+                <button onclick="closeShareModal()" class="px-4 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-lg text-xs font-medium">取消</button>
+                <button onclick="confirmShareSettings()" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium">保存设置</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加试卷 / AI排版组卷 Modal -->
     <div id="aiTypesetModal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-backdrop">
-        <div class="bg-white rounded-xl shadow-2xl border border-slate-200 w-11/12 max-w-lg max-h-[90vh] flex flex-col overflow-hidden">
+        <div class="bg-white rounded-xl shadow-2xl border border-slate-200 w-11/12 max-w-xl max-h-[90vh] flex flex-col overflow-hidden">
             <!-- Modal Header -->
             <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
                 <h3 class="font-bold text-slate-800 text-base">添加试卷</h3>
@@ -663,7 +732,7 @@
                     <label class="block text-slate-700 font-medium mb-1.5">
                         <span class="text-rose-500 mr-0.5">*</span>试卷标题
                     </label>
-                    <input type="text" id="aiTypesetPaperTitle" placeholder="请输入试卷标题" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 placeholder-slate-300 focus:outline-none focus:border-blue-500 transition-colors">
+                    <input type="text" id="aiTypesetPaperTitle" placeholder="请输入试卷标题" class="w-full bg-white border border-slate-200 rounded-lg px-3.5 py-2.5 text-xs text-slate-700 placeholder-slate-300 focus:outline-none focus:border-blue-500 transition-colors">
                 </div>
 
                 <!-- 2. 试卷类型 -->
@@ -671,7 +740,7 @@
                     <label class="block text-slate-700 font-medium mb-1.5">
                         <span class="text-rose-500 mr-0.5">*</span>试卷类型：
                     </label>
-                    <select id="aiTypesetPaperType" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
+                    <select id="aiTypesetPaperType" class="w-full bg-white border border-slate-200 rounded-lg px-3.5 py-2.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
                         <option value="" disabled selected class="text-slate-300">请选择试卷类型</option>
                         <option value="线下试卷">线下试卷</option>
                         <option value="章节测试">章节测试</option>
@@ -683,12 +752,13 @@
                 <!-- 3. 年份 -->
                 <div>
                     <label class="block text-slate-700 font-medium mb-1.5">年份</label>
-                    <select id="aiTypesetYear" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
+                    <select id="aiTypesetYear" class="w-full bg-white border border-slate-200 rounded-lg px-3.5 py-2.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
                         <option value="" disabled selected class="text-slate-300">请选择年份</option>
                         <option value="2027">2027</option>
                         <option value="2026">2026</option>
                         <option value="2025">2025</option>
                         <option value="2024">2024</option>
+                        <option value="2023">2023</option>
                     </select>
                 </div>
 
@@ -698,8 +768,8 @@
                         <span class="text-rose-500 mr-0.5">*</span>作答时长
                     </label>
                     <div class="flex items-center gap-2">
-                        <input type="number" id="aiTypesetDuration" placeholder="" class="w-32 bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
-                        <span class="text-slate-700 text-xs">分钟</span>
+                        <input type="number" id="aiTypesetDuration" placeholder="" class="w-36 bg-white border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
+                        <span class="text-slate-700 text-xs font-medium">分钟</span>
                     </div>
                 </div>
 
@@ -711,7 +781,7 @@
                             <label class="block text-slate-700 font-medium mb-1.5">
                                 <span class="text-rose-500 mr-0.5">*</span>专业分类
                             </label>
-                            <select id="aiTypesetCategory" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
+                            <select id="aiTypesetCategory" class="w-full bg-white border border-slate-200 rounded-lg px-3.5 py-2.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
                                 <option value="专升本" selected>专升本</option>
                                 <option value="考研">考研</option>
                                 <option value="高考">高考</option>
@@ -722,12 +792,15 @@
                             <label class="block text-slate-700 font-medium mb-1.5">
                                 <span class="text-rose-500 mr-0.5">*</span>地区
                             </label>
-                            <select id="aiTypesetRegion" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
+                            <select id="aiTypesetRegion" class="w-full bg-white border border-slate-200 rounded-lg px-3.5 py-2.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
                                 <option value="" selected class="text-slate-300">请选择地区</option>
                                 <option value="河南省">河南省</option>
                                 <option value="北京市">北京市</option>
                                 <option value="上海市">上海市</option>
                                 <option value="广东省">广东省</option>
+                                <option value="浙江省">浙江省</option>
+                                <option value="江苏省">江苏省</option>
+                                <option value="山东省">山东省</option>
                             </select>
                         </div>
 
@@ -735,14 +808,15 @@
                             <label class="block text-slate-700 font-medium mb-1.5">
                                 <span class="text-rose-500 mr-0.5">*</span>科目
                             </label>
-                            <select id="aiTypesetSubject" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
+                            <select id="aiTypesetSubject" class="w-full bg-white border border-slate-200 rounded-lg px-3.5 py-2.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
                                 <option value="" selected class="text-slate-300">请选择科目</option>
-                                <option value="法学">法学</option>
-                                <option value="植物遗传学">植物遗传学</option>
-                                <option value="管理学">管理学</option>
                                 <option value="高等数学">高等数学</option>
                                 <option value="大学英语">大学英语</option>
-                                <option value="计算机">计算机</option>
+                                <option value="计算机基础">计算机基础</option>
+                                <option value="管理学">管理学</option>
+                                <option value="法学">法学</option>
+                                <option value="教育学">教育学</option>
+                                <option value="植物遗传学">植物遗传学</option>
                             </select>
                         </div>
                     </div>
@@ -750,10 +824,98 @@
             </div>
 
             <!-- Modal Footer -->
+            <div class="px-6 py-4 border-t border-slate-100 bg-white flex items-center justify-end gap-3">
+                <button onclick="closeAiTypesetModal()" class="px-5 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-lg text-xs font-medium transition-colors">取消</button>
+                <button onclick="saveAndTypesetPaper()" class="px-5 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-medium transition-colors">保存并组卷</button>
+                <button onclick="submitAiTypesetPaper()" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition-colors shadow-2xs">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI录题 Modal (点击保存并组卷后触发) -->
+    <div id="aiLuTiModal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-backdrop">
+        <div class="bg-white rounded-xl shadow-2xl border border-slate-200 w-11/12 max-w-xl max-h-[90vh] flex flex-col overflow-hidden">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                        <i class="fas fa-magic text-sm"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-sm">AI录题</h3>
+                    </div>
+                </div>
+                <button onclick="closeAiLuTiModal()" class="text-slate-400 hover:text-slate-600 p-1 text-base leading-none transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="p-6 overflow-y-auto custom-scrollbar space-y-4 text-xs">
+                <!-- 文件上传区域 (支持拖拽与点击选择) -->
+                <div>
+                    <label class="block text-slate-700 font-medium mb-1.5">
+                        <span class="text-rose-500 mr-0.5">*</span>上传试题文件
+                    </label>
+                    <div id="aiLuTiDropZone" 
+                         onclick="document.getElementById('aiLuTiFileInput').click()"
+                         class="border-2 border-dashed border-slate-200 hover:border-blue-500 bg-slate-50/50 hover:bg-blue-50/30 rounded-xl p-5 text-center cursor-pointer transition-all duration-200 group relative">
+                        <input type="file" id="aiLuTiFileInput" multiple 
+                               accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.png,.jpg,.jpeg,.webp" 
+                               onchange="handleAiLuTiFileSelect(event)" 
+                               class="hidden">
+                        
+                        <div class="flex flex-col items-center justify-center gap-2 pointer-events-none">
+                            <div class="w-12 h-12 rounded-full bg-white shadow-xs border border-slate-200/80 flex items-center justify-center text-blue-500 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all">
+                                <i class="fas fa-cloud-arrow-up text-lg"></i>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">点击选择文件</span>
+                                <span class="text-slate-400"> 或将文件直接拖拽至此处</span>
+                            </div>
+                            
+                            <div class="flex flex-wrap items-center justify-center gap-1.5 mt-1">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-rose-50 text-rose-600 border border-rose-200">PDF (.pdf)</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-600 border border-blue-200">Word (.doc / .docx)</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-emerald-600 border border-emerald-200">Excel (.xls / .xlsx)</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600 border border-slate-200">TXT (.txt)</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-600 border border-amber-200">图片 (PNG / JPG)</span>
+                            </div>
+                            <p class="text-[10px] text-slate-400 mt-0.5">单个文件最大支持 50MB，可批量上传多个文件</p>
+                        </div>
+                    </div>
+
+                    <!-- 已选文件列表 -->
+                    <div id="aiLuTiFilesContainer" class="mt-2.5 space-y-1.5 hidden">
+                        <div class="flex items-center justify-between text-[11px] text-slate-500 font-medium px-1">
+                            <span>已选文件清单 (<span id="aiLuTiFileCount">0</span>)</span>
+                            <button type="button" onclick="clearAiLuTiFiles(event)" class="text-rose-500 hover:underline">清空重选</button>
+                        </div>
+                        <div id="aiLuTiFilesList" class="space-y-1.5 max-h-36 overflow-y-auto custom-scrollbar"></div>
+                    </div>
+                </div>
+
+                <!-- 提示：去 AI 操作日志中查看进度 -->
+                <div class="bg-blue-50/90 border border-blue-200 rounded-xl p-3.5 flex items-start gap-3">
+                    <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center shrink-0 text-blue-600 mt-0.5">
+                        <i class="fas fa-clock-rotate-left text-xs"></i>
+                    </div>
+                    <div class="text-xs text-blue-900 leading-relaxed">
+                        <div class="font-semibold text-blue-950 mb-0.5 flex items-center gap-1.5">
+                            <span>录题进度提示</span>
+                            <span class="bg-blue-200 text-blue-800 text-[10px] px-1.5 py-0.2 rounded font-normal">后台异步解析</span>
+                        </div>
+                        <div>提交后系统将启动 AI 智能识别。您可以随时前往左侧菜单<a href="ai_caozuo_rizhi.html" class="text-blue-700 font-semibold underline underline-offset-2 hover:text-blue-800">「AI操作日志-AI录题」</a>查看任务状态。</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
             <div class="px-6 py-4 border-t border-slate-100 bg-white flex items-center justify-end gap-2.5">
-                <button onclick="closeAiTypesetModal()" class="px-4 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-lg text-xs font-medium transition-colors">取消</button>
-                <button onclick="saveAndTypesetPaper()" class="px-4 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-medium transition-colors">保存并组卷</button>
-                <button onclick="submitAiTypesetPaper()" class="px-5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition-colors shadow-2xs">确定</button>
+                <button onclick="closeAiLuTiModal()" class="px-4 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-lg text-xs font-medium transition-colors">取消</button>
+                <button id="aiLuTiSubmitBtn" onclick="submitAiLuTiTask()" disabled class="px-5 py-1.5 bg-slate-200 text-slate-400 rounded-lg text-xs font-medium cursor-not-allowed transition-colors flex items-center gap-1.5">
+                    <span>确定</span>
+                </button>
             </div>
         </div>
     </div>
@@ -787,7 +949,7 @@
                 paperType: '线下试卷',
                 year: '2026',
                 totalScore: 150,
-                questionCount: 74,
+                questionCount: 0,
                 duration: 120,
                 creator: '李敏',
                 createTime: '2026-07-15 10:15'
@@ -799,7 +961,7 @@
                 paperType: '章节测试',
                 year: '2026',
                 totalScore: 100,
-                questionCount: 50,
+                questionCount: 0,
                 duration: 90,
                 creator: '黄飞亚',
                 createTime: '2026-07-20 14:30'
@@ -811,7 +973,7 @@
                 paperType: '模拟考试',
                 year: '2026',
                 totalScore: 100,
-                questionCount: 45,
+                questionCount: 0,
                 duration: 90,
                 creator: '李敏',
                 createTime: '2026-07-20 16:00'
@@ -823,7 +985,7 @@
                 paperType: '模拟考试',
                 year: '2026',
                 totalScore: 100,
-                questionCount: 40,
+                questionCount: 0,
                 duration: 90,
                 creator: '黄飞亚',
                 createTime: '2026-07-22 10:30'
@@ -835,7 +997,7 @@
                 paperType: '真题试卷',
                 year: '2026',
                 totalScore: 150,
-                questionCount: 60,
+                questionCount: 0,
                 duration: 120,
                 creator: '黄飞亚',
                 createTime: '2026-07-25 14:20'
@@ -865,10 +1027,11 @@
             document.getElementById('totalRecordsCount').textContent = list.length.toString();
 
             tbody.innerHTML = list.map(item => {
+                const hasQuestions = Number(item.questionCount) > 0;
                 return `
                     <tr class="group hover:bg-slate-50/80 transition-colors">
                         <td class="py-2.5 px-3">
-                            <div class="font-medium text-blue-600 hover:underline cursor-pointer" onclick="openPreviewModal('${item.id}')">${item.title}</div>
+                            <div class="font-medium text-blue-600 hover:underline cursor-pointer" onclick="${hasQuestions ? `openPreviewModal('${item.id}')` : `openEditModal('${item.id}')`}">${item.title}</div>
                             <div class="text-[11px] text-slate-400">ID: ${item.id}</div>
                         </td>
                         <td class="py-2.5 px-3 text-slate-600">${item.category}</td>
@@ -879,13 +1042,15 @@
                         <td class="py-2.5 px-3 text-slate-700">${item.duration}</td>
                         <td class="py-2.5 px-3 text-slate-700">${item.creator}</td>
                         <td class="py-2.5 px-3 text-slate-500 text-[11px]">${item.createTime}</td>
-                        <td class="py-2.5 px-3 text-right pr-4 space-x-2 sticky right-0 bg-white group-hover:bg-slate-50 transition-colors z-10 shadow-[-4px_0_8px_-2px_rgba(0,0,0,0.06)]">
-                            <button onclick="openPreviewModal('${item.id}')" class="text-blue-600 hover:text-blue-800">预览</button>
+                        <td class="py-2.5 px-3 text-left pl-3 space-x-3 sticky right-0 bg-white group-hover:bg-slate-50 transition-colors z-10 shadow-[-4px_0_8px_-2px_rgba(0,0,0,0.06)] min-w-[280px]">
+                            <button onclick="sharePaper('${item.id}')" class="text-blue-600 hover:text-blue-800">共享</button>
+                            ${hasQuestions ? `<button onclick="openPreviewModal('${item.id}')" class="text-blue-600 hover:text-blue-800">预览</button>` : ''}
                             <button onclick="openEditModal('${item.id}')" class="text-blue-600 hover:text-blue-800">编辑</button>
+                            <button onclick="openComposePaper('${item.id}')" class="text-blue-600 hover:text-blue-800">组卷</button>
                             <button onclick="copyPaper('${item.id}')" class="text-blue-600 hover:text-blue-800">复制</button>
-                            <button onclick="exportPaper('${item.id}')" class="text-blue-600 hover:text-blue-800">导出</button>
+                            ${hasQuestions ? `<button onclick="exportPaper('${item.id}')" class="text-blue-600 hover:text-blue-800">导出</button>` : ''}
                             <button onclick="viewLog('${item.id}')" class="text-blue-600 hover:text-blue-800">日志</button>
-                            <button onclick="deletePaper('${item.id}')" class="text-rose-600 hover:text-rose-800">删除</button>
+                            <button onclick="deletePaper('${item.id}')" class="text-blue-600 hover:text-blue-800">删除</button>
                         </td>
                     </tr>
                 `;
@@ -1081,6 +1246,32 @@
             }
         }
 
+        // Share Paper Actions
+        function sharePaper(id) {
+            const item = papersList.find(p => p.id === id);
+            if (!item) return;
+            document.getElementById('shareModalPaperTitle').textContent = item.title;
+            document.getElementById('shareModal').classList.remove('hidden');
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.add('hidden');
+        }
+
+        function copyShareLink() {
+            showToast('试卷共享链接已复制到剪贴板！');
+        }
+
+        function confirmShareSettings() {
+            showToast('共享权限设置已保存！');
+            closeShareModal();
+        }
+
+        // Compose Paper
+        function openComposePaper(id) {
+            window.location.href = `daoru_shijuan.html?id=${id}`;
+        }
+
         function viewLog(id) {
             const item = papersList.find(p => p.id === id);
             document.getElementById('logModalList').innerHTML = `
@@ -1101,7 +1292,7 @@
         }
 
         function importPapers() {
-            showToast('请选择本地试卷文件(Word/Excel)导入');
+            openAiTypesetModal();
         }
 
         function openAiModal() {
@@ -1124,13 +1315,188 @@
         }
 
         function saveAndTypesetPaper() {
-            const title = document.getElementById('aiTypesetPaperTitle').value.trim();
-            if (!title) {
-                showToast('请输入试卷标题');
+            const titleInput = document.getElementById('aiTypesetPaperTitle');
+            const title = (titleInput && titleInput.value.trim()) ? titleInput.value.trim() : '未命名试卷';
+
+            const pType = document.getElementById('aiTypesetPaperType').value || '线下试卷';
+            const yearVal = document.getElementById('aiTypesetYear').value || '2026';
+            const durationVal = parseInt(document.getElementById('aiTypesetDuration').value) || 90;
+            const regionVal = document.getElementById('aiTypesetRegion').value || '';
+            const subjectVal = document.getElementById('aiTypesetSubject').value || '';
+            const categoryVal = document.getElementById('aiTypesetCategory').value || '专升本';
+
+            const fullCategory = [categoryVal, subjectVal, regionVal].filter(Boolean).join('-');
+            const newId = '124' + Math.floor(Math.random() * 1000000000000000);
+
+            papersList.unshift({
+                id: newId,
+                title: title,
+                category: fullCategory,
+                paperType: pType,
+                year: yearVal,
+                totalScore: 100,
+                questionCount: 45,
+                duration: durationVal,
+                creator: '黄飞亚',
+                createTime: new Date().toISOString().replace('T', ' ').substring(0, 16)
+            });
+
+            searchPapers();
+            showToast('试卷信息已保存！');
+            openAiLuTiModal();
+        }
+
+        // AI录题 Modal Logic
+        let aiLuTiUploadedFiles = [];
+
+        function openAiLuTiModal() {
+            closeAiTypesetModal();
+            const modal = document.getElementById('aiLuTiModal');
+            if (modal) modal.classList.remove('hidden');
+            initAiLuTiDropZone();
+        }
+
+        function closeAiLuTiModal() {
+            const modal = document.getElementById('aiLuTiModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function getFileFormatInfo(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            if (ext === 'pdf') return { icon: 'fa-file-pdf text-rose-500', color: 'bg-rose-50 border-rose-200' };
+            if (['doc', 'docx'].includes(ext)) return { icon: 'fa-file-word text-blue-500', color: 'bg-blue-50 border-blue-200' };
+            if (['xls', 'xlsx'].includes(ext)) return { icon: 'fa-file-excel text-emerald-500', color: 'bg-emerald-50 border-emerald-200' };
+            if (['png', 'jpg', 'jpeg', 'webp'].includes(ext)) return { icon: 'fa-file-image text-amber-500', color: 'bg-amber-50 border-amber-200' };
+            return { icon: 'fa-file-lines text-slate-500', color: 'bg-slate-50 border-slate-200' };
+        }
+
+        function handleAiLuTiFileSelect(event) {
+            const files = event.target.files;
+            if (files && files.length > 0) {
+                Array.from(files).forEach(f => {
+                    aiLuTiUploadedFiles.push({
+                        name: f.name,
+                        size: (f.size / (1024 * 1024)).toFixed(1) + ' MB',
+                        formatInfo: getFileFormatInfo(f.name)
+                    });
+                });
+                renderAiLuTiFileList();
+            }
+            event.target.value = '';
+        }
+
+        function renderAiLuTiFileList() {
+            const container = document.getElementById('aiLuTiFilesContainer');
+            const listEl = document.getElementById('aiLuTiFilesList');
+            const countEl = document.getElementById('aiLuTiFileCount');
+            const submitBtn = document.getElementById('aiLuTiSubmitBtn');
+
+            if (submitBtn) {
+                if (aiLuTiUploadedFiles.length === 0) {
+                    submitBtn.disabled = true;
+                    submitBtn.className = 'px-5 py-1.5 bg-slate-200 text-slate-400 rounded-lg text-xs font-medium cursor-not-allowed transition-colors flex items-center gap-1.5';
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtn.className = 'px-5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium cursor-pointer transition-colors shadow-2xs flex items-center gap-1.5';
+                }
+            }
+
+            if (!container || !listEl) return;
+
+            if (aiLuTiUploadedFiles.length === 0) {
+                container.classList.add('hidden');
+                listEl.innerHTML = '';
+                if (countEl) countEl.textContent = '0';
                 return;
             }
-            showToast('已保存并开启AI排版渲染...');
-            closeAiTypesetModal();
+
+            container.classList.remove('hidden');
+            if (countEl) countEl.textContent = aiLuTiUploadedFiles.length;
+
+            listEl.innerHTML = aiLuTiUploadedFiles.map((file, idx) => `
+                <div class="flex items-center justify-between p-2.5 bg-slate-50 hover:bg-slate-100/80 border border-slate-200/80 rounded-lg transition-colors group">
+                    <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                        <div class="w-8 h-8 rounded-lg ${file.formatInfo.color} flex items-center justify-center shrink-0 border">
+                            <i class="fas ${file.formatInfo.icon} text-sm"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <div class="text-xs font-semibold text-slate-800 truncate" title="${file.name}">${file.name}</div>
+                            <div class="flex items-center gap-2 text-[10px] text-slate-400 mt-0.5">
+                                <span>${file.size}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" onclick="removeAiLuTiFile(${idx})" class="text-slate-400 hover:text-rose-500 p-1.5 rounded-lg hover:bg-rose-50 transition-colors ml-2" title="移除此文件">
+                        <i class="fas fa-trash-can text-xs"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeAiLuTiFile(index) {
+            aiLuTiUploadedFiles.splice(index, 1);
+            renderAiLuTiFileList();
+        }
+
+        function clearAiLuTiFiles(event) {
+            if (event) event.stopPropagation();
+            aiLuTiUploadedFiles = [];
+            renderAiLuTiFileList();
+        }
+
+        function initAiLuTiDropZone() {
+            const dropZone = document.getElementById('aiLuTiDropZone');
+            if (!dropZone || dropZone.dataset.initialized) return;
+            dropZone.dataset.initialized = "true";
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }, false);
+            });
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dropZone.classList.add('border-blue-500', 'bg-blue-50/50');
+                }, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dropZone.classList.remove('border-blue-500', 'bg-blue-50/50');
+                }, false);
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                if (files && files.length > 0) {
+                    Array.from(files).forEach(f => {
+                        aiLuTiUploadedFiles.push({
+                            name: f.name,
+                            size: (f.size / (1024 * 1024)).toFixed(1) + ' MB',
+                            formatInfo: getFileFormatInfo(f.name)
+                        });
+                    });
+                    renderAiLuTiFileList();
+                }
+            }, false);
+        }
+
+        function submitAiLuTiTask() {
+            if (aiLuTiUploadedFiles.length === 0) {
+                showToast('请先选择或拖拽上传试题文件', true);
+                return;
+            }
+            const count = aiLuTiUploadedFiles.length;
+            closeAiLuTiModal();
+            aiLuTiUploadedFiles = [];
+            renderAiLuTiFileList();
+            showToast(`已成功创建 ${count} 个文件的AI录题任务！正在跳转至AI操作日志...`);
+            setTimeout(() => {
+                window.location.href = 'ai_caozuo_rizhi.html';
+            }, 500);
         }
 
         function submitAiTypesetPaper() {
