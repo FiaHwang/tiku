@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>库课管理平台 - 我的试卷</title>
+    <!-- FontAwesome & Tailwind CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f1f5f9;
+            color: #334155;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Custom scrollbars */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Nav hover and active states */
+        .primary-nav-item {
+            transition: all 0.15s ease;
+        }
+        .primary-nav-item:hover {
+            color: #2563eb;
+            background-color: #f8fafc;
+        }
+        .primary-nav-item.active {
+            color: #2563eb;
+            background-color: #eff6ff;
+            font-weight: 600;
+        }
+
+        .secondary-subitem {
+            transition: all 0.15s ease;
+        }
+        .secondary-subitem:hover {
+            color: #2563eb;
+            background-color: #f8fafc;
+        }
+        .secondary-subitem.active {
+            color: #2563eb;
+            background-color: #e0edff;
+            font-weight: 600;
+        }
+
+        /* Table custom styles */
+        .paper-table th {
+            white-space: nowrap;
+            font-weight: 600;
+            color: #475569;
+            background-color: #f8fafc;
+        }
+        .paper-table td {
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .modal-backdrop {
+            background-color: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(2px);
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen text-sm select-none">
+
+    <!-- 顶部 Top Header Bar -->
+    <header class="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 z-20 shrink-0 shadow-xs">
+        <!-- Left Section: Logo & Platform Title -->
+        <div class="flex items-center gap-3">
+            <!-- Red Square Logo Badge -->
+            <a href="../index.html" title="返回首页" class="bg-[#e52e2e] text-white rounded px-2 py-1 flex flex-col justify-center items-center shadow-xs hover:opacity-90 transition-opacity">
+                <span class="text-sm font-black leading-tight tracking-wider">库课</span>
+                <span class="text-[8px] scale-90 font-sans tracking-tighter opacity-90 leading-none">Cook Life</span>
+            </a>
+            
+            <!-- Platform Title -->
+            <a href="../index.html" title="返回首页" class="text-lg font-bold text-slate-800 tracking-tight hover:text-blue-600 transition-colors">库课管理平台</a>
+
+            <!-- Big Question Bank Pill Button -->
+            <button class="ml-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-medium flex items-center gap-1.5 hover:bg-blue-100 transition-colors border border-blue-100">
+                <span>大题库</span>
+                <i class="fas fa-exchange-alt text-[10px]"></i>
+            </button>
+        </div>
+
+        <!-- Right Section: Search & Utilities & User Profile -->
+        <div class="flex items-center gap-4">
+            <!-- Search Box -->
+            <div class="relative flex items-center">
+                <i class="fas fa-search absolute left-3 text-slate-400 text-xs"></i>
+                <input type="text" placeholder="请输入功能或试卷标题" class="bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-1.5 text-xs w-64 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+            </div>
+
+            <!-- Purple AI Cloud Circle Icon -->
+            <button class="w-7 h-7 bg-indigo-500 hover:bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-xs transition-transform active:scale-95" title="库AI助手">
+                <i class="fas fa-cloud text-xs"></i>
+            </button>
+
+            <!-- Utility Action Icons -->
+            <div class="flex items-center gap-3 text-slate-500 text-base">
+                <button class="hover:text-slate-800 transition-colors" title="文档"><i class="far fa-file-alt"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="待办"><i class="far fa-check-square"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="下发与同步"><i class="fas fa-cloud-upload-alt"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="消息通知"><i class="far fa-comment-dots"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="帮助中心"><i class="far fa-question-circle"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="意见反馈"><i class="far fa-edit"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="应用市场"><i class="fas fa-store"></i></button>
+            </div>
+
+            <div class="h-4 w-px bg-slate-200"></div>
+
+            <!-- User Info Dropdown -->
+            <div class="flex items-center gap-1.5 cursor-pointer group">
+                <span class="text-xs font-medium text-slate-700 group-hover:text-blue-600 transition-colors">黄飞亚</span>
+                <i class="fas fa-caret-down text-xs text-slate-400 group-hover:text-blue-600 transition-colors"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Header 下方的 Tab 标签栏 -->
+    <div class="h-9 bg-slate-100 border-b border-slate-200 flex items-center px-2 gap-1 text-xs shrink-0 z-10">
+        <!-- Home Icon Item -->
+        <a href="../index.html" class="flex items-center gap-1 px-2.5 py-1 text-slate-600 font-medium hover:text-slate-900 cursor-pointer">
+            <i class="fas fa-home text-sm"></i>
+            <span>首页</span>
+        </a>
+
+        <div class="h-4 w-px bg-slate-300 mx-1"></div>
+
+        <!-- Left Arrow Scroll Button -->
+        <button class="w-6 h-6 bg-white border border-slate-200 rounded flex items-center justify-center text-slate-400 hover:text-slate-700 hover:border-slate-300 shadow-2xs">
+            <i class="fas fa-chevron-left text-[10px]"></i>
+        </button>
+
+        <!-- Tab Items Container -->
+        <div class="flex items-center gap-1 overflow-x-auto custom-scrollbar py-0.5">
+            <!-- Active Tab: 我的试卷 -->
+            <div class="px-3 py-1 bg-white border border-blue-500 text-blue-600 rounded font-medium cursor-pointer shadow-2xs flex items-center gap-2">
+                <span>我的试卷</span>
+                <i class="fas fa-times text-[10px] text-blue-400 hover:text-blue-600 transition-colors"></i>
+            </div>
+        </div>
+
+        <!-- Right Arrow Scroll Button -->
+        <button class="w-6 h-6 bg-white border border-slate-200 rounded flex items-center justify-center text-slate-400 hover:text-slate-700 hover:border-slate-300 shadow-2xs ml-auto">
+            <i class="fas fa-chevron-right text-[10px]"></i>
+        </button>
+    </div>
+
+    <!-- 主体内容区域 (双栏导航 + 我的试卷内容) -->
+    <div class="flex flex-1 overflow-hidden">
+
+        <!-- 左侧一级导航 (Primary Icon Navigation Sidebar) -->
+        <aside class="w-16 bg-white border-r border-slate-200 flex flex-col items-center py-2 overflow-y-auto custom-scrollbar shrink-0 gap-1">
+            <a href="../index.html" class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-home text-base"></i>
+                <span class="text-[10px]">首页</span>
+            </a>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-robot text-base"></i>
+                <span class="text-[10px]">库AI</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-layer-group text-base"></i>
+                <span class="text-[10px]">运营</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-bullseye text-base"></i>
+                <span class="text-[10px]">营销</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-bullhorn text-base"></i>
+                <span class="text-[10px]">推广</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-network-wired text-base"></i>
+                <span class="text-[10px]">线索</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-users text-base"></i>
+                <span class="text-[10px]">CRM</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-comments text-base"></i>
+                <span class="text-[10px]">SCRM</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-sitemap text-base"></i>
+                <span class="text-[10px]">渠道</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-shopping-bag text-base"></i>
+                <span class="text-[10px]">商品</span>
+            </div>
+
+            <!-- Active Selected Main Menu: 题库 -->
+            <div class="primary-nav-item active w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer">
+                <i class="fas fa-pen-to-square text-base"></i>
+                <span class="text-[10px]">题库</span>
+            </div>
+
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-newspaper text-base"></i>
+                <span class="text-[10px]">资讯</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-clipboard-list text-base"></i>
+                <span class="text-[10px]">订单</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-graduation-cap text-base"></i>
+                <span class="text-[10px]">学服</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-question-circle text-base"></i>
+                <span class="text-[10px]">答疑</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-lightbulb text-base"></i>
+                <span class="text-[10px]">教务</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-user-tie text-base"></i>
+                <span class="text-[10px]">师资</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-yen-sign text-base"></i>
+                <span class="text-[10px]">财务</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-chart-line text-base"></i>
+                <span class="text-[10px]">数据</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-headset text-base"></i>
+                <span class="text-[10px]">坐席</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-mobile-alt text-base"></i>
+                <span class="text-[10px]">设备</span>
+            </div>
+        </aside>
+
+        <!-- 左侧二级子导航 (Secondary Sub-Navigation Sidebar) -->
+        <aside class="w-48 bg-white border-r border-slate-200 overflow-y-auto custom-scrollbar py-3 px-2 flex flex-col gap-3 shrink-0">
+            
+            <!-- Group 1: 试题管理 -->
+            <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleMenu('group-1')">
+                    <span>试题管理</span>
+                    <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-1"></i>
+                </div>
+                <div class="space-y-0.5" id="group-1">
+                    <a href="shitiku.html" class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer block">
+                        试题库
+                    </a>
+                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                        错题反馈
+                    </div>
+                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                        刷题版本
+                    </div>
+                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                        AI操作日志
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 2: 试卷管理 -->
+            <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleMenu('group-2')">
+                    <span>试卷管理</span>
+                    <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-2"></i>
+                </div>
+                <div class="space-y-0.5" id="group-2">
+                    <a href="shijuanku.html" class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer block">
+                        试卷库
+                    </a>
+                    <a href="wode_shijuan.html" class="secondary-subitem active px-3 py-1.5 rounded-lg text-xs cursor-pointer block">
+                        我的试卷
+                    </a>
+                </div>
+            </div>
+
+            <!-- Group 3: 题库运营 -->
+            <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleMenu('group-3')">
+                    <span>题库运营</span>
+                    <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-3"></i>
+                </div>
+                <div class="space-y-0.5" id="group-3">
+                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                        试卷考试
+                    </div>
+                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                        章节刷题
+                    </div>
+                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                        每日练习
+                    </div>
+                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                        固定刷题
+                    </div>
+                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                        强化通关练
+                    </div>
+                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                        赠题列表
+                    </div>
+                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                        热门标签
+                    </div>
+                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                        测评考试
+                    </div>
+                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                        知识点练习
+                    </div>
+                    <a href="xuesheng_shuju.html" class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer block">
+                        学生行为数据看板
+                    </a>
+                </div>
+            </div>
+
+            <!-- Group 4: 资源配置 -->
+            <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleMenu('group-4')">
+                    <span>资源配置</span>
+                    <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-4"></i>
+                </div>
+                <div class="space-y-0.5" id="group-4">
+                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                        分类管理
+                    </div>
+                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                        标签管理
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- 右侧主内容区域 Main Content Area -->
+        <main class="flex-1 bg-slate-50 overflow-y-auto custom-scrollbar p-4 flex flex-col gap-3">
+
+            <!-- 页面标题 Title -->
+            <div class="text-base font-bold text-slate-800">
+                我的试卷
+            </div>
+
+            <!-- 筛选框容器 Card -->
+            <div class="bg-white rounded-xl border border-slate-200 p-4 space-y-3 shadow-2xs">
+                
+                <!-- 第一行：试卷ID / 试卷标题 / 专业分类 / 查询 / 重置 -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+                    <div class="md:col-span-3 flex items-center gap-2">
+                        <label class="w-16 shrink-0 text-right text-slate-600 text-xs font-medium">试卷ID</label>
+                        <input type="text" id="filterPaperId" placeholder="请输入试卷ID" class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+                    </div>
+
+                    <div class="md:col-span-4 flex items-center gap-2">
+                        <label class="w-16 shrink-0 text-right text-slate-600 text-xs font-medium">试卷标题</label>
+                        <input type="text" id="filterPaperTitle" placeholder="请输入试卷标题" class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+                    </div>
+
+                    <div class="md:col-span-3 flex items-center gap-2">
+                        <label class="w-16 shrink-0 text-right text-slate-600 text-xs font-medium">专业分类</label>
+                        <select id="filterCategory" class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+                            <option value="">请选择专业分类</option>
+                            <option value="专升本-法学-河南省">专升本-法学-河南省</option>
+                            <option value="专升本-植物遗传学-河南省">专升本-植物遗传学-河南省</option>
+                            <option value="专升本-管理学-河南省">专升本-管理学-河南省</option>
+                            <option value="专升本-高等数学-河南省">专升本-高等数学-河南省</option>
+                        </select>
+                    </div>
+
+                    <div class="md:col-span-2 flex items-center justify-end gap-2">
+                        <button onclick="searchPapers()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-4 py-1.5 rounded-lg font-medium transition-colors flex items-center gap-1 shadow-2xs">
+                            <i class="fas fa-search text-[10px]"></i>
+                            <span>查询</span>
+                        </button>
+                        <button onclick="resetFilters()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs px-4 py-1.5 rounded-lg font-medium transition-colors shadow-2xs">
+                            <span>重置</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 第二行：试卷类型 / 试卷年份 / 创建人 / 展开更多 -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+                    <div class="md:col-span-3 flex items-center gap-2">
+                        <label class="w-16 shrink-0 text-right text-slate-600 text-xs font-medium">试卷类型</label>
+                        <select id="filterPaperType" class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+                            <option value="">请选择试卷类型</option>
+                            <option value="线下试卷">线下试卷</option>
+                            <option value="章节测试">章节测试</option>
+                            <option value="模拟考试">模拟考试</option>
+                            <option value="真题试卷">真题试卷</option>
+                        </select>
+                    </div>
+
+                    <div class="md:col-span-4 flex items-center gap-2">
+                        <label class="w-16 shrink-0 text-right text-slate-600 text-xs font-medium">试卷年份</label>
+                        <select id="filterPaperYear" class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+                            <option value="">请选择试卷年份</option>
+                            <option value="2027">2027</option>
+                            <option value="2026">2026</option>
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                        </select>
+                    </div>
+
+                    <div class="md:col-span-3 flex items-center gap-2">
+                        <label class="w-16 shrink-0 text-right text-slate-600 text-xs font-medium">创建人</label>
+                        <input type="text" id="filterCreator" placeholder="请输入创建人" class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+                    </div>
+
+                    <div class="md:col-span-2 flex items-center justify-end">
+                        <button onclick="toggleMoreFilters()" class="text-blue-600 text-xs hover:underline flex items-center gap-1 font-medium">
+                            <span id="moreFilterText">展开更多</span>
+                            <i class="fas fa-chevron-down text-[10px]" id="moreFilterIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 第三行（展开更多内容）：创建时间 -->
+                <div id="moreFilterRow" class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center hidden">
+                    <div class="md:col-span-6 flex items-center gap-2">
+                        <label class="w-16 shrink-0 text-right text-slate-600 text-xs font-medium">创建时间</label>
+                        <div class="flex-1 flex items-center bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 focus-within:border-blue-500 focus-within:bg-white transition-all">
+                            <i class="far fa-calendar-alt text-slate-400 mr-2 shrink-0"></i>
+                            <input type="text" placeholder="开始日期" onfocus="(this.type='date')" onblur="if(!this.value)this.type='text'" id="filterStartDate" class="w-full bg-transparent focus:outline-none text-xs text-slate-700 placeholder-slate-400">
+                            <span class="mx-2 text-slate-400">至</span>
+                            <input type="text" placeholder="结束日期" onfocus="(this.type='date')" onblur="if(!this.value)this.type='text'" id="filterEndDate" class="w-full bg-transparent focus:outline-none text-xs text-slate-700 placeholder-slate-400">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 数据表格 Card Body -->
+            <div class="bg-white rounded-xl border border-slate-200 p-4 space-y-3 shadow-2xs flex-1 flex flex-col">
+                
+                <!-- 操作按钮栏 -->
+                <div class="flex items-center gap-2">
+                    <button onclick="openCreatePaperModal()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3.5 py-1.5 rounded-lg font-medium transition-colors flex items-center gap-1.5 shadow-2xs">
+                        <i class="fas fa-plus text-[10px]"></i>
+                        <span>手动组卷</span>
+                    </button>
+                    <button onclick="importPapers()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs px-3.5 py-1.5 rounded-lg font-medium transition-colors shadow-2xs">
+                        <span>导入试卷</span>
+                    </button>
+                    <button onclick="openAiModal()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs px-3.5 py-1.5 rounded-lg font-medium transition-colors shadow-2xs">
+                        <span>智能组卷</span>
+                    </button>
+                    <button onclick="openAiTypesetModal()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs px-3.5 py-1.5 rounded-lg font-medium transition-colors shadow-2xs">
+                        <span>AI排版组卷</span>
+                    </button>
+                </div>
+
+                <!-- 试卷列表 Table -->
+                <div class="overflow-x-auto custom-scrollbar flex-1 border border-slate-100 rounded-lg">
+                    <table class="w-full text-left border-collapse paper-table text-xs whitespace-nowrap">
+                        <thead>
+                            <tr class="border-b border-slate-200 bg-slate-50/80">
+                                <th class="py-2.5 px-3 min-w-[220px]">试卷标题</th>
+                                <th class="py-2.5 px-3">适用分类</th>
+                                <th class="py-2.5 px-3">试卷类型</th>
+                                <th class="py-2.5 px-3">年份</th>
+                                <th class="py-2.5 px-3">总分</th>
+                                <th class="py-2.5 px-3">试题数</th>
+                                <th class="py-2.5 px-3">作答时长(min)</th>
+                                <th class="py-2.5 px-3">创建人</th>
+                                <th class="py-2.5 px-3">创建时间</th>
+                                <th class="py-2.5 px-3 text-right pr-4 sticky right-0 bg-slate-50 z-20 shadow-[-4px_0_8px_-2px_rgba(0,0,0,0.06)]">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paperTableBody" class="divide-y divide-slate-100 text-slate-700">
+                            <!-- JS Dynamic Rows -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 底部分页区域 -->
+                <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs text-slate-500">
+                    <div>
+                        共 <span id="totalRecordsCount" class="font-medium text-slate-700">6</span> 条记录
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            <span>每页</span>
+                            <select class="bg-slate-50 border border-slate-200 rounded px-2 py-1 text-xs text-slate-700 focus:outline-none">
+                                <option>10 条</option>
+                                <option>20 条</option>
+                                <option>50 条</option>
+                            </select>
+                        </div>
+
+                        <div class="flex items-center gap-1">
+                            <button class="w-7 h-7 bg-slate-100 text-slate-400 rounded flex items-center justify-center cursor-not-allowed">
+                                <i class="fas fa-chevron-left text-[10px]"></i>
+                            </button>
+                            <button class="w-7 h-7 bg-blue-600 text-white rounded font-medium flex items-center justify-center">1</button>
+                            <button class="w-7 h-7 bg-slate-100 text-slate-400 rounded flex items-center justify-center cursor-not-allowed">
+                                <i class="fas fa-chevron-right text-[10px]"></i>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center gap-1">
+                            <span>前往</span>
+                            <input type="text" value="1" class="w-8 h-7 text-center bg-slate-50 border border-slate-200 rounded text-slate-700 focus:outline-none text-xs">
+                            <span>页</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Modals -->
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-backdrop">
+        <div class="bg-white rounded-xl shadow-2xl border border-slate-200 w-11/12 max-w-3xl max-h-[85vh] flex flex-col overflow-hidden">
+            <div class="px-5 py-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                    <i class="fas fa-eye text-blue-600"></i>
+                    <span id="previewTitle">试卷预览</span>
+                </h3>
+                <button onclick="closePreviewModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fas fa-times text-base"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto custom-scrollbar space-y-4" id="previewContent">
+                <!-- Preview Info -->
+            </div>
+            <div class="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-end gap-2">
+                <button onclick="closePreviewModal()" class="px-4 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-lg text-xs font-medium">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit / Create Form Modal -->
+    <div id="paperFormModal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-backdrop">
+        <div class="bg-white rounded-xl shadow-2xl border border-slate-200 w-11/12 max-w-xl max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="px-5 py-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+                <h3 class="font-bold text-slate-800 text-sm" id="formModalTitle">编辑试卷</h3>
+                <button onclick="closePaperFormModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fas fa-times text-base"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto custom-scrollbar space-y-4 text-xs">
+                <input type="hidden" id="modalPaperId">
+                <div>
+                    <label class="block text-slate-700 font-medium mb-1">试卷标题</label>
+                    <input type="text" id="modalTitle" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-700 focus:outline-none focus:border-blue-500 focus:bg-white">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-700 font-medium mb-1">适用分类</label>
+                        <select id="modalCategory" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-700 focus:outline-none focus:border-blue-500 focus:bg-white">
+                            <option value="专升本-法学-河南省">专升本-法学-河南省</option>
+                            <option value="专升本-植物遗传学-河南省">专升本-植物遗传学-河南省</option>
+                            <option value="专升本-管理学-河南省">专升本-管理学-河南省</option>
+                            <option value="专升本-高等数学-河南省">专升本-高等数学-河南省</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 font-medium mb-1">试卷类型</label>
+                        <select id="modalPaperType" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-700 focus:outline-none focus:border-blue-500 focus:bg-white">
+                            <option value="线下试卷">线下试卷</option>
+                            <option value="章节测试">章节测试</option>
+                            <option value="模拟考试">模拟考试</option>
+                            <option value="真题试卷">真题试卷</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-slate-700 font-medium mb-1">年份</label>
+                        <select id="modalYear" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-700 focus:outline-none focus:border-blue-500 focus:bg-white">
+                            <option value="2027">2027</option>
+                            <option value="2026">2026</option>
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 font-medium mb-1">总分</label>
+                        <input type="number" id="modalTotalScore" value="150" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-700 focus:outline-none focus:border-blue-500 focus:bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 font-medium mb-1">作答时长(min)</label>
+                        <input type="number" id="modalDuration" value="90" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-700 focus:outline-none focus:border-blue-500 focus:bg-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-700 font-medium mb-1">创建人</label>
+                    <input type="text" id="modalCreator" value="李敏" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-700 focus:outline-none focus:border-blue-500 focus:bg-white">
+                </div>
+            </div>
+            <div class="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-end gap-2">
+                <button onclick="closePaperFormModal()" class="px-4 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-lg text-xs font-medium">取消</button>
+                <button onclick="savePaperForm()" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium shadow-2xs">保存提交</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Operation Log Modal -->
+    <div id="logModal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-backdrop">
+        <div class="bg-white rounded-xl shadow-2xl border border-slate-200 w-11/12 max-w-lg max-h-[80vh] flex flex-col overflow-hidden">
+            <div class="px-5 py-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                    <i class="fas fa-history text-blue-600"></i>
+                    <span>试卷操作日志</span>
+                </h3>
+                <button onclick="closeLogModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fas fa-times text-base"></i>
+                </button>
+            </div>
+            <div class="p-5 overflow-y-auto custom-scrollbar space-y-3 text-xs" id="logModalList">
+                <!-- Log List -->
+            </div>
+            <div class="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-end">
+                <button onclick="closeLogModal()" class="px-4 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-lg text-xs font-medium">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI排版组卷 - 添加试卷 Modal -->
+    <div id="aiTypesetModal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-backdrop">
+        <div class="bg-white rounded-xl shadow-2xl border border-slate-200 w-11/12 max-w-lg max-h-[90vh] flex flex-col overflow-hidden">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+                <h3 class="font-bold text-slate-800 text-base">添加试卷</h3>
+                <button onclick="closeAiTypesetModal()" class="text-slate-400 hover:text-slate-600 p-1 text-lg leading-none">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="p-6 overflow-y-auto custom-scrollbar space-y-4 text-xs">
+                <!-- 1. 试卷标题 -->
+                <div>
+                    <label class="block text-slate-700 font-medium mb-1.5">
+                        <span class="text-rose-500 mr-0.5">*</span>试卷标题
+                    </label>
+                    <input type="text" id="aiTypesetPaperTitle" placeholder="请输入试卷标题" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 placeholder-slate-300 focus:outline-none focus:border-blue-500 transition-colors">
+                </div>
+
+                <!-- 2. 试卷类型 -->
+                <div>
+                    <label class="block text-slate-700 font-medium mb-1.5">
+                        <span class="text-rose-500 mr-0.5">*</span>试卷类型：
+                    </label>
+                    <select id="aiTypesetPaperType" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
+                        <option value="" disabled selected class="text-slate-300">请选择试卷类型</option>
+                        <option value="线下试卷">线下试卷</option>
+                        <option value="章节测试">章节测试</option>
+                        <option value="模拟考试">模拟考试</option>
+                        <option value="真题试卷">真题试卷</option>
+                    </select>
+                </div>
+
+                <!-- 3. 年份 -->
+                <div>
+                    <label class="block text-slate-700 font-medium mb-1.5">年份</label>
+                    <select id="aiTypesetYear" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
+                        <option value="" disabled selected class="text-slate-300">请选择年份</option>
+                        <option value="2027">2027</option>
+                        <option value="2026">2026</option>
+                        <option value="2025">2025</option>
+                        <option value="2024">2024</option>
+                    </select>
+                </div>
+
+                <!-- 4. 作答时长 -->
+                <div>
+                    <label class="block text-slate-700 font-medium mb-1.5">
+                        <span class="text-rose-500 mr-0.5">*</span>作答时长
+                    </label>
+                    <div class="flex items-center gap-2">
+                        <input type="number" id="aiTypesetDuration" placeholder="" class="w-32 bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
+                        <span class="text-slate-700 text-xs">分钟</span>
+                    </div>
+                </div>
+
+                <!-- 5. 适用分类 (Boxed) -->
+                <div>
+                    <label class="block text-slate-700 font-medium mb-2">适用分类</label>
+                    <div class="bg-slate-50/70 border border-slate-100 rounded-xl p-4 space-y-3.5">
+                        <div>
+                            <label class="block text-slate-700 font-medium mb-1.5">
+                                <span class="text-rose-500 mr-0.5">*</span>专业分类
+                            </label>
+                            <select id="aiTypesetCategory" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
+                                <option value="专升本" selected>专升本</option>
+                                <option value="考研">考研</option>
+                                <option value="高考">高考</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-700 font-medium mb-1.5">
+                                <span class="text-rose-500 mr-0.5">*</span>地区
+                            </label>
+                            <select id="aiTypesetRegion" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
+                                <option value="" selected class="text-slate-300">请选择地区</option>
+                                <option value="河南省">河南省</option>
+                                <option value="北京市">北京市</option>
+                                <option value="上海市">上海市</option>
+                                <option value="广东省">广东省</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-700 font-medium mb-1.5">
+                                <span class="text-rose-500 mr-0.5">*</span>科目
+                            </label>
+                            <select id="aiTypesetSubject" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors">
+                                <option value="" selected class="text-slate-300">请选择科目</option>
+                                <option value="法学">法学</option>
+                                <option value="植物遗传学">植物遗传学</option>
+                                <option value="管理学">管理学</option>
+                                <option value="高等数学">高等数学</option>
+                                <option value="大学英语">大学英语</option>
+                                <option value="计算机">计算机</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="px-6 py-4 border-t border-slate-100 bg-white flex items-center justify-end gap-2.5">
+                <button onclick="closeAiTypesetModal()" class="px-4 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-lg text-xs font-medium transition-colors">取消</button>
+                <button onclick="saveAndTypesetPaper()" class="px-4 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-medium transition-colors">保存并组卷</button>
+                <button onclick="submitAiTypesetPaper()" class="px-5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition-colors shadow-2xs">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-800 text-white text-xs px-4 py-2.5 rounded-lg shadow-lg flex items-center gap-2 transition-all transform translate-y-12 opacity-0 pointer-events-none">
+        <i class="fas fa-check-circle text-emerald-400 text-sm" id="toastIcon"></i>
+        <span id="toastMsg">操作成功</span>
+    </div>
+
+    <!-- JavaScript Data and Logic -->
+    <script>
+        // Sample Test Paper Data for "我的试卷"
+        const rawPapersData = [
+            {
+                id: '1244184224370257920',
+                title: '2027学年河南省第一次大联考(B) 卷',
+                category: '专升本-法学-河南省',
+                paperType: '线下试卷',
+                year: '2026',
+                totalScore: 150,
+                questionCount: 70,
+                duration: 120,
+                creator: '李敏',
+                createTime: '2026-07-15 10:20'
+            },
+            {
+                id: '1244183618858008576',
+                title: '2027学年河南省第一次大联考',
+                category: '专升本-植物遗传学-河南省',
+                paperType: '线下试卷',
+                year: '2026',
+                totalScore: 150,
+                questionCount: 74,
+                duration: 120,
+                creator: '李敏',
+                createTime: '2026-07-15 10:15'
+            },
+            {
+                id: '1242698466827403264',
+                title: '章节必练2·管理理论的历史演变',
+                category: '专升本-管理学-河南省',
+                paperType: '章节测试',
+                year: '2026',
+                totalScore: 100,
+                questionCount: 50,
+                duration: 90,
+                creator: '黄飞亚',
+                createTime: '2026-07-20 14:30'
+            },
+            {
+                id: '1242698000111222333',
+                title: '高等数学函数极限与连续性专项训练',
+                category: '专升本-高等数学-河南省',
+                paperType: '模拟考试',
+                year: '2026',
+                totalScore: 100,
+                questionCount: 45,
+                duration: 90,
+                creator: '李敏',
+                createTime: '2026-07-20 16:00'
+            },
+            {
+                id: '1242643210987654322',
+                title: '法学专业经典案例分析测试卷(拟定)',
+                category: '专升本-法学-河南省',
+                paperType: '模拟考试',
+                year: '2026',
+                totalScore: 100,
+                questionCount: 40,
+                duration: 90,
+                creator: '黄飞亚',
+                createTime: '2026-07-22 10:30'
+            },
+            {
+                id: '1242643210987654323',
+                title: '2026植物遗传学考前冲刺拔高卷',
+                category: '专升本-植物遗传学-河南省',
+                paperType: '真题试卷',
+                year: '2026',
+                totalScore: 150,
+                questionCount: 60,
+                duration: 120,
+                creator: '黄飞亚',
+                createTime: '2026-07-25 14:20'
+            }
+        ];
+
+        let papersList = [...rawPapersData];
+
+        // Render Table Rows
+        function renderTable(list) {
+            const tbody = document.getElementById('paperTableBody');
+            if (!tbody) return;
+
+            if (list.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="text-center py-12 text-slate-400">
+                            <i class="far fa-folder-open text-3xl mb-2 block"></i>
+                            <span>未找到匹配的试卷数据</span>
+                        </td>
+                    </tr>
+                `;
+                document.getElementById('totalRecordsCount').textContent = '0';
+                return;
+            }
+
+            document.getElementById('totalRecordsCount').textContent = list.length.toString();
+
+            tbody.innerHTML = list.map(item => {
+                return `
+                    <tr class="group hover:bg-slate-50/80 transition-colors">
+                        <td class="py-2.5 px-3">
+                            <div class="font-medium text-blue-600 hover:underline cursor-pointer" onclick="openPreviewModal('${item.id}')">${item.title}</div>
+                            <div class="text-[11px] text-slate-400">ID: ${item.id}</div>
+                        </td>
+                        <td class="py-2.5 px-3 text-slate-600">${item.category}</td>
+                        <td class="py-2.5 px-3 text-slate-600">${item.paperType}</td>
+                        <td class="py-2.5 px-3 text-slate-600">${item.year}</td>
+                        <td class="py-2.5 px-3 font-semibold text-slate-800">${item.totalScore}</td>
+                        <td class="py-2.5 px-3 text-slate-700">${item.questionCount}</td>
+                        <td class="py-2.5 px-3 text-slate-700">${item.duration}</td>
+                        <td class="py-2.5 px-3 text-slate-700">${item.creator}</td>
+                        <td class="py-2.5 px-3 text-slate-500 text-[11px]">${item.createTime}</td>
+                        <td class="py-2.5 px-3 text-right pr-4 space-x-2 sticky right-0 bg-white group-hover:bg-slate-50 transition-colors z-10 shadow-[-4px_0_8px_-2px_rgba(0,0,0,0.06)]">
+                            <button onclick="openPreviewModal('${item.id}')" class="text-blue-600 hover:text-blue-800">预览</button>
+                            <button onclick="openEditModal('${item.id}')" class="text-blue-600 hover:text-blue-800">编辑</button>
+                            <button onclick="copyPaper('${item.id}')" class="text-blue-600 hover:text-blue-800">复制</button>
+                            <button onclick="exportPaper('${item.id}')" class="text-blue-600 hover:text-blue-800">导出</button>
+                            <button onclick="viewLog('${item.id}')" class="text-blue-600 hover:text-blue-800">日志</button>
+                            <button onclick="deletePaper('${item.id}')" class="text-rose-600 hover:text-rose-800">删除</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Search & Filter Handler
+        function searchPapers() {
+            const paperId = document.getElementById('filterPaperId').value.trim().toLowerCase();
+            const title = document.getElementById('filterPaperTitle').value.trim().toLowerCase();
+            const category = document.getElementById('filterCategory').value;
+            const paperType = document.getElementById('filterPaperType').value;
+            const paperYear = document.getElementById('filterPaperYear').value;
+            const creator = document.getElementById('filterCreator').value.trim().toLowerCase();
+
+            const filtered = papersList.filter(item => {
+                if (paperId && !item.id.toLowerCase().includes(paperId)) return false;
+                if (title && !item.title.toLowerCase().includes(title)) return false;
+                if (category && item.category !== category) return false;
+                if (paperType && item.paperType !== paperType) return false;
+                if (paperYear && item.year !== paperYear) return false;
+                if (creator && !item.creator.toLowerCase().includes(creator)) return false;
+                return true;
+            });
+
+            renderTable(filtered);
+        }
+
+        function resetFilters() {
+            document.getElementById('filterPaperId').value = '';
+            document.getElementById('filterPaperTitle').value = '';
+            document.getElementById('filterCategory').value = '';
+            document.getElementById('filterPaperType').value = '';
+            document.getElementById('filterPaperYear').value = '';
+            document.getElementById('filterCreator').value = '';
+            if (document.getElementById('filterStartDate')) {
+                document.getElementById('filterStartDate').value = '';
+                document.getElementById('filterStartDate').type = 'text';
+            }
+            if (document.getElementById('filterEndDate')) {
+                document.getElementById('filterEndDate').value = '';
+                document.getElementById('filterEndDate').type = 'text';
+            }
+            renderTable(papersList);
+        }
+
+        function toggleMoreFilters() {
+            const row = document.getElementById('moreFilterRow');
+            const icon = document.getElementById('moreFilterIcon');
+            const text = document.getElementById('moreFilterText');
+            if (row) {
+                if (row.classList.contains('hidden')) {
+                    row.classList.remove('hidden');
+                    if (text) text.textContent = '收起更多';
+                    if (icon) icon.className = 'fas fa-chevron-up text-[10px]';
+                } else {
+                    row.classList.add('hidden');
+                    if (text) text.textContent = '展开更多';
+                    if (icon) icon.className = 'fas fa-chevron-down text-[10px]';
+                }
+            }
+        }
+
+        // Actions
+        function openPreviewModal(id) {
+            const item = papersList.find(p => p.id === id);
+            if (!item) return;
+            document.getElementById('previewTitle').textContent = `试卷预览 - ${item.title}`;
+            document.getElementById('previewContent').innerHTML = `
+                <div class="bg-slate-50 p-4 rounded-lg space-y-2 border border-slate-200">
+                    <div class="text-sm font-bold text-slate-800">${item.title}</div>
+                    <div class="text-xs text-slate-500">试卷ID: ${item.id}</div>
+                    <div class="grid grid-cols-2 gap-2 text-xs text-slate-600 mt-2">
+                        <div><span class="font-medium text-slate-700">适用分类：</span>${item.category}</div>
+                        <div><span class="font-medium text-slate-700">试卷类型：</span>${item.paperType}</div>
+                        <div><span class="font-medium text-slate-700">年份：</span>${item.year}</div>
+                        <div><span class="font-medium text-slate-700">总分：</span>${item.totalScore}分</div>
+                        <div><span class="font-medium text-slate-700">试题数：</span>${item.questionCount}题</div>
+                        <div><span class="font-medium text-slate-700">作答时长：</span>${item.duration}分钟</div>
+                        <div><span class="font-medium text-slate-700">创建人：</span>${item.creator}</div>
+                        <div><span class="font-medium text-slate-700">创建时间：</span>${item.createTime}</div>
+                    </div>
+                </div>
+                <div class="p-8 border border-dashed border-slate-300 rounded-lg text-center text-slate-400">
+                    <i class="fas fa-file-signature text-3xl mb-2"></i>
+                    <p class="text-xs">此处预览试卷各题型结构与题目内容...</p>
+                </div>
+            `;
+            document.getElementById('previewModal').classList.remove('hidden');
+        }
+
+        function closePreviewModal() {
+            document.getElementById('previewModal').classList.add('hidden');
+        }
+
+        function openCreatePaperModal() {
+            document.getElementById('formModalTitle').textContent = '手动组卷 - 新建试卷';
+            document.getElementById('modalPaperId').value = '';
+            document.getElementById('modalTitle').value = '';
+            document.getElementById('modalCategory').selectedIndex = 0;
+            document.getElementById('modalPaperType').selectedIndex = 0;
+            document.getElementById('modalYear').selectedIndex = 1;
+            document.getElementById('modalTotalScore').value = 100;
+            document.getElementById('modalDuration').value = 90;
+            document.getElementById('modalCreator').value = '黄飞亚';
+            document.getElementById('paperFormModal').classList.remove('hidden');
+        }
+
+        function openEditModal(id) {
+            const item = papersList.find(p => p.id === id);
+            if (!item) return;
+            document.getElementById('formModalTitle').textContent = '编辑试卷';
+            document.getElementById('modalPaperId').value = item.id;
+            document.getElementById('modalTitle').value = item.title;
+            document.getElementById('modalCategory').value = item.category;
+            document.getElementById('modalPaperType').value = item.paperType;
+            document.getElementById('modalYear').value = item.year;
+            document.getElementById('modalTotalScore').value = item.totalScore;
+            document.getElementById('modalDuration').value = item.duration;
+            document.getElementById('modalCreator').value = item.creator;
+            document.getElementById('paperFormModal').classList.remove('hidden');
+        }
+
+        function closePaperFormModal() {
+            document.getElementById('paperFormModal').classList.add('hidden');
+        }
+
+        function savePaperForm() {
+            const paperId = document.getElementById('modalPaperId').value;
+            const title = document.getElementById('modalTitle').value.trim();
+            if (!title) {
+                showToast('请输入试卷标题');
+                return;
+            }
+
+            if (paperId) {
+                const item = papersList.find(p => p.id === paperId);
+                if (item) {
+                    item.title = title;
+                    item.category = document.getElementById('modalCategory').value;
+                    item.paperType = document.getElementById('modalPaperType').value;
+                    item.year = document.getElementById('modalYear').value;
+                    item.totalScore = parseInt(document.getElementById('modalTotalScore').value) || 100;
+                    item.duration = parseInt(document.getElementById('modalDuration').value) || 90;
+                    item.creator = document.getElementById('modalCreator').value;
+                }
+                showToast('试卷信息修改成功');
+            } else {
+                const newId = '124' + Math.floor(Math.random() * 1000000000000000);
+                papersList.unshift({
+                    id: newId,
+                    title: title,
+                    category: document.getElementById('modalCategory').value,
+                    paperType: document.getElementById('modalPaperType').value,
+                    year: document.getElementById('modalYear').value,
+                    totalScore: parseInt(document.getElementById('modalTotalScore').value) || 100,
+                    questionCount: 50,
+                    duration: parseInt(document.getElementById('modalDuration').value) || 90,
+                    creator: document.getElementById('modalCreator').value || '黄飞亚',
+                    createTime: new Date().toISOString().replace('T', ' ').substring(0, 16)
+                });
+                showToast('新建手动组卷成功');
+            }
+
+            closePaperFormModal();
+            searchPapers();
+        }
+
+        function copyPaper(id) {
+            const item = papersList.find(p => p.id === id);
+            if (item) {
+                const newId = '124' + Math.floor(Math.random() * 1000000000000000);
+                papersList.unshift({
+                    ...item,
+                    id: newId,
+                    title: `${item.title} - 副本`,
+                    createTime: new Date().toISOString().replace('T', ' ').substring(0, 16)
+                });
+                showToast('试卷复制成功');
+                searchPapers();
+            }
+        }
+
+        function exportPaper(id) {
+            showToast('试卷导出任务已发起，正在下载 Word/PDF...');
+        }
+
+        function deletePaper(id) {
+            if (confirm('确定要删除该试卷吗？删除后不可恢复。')) {
+                papersList = papersList.filter(p => p.id !== id);
+                showToast('试卷已成功删除');
+                searchPapers();
+            }
+        }
+
+        function viewLog(id) {
+            const item = papersList.find(p => p.id === id);
+            document.getElementById('logModalList').innerHTML = `
+                <div class="border-l-2 border-blue-500 pl-3 space-y-1">
+                    <div class="font-medium text-slate-800">编辑试卷信息</div>
+                    <div class="text-slate-500">操作人: ${item ? item.creator : '管理员'} (${item ? item.createTime : '2026-07-20 14:30'})</div>
+                </div>
+                <div class="border-l-2 border-slate-300 pl-3 space-y-1">
+                    <div class="font-medium text-slate-800">试卷新建提交</div>
+                    <div class="text-slate-500">操作人: ${item ? item.creator : '系统创建'} (2026-07-15 10:15)</div>
+                </div>
+            `;
+            document.getElementById('logModal').classList.remove('hidden');
+        }
+
+        function closeLogModal() {
+            document.getElementById('logModal').classList.add('hidden');
+        }
+
+        function importPapers() {
+            showToast('请选择本地试卷文件(Word/Excel)导入');
+        }
+
+        function openAiModal() {
+            openAiTypesetModal();
+        }
+
+        // AI排版组卷 Modal Functions
+        function openAiTypesetModal() {
+            document.getElementById('aiTypesetPaperTitle').value = '';
+            document.getElementById('aiTypesetPaperType').selectedIndex = 0;
+            document.getElementById('aiTypesetYear').selectedIndex = 0;
+            document.getElementById('aiTypesetDuration').value = '';
+            document.getElementById('aiTypesetRegion').selectedIndex = 0;
+            document.getElementById('aiTypesetSubject').selectedIndex = 0;
+            document.getElementById('aiTypesetModal').classList.remove('hidden');
+        }
+
+        function closeAiTypesetModal() {
+            document.getElementById('aiTypesetModal').classList.add('hidden');
+        }
+
+        function saveAndTypesetPaper() {
+            const title = document.getElementById('aiTypesetPaperTitle').value.trim();
+            if (!title) {
+                showToast('请输入试卷标题');
+                return;
+            }
+            showToast('已保存并开启AI排版渲染...');
+            closeAiTypesetModal();
+        }
+
+        function submitAiTypesetPaper() {
+            const title = document.getElementById('aiTypesetPaperTitle').value.trim();
+            if (!title) {
+                showToast('请输入试卷标题');
+                return;
+            }
+
+            const pType = document.getElementById('aiTypesetPaperType').value || '线下试卷';
+            const yearVal = document.getElementById('aiTypesetYear').value || '2026';
+            const durationVal = parseInt(document.getElementById('aiTypesetDuration').value) || 90;
+            const regionVal = document.getElementById('aiTypesetRegion').value || '';
+            const subjectVal = document.getElementById('aiTypesetSubject').value || '';
+            const categoryVal = document.getElementById('aiTypesetCategory').value || '专升本';
+
+            const fullCategory = [categoryVal, subjectVal, regionVal].filter(Boolean).join('-');
+            const newId = '124' + Math.floor(Math.random() * 1000000000000000);
+
+            papersList.unshift({
+                id: newId,
+                title: title,
+                category: fullCategory,
+                paperType: pType,
+                year: yearVal,
+                totalScore: 100,
+                questionCount: 45,
+                duration: durationVal,
+                creator: '黄飞亚',
+                createTime: new Date().toISOString().replace('T', ' ').substring(0, 16)
+            });
+
+            showToast('AI排版组卷成功创建！');
+            closeAiTypesetModal();
+            searchPapers();
+        }
+
+        // Toast Helper
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.remove('translate-y-12', 'opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('translate-y-12', 'opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+
+        function toggleMenu(groupId) {
+            const group = document.getElementById(groupId);
+            const arrow = document.getElementById('arrow-' + groupId);
+            if (group && arrow) {
+                if (group.classList.contains('hidden')) {
+                    group.classList.remove('hidden');
+                    arrow.style.transform = 'rotate(0deg)';
+                } else {
+                    group.classList.add('hidden');
+                    arrow.style.transform = 'rotate(180deg)';
+                }
+            }
+        }
+
+        // Initialize Table
+        renderTable(papersList);
+    </script>
+</body>
+</html>
