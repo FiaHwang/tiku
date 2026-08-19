@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>库课管理平台 - 学生行为数据看板</title>
+    <title>库课管理平台 - 学生数据看板</title>
     <!-- FontAwesome & Tailwind CSS & Chart.js -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -74,6 +74,17 @@
             color: #2563eb;
             border-bottom: 2px solid #2563eb;
             font-weight: 600;
+        }
+
+        /* 隐藏数字输入框上下微调箭头 (No Spinners) */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
         }
     </style>
 </head>
@@ -155,9 +166,9 @@
                 <span>首页</span>
             </a>
 
-            <!-- Active Tab: 学生行为数据看板 -->
+            <!-- Active Tab: 学生数据看板 -->
             <div class="px-3 py-1 bg-white border border-blue-500 text-blue-600 rounded font-medium cursor-pointer shadow-2xs flex items-center gap-2">
-                <span>学生行为数据看板</span>
+                <span>学生数据看板</span>
                 <i class="fas fa-times text-[10px] text-blue-400 hover:text-blue-600 transition-colors"></i>
             </div>
         </div>
@@ -263,7 +274,7 @@
         </aside>
 
         <!-- 左侧二级子导航 (Secondary Sub-Navigation Sidebar) -->
-        <aside class="w-48 bg-white border-r border-slate-200 overflow-y-auto custom-scrollbar py-3 px-2 flex flex-col gap-3 shrink-0">
+        <aside class="w-32 bg-white border-r border-slate-200 overflow-y-auto custom-scrollbar py-3 px-2 flex flex-col gap-2.5 shrink-0">
             
             <!-- Group 1: 试题管理 -->
             <div class="space-y-1">
@@ -272,16 +283,16 @@
                     <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-1"></i>
                 </div>
                 <div class="space-y-0.5" id="group-1">
-                    <a href="shitiku.html" class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer block">
+                    <a href="shitiku.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">
                         试题库
                     </a>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         错题反馈
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         刷题版本
                     </div>
-                    <a href="ai_caozuo_rizhi.html" class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer block">
+                    <a href="ai_caozuo_rizhi.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">
                         AI操作日志
                     </a>
                 </div>
@@ -294,10 +305,10 @@
                     <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-2"></i>
                 </div>
                 <div class="space-y-0.5" id="group-2">
-                    <a href="shijuanku.html" class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer block">
+                    <a href="shijuanku.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">
                         试卷库
                     </a>
-                    <a href="wode_shijuan.html" class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer block">
+                    <a href="wode_shijuan.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">
                         我的试卷
                     </a>
                 </div>
@@ -310,35 +321,38 @@
                     <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-3"></i>
                 </div>
                 <div class="space-y-0.5" id="group-3">
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         试卷考试
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         章节刷题
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         每日练习
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         固定刷题
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         强化通关练
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         赠题列表
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         热门标签
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         测评考试
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         知识点练习
                     </div>
-                    <a href="xuesheng_shuju.html" class="secondary-subitem active px-3 py-1.5 rounded-lg text-xs cursor-pointer block">
-                        学生行为数据看板
+                    <a href="xuesheng_shuju.html" class="secondary-subitem active px-2.5 py-1.5 rounded-md text-xs cursor-pointer block whitespace-nowrap">
+                        学生数据看板
+                    </a>
+                    <a href="xuesheng_shuju2.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">
+                        学生数据看板2
                     </a>
                 </div>
             </div>
@@ -350,10 +364,10 @@
                     <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-4"></i>
                 </div>
                 <div class="space-y-0.5" id="group-4">
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         知识点体系
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         教材章节
                     </div>
                 </div>
@@ -366,25 +380,25 @@
                     <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-5"></i>
                 </div>
                 <div class="space-y-0.5" id="group-5">
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         题型管理
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         试题难度
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         试卷类型
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         错题类型
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         字段设置
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         赠题原因
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         通用设置
                     </div>
                 </div>
@@ -397,10 +411,10 @@
                     <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-6"></i>
                 </div>
                 <div class="space-y-0.5" id="group-6">
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         下发管理
                     </div>
-                    <div class="secondary-subitem px-3 py-1.5 rounded-lg text-xs text-slate-600 cursor-pointer">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
                         下发统计
                     </div>
                 </div>
@@ -471,9 +485,9 @@
                     <!-- 4. 章节教材筛选 (独立筛选器) -->
                     <div class="relative min-w-[120px] flex items-center">
                         <select id="filterTextbook" class="w-full appearance-none bg-white border border-slate-200 hover:border-slate-300 rounded-md pl-3 pr-8 py-1.5 text-slate-700 font-normal focus:outline-none focus:border-blue-500 transition-colors cursor-pointer" onchange="refreshDashboardData()">
-                            <option value="all_textbooks" selected class="text-slate-700">章节教材</option>
-                            <option value="tb_2026" class="text-slate-700">2026统考教材</option>
+                            <option value="tb_2026" selected class="text-slate-700">2026统考教材</option>
                             <option value="tb_zhenti" class="text-slate-700">历年真题汇编</option>
+                            <option value="all_textbooks" class="text-slate-700">全部教材</option>
                         </select>
                         <div class="pointer-events-none absolute right-2.5 text-slate-400">
                             <i class="fas fa-chevron-down text-[10px]"></i>
@@ -483,9 +497,9 @@
                     <!-- 5. 知识点体系筛选 (独立筛选器) -->
                     <div class="relative min-w-[120px] flex items-center">
                         <select id="filterKnowledge" class="w-full appearance-none bg-white border border-slate-200 hover:border-slate-300 rounded-md pl-3 pr-8 py-1.5 text-slate-700 font-normal focus:outline-none focus:border-blue-500 transition-colors cursor-pointer" onchange="refreshDashboardData()">
-                            <option value="all_knowledge" selected class="text-slate-700">知识点体系</option>
-                            <option value="kp_core" class="text-slate-700">核心高频考点</option>
-                            <option value="kp_basic" class="text-slate-700">基础必刷点</option>
+                            <option value="kp_core" selected class="text-slate-700">核心高频考点体系</option>
+                            <option value="kp_basic" class="text-slate-700">基础必刷点体系</option>
+                            <option value="all_knowledge" class="text-slate-700">全量知识点体系</option>
                         </select>
                         <div class="pointer-events-none absolute right-2.5 text-slate-400">
                             <i class="fas fa-chevron-down text-[10px]"></i>
@@ -542,23 +556,23 @@
 
                 <div class="stat-card bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-2xs">
                     <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
-                        <span>活跃用户数 (DAU)</span>
+                        <span>做题用户数 (DAU)</span>
                         <i class="fas fa-users text-emerald-500"></i>
                     </div>
                     <div class="text-lg font-bold text-slate-800">42,180 <span class="text-xs font-normal text-slate-400">人</span></div>
                 </div>
             </div>
 
-            <!-- SECTION 1 & 5: 薄弱分析 & 用户分层 (Row 1) -->
+            <!-- SECTION 1 & 5: 试题诊断 & 用户分层 (Row 1) -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
                 
-                <!-- 1. 薄弱分析 (Weakness Analysis) - 8 Cols -->
+                <!-- 1. 试题诊断 - 7 Cols -->
                 <div class="lg:col-span-7 bg-white rounded-xl p-4 border border-slate-200/80 shadow-2xs flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <h3 class="font-bold text-slate-800 flex items-center gap-2">
                                 <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-                                <span>薄弱分析：章节 / 知识点 / 题型</span>
+                                <span>试题诊断</span>
                             </h3>
                             <div class="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg text-xs">
                                 <button onclick="switchWeaknessTab('chapter')" id="tabChapter" class="px-2 py-0.5 rounded-md font-medium text-slate-600 hover:text-blue-600 bg-white shadow-2xs">按章节</button>
@@ -567,30 +581,19 @@
                             </div>
                         </div>
 
-                        <!-- 搜索与 正确率筛选 栏 -->
-                        <div class="mb-2.5 flex flex-wrap items-center justify-between gap-2">
-                            <div id="treeSearchContainer" class="flex-1 min-w-[160px]">
+                        <!-- 搜索栏 -->
+                        <div class="mb-2.5 flex items-center gap-2">
+                            <div id="treeSearchContainer" class="flex-1">
                                 <input type="text" id="treeSearchInput" placeholder="输入关键字进行搜索" oninput="handleTreeSearch()"
                                     class="w-full bg-white border border-slate-200 hover:border-slate-300 rounded-md px-3 py-1.5 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors">
-                            </div>
-                            <div class="flex items-center gap-1.5 text-xs text-slate-600 bg-slate-50/80 px-2.5 py-1.5 rounded-md border border-slate-200/80 shrink-0">
-                                <label class="flex items-center gap-1.5 cursor-pointer select-none">
-                                    <input type="checkbox" id="accuracyFilterToggle" onchange="handleTreeSearch()" class="rounded text-blue-600 focus:ring-0 cursor-pointer w-3.5 h-3.5 border-slate-300">
-                                    <span class="text-slate-600">正确率 &lt;</span>
-                                </label>
-                                <div class="flex items-center">
-                                    <input type="number" id="accuracyThresholdInput" value="50" min="0" max="100" oninput="handleTreeSearch()"
-                                        class="w-10 bg-white border border-slate-200 rounded px-1 py-0.5 text-center text-xs font-semibold text-slate-800 focus:outline-none focus:border-blue-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
-                                    <span class="ml-0.5 text-slate-500 font-normal">%</span>
-                                </div>
                             </div>
                         </div>
 
                         <div class="overflow-x-auto max-h-[380px] overflow-y-auto">
                             <table class="w-full text-left text-xs">
-                                <thead class="sticky top-0 bg-white z-10 shadow-2xs">
+                                <thead id="weaknessTableHead" class="sticky top-0 bg-white z-10 shadow-2xs">
                                     <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
-                                        <th class="p-2 font-medium">名称</th>
+                                        <th class="p-2 font-medium">章节名称</th>
                                         <th class="p-2 font-medium">作答次数</th>
                                         <th class="p-2 font-medium text-right">正确率</th>
                                     </tr>
@@ -609,11 +612,12 @@
                         <div class="flex items-center justify-between mb-3">
                             <h3 class="font-bold text-slate-800 flex items-center gap-2">
                                 <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-                                <span>用户分层：正确率与日均做题量</span>
+                                <span>用户分层</span>
                             </h3>
                             <div class="flex items-center gap-1 text-xs bg-slate-100 p-0.5 rounded-lg">
                                 <button id="btnSegAccuracy" onclick="switchUserSegment('accuracy')" class="px-2 py-0.5 rounded-md font-medium text-slate-700 bg-white shadow-2xs">按正确率</button>
-                                <button id="btnSegVolume" onclick="switchUserSegment('volume')" class="px-2 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600">按日均做题量</button>
+                                <button id="btnSegVolume" onclick="switchUserSegment('volume')" class="px-2 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600">按做题量</button>
+                                <button id="btnSegUserType" onclick="switchUserSegment('userType')" class="px-2 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600">按新老用户</button>
                             </div>
                         </div>
 
@@ -641,641 +645,315 @@
                         </div>
                     </div>
 
-                    <div class="mt-3 pt-2 border-t border-slate-100 grid grid-cols-2 gap-2 text-center text-xs">
+                    <div class="mt-3 pt-2 border-t border-slate-100 grid grid-cols-3 gap-2 text-center text-xs">
                         <div class="bg-slate-50 p-2 rounded-lg">
-                            <div class="text-slate-400">正确率主干区间</div>
-                            <div class="font-bold text-blue-600 text-xs mt-0.5">50% - 75% (48.9%)</div>
+                            <div class="text-slate-400">正确率主流</div>
+                            <div class="font-bold text-blue-600 text-xs mt-0.5">50% - 75%</div>
                         </div>
                         <div class="bg-slate-50 p-2 rounded-lg">
-                            <div class="text-slate-400">日均做题主干区间</div>
-                            <div class="font-bold text-emerald-600 text-xs mt-0.5">31 - 60 道 (35.0%)</div>
+                            <div class="text-slate-400">做题量主流</div>
+                            <div class="font-bold text-emerald-600 text-xs mt-0.5">31 - 60 道</div>
+                        </div>
+                        <div class="bg-slate-50 p-2 rounded-lg">
+                            <div class="text-slate-400">新用户占比</div>
+                            <div class="font-bold text-purple-600 text-xs mt-0.5">30%</div>
                         </div>
                     </div>
                 </div>
 
             </div>
 
-            <!-- SECTION 2 & 6: 模块分析 & 题目交互指标 (Row 2) -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <!-- SECTION 2: 功能模块分析 与 做题用户数柱状图 (左右排列) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 pb-6">
                 
-                <!-- 2. 功能模块分析 (Module Analysis) - 6 Cols -->
-                <div class="lg:col-span-6 bg-white rounded-xl p-4 border border-slate-200/80 shadow-2xs">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                            <span>功能模块分析：交卷次数与作答时长</span>
-                        </h3>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs">
-                            <thead>
-                                <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
-                                    <th class="p-2 font-medium">功能模块</th>
-                                    <th class="p-2 font-medium">交卷次数</th>
-                                    <th class="p-2 font-medium text-right">作答时长</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100 text-slate-700">
-                                <tr>
-                                    <td class="p-2 font-medium flex items-center gap-1.5">
-                                        <i class="fas fa-layer-group text-blue-500"></i>
-                                        <span>章节刷题</span>
-                                    </td>
-                                    <td class="p-2">45,820 次</td>
-                                    <td class="p-2 text-right">18.2 分钟</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2 font-medium flex items-center gap-1.5">
-                                        <i class="fas fa-calendar-check text-amber-500"></i>
-                                        <span>每日练习</span>
-                                    </td>
-                                    <td class="p-2">32,150 次</td>
-                                    <td class="p-2 text-right">8.5 分钟</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2 font-medium flex items-center gap-1.5">
-                                        <i class="fas fa-file-signature text-purple-500"></i>
-                                        <span>试卷考试 / 模考</span>
-                                    </td>
-                                    <td class="p-2">21,400 次</td>
-                                    <td class="p-2 text-right">42.0 分钟</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2 font-medium flex items-center gap-1.5">
-                                        <i class="fas fa-rotate-left text-rose-500"></i>
-                                        <span>错题本集中攻坚</span>
-                                    </td>
-                                    <td class="p-2">16,200 次</td>
-                                    <td class="p-2 text-right">14.6 分钟</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2 font-medium flex items-center gap-1.5">
-                                        <i class="fas fa-bolt text-indigo-500"></i>
-                                        <span>强化通关练</span>
-                                    </td>
-                                    <td class="p-2">12,970 次</td>
-                                    <td class="p-2 text-right">12.0 分钟</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- 6. 题目交互行为 (Question Interaction Metrics) - 6 Cols -->
-                <div class="lg:col-span-6 bg-white rounded-xl p-4 border border-slate-200/80 shadow-2xs">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
-                            <span>题目深度交互：完成/跳题/收藏/纠错/解析率</span>
-                        </h3>
-                        <span class="text-xs text-slate-400">细粒度做题行为</span>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-3 mb-3">
-                        <div class="p-3 bg-blue-50/60 rounded-xl border border-blue-100">
-                            <div class="text-slate-500 text-xs mb-1">题目完成率</div>
-                            <div class="text-xl font-extrabold text-blue-600">88.5%</div>
-                            <div class="text-[10px] text-slate-400 mt-1">作答完整提交比例</div>
-                        </div>
-
-                        <div class="p-3 bg-amber-50/60 rounded-xl border border-amber-100">
-                            <div class="text-slate-500 text-xs mb-1">跳题率</div>
-                            <div class="text-xl font-extrabold text-amber-600">6.2%</div>
-                            <div class="text-[10px] text-slate-400 mt-1">未作答直接跳过</div>
-                        </div>
-
-                        <div class="p-3 bg-purple-50/60 rounded-xl border border-purple-100">
-                            <div class="text-slate-500 text-xs mb-1">收藏率</div>
-                            <div class="text-xl font-extrabold text-purple-600">18.4%</div>
-                            <div class="text-[10px] text-slate-400 mt-1">加入个人收藏本</div>
-                        </div>
-
-                        <div class="p-3 bg-rose-50/60 rounded-xl border border-rose-100">
-                            <div class="text-slate-500 text-xs mb-1">纠错反馈率</div>
-                            <div class="text-xl font-extrabold text-rose-600">1.8%</div>
-                            <div class="text-[10px] text-slate-400 mt-1">提交题目错漏反馈</div>
-                        </div>
-
-                        <div class="p-3 bg-emerald-50/60 rounded-xl border border-emerald-100">
-                            <div class="text-slate-500 text-xs mb-1">解析查看率</div>
-                            <div class="text-xl font-extrabold text-emerald-600">64.2%</div>
-                            <div class="text-[10px] text-slate-400 mt-1">答题后主动展开解析</div>
-                        </div>
-
-                        <div class="p-3 bg-cyan-50/60 rounded-xl border border-cyan-100">
-                            <div class="text-slate-500 text-xs mb-1">重复做题率</div>
-                            <div class="text-xl font-extrabold text-cyan-600">32.1%</div>
-                            <div class="text-[10px] text-slate-400 mt-1">同一题目二次作答</div>
-                        </div>
-                    </div>
-
-
-                </div>
-
-            </div>
-
-            <!-- SECTION 7: 搜索行为 (Row 3) -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-                
-                <!-- 7. 搜索行为 (Search Behavior) - 12 Cols -->
-                <div class="lg:col-span-12 bg-white rounded-xl p-4 border border-slate-200/80 shadow-2xs flex flex-col justify-between">
+                <!-- 1. 功能模块分析 (Module Analysis) - 6 Cols -->
+                <div class="lg:col-span-6 bg-white rounded-xl p-4 border border-slate-200/80 shadow-2xs flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-purple-500"></span>
-                                <span>搜索行为：热搜关键词排行榜 Top 20</span>
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                <span>功能模块分析</span>
                             </h3>
-                            <span class="text-xs text-slate-400">主动搜题意向</span>
                         </div>
 
-                        <!-- 搜索关键词 Top 20 列表 -->
-                        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-2">
-                            <!-- 1 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-amber-50/80 border border-amber-200/60 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-amber-500 text-white font-bold text-[10px] flex items-center justify-center shrink-0">1</span>
-                                    <span class="font-bold text-slate-800 truncate">微积分求导</span>
-                                </div>
-                                <span class="text-[11px] font-semibold text-amber-700 shrink-0 ml-1">12.4k</span>
-                            </div>
-                            <!-- 2 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-100/90 border border-slate-200/80 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-400 text-white font-bold text-[10px] flex items-center justify-center shrink-0">2</span>
-                                    <span class="font-bold text-slate-800 truncate">定语从句</span>
-                                </div>
-                                <span class="text-[11px] font-semibold text-slate-600 shrink-0 ml-1">9.8k</span>
-                            </div>
-                            <!-- 3 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-orange-50/80 border border-orange-200/60 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-orange-400 text-white font-bold text-[10px] flex items-center justify-center shrink-0">3</span>
-                                    <span class="font-bold text-slate-800 truncate">数据结构二叉树</span>
-                                </div>
-                                <span class="text-[11px] font-semibold text-orange-700 shrink-0 ml-1">8.5k</span>
-                            </div>
-                            <!-- 4 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 font-bold text-[10px] flex items-center justify-center shrink-0">4</span>
-                                    <span class="font-medium text-slate-700 truncate">线性代数矩阵</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 shrink-0 ml-1">7.2k</span>
-                            </div>
-                            <!-- 5 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 font-bold text-[10px] flex items-center justify-center shrink-0">5</span>
-                                    <span class="font-medium text-slate-700 truncate">政治时政热点</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 shrink-0 ml-1">6.9k</span>
-                            </div>
-
-                            <!-- 6 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 font-bold text-[10px] flex items-center justify-center shrink-0">6</span>
-                                    <span class="font-medium text-slate-700 truncate">极限存在准则</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 shrink-0 ml-1">5.1k</span>
-                            </div>
-                            <!-- 7 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 font-bold text-[10px] flex items-center justify-center shrink-0">7</span>
-                                    <span class="font-medium text-slate-700 truncate">长难句翻译拆解</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 shrink-0 ml-1">4.8k</span>
-                            </div>
-                            <!-- 8 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 font-bold text-[10px] flex items-center justify-center shrink-0">8</span>
-                                    <span class="font-medium text-slate-700 truncate">泰勒展开公式</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 shrink-0 ml-1">4.5k</span>
-                            </div>
-                            <!-- 9 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 font-bold text-[10px] flex items-center justify-center shrink-0">9</span>
-                                    <span class="font-medium text-slate-700 truncate">TCP/IP协议族</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 shrink-0 ml-1">4.1k</span>
-                            </div>
-                            <!-- 10 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 font-bold text-[10px] flex items-center justify-center shrink-0">10</span>
-                                    <span class="font-medium text-slate-700 truncate">虚拟语气用法</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 shrink-0 ml-1">3.9k</span>
-                            </div>
-
-                            <!-- 11 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 font-bold text-[10px] flex items-center justify-center shrink-0">11</span>
-                                    <span class="font-medium text-slate-700 truncate">马原哲学原理</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 shrink-0 ml-1">3.7k</span>
-                            </div>
-                            <!-- 12 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 font-bold text-[10px] flex items-center justify-center shrink-0">12</span>
-                                    <span class="font-medium text-slate-700 truncate">概率论正态分布</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 shrink-0 ml-1">3.5k</span>
-                            </div>
-                            <!-- 13 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 font-bold text-[10px] flex items-center justify-center shrink-0">13</span>
-                                    <span class="font-medium text-slate-700 truncate">复合函数求导</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 shrink-0 ml-1">3.2k</span>
-                            </div>
-                            <!-- 14 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 font-bold text-[10px] flex items-center justify-center shrink-0">14</span>
-                                    <span class="font-medium text-slate-700 truncate">写作模板范文</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 shrink-0 ml-1">3.0k</span>
-                            </div>
-                            <!-- 15 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 font-bold text-[10px] flex items-center justify-center shrink-0">15</span>
-                                    <span class="font-medium text-slate-700 truncate">数据库SQL查询</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 shrink-0 ml-1">2.8k</span>
-                            </div>
-
-                            <!-- 16 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 font-bold text-[10px] flex items-center justify-center shrink-0">16</span>
-                                    <span class="font-medium text-slate-700 truncate">不定积分换元法</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 shrink-0 ml-1">2.6k</span>
-                            </div>
-                            <!-- 17 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 font-bold text-[10px] flex items-center justify-center shrink-0">17</span>
-                                    <span class="font-medium text-slate-700 truncate">毛中特知识点</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 shrink-0 ml-1">2.4k</span>
-                            </div>
-                            <!-- 18 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 font-bold text-[10px] flex items-center justify-center shrink-0">18</span>
-                                    <span class="font-medium text-slate-700 truncate">词汇辨析近义词</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 shrink-0 ml-1">2.2k</span>
-                            </div>
-                            <!-- 19 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 font-bold text-[10px] flex items-center justify-center shrink-0">19</span>
-                                    <span class="font-medium text-slate-700 truncate">进程调度算法</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 shrink-0 ml-1">2.0k</span>
-                            </div>
-                            <!-- 20 -->
-                            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 font-bold text-[10px] flex items-center justify-center shrink-0">20</span>
-                                    <span class="font-medium text-slate-700 truncate">空间解析几何</span>
-                                </div>
-                                <span class="text-[11px] text-slate-500 shrink-0 ml-1">1.8k</span>
-                            </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead>
+                                    <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
+                                        <th class="p-2.5 font-medium">功能模块</th>
+                                        <th class="p-2.5 font-medium">交卷次数</th>
+                                        <th class="p-2.5 font-medium text-right">作答时长</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr>
+                                        <td class="p-2.5 font-medium flex items-center gap-1.5">
+                                            <i class="fas fa-layer-group text-blue-500"></i>
+                                            <span>章节刷题</span>
+                                        </td>
+                                        <td class="p-2.5">45,820 次</td>
+                                        <td class="p-2.5 text-right">18.2 分钟</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2.5 font-medium flex items-center gap-1.5">
+                                            <i class="fas fa-calendar-check text-amber-500"></i>
+                                            <span>每日练习</span>
+                                        </td>
+                                        <td class="p-2.5">32,150 次</td>
+                                        <td class="p-2.5 text-right">8.5 分钟</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2.5 font-medium flex items-center gap-1.5">
+                                            <i class="fas fa-file-signature text-purple-500"></i>
+                                            <span>试卷考试 / 模考</span>
+                                        </td>
+                                        <td class="p-2.5">21,400 次</td>
+                                        <td class="p-2.5 text-right">42.0 分钟</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2.5 font-medium flex items-center gap-1.5">
+                                            <i class="fas fa-rotate-left text-rose-500"></i>
+                                            <span>错题本集中攻坚</span>
+                                        </td>
+                                        <td class="p-2.5">16,200 次</td>
+                                        <td class="p-2.5 text-right">14.6 分钟</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2.5 font-medium flex items-center gap-1.5">
+                                            <i class="fas fa-bolt text-indigo-500"></i>
+                                            <span>强化通关练</span>
+                                        </td>
+                                        <td class="p-2.5">12,970 次</td>
+                                        <td class="p-2.5 text-right">12.0 分钟</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                    </div>
-
-                    <div class="mt-3 pt-2 border-t border-slate-100 text-[11px] text-slate-400 flex items-center justify-between">
-                        <span>搜题日均请求量: <strong>38,450</strong> 次</span>
                     </div>
                 </div>
 
-            </div>
-
-            <!-- SECTION 4 & 8: 时间行为 & 真题模拟 (Row 4) -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 pb-6">
-                
-                <!-- 4. 活跃人数柱状图 (Active Users Bar Chart: Day/Week/Month) - 7 Cols -->
-                <div class="lg:col-span-7 bg-white rounded-xl p-4 border border-slate-200/80 shadow-2xs">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
-                            <span>日/周/月 活跃人数柱状图</span>
-                        </h3>
-                        <div class="flex items-center gap-1 text-xs bg-slate-100 p-0.5 rounded-lg">
-                            <button id="btnActiveDay" onclick="switchActivePeriod('day')" class="px-2.5 py-0.5 rounded-md font-medium text-slate-700 bg-white shadow-2xs">日</button>
-                            <button id="btnActiveWeek" onclick="switchActivePeriod('week')" class="px-2.5 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600">周</button>
-                            <button id="btnActiveMonth" onclick="switchActivePeriod('month')" class="px-2.5 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600">月</button>
+                <!-- 2. 做题用户数柱状图 (Day/Week/Month) - 6 Cols -->
+                <div class="lg:col-span-6 bg-white rounded-xl p-4 border border-slate-200/80 shadow-2xs flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
+                                <span>做题用户数</span>
+                            </h3>
+                            <div class="flex items-center gap-1 text-xs bg-slate-100 p-0.5 rounded-lg">
+                                <button id="btnActiveDay" onclick="switchActivePeriod('day')" class="px-2.5 py-0.5 rounded-md font-medium text-slate-700 bg-white shadow-2xs">日</button>
+                                <button id="btnActiveWeek" onclick="switchActivePeriod('week')" class="px-2.5 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600">周</button>
+                                <button id="btnActiveMonth" onclick="switchActivePeriod('month')" class="px-2.5 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600">月</button>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- 活跃人数柱状图 -->
-                    <div class="h-44 relative">
-                        <canvas id="activeUsersChart"></canvas>
+                        <!-- 做题用户数柱状图 -->
+                        <div class="h-48 relative">
+                            <canvas id="activeUsersChart"></canvas>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-slate-100 text-center text-xs">
                         <div class="bg-slate-50 p-2 rounded-lg">
-                            <div class="text-slate-400">日均活跃人数 (DAU)</div>
+                            <div class="text-slate-400">日均做题用户数 (DAU)</div>
                             <div class="font-bold text-slate-800 mt-0.5">42,800 人</div>
                         </div>
                         <div class="bg-slate-50 p-2 rounded-lg">
-                            <div class="text-slate-400">周均活跃人数 (WAU)</div>
+                            <div class="text-slate-400">周均做题用户数 (WAU)</div>
                             <div class="font-bold text-blue-600 mt-0.5">185,200 人</div>
                         </div>
                         <div class="bg-slate-50 p-2 rounded-lg">
-                            <div class="text-slate-400">月活跃人数 (MAU)</div>
+                            <div class="text-slate-400">月做题用户数 (MAU)</div>
                             <div class="font-bold text-purple-600 mt-0.5">640,000 人</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 8. 真题、模考与大联考排行榜 (Past Exam, Mock & Joint Exam Rankings) - 5 Cols -->
-                <div class="lg:col-span-5 bg-white rounded-xl p-4 border border-slate-200/80 shadow-2xs flex flex-col justify-between">
-                    <div>
-                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-                            <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-                                <span>试卷交卷热度排行榜</span>
-                            </h3>
-                            <div class="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg text-xs" id="examCategoryTabs">
-                                <button onclick="switchExamCategory('zhenti')" id="tab-zhenti" class="px-2.5 py-1 rounded-md font-medium transition-all bg-white text-rose-600 shadow-2xs">真题试卷</button>
-                                <button onclick="switchExamCategory('mokao')" id="tab-mokao" class="px-2.5 py-1 rounded-md font-medium transition-all text-slate-500 hover:text-slate-800">模考套卷</button>
-                                <button onclick="switchExamCategory('daliankao')" id="tab-daliankao" class="px-2.5 py-1 rounded-md font-medium transition-all text-slate-500 hover:text-slate-800">全国大联考</button>
-                            </div>
+            </div>
+
+            <!-- SECTION 9: 专项深度排行榜 (6合1 选项卡切换单容器) -->
+            <div class="bg-white rounded-xl p-5 border border-slate-200/80 shadow-2xs space-y-4 mb-6">
+                <!-- 6个切换按钮组 -->
+                <div class="flex items-center gap-1.5 flex-wrap bg-slate-50 p-1.5 rounded-lg border border-slate-200/70" id="rankingTabButtonGroup">
+                    <button type="button" onclick="switchRankingTab('kp_error')" id="btnTab-kp_error"
+                        class="ranking-tab-btn px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all bg-blue-600 text-white shadow-xs">
+                        <i class="fas fa-exclamation-triangle text-[11px]"></i>
+                        <span>错误率最高的知识点</span>
+                        <span class="px-1.5 py-0.2 text-[10px] rounded bg-white/20">Top 100</span>
+                    </button>
+
+                    <button type="button" onclick="switchRankingTab('kp_count')" id="btnTab-kp_count"
+                        class="ranking-tab-btn px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all bg-transparent text-slate-600 hover:bg-slate-200/70 hover:text-slate-900">
+                        <i class="fas fa-fire text-[11px] text-amber-500"></i>
+                        <span>作答次数最多的知识点</span>
+                        <span class="px-1.5 py-0.2 text-[10px] rounded bg-slate-200 text-slate-600">Top 100</span>
+                    </button>
+
+                    <button type="button" onclick="switchRankingTab('chap_error')" id="btnTab-chap_error"
+                        class="ranking-tab-btn px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all bg-transparent text-slate-600 hover:bg-slate-200/70 hover:text-slate-900">
+                        <i class="fas fa-book-open text-[11px] text-rose-500"></i>
+                        <span>错误率最高的章节</span>
+                        <span class="px-1.5 py-0.2 text-[10px] rounded bg-slate-200 text-slate-600">Top 50</span>
+                    </button>
+
+                    <button type="button" onclick="switchRankingTab('chap_count')" id="btnTab-chap_count"
+                        class="ranking-tab-btn px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all bg-transparent text-slate-600 hover:bg-slate-200/70 hover:text-slate-900">
+                        <i class="fas fa-layer-group text-[11px] text-blue-500"></i>
+                        <span>作答次数最多的章节</span>
+                        <span class="px-1.5 py-0.2 text-[10px] rounded bg-slate-200 text-slate-600">Top 50</span>
+                    </button>
+
+                    <button type="button" onclick="switchRankingTab('qtype_error')" id="btnTab-qtype_error"
+                        class="ranking-tab-btn px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all bg-transparent text-slate-600 hover:bg-slate-200/70 hover:text-slate-900">
+                        <i class="fas fa-clipboard-question text-[11px] text-purple-500"></i>
+                        <span>错误率最高的题型</span>
+                        <span class="px-1.5 py-0.2 text-[10px] rounded bg-slate-200 text-slate-600">Top 20</span>
+                    </button>
+
+                    <button type="button" onclick="switchRankingTab('qtype_count')" id="btnTab-qtype_count"
+                        class="ranking-tab-btn px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all bg-transparent text-slate-600 hover:bg-slate-200/70 hover:text-slate-900">
+                        <i class="fas fa-chart-pie text-[11px] text-indigo-500"></i>
+                        <span>作答次数最多的题型</span>
+                        <span class="px-1.5 py-0.2 text-[10px] rounded bg-slate-200 text-slate-600">Top 20</span>
+                    </button>
+                </div>
+
+                <!-- 统一表格展示区域 -->
+                <div class="overflow-x-auto min-h-[380px] max-h-[520px] overflow-y-auto custom-scrollbar border border-slate-100 rounded-lg">
+                    <table class="w-full text-left text-xs">
+                        <thead class="sticky top-0 bg-slate-50 z-10 text-slate-500 border-b border-slate-200" id="unifiedTableHeader">
+                            <!-- Dynamic header based on active tab -->
+                        </thead>
+                        <tbody id="unifiedTableBody" class="divide-y divide-slate-100 text-slate-700">
+                            <!-- Dynamic rows based on active tab -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 统一底部分页与统计栏 -->
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-end" id="unifiedTablePagination">
+                    <!-- Dynamic pagination -->
+                </div>
+            </div>
+
+            <!-- SECTION 10: 考点热度 -->
+            <div class="bg-white rounded-xl p-5 border border-slate-200/80 shadow-2xs space-y-4 mb-6" id="moduleExamHeatSection">
+                <!-- 头部标题与筛选项 -->
+                <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+                        <h3 class="font-bold text-slate-800 text-sm md:text-base">真题考点热度</h3>
+                    </div>
+
+                    <!-- 筛选项 (考频、难度、星级) -->
+                    <div class="flex items-center gap-2 flex-wrap text-xs">
+                        <!-- 考频筛选 -->
+                        <div class="relative min-w-[95px]">
+                            <select id="heatFilterFreq" onchange="handleHeatFilterChange()"
+                                class="w-full appearance-none bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-md pl-2.5 pr-6 py-1.5 text-slate-700 focus:outline-none focus:border-orange-500 cursor-pointer">
+                                <option value="all">全部考频</option>
+                                <option value="5">5次</option>
+                                <option value="4">4次</option>
+                                <option value="3">3次</option>
+                                <option value="2">2次</option>
+                                <option value="1">1次</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>
                         </div>
 
-                        <!-- 列表: 真题试卷偏好 (按交卷人数降序) -->
-                        <div id="exam-list-zhenti" class="space-y-2">
-                            <!-- Rank 1 -->
-                            <div class="p-2 bg-rose-50/50 rounded-lg border border-rose-100 text-xs">
-                                <div class="flex items-center justify-between mb-1">
-                                    <div class="flex items-center gap-2 font-bold text-slate-800">
-                                        <span class="w-4 h-4 rounded-full bg-rose-500 text-white font-bold text-[10px] flex items-center justify-center shrink-0">1</span>
-                                        <span>2024 年真题套卷</span>
-                                    </div>
-                                    <div class="flex items-center gap-1.5 text-slate-600">
-                                        <span>交卷: <strong class="text-rose-600">48,250</strong> 人</span>
-                                        <span class="text-slate-400 text-[11px]">(交卷率：39.1%)</span>
-                                    </div>
-                                </div>
-                                <div class="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-rose-500 h-full rounded-full" style="width: 100%"></div>
-                                </div>
-                            </div>
-
-                            <!-- Rank 2 -->
-                            <div class="p-2 bg-orange-50/50 rounded-lg border border-orange-100 text-xs">
-                                <div class="flex items-center justify-between mb-1">
-                                    <div class="flex items-center gap-2 font-bold text-slate-800">
-                                        <span class="w-4 h-4 rounded-full bg-orange-500 text-white font-bold text-[10px] flex items-center justify-center shrink-0">2</span>
-                                        <span>2023 年真题套卷</span>
-                                    </div>
-                                    <div class="flex items-center gap-1.5 text-slate-600">
-                                        <span>交卷: <strong class="text-orange-600">32,400</strong> 人</span>
-                                        <span class="text-slate-400 text-[11px]">(交卷率：26.2%)</span>
-                                    </div>
-                                </div>
-                                <div class="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-orange-500 h-full rounded-full" style="width: 67.1%"></div>
-                                </div>
-                            </div>
-
-                            <!-- Rank 3 -->
-                            <div class="p-2 bg-amber-50/50 rounded-lg border border-amber-100 text-xs">
-                                <div class="flex items-center justify-between mb-1">
-                                    <div class="flex items-center gap-2 font-bold text-slate-800">
-                                        <span class="w-4 h-4 rounded-full bg-amber-500 text-white font-bold text-[10px] flex items-center justify-center shrink-0">3</span>
-                                        <span>2022 年真题套卷</span>
-                                    </div>
-                                    <div class="flex items-center gap-1.5 text-slate-600">
-                                        <span>交卷: <strong class="text-amber-600">21,800</strong> 人</span>
-                                        <span class="text-slate-400 text-[11px]">(交卷率：17.7%)</span>
-                                    </div>
-                                </div>
-                                <div class="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-amber-500 h-full rounded-full" style="width: 45.2%"></div>
-                                </div>
-                            </div>
-
-                            <!-- Rank 4 -->
-                            <div class="p-2 bg-slate-50 rounded-lg border border-slate-100 text-xs">
-                                <div class="flex items-center justify-between mb-1">
-                                    <div class="flex items-center gap-2 font-medium text-slate-700">
-                                        <span class="w-4 h-4 rounded-full bg-slate-300 text-slate-700 font-bold text-[10px] flex items-center justify-center shrink-0">4</span>
-                                        <span>2021 年真题套卷</span>
-                                    </div>
-                                    <div class="flex items-center gap-1.5 text-slate-600">
-                                        <span>交卷: <strong class="text-slate-700">14,800</strong> 人</span>
-                                        <span class="text-slate-400 text-[11px]">(交卷率：12.0%)</span>
-                                    </div>
-                                </div>
-                                <div class="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-blue-500 h-full rounded-full" style="width: 30.7%"></div>
-                                </div>
-                            </div>
-
-                            <!-- Rank 5 -->
-                            <div class="p-2 bg-slate-50 rounded-lg border border-slate-100 text-xs">
-                                <div class="flex items-center justify-between mb-1">
-                                    <div class="flex items-center gap-2 font-medium text-slate-700">
-                                        <span class="w-4 h-4 rounded-full bg-slate-300 text-slate-700 font-bold text-[10px] flex items-center justify-center shrink-0">5</span>
-                                        <span>2020 年及以前真题套卷</span>
-                                    </div>
-                                    <div class="flex items-center gap-1.5 text-slate-600">
-                                        <span>交卷: <strong class="text-slate-700">6,200</strong> 人</span>
-                                        <span class="text-slate-400 text-[11px]">(交卷率：5.0%)</span>
-                                    </div>
-                                </div>
-                                <div class="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-indigo-400 h-full rounded-full" style="width: 12.8%"></div>
-                                </div>
-                            </div>
+                        <!-- 难度筛选 -->
+                        <div class="relative min-w-[95px]">
+                            <select id="heatFilterDifficulty" onchange="handleHeatFilterChange()"
+                                class="w-full appearance-none bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-md pl-2.5 pr-6 py-1.5 text-slate-700 focus:outline-none focus:border-orange-500 cursor-pointer">
+                                <option value="all">全部难度</option>
+                                <option value="难">难</option>
+                                <option value="较难">较难</option>
+                                <option value="中">中</option>
+                                <option value="较易">较易</option>
+                                <option value="易">易</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>
                         </div>
 
-                        <!-- 列表: 模考套卷 (按交卷人数降序) -->
-                        <div id="exam-list-mokao" class="space-y-2 hidden">
-                            <!-- Rank 1 -->
-                            <div class="p-2 bg-rose-50/50 rounded-lg border border-rose-100 text-xs">
-                                <div class="flex items-center justify-between mb-1">
-                                    <div class="flex items-center gap-2 font-bold text-slate-800">
-                                        <span class="w-4 h-4 rounded-full bg-rose-500 text-white font-bold text-[10px] flex items-center justify-center shrink-0">1</span>
-                                        <span>2025 考研万人模考一卷</span>
-                                    </div>
-                                    <div class="flex items-center gap-1.5 text-slate-600">
-                                        <span>交卷: <strong class="text-rose-600">38,600</strong> 人</span>
-                                    </div>
-                                </div>
-                                <div class="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-rose-500 h-full rounded-full" style="width: 100%"></div>
-                                </div>
-                            </div>
-
-                            <!-- Rank 2 -->
-                            <div class="p-2 bg-orange-50/50 rounded-lg border border-orange-100 text-xs">
-                                <div class="flex items-center justify-between mb-1">
-                                    <div class="flex items-center gap-2 font-bold text-slate-800">
-                                        <span class="w-4 h-4 rounded-full bg-orange-500 text-white font-bold text-[10px] flex items-center justify-center shrink-0">2</span>
-                                        <span>2025 全真押题冲刺卷(二)</span>
-                                    </div>
-                                    <div class="flex items-center gap-1.5 text-slate-600">
-                                        <span>交卷: <strong class="text-orange-600">29,400</strong> 人</span>
-                                    </div>
-                                </div>
-                                <div class="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-orange-500 h-full rounded-full" style="width: 76.2%"></div>
-                                </div>
-                            </div>
-
-                            <!-- Rank 3 -->
-                            <div class="p-2 bg-amber-50/50 rounded-lg border border-amber-100 text-xs">
-                                <div class="flex items-center justify-between mb-1">
-                                    <div class="flex items-center gap-2 font-bold text-slate-800">
-                                        <span class="w-4 h-4 rounded-full bg-amber-500 text-white font-bold text-[10px] flex items-center justify-center shrink-0">3</span>
-                                        <span>阶段强化模考三卷</span>
-                                    </div>
-                                    <div class="flex items-center gap-1.5 text-slate-600">
-                                        <span>交卷: <strong class="text-amber-600">21,500</strong> 人</span>
-                                    </div>
-                                </div>
-                                <div class="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-amber-500 h-full rounded-full" style="width: 55.7%"></div>
-                                </div>
-                            </div>
-
-                            <!-- Rank 4 -->
-                            <div class="p-2 bg-slate-50 rounded-lg border border-slate-100 text-xs">
-                                <div class="flex items-center justify-between mb-1">
-                                    <div class="flex items-center gap-2 font-medium text-slate-700">
-                                        <span class="w-4 h-4 rounded-full bg-slate-300 text-slate-700 font-bold text-[10px] flex items-center justify-center shrink-0">4</span>
-                                        <span>考前30天全真模拟卷(一)</span>
-                                    </div>
-                                    <div class="flex items-center gap-1.5 text-slate-600">
-                                        <span>交卷: <strong class="text-slate-700">15,200</strong> 人</span>
-                                    </div>
-                                </div>
-                                <div class="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-blue-500 h-full rounded-full" style="width: 39.4%"></div>
-                                </div>
-                            </div>
-
-                            <!-- Rank 5 -->
-                            <div class="p-2 bg-slate-50 rounded-lg border border-slate-100 text-xs">
-                                <div class="flex items-center justify-between mb-1">
-                                    <div class="flex items-center gap-2 font-medium text-slate-700">
-                                        <span class="w-4 h-4 rounded-full bg-slate-300 text-slate-700 font-bold text-[10px] flex items-center justify-center shrink-0">5</span>
-                                        <span>基础能力诊断模考卷</span>
-                                    </div>
-                                    <div class="flex items-center gap-1.5 text-slate-600">
-                                        <span>交卷: <strong class="text-slate-700">8,100</strong> 人</span>
-                                    </div>
-                                </div>
-                                <div class="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-indigo-400 h-full rounded-full" style="width: 21.0%"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 列表: 全国大联考 (按交卷人数降序) -->
-                        <div id="exam-list-daliankao" class="space-y-2 hidden">
-                            <!-- Rank 1 -->
-                            <div class="p-2 bg-rose-50/50 rounded-lg border border-rose-100 text-xs">
-                                <div class="flex items-center justify-between mb-1">
-                                    <div class="flex items-center gap-2 font-bold text-slate-800">
-                                        <span class="w-4 h-4 rounded-full bg-rose-500 text-white font-bold text-[10px] flex items-center justify-center shrink-0">1</span>
-                                        <span>2025 全国考研7月大联考</span>
-                                    </div>
-                                    <div class="flex items-center gap-1.5 text-slate-600">
-                                        <span>交卷: <strong class="text-rose-600">52,100</strong> 人</span>
-                                    </div>
-                                </div>
-                                <div class="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-rose-500 h-full rounded-full" style="width: 100%"></div>
-                                </div>
-                            </div>
-
-                            <!-- Rank 2 -->
-                            <div class="p-2 bg-orange-50/50 rounded-lg border border-orange-100 text-xs">
-                                <div class="flex items-center justify-between mb-1">
-                                    <div class="flex items-center gap-2 font-bold text-slate-800">
-                                        <span class="w-4 h-4 rounded-full bg-orange-500 text-white font-bold text-[10px] flex items-center justify-center shrink-0">2</span>
-                                        <span>2025 暑期百校联合大联考</span>
-                                    </div>
-                                    <div class="flex items-center gap-1.5 text-slate-600">
-                                        <span>交卷: <strong class="text-orange-600">39,800</strong> 人</span>
-                                    </div>
-                                </div>
-                                <div class="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-orange-500 h-full rounded-full" style="width: 76.4%"></div>
-                                </div>
-                            </div>
-
-                            <!-- Rank 3 -->
-                            <div class="p-2 bg-amber-50/50 rounded-lg border border-amber-100 text-xs">
-                                <div class="flex items-center justify-between mb-1">
-                                    <div class="flex items-center gap-2 font-bold text-slate-800">
-                                        <span class="w-4 h-4 rounded-full bg-amber-500 text-white font-bold text-[10px] flex items-center justify-center shrink-0">3</span>
-                                        <span>2024 秋季万人大联考诊断卷</span>
-                                    </div>
-                                    <div class="flex items-center gap-1.5 text-slate-600">
-                                        <span>交卷: <strong class="text-amber-600">26,400</strong> 人</span>
-                                    </div>
-                                </div>
-                                <div class="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-amber-500 h-full rounded-full" style="width: 50.7%"></div>
-                                </div>
-                            </div>
-
-                            <!-- Rank 4 -->
-                            <div class="p-2 bg-slate-50 rounded-lg border border-slate-100 text-xs">
-                                <div class="flex items-center justify-between mb-1">
-                                    <div class="flex items-center gap-2 font-medium text-slate-700">
-                                        <span class="w-4 h-4 rounded-full bg-slate-300 text-slate-700 font-bold text-[10px] flex items-center justify-center shrink-0">4</span>
-                                        <span>2024 全国考研10月大联考</span>
-                                    </div>
-                                    <div class="flex items-center gap-1.5 text-slate-600">
-                                        <span>交卷: <strong class="text-slate-700">14,200</strong> 人</span>
-                                    </div>
-                                </div>
-                                <div class="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-blue-500 h-full rounded-full" style="width: 27.3%"></div>
-                                </div>
-                            </div>
-
-                            <!-- Rank 5 -->
-                            <div class="p-2 bg-slate-50 rounded-lg border border-slate-100 text-xs">
-                                <div class="flex items-center justify-between mb-1">
-                                    <div class="flex items-center gap-2 font-medium text-slate-700">
-                                        <span class="w-4 h-4 rounded-full bg-slate-300 text-slate-700 font-bold text-[10px] flex items-center justify-center shrink-0">5</span>
-                                        <span>2024 春季开学诊断大联考</span>
-                                    </div>
-                                    <div class="flex items-center gap-1.5 text-slate-600">
-                                        <span>交卷: <strong class="text-slate-700">7,500</strong> 人</span>
-                                    </div>
-                                </div>
-                                <div class="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-indigo-400 h-full rounded-full" style="width: 14.4%"></div>
-                                </div>
-                            </div>
+                        <!-- 星级筛选 -->
+                        <div class="relative min-w-[95px]">
+                            <select id="heatFilterStar" onchange="handleHeatFilterChange()"
+                                class="w-full appearance-none bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-md pl-2.5 pr-6 py-1.5 text-slate-700 focus:outline-none focus:border-orange-500 cursor-pointer">
+                                <option value="all">全部星级</option>
+                                <option value="5">5星</option>
+                                <option value="4">4星</option>
+                                <option value="3">3星</option>
+                                <option value="2">2星</option>
+                                <option value="1">1星</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>
                         </div>
                     </div>
                 </div>
 
-            </div>
+                <!-- 考点热度 全景表格 -->
+                <div class="overflow-x-auto min-h-[380px] max-h-[560px] overflow-y-auto custom-scrollbar border border-slate-100 rounded-lg">
+                    <table class="w-full text-left text-xs">
+                        <thead class="sticky top-0 bg-slate-50 z-10 text-slate-600 border-b border-slate-200 select-none">
+                            <tr>
+                                <th class="p-2.5 font-semibold text-center w-12">序号</th>
+                                <th class="p-2.5 font-semibold min-w-[200px]">知识点名称</th>
+                                <th class="p-2.5 font-semibold min-w-[105px] cursor-pointer hover:text-orange-600 transition-colors" onclick="toggleHeatSort('freqYears')" id="th-freqYears">
+                                    <div class="flex items-center gap-1">
+                                        <span>考频（近5年）</span>
+                                        <span id="sort-icon-freqYears"><i class="fas fa-sort-down text-orange-500 text-[10px]"></i></span>
+                                    </div>
+                                </th>
+                                <th class="p-2.5 font-semibold min-w-[75px] cursor-pointer hover:text-orange-600 transition-colors" onclick="toggleHeatSort('difficulty')" id="th-difficulty">
+                                    <div class="flex items-center gap-1">
+                                        <span>难度</span>
+                                        <span id="sort-icon-difficulty"><i class="fas fa-sort text-slate-300 text-[10px]"></i></span>
+                                    </div>
+                                </th>
+                                <th class="p-2.5 font-semibold min-w-[90px] cursor-pointer hover:text-orange-600 transition-colors" onclick="toggleHeatSort('star')" id="th-star">
+                                    <div class="flex items-center gap-1">
+                                        <span>星级</span>
+                                        <span id="sort-icon-star"><i class="fas fa-sort text-slate-300 text-[10px]"></i></span>
+                                    </div>
+                                </th>
+                                <th class="p-2.5 font-semibold min-w-[120px]">常考题型</th>
+                                <th class="p-2.5 font-semibold min-w-[105px] cursor-pointer hover:text-orange-600 transition-colors" onclick="toggleHeatSort('scoreRatio')" id="th-scoreRatio">
+                                    <div class="flex items-center gap-1">
+                                        <span>真题分值占比</span>
+                                        <span id="sort-icon-scoreRatio"><i class="fas fa-sort text-slate-300 text-[10px]"></i></span>
+                                    </div>
+                                </th>
+                                <th class="p-2.5 font-semibold min-w-[105px] cursor-pointer hover:text-orange-600 transition-colors" onclick="toggleHeatSort('totalAvgScore')" id="th-totalAvgScore">
+                                    <div class="flex items-center gap-1">
+                                        <span>真题平均分值</span>
+                                        <span id="sort-icon-totalAvgScore"><i class="fas fa-sort text-slate-300 text-[10px]"></i></span>
+                                    </div>
+                                </th>
+                                <th class="p-2.5 font-semibold min-w-[105px] cursor-pointer hover:text-orange-600 transition-colors" onclick="toggleHeatSort('avgScore')" id="th-avgScore">
+                                    <div class="flex items-center gap-1">
+                                        <span>真题平均得分</span>
+                                        <span id="sort-icon-avgScore"><i class="fas fa-sort text-slate-300 text-[10px]"></i></span>
+                                    </div>
+                                </th>
+                                <th class="p-2.5 font-semibold min-w-[110px] text-right pr-4 cursor-pointer hover:text-orange-600 transition-colors" onclick="toggleHeatSort('accuracy')" id="th-accuracy">
+                                    <div class="flex items-center justify-end gap-1">
+                                        <span>真题正确率</span>
+                                        <span id="sort-icon-accuracy"><i class="fas fa-sort text-slate-300 text-[10px]"></i></span>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="heatTableBody" class="divide-y divide-slate-100 text-slate-700">
+                            <!-- Dynamic rows via JS -->
+                        </tbody>
+                    </table>
+                </div>
 
-        </main>
+                <!-- 考点热度 分页栏 -->
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-end" id="heatPaginationContainer">
+                    <!-- Dynamic pagination buttons -->
+                </div>
+            </div>
     </div>
 
     <script>
@@ -1325,9 +1003,9 @@
                     { id: "c2-1", name: "精气学说与阴阳五行", level: 2, count: "18,200次", accuracy: "54.1%", time: "3.1分钟", status: "中度薄弱", alert: false }
                 ]
             },
-            { id: "c3", name: "中医学的主要思维方式", level: 1, count: "22,400次", accuracy: "61.0%", time: "2.4分钟", status: "掌握良好", alert: false },
+            { id: "c3", name: "中医学的主要思维方式", level: 1, count: "22,400次", accuracy: "61%", time: "2.4分钟", status: "掌握良好", alert: false },
             { id: "c4", name: "藏象", level: 1, count: "41,800次", accuracy: "44.2%", time: "4.2分钟", status: "重点薄弱", alert: true },
-            { id: "c5", name: "精气血津液神", level: 1, count: "29,600次", accuracy: "58.0%", time: "2.9分钟", status: "中度薄弱", alert: false },
+            { id: "c5", name: "精气血津液神", level: 1, count: "29,600次", accuracy: "58%", time: "2.9分钟", status: "中度薄弱", alert: false },
             { id: "c6", name: "经络", level: 1, count: "21,500次", accuracy: "49.1%", time: "3.6分钟", status: "重点薄弱", alert: true },
             { id: "c7", name: "体质", level: 1, count: "18,300次", accuracy: "65.2%", time: "2.2分钟", status: "掌握良好", alert: false },
             { id: "c8", name: "病因", level: 1, count: "26,100次", accuracy: "53.8%", time: "3.0分钟", status: "中度薄弱", alert: false },
@@ -1357,16 +1035,63 @@
                     }
                 ]
             },
-            { id: "k2", name: "藏象学说与五脏生理功能", level: 1, count: "32,100次", accuracy: "52.0%", time: "3.2分钟", status: "中度薄弱", alert: false },
+            { id: "k2", name: "藏象学说与五脏生理功能", level: 1, count: "32,100次", accuracy: "52%", time: "3.2分钟", status: "中度薄弱", alert: false },
             { id: "k3", name: "病因辨证与六淫邪气特征", level: 1, count: "28,400次", accuracy: "58.6%", time: "2.7分钟", status: "中度薄弱", alert: false }
         ];
 
         const questionTypeData = [
-            { name: "综合证明题 (大题)", count: "32,400次", accuracy: "41.0%", time: "8.5分钟", status: "重点薄弱", alert: true },
-            { name: "长难句翻译与改错", count: "28,100次", accuracy: "49.5%", time: "4.2分钟", status: "重点薄弱", alert: true },
-            { name: "算法程序阅读理解题", count: "19,500次", accuracy: "54.2%", time: "5.6分钟", status: "中度薄弱", alert: false },
-            { name: "单项选择题 (基础项)", count: "85,600次", accuracy: "82.4%", time: "0.8分钟", status: "掌握良好", alert: false }
+            { name: "问答题-综合证明题", struct: "问答题", count: "38,500次", accuracy: "27.2%", time: "8.5分钟", status: "重点薄弱", alert: true },
+            { name: "问答题-算法编程", struct: "问答题", count: "31,200次", accuracy: "31.6%", time: "9.2分钟", status: "重点薄弱", alert: true },
+            { name: "材料题-综合案例分析", struct: "材料题", count: "42,100次", accuracy: "35.1%", time: "7.8分钟", status: "重点薄弱", alert: true },
+            { name: "问答题-长难句翻译与纠错", struct: "问答题", count: "58,600次", accuracy: "38.5%", time: "4.5分钟", status: "重点薄弱", alert: true },
+            { name: "问答题-建模与综合计算", struct: "问答题", count: "52,400次", accuracy: "41.8%", time: "6.8分钟", status: "重点薄弱", alert: true },
+            { name: "问答题-议论文写作", struct: "问答题", count: "46,800次", accuracy: "44.3%", time: "12.0分钟", status: "重点薄弱", alert: true },
+            { name: "问答题-政治与时政论述", struct: "问答题", count: "63,200次", accuracy: "47.7%", time: "5.5分钟", status: "重点薄弱", alert: true },
+            { name: "多选题-多选5项", struct: "多选题", count: "142,500次", accuracy: "50.2%", time: "1.8分钟", status: "中度薄弱", alert: false },
+            { name: "不定项选择题-不定项选择4项", struct: "不定项选择题", count: "98,600次", accuracy: "52.4%", time: "1.5分钟", status: "中度薄弱", alert: false },
+            { name: "问答题-概念要点简答", struct: "问答题", count: "78,900次", accuracy: "54.8%", time: "3.2分钟", status: "中度薄弱", alert: false },
+            { name: "单选题-阅读理解推理", struct: "单选题", count: "168,400次", accuracy: "57.9%", time: "2.1分钟", status: "中度薄弱", alert: false },
+            { name: "单选题-完形填空", struct: "单选题", count: "125,600次", accuracy: "61.3%", time: "1.2分钟", status: "中度薄弱", alert: false },
+            { name: "问答题-应用文书信小作文", struct: "问答题", count: "54,100次", accuracy: "64.8%", time: "6.5分钟", status: "掌握良好", alert: false },
+            { name: "材料题-材料分析解答", struct: "材料题", count: "71,200次", accuracy: "67.2%", time: "4.8分钟", status: "掌握良好", alert: false },
+            { name: "填空题-图表状态追踪", struct: "填空题", count: "49,800次", accuracy: "70.5%", time: "2.2分钟", status: "掌握良好", alert: false },
+            { name: "问答题-名词解释精准定义", struct: "问答题", count: "65,400次", accuracy: "73.8%", time: "2.0分钟", status: "掌握良好", alert: false },
+            { name: "单选题-单选4项", struct: "单选题", count: "385,400次", accuracy: "77%", time: "0.8分钟", status: "掌握良好", alert: false },
+            { name: "填空题-数值计算", struct: "填空题", count: "189,500次", accuracy: "79.4%", time: "1.4分钟", status: "掌握良好", alert: false },
+            { name: "判断题-正误判断", struct: "判断题", count: "156,400次", accuracy: "82.8%", time: "0.6分钟", status: "掌握良好", alert: false },
+            { name: "单选题-阅读理解细节定位", struct: "单选题", count: "214,500次", accuracy: "85.5%", time: "1.6分钟", status: "掌握良好", alert: false }
         ];
+
+        // 统一百分比格式化工具（去除末尾无意义的 .0 等）
+        function formatPercent(val) {
+            if (val === null || val === undefined || val === '') return '';
+            if (typeof val === 'number') {
+                return parseFloat(val.toFixed(1)) + '%';
+            }
+            const str = String(val).trim();
+            if (str.endsWith('%')) {
+                const num = parseFloat(str.slice(0, -1));
+                if (!isNaN(num)) {
+                    return parseFloat(num.toFixed(1)) + '%';
+                }
+            }
+            const num = parseFloat(str);
+            if (!isNaN(num)) {
+                return parseFloat(num.toFixed(1)) + '%';
+            }
+            return str;
+        }
+
+        // 统一分值格式化工具（去除末尾无意义的 .0 等）
+        function formatScore(val) {
+            if (val === null || val === undefined || val === '') return '';
+            const str = String(val).trim();
+            const num = parseFloat(str.replace('分', ''));
+            if (!isNaN(num)) {
+                return parseFloat(num.toFixed(1)) + '分';
+            }
+            return str;
+        }
 
         function getAccuracyValue(accStr) {
             if (!accStr) return 0;
@@ -1414,7 +1139,7 @@
                                 </div>
                             </td>
                             <td class="p-2 text-slate-600">${node.count}</td>
-                            <td class="p-2 font-bold text-right ${nodeAcc < 50 ? 'text-rose-600' : 'text-slate-800'}">${node.accuracy}</td>
+                            <td class="p-2 font-bold text-right ${nodeAcc < 50 ? 'text-rose-600' : 'text-slate-800'}">${formatPercent(node.accuracy)}</td>
                         </tr>
                     `);
 
@@ -1427,6 +1152,7 @@
         }
 
         function renderWeaknessTable(type, keyword = '') {
+            const head = document.getElementById('weaknessTableHead');
             const body = document.getElementById('weaknessTableBody');
             const searchInput = document.getElementById('treeSearchInput');
             const toggleEl = document.getElementById('accuracyFilterToggle');
@@ -1442,28 +1168,64 @@
             const kw = keyword !== undefined ? keyword : (searchInput ? searchInput.value.trim() : '');
 
             if (type === 'questionType') {
+                if (head) {
+                    head.innerHTML = `
+                        <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
+                            <th class="p-2 font-medium">题型名称</th>
+                            <th class="p-2 font-medium text-center">试题结构</th>
+                            <th class="p-2 font-medium">作答次数</th>
+                            <th class="p-2 font-medium text-right">正确率</th>
+                        </tr>
+                    `;
+                }
+
                 const filteredQ = questionTypeData.filter(item => {
-                    const keyMatches = !kw || item.name.toLowerCase().includes(kw.toLowerCase());
+                    const keyMatches = !kw || item.name.toLowerCase().includes(kw.toLowerCase()) || (item.struct && item.struct.toLowerCase().includes(kw.toLowerCase()));
                     const itemAcc = getAccuracyValue(item.accuracy);
                     const accMatches = !filterAcc || (itemAcc < threshold);
                     return keyMatches && accMatches;
                 });
 
                 if (filteredQ.length === 0) {
-                    body.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-slate-400">暂无符合筛选条件的数据</td></tr>`;
+                    body.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">暂无符合筛选条件的数据</td></tr>`;
                 } else {
+                    const getStructBadge = (struct) => {
+                        switch (struct) {
+                            case '单选题': return '<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-700 border border-blue-200/60">单选题</span>';
+                            case '多选题': return '<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-purple-50 text-purple-700 border border-purple-200/60">多选题</span>';
+                            case '不定项选择题': return '<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-indigo-50 text-indigo-700 border border-indigo-200/60">不定项选择题</span>';
+                            case '填空题': return '<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-cyan-50 text-cyan-700 border border-cyan-200/60">填空题</span>';
+                            case '判断题': return '<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60">判断题</span>';
+                            case '问答题': return '<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-orange-50 text-orange-700 border border-orange-200/60">问答题</span>';
+                            case '材料题': return '<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-rose-50 text-rose-700 border border-rose-200/60">材料题</span>';
+                            default: return `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-700">${struct}</span>`;
+                        }
+                    };
+
                     body.innerHTML = filteredQ.map(item => {
                         const itemAcc = getAccuracyValue(item.accuracy);
+                        const structName = item.struct || (item.name.includes('-') ? item.name.split('-')[0] : '其他');
                         return `
                             <tr class="hover:bg-slate-50 transition-colors">
                                 <td class="p-2 font-semibold text-slate-800">${item.name}</td>
+                                <td class="p-2 text-center">${getStructBadge(structName)}</td>
                                 <td class="p-2 text-slate-600">${item.count}</td>
-                                <td class="p-2 font-bold text-right ${itemAcc < 50 ? 'text-rose-600' : 'text-slate-800'}">${item.accuracy}</td>
+                                <td class="p-2 font-bold text-right ${itemAcc < 50 ? 'text-rose-600' : 'text-slate-800'}">${formatPercent(item.accuracy)}</td>
                             </tr>
                         `;
                     }).join('');
                 }
             } else {
+                if (head) {
+                    head.innerHTML = `
+                        <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
+                            <th class="p-2 font-medium">${type === 'chapter' ? '章节名称' : '知识点名称'}</th>
+                            <th class="p-2 font-medium">作答次数</th>
+                            <th class="p-2 font-medium text-right">正确率</th>
+                        </tr>
+                    `;
+                }
+
                 const nodes = type === 'chapter' ? chapterTreeNodes : knowledgeTreeNodes;
                 const rowsHtml = generateTreeHtml(nodes, kw, filterAcc, threshold, []);
                 if (rowsHtml.length === 0) {
@@ -1522,19 +1284,32 @@
                 colors: ['#f43f5e', '#f59e0b', '#3b82f6', '#10b981']
             },
             volume: {
-                title: '日均做题量分层',
+                title: '做题量分层',
                 labels: ['0-30道', '31-60道', '61-90道', '91-120道', '121-150道', '150道以上'],
                 counts: [6270, 7840, 4930, 2240, 895, 225],
-                ratios: ['28.0%', '35.0%', '22.0%', '10.0%', '4.0%', '1.0%'],
+                ratios: ['28%', '35%', '22%', '10%', '4%', '1%'],
                 colors: ['#0284c7', '#3b82f6', '#8b5cf6', '#a855f7', '#d946ef', '#ec4899']
+            },
+            userType: {
+                title: '新老用户分层',
+                labels: ['新用户', '老用户'],
+                counts: [6720, 15680],
+                ratios: ['30%', '70%'],
+                colors: ['#38bdf8', '#8b5cf6']
             }
         };
 
         function switchUserSegment(type) {
-            document.getElementById('btnSegAccuracy').className = type === 'accuracy' ? 'px-2 py-0.5 rounded-md font-medium text-slate-700 bg-white shadow-2xs' : 'px-2 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600';
-            document.getElementById('btnSegVolume').className = type === 'volume' ? 'px-2 py-0.5 rounded-md font-medium text-slate-700 bg-white shadow-2xs' : 'px-2 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600';
+            const btnAccuracy = document.getElementById('btnSegAccuracy');
+            const btnVolume = document.getElementById('btnSegVolume');
+            const btnUserType = document.getElementById('btnSegUserType');
+
+            if (btnAccuracy) btnAccuracy.className = type === 'accuracy' ? 'px-2 py-0.5 rounded-md font-medium text-slate-700 bg-white shadow-2xs' : 'px-2 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600';
+            if (btnVolume) btnVolume.className = type === 'volume' ? 'px-2 py-0.5 rounded-md font-medium text-slate-700 bg-white shadow-2xs' : 'px-2 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600';
+            if (btnUserType) btnUserType.className = type === 'userType' ? 'px-2 py-0.5 rounded-md font-medium text-slate-700 bg-white shadow-2xs' : 'px-2 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600';
 
             const item = userSegmentData[type];
+            if (!item) return;
             const tbody = document.getElementById('userSegmentTableBody');
             if (tbody) {
                 tbody.innerHTML = item.labels.map((lbl, i) => `
@@ -1544,7 +1319,7 @@
                             <span>${lbl}</span>
                         </td>
                         <td class="p-1.5 font-semibold text-slate-800">${item.counts[i].toLocaleString()} 人</td>
-                        <td class="p-1.5 font-bold text-right text-slate-700">${item.ratios[i]}</td>
+                        <td class="p-1.5 font-bold text-right text-slate-700">${formatPercent(item.ratios[i])}</td>
                     </tr>
                 `).join('');
             }
@@ -1587,22 +1362,6 @@
                 activeUsersChartInstance.data.datasets[0].label = item.label;
                 activeUsersChartInstance.update();
             }
-        }
-
-        function switchExamCategory(cat) {
-            ['zhenti', 'mokao', 'daliankao'].forEach(c => {
-                const tabBtn = document.getElementById(`tab-${c}`);
-                const listEl = document.getElementById(`exam-list-${c}`);
-                if (tabBtn && listEl) {
-                    if (c === cat) {
-                        tabBtn.className = 'px-2.5 py-1 rounded-md font-medium transition-all bg-white text-rose-600 shadow-2xs';
-                        listEl.classList.remove('hidden');
-                    } else {
-                        tabBtn.className = 'px-2.5 py-1 rounded-md font-medium transition-all text-slate-500 hover:text-slate-800';
-                        listEl.classList.add('hidden');
-                    }
-                }
-            });
         }
 
         function initCharts() {
@@ -1696,6 +1455,983 @@
             }
         }
 
+        // ==================== 专项深度排行榜数据集 (Top 100 知识点 / Top 50 章节 / Top 20 题型) ====================
+
+        // 100个精细知识点基础数据源
+        const rawKnowledgePoints = [
+            { name: "《黄帝内经》诊法与理论精要", chapter: "绪论：中医理论体系形成", errorRate: 68.5, totalCount: 18420, wrongCount: 12617, users: 14200, time: "4.5分" },
+            { name: "木旺乘土与土虚木乘典例判断", chapter: "中医学哲学基础：五行学说", errorRate: 66.8, totalCount: 22150, wrongCount: 14796, users: 16800, time: "4.2分" },
+            { name: "隐函数极值与拉格朗日乘数法应用", chapter: "多元函数微分学：极值最值", errorRate: 65.4, totalCount: 31200, wrongCount: 20404, users: 24500, time: "6.8分" },
+            { name: "二阶常系数线性非齐次微分方程特解形式", chapter: "微分方程：高阶方程求解", errorRate: 64.9, totalCount: 29800, wrongCount: 19340, users: 22100, time: "5.5分" },
+            { name: "特征值与特征向量相似对角化判定", chapter: "线性代数：矩阵对角化", errorRate: 63.7, totalCount: 27400, wrongCount: 17453, users: 20800, time: "5.1分" },
+            { name: "平衡二叉树AVL旋转调整(LL/RR/LR/RL)", chapter: "树与二叉树：动态查找树", errorRate: 62.5, totalCount: 24100, wrongCount: 15062, users: 18900, time: "5.9分" },
+            { name: "拓扑排序与关键路径AOE网最早最迟时间", chapter: "图论算法：有向无环图", errorRate: 61.8, totalCount: 25600, wrongCount: 15820, users: 19400, time: "6.2分" },
+            { name: "洛必达法则'0/0'与'∞/∞'适用条件与反例", chapter: "函数极限与连续性", errorRate: 60.9, totalCount: 42500, wrongCount: 25882, users: 31200, time: "3.8分" },
+            { name: "定积分的几何应用-旋转体体积与侧面积", chapter: "一元函数积分学：定积分应用", errorRate: 60.2, totalCount: 38900, wrongCount: 23417, users: 28600, time: "4.9分" },
+            { name: "全概率公式与贝叶斯公式逆概率计算", chapter: "概率统计：随机事件与概率", errorRate: 59.6, totalCount: 34100, wrongCount: 20323, users: 26500, time: "4.7分" },
+            { name: "虚拟语气在条件句与名词性从句中的辨析", chapter: "英语语法：虚拟语气", errorRate: 59.1, totalCount: 46200, wrongCount: 27304, users: 35100, time: "2.8分" },
+            { name: "倒装句完全倒装与部分倒装触发词甄别", chapter: "英语语法：特殊句式", errorRate: 58.4, totalCount: 39500, wrongCount: 23068, users: 30400, time: "2.5分" },
+            { name: "非谓语动词作定语与状语的时态语态区别", chapter: "英语语法：非谓语动词", errorRate: 57.8, totalCount: 52100, wrongCount: 30113, users: 38200, time: "3.1分" },
+            { name: "字符串KMP算法next与nextval数组推导", chapter: "串与数组：模式匹配", errorRate: 57.2, totalCount: 19800, wrongCount: 11325, users: 15600, time: "5.4分" },
+            { name: "散列表线性探测与二次探测冲突处理ASL", chapter: "查找算法：散列查找", errorRate: 56.5, totalCount: 21400, wrongCount: 12091, users: 17200, time: "4.1分" },
+            { name: "快速排序Partition双指针划分算法执行流程", chapter: "内部排序算法：交换排序", errorRate: 55.9, totalCount: 33800, wrongCount: 18894, users: 27100, time: "3.6分" },
+            { name: "堆排序大顶堆初建与筛选过程追踪", chapter: "内部排序算法：选择排序", errorRate: 55.3, totalCount: 26900, wrongCount: 14875, users: 21500, time: "4.4分" },
+            { name: "关系模型第三范式3NF与BCNF消除冗余判定", chapter: "数据库系统：规范化理论", errorRate: 54.8, totalCount: 23400, wrongCount: 12823, users: 18600, time: "3.9分" },
+            { name: "进程同步信号量P/V操作生产者与消费者", chapter: "操作系统：进程管理与并发", errorRate: 54.2, totalCount: 28700, wrongCount: 15555, users: 23000, time: "5.2分" },
+            { name: "银行家算法安全性检查序列判断与死锁避免", chapter: "操作系统：死锁处理", errorRate: 53.7, totalCount: 22800, wrongCount: 12243, users: 18100, time: "4.8分" },
+            { name: "虚拟内存页面置换算法LRU与FIFO缺页率", chapter: "操作系统：存储管理", errorRate: 53.1, totalCount: 29400, wrongCount: 15611, users: 23600, time: "3.5分" },
+            { name: "五行乘侮与母子相及病理辨析", chapter: "中医学哲学基础：五行学说", errorRate: 52.6, totalCount: 25100, wrongCount: 13202, users: 19800, time: "3.7分" },
+            { name: "藏象学说五脏与六腑表里配合及生理联系", chapter: "中医学藏象：脏腑关系", errorRate: 52.0, totalCount: 36200, wrongCount: 18824, users: 28900, time: "3.0分" },
+            { name: "经络走向交接规律与十二经脉循行部位", chapter: "中医学经络：经络系统", errorRate: 51.5, totalCount: 31500, wrongCount: 16222, users: 25100, time: "3.3分" },
+            { name: "病因辨证六淫邪气致病特征(风寒湿燥火)", chapter: "中医学病因：六淫致病", errorRate: 50.9, totalCount: 34800, wrongCount: 17713, users: 27800, time: "2.9分" },
+            { name: "不定积分第二类换元积分法(三角代换法)", chapter: "一元函数积分学：不定积分", errorRate: 50.4, totalCount: 48600, wrongCount: 24494, users: 38900, time: "4.3分" },
+            { name: "分部积分法反对幂指三优先级法则运用", chapter: "一元函数积分学：不定积分", errorRate: 49.8, totalCount: 51200, wrongCount: 25497, users: 40500, time: "3.9分" },
+            { name: "复合函数求导链式法则及高阶导数求解", chapter: "一元函数微分学：导数计算", errorRate: 49.2, totalCount: 58900, wrongCount: 28978, users: 45200, time: "3.2分" },
+            { name: "闭区间上连续函数的零点定理与介值定理", chapter: "函数极限与连续性", errorRate: 48.7, totalCount: 37400, wrongCount: 18213, users: 29800, time: "4.0分" },
+            { name: "矩阵初等变换与阶梯矩阵求矩阵的秩", chapter: "线性代数：矩阵运算", errorRate: 48.1, totalCount: 45800, wrongCount: 22029, users: 36400, time: "3.4分" },
+            { name: "伴随矩阵公式A*及逆矩阵性质计算题", chapter: "线性代数：逆矩阵", errorRate: 47.6, totalCount: 41200, wrongCount: 19611, users: 33100, time: "3.5分" },
+            { name: "齐次与非齐次线性方程组基础解系通解结构", chapter: "线性代数：线性方程组", errorRate: 47.0, totalCount: 39800, wrongCount: 18706, users: 31900, time: "4.6分" },
+            { name: "二次型化为标准形的正交变换法与配方法", chapter: "线性代数：二次型", errorRate: 46.5, totalCount: 28900, wrongCount: 13438, users: 23100, time: "5.0分" },
+            { name: "连续型随机变量联合概率密度与边缘密度", chapter: "概率统计：多维随机变量", errorRate: 46.0, totalCount: 32600, wrongCount: 14996, users: 25800, time: "4.5分" },
+            { name: "正态分布抽样分布(t分布/F分布/卡方分布)", chapter: "概率统计：数理统计基础", errorRate: 45.4, totalCount: 29500, wrongCount: 13393, users: 23400, time: "4.1分" },
+            { name: "矩估计与极大似然估计量构造与求解", chapter: "概率统计：参数估计", errorRate: 44.9, totalCount: 31800, wrongCount: 14278, users: 25200, time: "4.7分" },
+            { name: "定语从句关系代词which/that与关系副词甄别", chapter: "英语语法：定语从句", errorRate: 44.3, totalCount: 68400, wrongCount: 30301, users: 51200, time: "2.1分" },
+            { name: "强调句型It is...that结构与主谓一致综合题", chapter: "英语语法：特殊句式", errorRate: 43.8, totalCount: 44100, wrongCount: 19315, users: 34800, time: "2.3分" },
+            { name: "英语长难句复杂嵌套结构快速拆解分析", chapter: "英语语法：长难句阅读", errorRate: 43.2, totalCount: 49500, wrongCount: 21384, users: 39100, time: "3.6分" },
+            { name: "英语完形填空篇章逻辑转折与代词指代推断", chapter: "英语题型：完形填空", errorRate: 42.7, totalCount: 56200, wrongCount: 23997, users: 43600, time: "2.9分" },
+            { name: "英语阅读理解细节事实题定位与同义替换", chapter: "英语题型：阅读理解", errorRate: 42.1, totalCount: 75400, wrongCount: 31743, users: 56800, time: "3.4分" },
+            { name: "单链表头插法与尾插法反转与中间节点定位", chapter: "线性表：链式存储", errorRate: 41.6, totalCount: 46800, wrongCount: 19468, users: 37200, time: "3.7分" },
+            { name: "栈在算术表达式中缀转后缀求值与括号匹配", chapter: "栈和队列：受限线性表", errorRate: 41.0, totalCount: 38200, wrongCount: 15662, users: 30100, time: "3.3分" },
+            { name: "循环队列队满与队空条件判断及元素个数计算", chapter: "栈和队列：受限线性表", errorRate: 40.5, totalCount: 36900, wrongCount: 14944, users: 29300, time: "2.6分" },
+            { name: "二叉树前序中序遍历序列重构二叉树形态", chapter: "树与二叉树：二叉树遍历", errorRate: 39.9, totalCount: 43100, wrongCount: 17196, users: 34500, time: "3.8分" },
+            { name: "哈夫曼树构造与带权路径长度WPL计算", chapter: "树与二叉树：最优二叉树", errorRate: 39.4, totalCount: 35700, wrongCount: 14065, users: 28400, time: "3.1分" },
+            { name: "图的邻接矩阵与邻接表存储结构空间代价换算", chapter: "图：图的存储结构", errorRate: 38.8, totalCount: 33400, wrongCount: 12959, users: 26800, time: "2.8分" },
+            { name: "最小生成树Prim算法与Kruskal算法选边原理", chapter: "图论算法：最小生成树", errorRate: 38.3, totalCount: 37800, wrongCount: 14477, users: 30200, time: "3.5分" },
+            { name: "单源最短路径Dijkstra算法松弛操作过程追踪", chapter: "图论算法：最短路径", errorRate: 37.8, totalCount: 32100, wrongCount: 12133, users: 25600, time: "4.0分" },
+            { name: "二分折半查找判定树与成功/失败ASL计算", chapter: "查找算法：顺序与折半", errorRate: 37.2, totalCount: 41500, wrongCount: 15438, users: 33200, time: "2.7分" },
+            { name: "二叉排序树BST插入与删除节点后结构调整", chapter: "树与二叉树：动态查找树", errorRate: 36.7, totalCount: 34900, wrongCount: 12808, users: 27900, time: "3.4分" },
+            { name: "归并排序二路归并算法与时间空间复杂度", chapter: "内部排序算法：归并排序", errorRate: 36.1, totalCount: 29800, wrongCount: 10757, users: 24100, time: "2.9分" },
+            { name: "SQL关联查询Left Join与Inner Join执行性能", chapter: "数据库系统：关系数据库标准语言", errorRate: 35.6, totalCount: 52400, wrongCount: 18654, users: 41800, time: "2.5分" },
+            { name: "数据库事务ACID特性与隔离级别并发问题", chapter: "数据库系统：事务与并发控制", errorRate: 35.0, totalCount: 44800, wrongCount: 15680, users: 35900, time: "2.4分" },
+            { name: "唯物辩证法量变质变与否定之否定规律剖析", chapter: "马克思主义哲学：唯物辩证法", errorRate: 34.5, totalCount: 61200, wrongCount: 21114, users: 48900, time: "2.0分" },
+            { name: "认识论感性认识到理性认识的飞跃条件", chapter: "马克思主义哲学：认识论", errorRate: 34.0, totalCount: 57800, wrongCount: 19652, users: 46200, time: "2.1分" },
+            { name: "剩余价值理论绝对剩余价值与相对剩余价值区别", chapter: "政治经济学：资本主义经济", errorRate: 33.5, totalCount: 53900, wrongCount: 18056, users: 43100, time: "2.3分" },
+            { name: "新民主主义革命三大法宝(统一战线/武装斗争/党建)", chapter: "毛泽东思想：新民主主义革命", errorRate: 33.0, totalCount: 64500, wrongCount: 21285, users: 51000, time: "1.8分" },
+            { name: "中国式现代化的中国特色与本质要求五个坚持", chapter: "新时代中国特色社会主义思想", errorRate: 32.5, totalCount: 78900, wrongCount: 25642, users: 61500, time: "1.7分" },
+            { name: "常数项级数正项级数比值审敛法与根值审敛法", chapter: "无穷级数：常数项级数", errorRate: 32.0, totalCount: 38600, wrongCount: 12352, users: 30800, time: "4.1分" },
+            { name: "幂级数收敛半径与收敛区间端点敛散性判定", chapter: "无穷级数：幂级数", errorRate: 31.5, totalCount: 35200, wrongCount: 11088, users: 28100, time: "4.3分" },
+            { name: "初等函数展开为麦克劳林级数常用公式", chapter: "无穷级数：函数展开", errorRate: 31.0, totalCount: 42100, wrongCount: 13051, users: 33400, time: "3.7分" },
+            { name: "多元函数偏导数连续/可偏导/可微三者关系", chapter: "多元函数微分学：概念与性质", errorRate: 30.5, totalCount: 47800, wrongCount: 14579, users: 38100, time: "3.6分" },
+            { name: "二重积分直角坐标与极坐标对称性简化计算", chapter: "多元函数积分学：二重积分", errorRate: 30.0, totalCount: 51900, wrongCount: 15570, users: 41200, time: "4.2分" },
+            { name: "空间平面与直线的点向式对称式方程建立", chapter: "向量代数与空间解析几何", errorRate: 29.5, totalCount: 36700, wrongCount: 10826, users: 29400, time: "3.1分" },
+            { name: "向量数量积与向量积坐标运算及几何意义", chapter: "向量代数与空间解析几何", errorRate: 29.0, totalCount: 48900, wrongCount: 14181, users: 39200, time: "2.3分" },
+            { name: "一阶线性微分方程常数变易法通解公式应用", chapter: "微分方程：一阶微分方程", errorRate: 28.5, totalCount: 56400, wrongCount: 16074, users: 44900, time: "3.2分" },
+            { name: "可降阶的高阶微分方程求解方法三类模型", chapter: "微分方程：高阶方程求解", errorRate: 28.0, totalCount: 33100, wrongCount: 9268, users: 26500, time: "3.8分" },
+            { name: "极值点与拐点判定定理及凹凸区间求解", chapter: "一元函数微分学：导数应用", errorRate: 27.5, totalCount: 62800, wrongCount: 17270, users: 50100, time: "2.9分" },
+            { name: "罗尔定理与拉格朗日中值定理辅助函数构造", chapter: "一元函数微分学：中值定理", errorRate: 27.0, totalCount: 45200, wrongCount: 12204, users: 36100, time: "4.6分" },
+            { name: "柯西中值定理在双函数极限证明中的应用", chapter: "一元函数微分学：中值定理", errorRate: 26.5, totalCount: 28400, wrongCount: 7526, users: 22700, time: "4.8分" },
+            { name: "变上限积分函数求导法则与导数极值分析", chapter: "一元函数积分学：定积分性质", errorRate: 26.0, totalCount: 58200, wrongCount: 15132, users: 46500, time: "3.3分" },
+            { name: "定积分牛顿-莱布尼茨基本公式计算定积分", chapter: "一元函数积分学：微积分基本定理", errorRate: 25.5, totalCount: 82400, wrongCount: 21012, users: 65800, time: "1.9分" },
+            { name: "反常积分敛散性审敛法与无穷限积分计算", chapter: "一元函数积分学：反常积分", errorRate: 25.0, totalCount: 39100, wrongCount: 9775, users: 31200, time: "3.4分" },
+            { name: "行列式按行按列展开定理与代数余子式计算", chapter: "线性代数：行列式", errorRate: 24.5, totalCount: 74200, wrongCount: 18179, users: 59300, time: "2.2分" },
+            { name: "克拉默法则Cramer Rule求解线性方程组适用前提", chapter: "线性代数：行列式应用", errorRate: 24.0, totalCount: 65100, wrongCount: 15624, users: 52000, time: "1.8分" },
+            { name: "向量组线性相关与线性无关定义与充要条件", chapter: "线性代数：向量组", errorRate: 23.5, totalCount: 58900, wrongCount: 13841, users: 47100, time: "2.8分" },
+            { name: "极大线性无关组与向量组的秩求解矩阵行阶梯", chapter: "线性代数：向量组", errorRate: 23.0, totalCount: 49800, wrongCount: 11454, users: 39800, time: "3.1分" },
+            { name: "施密特正交化过程将线性无关向量正交规范化", chapter: "线性代数：正交矩阵", errorRate: 22.5, totalCount: 32600, wrongCount: 7335, users: 26100, time: "4.2分" },
+            { name: "离散型随机变量期望与方差性质及常用分布参数", chapter: "概率统计：数字特征", errorRate: 22.0, totalCount: 68900, wrongCount: 15158, users: 55200, time: "2.1分" },
+            { name: "常见分布数学期望与方差(二项/泊松/均匀/指数)", chapter: "概率统计：随机变量及分布", errorRate: 21.5, totalCount: 77500, wrongCount: 16662, users: 62100, time: "1.8分" },
+            { name: "大数定律切比雪夫不等式与中心极限定理应用", chapter: "概率统计：极限定理", errorRate: 21.0, totalCount: 35800, wrongCount: 7518, users: 28700, time: "3.5分" },
+            { name: "主谓一致原则就近原则与就远原则重点词汇", chapter: "英语语法：主谓一致", errorRate: 20.5, totalCount: 71200, wrongCount: 14596, users: 57400, time: "1.6分" },
+            { name: "同位语从句与定语从句连接词that用法区别", chapter: "英语语法：名词性从句", errorRate: 20.0, totalCount: 63400, wrongCount: 12680, users: 50800, time: "2.0分" },
+            { name: "状语从句时态呼应与主将从现原则辨析", chapter: "英语语法：状语从句", errorRate: 19.5, totalCount: 81900, wrongCount: 15970, users: 65700, time: "1.5分" },
+            { name: "英语小作文求职信与感谢信高分模板表达", chapter: "英语题型：书面表达", errorRate: 19.0, totalCount: 69400, wrongCount: 13186, users: 55600, time: "4.5分" },
+            { name: "顺序表结构体定义与动态扩容内存分配", chapter: "线性表：顺序存储", errorRate: 18.5, totalCount: 73800, wrongCount: 13653, users: 59100, time: "1.7分" },
+            { name: "双向链表插入与删除节点指针修改顺序", chapter: "线性表：链式存储", errorRate: 18.0, totalCount: 58400, wrongCount: 10512, users: 46800, time: "2.4分" },
+            { name: "二叉树性质叶子节点度数为2的节点关系n0=n2+1", chapter: "树与二叉树：性质推导", errorRate: 17.5, totalCount: 86500, wrongCount: 15137, users: 69200, time: "1.4分" },
+            { name: "完全二叉树节点序号与左右孩子父节点关系", chapter: "树与二叉树：二叉树存储", errorRate: 17.0, totalCount: 89400, wrongCount: 15198, users: 71500, time: "1.3分" },
+            { name: "图的深度优先遍历DFS递归实现栈结构分析", chapter: "图：图的遍历", errorRate: 16.5, totalCount: 52100, wrongCount: 8596, users: 41700, time: "2.6分" },
+            { name: "图的广度优先遍历BFS队列层次遍历实现", chapter: "图：图的遍历", errorRate: 16.0, totalCount: 55800, wrongCount: 8928, users: 44600, time: "2.4分" },
+            { name: "直接插入排序与折半插入排序比较与移动次数", chapter: "内部排序算法：插入排序", errorRate: 15.5, totalCount: 76200, wrongCount: 11811, users: 61000, time: "1.8分" },
+            { name: "冒泡排序Bubble Sort最少与最多交换比较次数", chapter: "内部排序算法：交换排序", errorRate: 15.0, totalCount: 94800, wrongCount: 14220, users: 75900, time: "1.2分" },
+            { name: "简单选择排序不稳定原因与算法比较次数推导", chapter: "内部排序算法：选择排序", errorRate: 14.5, totalCount: 81500, wrongCount: 11817, users: 65200, time: "1.5分" },
+            { name: "SQL单表查询Select Where Order By排序与限制", chapter: "数据库系统：基础SQL", errorRate: 14.0, totalCount: 98600, wrongCount: 13804, users: 78900, time: "1.1分" },
+            { name: "SQL聚合函数Count/Sum/Avg/Group By与Having", chapter: "数据库系统：分组统计", errorRate: 13.5, totalCount: 91400, wrongCount: 12339, users: 73100, time: "1.4分" },
+            { name: "中医学整体观念与辨证论治基本特点", chapter: "绪论：中医理论体系形成", errorRate: 13.0, totalCount: 97800, wrongCount: 12714, users: 78200, time: "1.0分" },
+            { name: "阴阳对立制约互根互用消长平衡相互转化规律", chapter: "中医学哲学基础：阴阳学说", errorRate: 12.5, totalCount: 95400, wrongCount: 11925, users: 76300, time: "1.2分" },
+            { name: "极限保号性与极限局部有界性基本性质", chapter: "函数极限与连续性", errorRate: 12.0, totalCount: 99400, wrongCount: 11928, users: 79500, time: "1.1分" }
+        ];
+
+        // 50个精细章节基础数据源（已去除第2章数据，名称已去除第几章前缀）
+        const rawChapters = [
+            { name: "多元函数微分学应用与极值问题", errorRate: 63.8, totalCount: 94200, kpCount: 18, difficulty: "极难", examUsers: 48900, submitCount: 38200 },
+            { name: "微分方程与差分方程高阶求解", errorRate: 61.5, totalCount: 88500, kpCount: 16, difficulty: "极难", examUsers: 45600, submitCount: 35100 },
+            { name: "矩阵相似对角化与二次型化简", errorRate: 59.2, totalCount: 82400, kpCount: 15, difficulty: "极难", examUsers: 42100, submitCount: 32600 },
+            { name: "图论高级算法与网络流分析", errorRate: 57.6, totalCount: 76900, kpCount: 14, difficulty: "困难", examUsers: 39800, submitCount: 30400 },
+            { name: "树与二叉树平衡旋转与Huffman树", errorRate: 55.4, totalCount: 91200, kpCount: 19, difficulty: "困难", examUsers: 47200, submitCount: 37500 },
+            { name: "操作系统进程并发与死锁预防", errorRate: 54.1, totalCount: 86400, kpCount: 16, difficulty: "困难", examUsers: 44300, submitCount: 34800 },
+            { name: "数据库关系规范化与3NF/BCNF分解", errorRate: 52.8, totalCount: 79800, kpCount: 13, difficulty: "困难", examUsers: 41200, submitCount: 31900 },
+            { name: "概率论二维随机变量及其联合分布", errorRate: 51.5, totalCount: 84300, kpCount: 15, difficulty: "困难", examUsers: 43500, submitCount: 33700 },
+            { name: "英语复杂虚拟语气与倒装句式专题", errorRate: 50.2, totalCount: 112400, kpCount: 22, difficulty: "困难", examUsers: 58900, submitCount: 46200 },
+            { name: "中医哲学基础阴阳五行生克乘侮病理", errorRate: 49.3, totalCount: 96800, kpCount: 17, difficulty: "中等", examUsers: 50200, submitCount: 39600 },
+            { name: "一元函数积分学定积分几何与物理应用", errorRate: 48.4, totalCount: 125600, kpCount: 24, difficulty: "中等", examUsers: 64800, submitCount: 52100 },
+            { name: "线性代数线性方程组解的结构与定理", errorRate: 47.5, totalCount: 104200, kpCount: 18, difficulty: "中等", examUsers: 54100, submitCount: 42800 },
+            { name: "查找算法散列表与平衡查找树", errorRate: 46.2, totalCount: 89400, kpCount: 16, difficulty: "中等", examUsers: 46300, submitCount: 36700 },
+            { name: "内部排序快速排序与堆排序算法", errorRate: 45.1, totalCount: 98200, kpCount: 17, difficulty: "中等", examUsers: 51000, submitCount: 40500 },
+            { name: "操作系统虚拟内存管理与页面置换", errorRate: 44.0, totalCount: 92600, kpCount: 15, difficulty: "中等", examUsers: 48100, submitCount: 38200 },
+            { name: "数据库事务并发控制与锁机制", errorRate: 43.1, totalCount: 85200, kpCount: 14, difficulty: "中等", examUsers: 44200, submitCount: 35000 },
+            { name: "数理统计参数估计与假设检验基础", errorRate: 42.0, totalCount: 78500, kpCount: 13, difficulty: "中等", examUsers: 40800, submitCount: 32200 },
+            { name: "英语非谓语动词全场景精准辨析", errorRate: 41.2, totalCount: 138900, kpCount: 25, difficulty: "中等", examUsers: 72100, submitCount: 58400 },
+            { name: "中医学藏象脏腑生理功能与相互联系", errorRate: 40.3, totalCount: 108400, kpCount: 20, difficulty: "中等", examUsers: 56300, submitCount: 44900 },
+            { name: "一元函数微分学导数中值定理与不等式证明", errorRate: 39.5, totalCount: 132400, kpCount: 23, difficulty: "中等", examUsers: 68500, submitCount: 55100 },
+            { name: "无穷级数幂级数收敛域与函数展开", errorRate: 38.6, totalCount: 87500, kpCount: 15, difficulty: "中等", examUsers: 45300, submitCount: 36000 },
+            { name: "线性代数向量组线性相关性与极大无关组", errorRate: 37.8, totalCount: 101200, kpCount: 18, difficulty: "中等", examUsers: 52600, submitCount: 41800 },
+            { name: "串与数组KMP模式匹配算法深入", errorRate: 36.9, totalCount: 74500, kpCount: 12, difficulty: "中等", examUsers: 38700, submitCount: 30600 },
+            { name: "操作系统文件系统FAT与inode索引", errorRate: 36.0, totalCount: 81200, kpCount: 14, difficulty: "中等", examUsers: 42200, submitCount: 33400 },
+            { name: "数据库SQL高级查询与子查询优化", errorRate: 35.2, totalCount: 142800, kpCount: 26, difficulty: "中等", examUsers: 74500, submitCount: 60200 },
+            { name: "概率统计随机变量数字特征期望方差", errorRate: 34.3, totalCount: 115400, kpCount: 21, difficulty: "中等", examUsers: 60100, submitCount: 48300 },
+            { name: "英语定语从句与名词性从句复合考查", errorRate: 33.5, totalCount: 154200, kpCount: 28, difficulty: "基础", examUsers: 80500, submitCount: 65400 },
+            { name: "中医学经络系统循行走向规律", errorRate: 32.7, totalCount: 95600, kpCount: 17, difficulty: "基础", examUsers: 49800, submitCount: 39500 },
+            { name: "栈和队列基本操作与典型应用模型", errorRate: 30.2, totalCount: 119800, kpCount: 22, difficulty: "基础", examUsers: 62400, submitCount: 50400 },
+            { name: "概率论常见连续型随机变量及其分布", errorRate: 27.7, totalCount: 118900, kpCount: 21, difficulty: "基础", examUsers: 62000, submitCount: 49900 },
+            { name: "英语状语从句主将从现与时态配合", errorRate: 26.8, totalCount: 162100, kpCount: 29, difficulty: "基础", examUsers: 84600, submitCount: 69200 },
+            { name: "中医学病因辨证六淫七情致病特点", errorRate: 26.0, totalCount: 103400, kpCount: 19, difficulty: "基础", examUsers: 53900, submitCount: 43200 },
+            { name: "极限概念计算极限四则运算与保号性", errorRate: 25.2, totalCount: 185400, kpCount: 32, difficulty: "基础", examUsers: 96800, submitCount: 80200 },
+            { name: "线性代数行列式性质与展开定理计算", errorRate: 24.3, totalCount: 158200, kpCount: 28, difficulty: "基础", examUsers: 82500, submitCount: 67300 },
+            { name: "操作系统概论体系结构与系统调用", errorRate: 22.7, totalCount: 129400, kpCount: 24, difficulty: "基础", examUsers: 67500, submitCount: 54900 },
+            { name: "数据库系统概述三级模式与数据独立性", errorRate: 21.8, totalCount: 135800, kpCount: 25, difficulty: "基础", examUsers: 70800, submitCount: 57600 },
+            { name: "英语主谓一致就近与就远原则深度剖析", errorRate: 20.2, totalCount: 159800, kpCount: 29, difficulty: "基础", examUsers: 83400, submitCount: 68300 },
+            { name: "毛泽东思想新民主主义革命理论体系", errorRate: 18.5, totalCount: 169200, kpCount: 30, difficulty: "基础", examUsers: 88300, submitCount: 72800 },
+            { name: "新时代中国特色社会主义思想核心要义", errorRate: 17.7, totalCount: 192400, kpCount: 35, difficulty: "基础", examUsers: 100500, submitCount: 83500 },
+            { name: "中医学理论体系形成和发展源流", errorRate: 16.8, totalCount: 181200, kpCount: 33, difficulty: "基础", examUsers: 94600, submitCount: 78200 },
+            { name: "英语核心词汇辨析与固定短语搭配", errorRate: 16.0, totalCount: 205600, kpCount: 38, difficulty: "基础", examUsers: 107400, submitCount: 89600 },
+            { name: "概率论随机事件与事件的相互独立性", errorRate: 15.2, totalCount: 164500, kpCount: 30, difficulty: "基础", examUsers: 85900, submitCount: 70800 },
+            { name: "计算机导论计算机硬件与二进制编码", errorRate: 14.3, totalCount: 198200, kpCount: 36, difficulty: "基础", examUsers: 103500, submitCount: 86400 }
+        ];
+
+        // 20个精细题型基础数据源（采用2级表示，无括号，试题结构为：单选题、多选题、不定项选择题、填空题、判断题、问答题、材料题）
+        const rawQuestionTypes = [
+            { name: "问答题-综合证明题", type: "问答题", errorRate: 72.8, totalCount: 38500, proportion: "3.2%", accuracy: "27.2%" },
+            { name: "问答题-算法编程", type: "问答题", errorRate: 68.4, totalCount: 31200, proportion: "2.6%", accuracy: "31.6%" },
+            { name: "材料题-综合案例分析", type: "材料题", errorRate: 64.9, totalCount: 42100, proportion: "3.5%", accuracy: "35.1%" },
+            { name: "问答题-长难句翻译与纠错", type: "问答题", errorRate: 61.5, totalCount: 58600, proportion: "4.9%", accuracy: "38.5%" },
+            { name: "问答题-建模与综合计算", type: "问答题", errorRate: 58.2, totalCount: 52400, proportion: "4.4%", accuracy: "41.8%" },
+            { name: "问答题-议论文写作", type: "问答题", errorRate: 55.7, totalCount: 46800, proportion: "3.9%", accuracy: "44.3%" },
+            { name: "问答题-政治与时政论述", type: "问答题", errorRate: 52.3, totalCount: 63200, proportion: "5.3%", accuracy: "47.7%" },
+            { name: "多选题-多选5项", type: "多选题", errorRate: 49.8, totalCount: 142500, proportion: "11.9%", accuracy: "50.2%" },
+            { name: "不定项选择题-不定项选择4项", type: "不定项选择题", errorRate: 47.6, totalCount: 98600, proportion: "8.2%", accuracy: "52.4%" },
+            { name: "问答题-概念要点简答", type: "问答题", errorRate: 45.2, totalCount: 78900, proportion: "6.6%", accuracy: "54.8%" },
+            { name: "单选题-阅读理解推理", type: "单选题", errorRate: 42.1, totalCount: 168400, proportion: "14.1%", accuracy: "57.9%" },
+            { name: "单选题-完形填空", type: "单选题", errorRate: 38.7, totalCount: 125600, proportion: "10.5%", accuracy: "61.3%" },
+            { name: "问答题-应用文书信小作文", type: "问答题", errorRate: 35.2, totalCount: 54100, proportion: "4.5%", accuracy: "64.8%" },
+            { name: "材料题-材料分析解答", type: "材料题", errorRate: 32.8, totalCount: 71200, proportion: "6%", accuracy: "67.2%" },
+            { name: "填空题-图表状态追踪", type: "填空题", errorRate: 29.5, totalCount: 49800, proportion: "4.2%", accuracy: "70.5%" },
+            { name: "问答题-名词解释精准定义", type: "问答题", errorRate: 26.2, totalCount: 65400, proportion: "5.5%", accuracy: "73.8%" },
+            { name: "单选题-单选4项", type: "单选题", errorRate: 23.0, totalCount: 385400, proportion: "32.3%", accuracy: "77%" },
+            { name: "填空题-数值计算", type: "填空题", errorRate: 20.6, totalCount: 189500, proportion: "15.9%", accuracy: "79.4%" },
+            { name: "判断题-正误判断", type: "判断题", errorRate: 17.2, totalCount: 156400, proportion: "13.1%", accuracy: "82.8%" },
+            { name: "单选题-阅读理解细节定位", type: "单选题", errorRate: 14.5, totalCount: 214500, proportion: "18%", accuracy: "85.5%" }
+        ];
+
+        // 专项深度排行榜全局状态 (6合1切换)
+        let currentRankingTab = 'kp_error';
+        let unifiedSearchKeyword = '';
+        let stateRanking = {
+            kp_error: { page: 1, pageSize: 20 },
+            kp_count: { page: 1, pageSize: 20 },
+            chap_error: { page: 1, pageSize: 15 },
+            chap_count: { page: 1, pageSize: 15 },
+            qtype_error: { page: 1, pageSize: 20 },
+            qtype_count: { page: 1, pageSize: 20 }
+        };
+
+        // 辅助：根据排名生成高亮徽章
+        function getRankBadge(rank) {
+            if (rank === 1) return `<span class="w-5 h-5 rounded-full bg-rose-500 text-white font-bold text-[11px] flex items-center justify-center shadow-2xs mx-auto">1</span>`;
+            if (rank === 2) return `<span class="w-5 h-5 rounded-full bg-orange-500 text-white font-bold text-[11px] flex items-center justify-center shadow-2xs mx-auto">2</span>`;
+            if (rank === 3) return `<span class="w-5 h-5 rounded-full bg-amber-500 text-white font-bold text-[11px] flex items-center justify-center shadow-2xs mx-auto">3</span>`;
+            return `<span class="w-5 h-5 rounded-full bg-slate-100 text-slate-600 font-semibold text-[10px] flex items-center justify-center mx-auto">${rank}</span>`;
+        }
+
+        // 辅助：生成统一样式的标准分页组件 (精确还原规范设计)
+        function renderCustomPagination({
+            total,
+            currentPage,
+            pageSize,
+            pageSizeOptions = [10, 20, 50, 100],
+            pageChangeFnName,
+            pageSizeChangeFnName,
+            jumpInputId
+        }) {
+            const totalPages = Math.ceil(total / pageSize) || 1;
+            const curPage = Math.max(1, Math.min(currentPage, totalPages));
+
+            // 1. 共 XX 条
+            const totalHtml = `<span class="text-slate-600 font-normal mr-1">共 ${total.toLocaleString()} 条</span>`;
+
+            // 2. 条/页 下拉选择器
+            const optionsHtml = pageSizeOptions.map(size => 
+                `<option value="${size}" ${size === pageSize ? 'selected' : ''}>${size}条/页</option>`
+            ).join('');
+
+            const sizeSelectHtml = `
+                <div class="relative inline-block mr-1">
+                    <select onchange="${pageSizeChangeFnName}(parseInt(this.value))" 
+                        class="appearance-none bg-white border border-slate-200 hover:border-slate-300 rounded px-2.5 py-1.5 pr-7 text-xs text-slate-700 cursor-pointer focus:outline-none focus:border-blue-500 shadow-2xs font-normal">
+                        ${optionsHtml}
+                    </select>
+                    <i class="fas fa-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-[9px] pointer-events-none"></i>
+                </div>
+            `;
+
+            // 3. 上一页按钮 (<)
+            const prevBtn = `
+                <button type="button" onclick="${pageChangeFnName}(${curPage - 1})" 
+                    ${curPage <= 1 ? 'disabled' : ''}
+                    class="w-8 h-8 flex items-center justify-center rounded bg-slate-100 hover:bg-slate-200 text-slate-500 disabled:opacity-40 disabled:hover:bg-slate-100 disabled:cursor-not-allowed text-xs transition-colors cursor-pointer"
+                    title="上一页">
+                    <i class="fas fa-chevron-left text-[10px]"></i>
+                </button>
+            `;
+
+            // 4. 页码按钮序列 (当前页高亮蓝色, 其余浅灰底色, 省略号 ...)
+            let pageItems = [];
+            if (totalPages <= 7) {
+                for (let i = 1; i <= totalPages; i++) pageItems.push(i);
+            } else {
+                if (curPage <= 4) {
+                    pageItems = [1, 2, 3, 4, 5, 6, '...', totalPages];
+                } else if (curPage >= totalPages - 3) {
+                    pageItems = [1, '...', totalPages - 5, totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+                } else {
+                    pageItems = [1, '...', curPage - 2, curPage - 1, curPage, curPage + 1, curPage + 2, '...', totalPages];
+                }
+            }
+
+            let pageBtnsHtml = '';
+            pageItems.forEach((item) => {
+                if (item === '...') {
+                    pageBtnsHtml += `
+                        <div class="w-8 h-8 flex items-center justify-center rounded bg-slate-100 text-slate-500 text-xs select-none">
+                            ...
+                        </div>
+                    `;
+                } else {
+                    const isCurrent = item === curPage;
+                    if (isCurrent) {
+                        pageBtnsHtml += `
+                            <button type="button" onclick="${pageChangeFnName}(${item})" 
+                                class="w-8 h-8 flex items-center justify-center rounded bg-blue-600 text-white font-bold text-xs shadow-2xs cursor-pointer">
+                                ${item}
+                            </button>
+                        `;
+                    } else {
+                        pageBtnsHtml += `
+                            <button type="button" onclick="${pageChangeFnName}(${item})" 
+                                class="w-8 h-8 flex items-center justify-center rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs transition-colors cursor-pointer">
+                                ${item}
+                            </button>
+                        `;
+                    }
+                }
+            });
+
+            // 5. 下一页按钮 (>)
+            const nextBtn = `
+                <button type="button" onclick="${pageChangeFnName}(${curPage + 1})" 
+                    ${curPage >= totalPages ? 'disabled' : ''}
+                    class="w-8 h-8 flex items-center justify-center rounded bg-slate-100 hover:bg-slate-200 text-slate-500 disabled:opacity-40 disabled:hover:bg-slate-100 disabled:cursor-not-allowed text-xs transition-colors cursor-pointer"
+                    title="下一页">
+                    <i class="fas fa-chevron-right text-[10px]"></i>
+                </button>
+            `;
+
+            // 6. 前往 X 页 (去除上下微调按钮)
+            const jumpHtml = `
+                <div class="flex items-center gap-1.5 text-slate-600 text-xs ml-1">
+                    <span>前往</span>
+                    <input type="text" inputmode="numeric" id="${jumpInputId}" value="${curPage}"
+                        onkeydown="if(event.key==='Enter'){ const v=parseInt(this.value); if(!isNaN(v)){ ${pageChangeFnName}(Math.max(1, Math.min(${totalPages}, v))); } }"
+                        onblur="const v=parseInt(this.value); if(!isNaN(v) && v !== ${curPage}){ ${pageChangeFnName}(Math.max(1, Math.min(${totalPages}, v))); } else if (isNaN(v)) { this.value = ${curPage}; }"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                        class="w-12 h-8 text-center bg-white border border-slate-200 hover:border-slate-300 focus:border-blue-500 rounded text-xs text-slate-800 focus:outline-none shadow-2xs font-normal" />
+                    <span>页</span>
+                </div>
+            `;
+
+            return `
+                <div class="flex flex-wrap items-center justify-end gap-2 text-xs text-slate-600 font-normal select-none">
+                    ${totalHtml}
+                    ${sizeSelectHtml}
+                    <div class="flex items-center gap-1.5">
+                        ${prevBtn}
+                        ${pageBtnsHtml}
+                        ${nextBtn}
+                    </div>
+                    ${jumpHtml}
+                </div>
+            `;
+        }
+
+        // 辅助：生成排行榜分页条
+        function renderUnifiedPagination(curPage, totalFiltered, pageSize) {
+            return renderCustomPagination({
+                total: totalFiltered,
+                currentPage: curPage,
+                pageSize: pageSize,
+                pageSizeOptions: [10, 15, 20, 50, 100],
+                pageChangeFnName: 'changeRankingPage',
+                pageSizeChangeFnName: 'changeRankingPageSize',
+                jumpInputId: 'rankingJumpPageInput'
+            });
+        }
+
+        function changeRankingPage(newPage) {
+            const curState = stateRanking[currentRankingTab];
+            curState.page = newPage;
+            renderUnifiedRanking();
+        }
+
+        function changeRankingPageSize(newSize) {
+            const curState = stateRanking[currentRankingTab];
+            curState.pageSize = newSize;
+            curState.page = 1;
+            renderUnifiedRanking();
+        }
+
+        // 切换榜单 Tab
+        function switchRankingTab(tabKey) {
+            currentRankingTab = tabKey;
+            
+            // 更新按钮激活状态
+            const tabKeys = ['kp_error', 'kp_count', 'chap_error', 'chap_count', 'qtype_error', 'qtype_count'];
+            tabKeys.forEach(key => {
+                const btn = document.getElementById('btnTab-' + key);
+                if (btn) {
+                    if (key === tabKey) {
+                        btn.className = 'ranking-tab-btn px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all bg-blue-600 text-white shadow-xs';
+                        // 将内部的 badge 也改成高亮
+                        const span = btn.querySelectorAll('span')[1];
+                        if (span) span.className = 'px-1.5 py-0.2 text-[10px] rounded bg-white/20 text-white';
+                    } else {
+                        btn.className = 'ranking-tab-btn px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all bg-transparent text-slate-600 hover:bg-slate-200/70 hover:text-slate-900';
+                        const span = btn.querySelectorAll('span')[1];
+                        if (span) span.className = 'px-1.5 py-0.2 text-[10px] rounded bg-slate-200 text-slate-600';
+                    }
+                }
+            });
+
+            // 切换时重置当前页码
+            stateRanking[tabKey].page = 1;
+            renderUnifiedRanking();
+        }
+
+        function handleUnifiedSearch() {
+            const input = document.getElementById('unifiedRankingSearch');
+            unifiedSearchKeyword = input ? input.value.trim().toLowerCase() : '';
+            stateRanking[currentRankingTab].page = 1;
+            renderUnifiedRanking();
+        }
+
+        // 核心：渲染统一的当前榜单
+        function renderUnifiedRanking() {
+            const headerEl = document.getElementById('unifiedTableHeader');
+            const bodyEl = document.getElementById('unifiedTableBody');
+            const pageEl = document.getElementById('unifiedTablePagination');
+            const badgeEl = document.getElementById('currentRankingBadge');
+            const descEl = document.getElementById('currentRankingDesc');
+            
+            if (!headerEl || !bodyEl) return;
+
+            const kw = unifiedSearchKeyword;
+            const curState = stateRanking[currentRankingTab];
+
+            if (currentRankingTab === 'kp_error') {
+                if (badgeEl) { badgeEl.innerText = 'TOP 100'; badgeEl.className = 'px-2 py-0.5 rounded text-[11px] font-bold bg-rose-100 text-rose-700'; }
+                if (descEl) descEl.innerText = '统计全量学员知识点数据，按错误率从高到低排列 (Top 100)';
+
+                headerEl.innerHTML = `
+                    <tr>
+                        <th class="p-2.5 font-medium w-12 text-center">排名</th>
+                        <th class="p-2.5 font-medium min-w-[240px]">知识点名称</th>
+                        <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">作答次数</th>
+                    </tr>
+                `;
+
+                const sorted = [...rawKnowledgePoints].sort((a, b) => b.errorRate - a.errorRate).slice(0, 100);
+                const filtered = sorted.filter(item => !kw || item.name.toLowerCase().includes(kw));
+                
+                const start = (curState.page - 1) * curState.pageSize;
+                const pageData = filtered.slice(start, start + curState.pageSize);
+
+                if (pageData.length === 0) {
+                    bodyEl.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-slate-400">无匹配知识点数据</td></tr>`;
+                } else {
+                    bodyEl.innerHTML = pageData.map(item => {
+                        const rank = sorted.indexOf(item) + 1;
+                        const accuracyVal = parseFloat((100 - item.errorRate).toFixed(1));
+                        const accuracyRate = formatPercent(accuracyVal);
+                        return `
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="p-2.5 text-center">${getRankBadge(rank)}</td>
+                                <td class="p-2.5 font-semibold text-slate-800">
+                                    <div class="truncate max-w-[320px]" title="${item.name}">${item.name}</div>
+                                </td>
+                                <td class="p-2.5 text-right">
+                                    <div class="flex items-center justify-end gap-2">
+                                        <div class="w-16 bg-slate-200/80 h-1.5 rounded-full overflow-hidden shrink-0">
+                                            <div class="bg-blue-600 h-full rounded-full" style="width: ${accuracyVal}%"></div>
+                                        </div>
+                                        <span class="font-bold text-slate-800 text-xs w-12 text-right">${accuracyRate}</span>
+                                    </div>
+                                </td>
+                                <td class="p-2.5 text-right font-medium text-slate-600">${item.totalCount.toLocaleString()}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+
+                if (pageEl) pageEl.innerHTML = renderUnifiedPagination(curState.page, filtered.length, curState.pageSize);
+            }
+            else if (currentRankingTab === 'kp_count') {
+                if (badgeEl) { badgeEl.innerText = 'TOP 100'; badgeEl.className = 'px-2 py-0.5 rounded text-[11px] font-bold bg-blue-100 text-blue-700'; }
+                if (descEl) descEl.innerText = '统计全量学员刷题频次最高的知识点分布 (Top 100)';
+
+                headerEl.innerHTML = `
+                    <tr>
+                        <th class="p-2.5 font-medium w-12 text-center">排名</th>
+                        <th class="p-2.5 font-medium min-w-[240px]">知识点名称</th>
+                        <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">作答次数</th>
+                    </tr>
+                `;
+
+                const sorted = [...rawKnowledgePoints].sort((a, b) => b.totalCount - a.totalCount).slice(0, 100);
+                const filtered = sorted.filter(item => !kw || item.name.toLowerCase().includes(kw));
+                
+                const start = (curState.page - 1) * curState.pageSize;
+                const pageData = filtered.slice(start, start + curState.pageSize);
+
+                if (pageData.length === 0) {
+                    bodyEl.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-slate-400">无匹配知识点数据</td></tr>`;
+                } else {
+                    bodyEl.innerHTML = pageData.map(item => {
+                        const rank = sorted.indexOf(item) + 1;
+                        const accuracyVal = parseFloat((100 - item.errorRate).toFixed(1));
+                        const accuracyRate = formatPercent(accuracyVal);
+                        return `
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="p-2.5 text-center">${getRankBadge(rank)}</td>
+                                <td class="p-2.5 font-semibold text-slate-800">
+                                    <div class="truncate max-w-[320px]" title="${item.name}">${item.name}</div>
+                                </td>
+                                <td class="p-2.5 text-right">
+                                    <div class="flex items-center justify-end gap-2">
+                                        <div class="w-16 bg-slate-200/80 h-1.5 rounded-full overflow-hidden shrink-0">
+                                            <div class="bg-blue-600 h-full rounded-full" style="width: ${accuracyVal}%"></div>
+                                        </div>
+                                        <span class="font-bold text-slate-800 text-xs w-12 text-right">${accuracyRate}</span>
+                                    </div>
+                                </td>
+                                <td class="p-2.5 text-right font-bold text-blue-600">${item.totalCount.toLocaleString()}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+
+                if (pageEl) pageEl.innerHTML = renderUnifiedPagination(curState.page, filtered.length, curState.pageSize);
+            }
+            else if (currentRankingTab === 'chap_error') {
+                if (badgeEl) { badgeEl.innerText = 'TOP 50'; badgeEl.className = 'px-2 py-0.5 rounded text-[11px] font-bold bg-rose-100 text-rose-700'; }
+                if (descEl) descEl.innerText = '统计各章节失分重灾区与高难度章节排名 (Top 50)';
+
+                headerEl.innerHTML = `
+                    <tr>
+                        <th class="p-2.5 font-medium w-12 text-center">排名</th>
+                        <th class="p-2.5 font-medium min-w-[240px]">章节名称</th>
+                        <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">作答次数</th>
+                    </tr>
+                `;
+
+                const sorted = [...rawChapters].sort((a, b) => b.errorRate - a.errorRate).slice(0, 50);
+                const filtered = sorted.filter(item => !kw || item.name.toLowerCase().includes(kw));
+
+                const start = (curState.page - 1) * curState.pageSize;
+                const pageData = filtered.slice(start, start + curState.pageSize);
+
+                if (pageData.length === 0) {
+                    bodyEl.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-slate-400">无匹配章节数据</td></tr>`;
+                } else {
+                    bodyEl.innerHTML = pageData.map(item => {
+                        const rank = sorted.indexOf(item) + 1;
+                        const accuracyVal = parseFloat((100 - item.errorRate).toFixed(1));
+                        const accuracyRate = formatPercent(accuracyVal);
+                        return `
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="p-2.5 text-center">${getRankBadge(rank)}</td>
+                                <td class="p-2.5 font-semibold text-slate-800">
+                                    <div class="truncate max-w-[320px]" title="${item.name}">${item.name}</div>
+                                </td>
+                                <td class="p-2.5 text-right">
+                                    <div class="flex items-center justify-end gap-2">
+                                        <div class="w-16 bg-slate-200/80 h-1.5 rounded-full overflow-hidden shrink-0">
+                                            <div class="bg-blue-600 h-full rounded-full" style="width: ${accuracyVal}%"></div>
+                                        </div>
+                                        <span class="font-bold text-slate-800 text-xs w-12 text-right">${accuracyRate}</span>
+                                    </div>
+                                </td>
+                                <td class="p-2.5 text-right text-slate-600 font-medium">${item.totalCount.toLocaleString()}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+
+                if (pageEl) pageEl.innerHTML = renderUnifiedPagination(curState.page, filtered.length, curState.pageSize);
+            }
+            else if (currentRankingTab === 'chap_count') {
+                if (badgeEl) { badgeEl.innerText = 'TOP 50'; badgeEl.className = 'px-2 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-800'; }
+                if (descEl) descEl.innerText = '统计练习与考试频次最高的重点章节排名 (Top 50)';
+
+                headerEl.innerHTML = `
+                    <tr>
+                        <th class="p-2.5 font-medium w-12 text-center">排名</th>
+                        <th class="p-2.5 font-medium min-w-[240px]">章节名称</th>
+                        <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">作答次数</th>
+                    </tr>
+                `;
+
+                const sorted = [...rawChapters].sort((a, b) => b.totalCount - a.totalCount).slice(0, 50);
+                const filtered = sorted.filter(item => !kw || item.name.toLowerCase().includes(kw));
+
+                const start = (curState.page - 1) * curState.pageSize;
+                const pageData = filtered.slice(start, start + curState.pageSize);
+
+                if (pageData.length === 0) {
+                    bodyEl.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-slate-400">无匹配章节数据</td></tr>`;
+                } else {
+                    bodyEl.innerHTML = pageData.map(item => {
+                        const rank = sorted.indexOf(item) + 1;
+                        const accuracyVal = parseFloat((100 - item.errorRate).toFixed(1));
+                        const accuracyRate = formatPercent(accuracyVal);
+                        return `
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="p-2.5 text-center">${getRankBadge(rank)}</td>
+                                <td class="p-2.5 font-semibold text-slate-800">
+                                    <div class="truncate max-w-[320px]" title="${item.name}">${item.name}</div>
+                                </td>
+                                <td class="p-2.5 text-right">
+                                    <div class="flex items-center justify-end gap-2">
+                                        <div class="w-16 bg-slate-200/80 h-1.5 rounded-full overflow-hidden shrink-0">
+                                            <div class="bg-blue-600 h-full rounded-full" style="width: ${accuracyVal}%"></div>
+                                        </div>
+                                        <span class="font-bold text-slate-800 text-xs w-12 text-right">${accuracyRate}</span>
+                                    </div>
+                                </td>
+                                <td class="p-2.5 text-right font-bold text-amber-600">${item.totalCount.toLocaleString()}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+
+                if (pageEl) pageEl.innerHTML = renderUnifiedPagination(curState.page, filtered.length, curState.pageSize);
+            }
+            else if (currentRankingTab === 'qtype_error') {
+                if (badgeEl) { badgeEl.innerText = 'TOP 20'; badgeEl.className = 'px-2 py-0.5 rounded text-[11px] font-bold bg-purple-100 text-purple-700'; }
+                if (descEl) descEl.innerText = '统计各题型失分难度与错误率排行榜 (Top 20)';
+
+                headerEl.innerHTML = `
+                    <tr>
+                        <th class="p-2.5 font-medium w-12 text-center">排名</th>
+                        <th class="p-2.5 font-medium min-w-[200px]">题型名称</th>
+                        <th class="p-2.5 font-medium text-center min-w-[100px]">试题结构</th>
+                        <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">作答次数</th>
+                    </tr>
+                `;
+
+                const sorted = [...rawQuestionTypes].sort((a, b) => b.errorRate - a.errorRate).slice(0, 20);
+                const filtered = sorted.filter(item => !kw || item.name.toLowerCase().includes(kw) || item.type.toLowerCase().includes(kw));
+
+                const start = (curState.page - 1) * curState.pageSize;
+                const pageData = filtered.slice(start, start + curState.pageSize);
+
+                if (pageData.length === 0) {
+                    bodyEl.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-slate-400">无匹配题型数据</td></tr>`;
+                } else {
+                    bodyEl.innerHTML = pageData.map(item => {
+                        const rank = sorted.indexOf(item) + 1;
+                        const accuracyVal = parseFloat((100 - item.errorRate).toFixed(1));
+                        const accuracyRate = formatPercent(accuracyVal);
+                        return `
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="p-2.5 text-center">${getRankBadge(rank)}</td>
+                                <td class="p-2.5 font-semibold text-slate-800">
+                                    <div class="truncate max-w-[240px]" title="${item.name}">${item.name}</div>
+                                </td>
+                                <td class="p-2.5 text-center">
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-700">${item.type}</span>
+                                </td>
+                                <td class="p-2.5 text-right">
+                                    <div class="flex items-center justify-end gap-2">
+                                        <div class="w-16 bg-slate-200/80 h-1.5 rounded-full overflow-hidden shrink-0">
+                                            <div class="bg-blue-600 h-full rounded-full" style="width: ${accuracyVal}%"></div>
+                                        </div>
+                                        <span class="font-bold text-slate-800 text-xs w-12 text-right">${accuracyRate}</span>
+                                    </div>
+                                </td>
+                                <td class="p-2.5 text-right font-medium text-slate-600">${item.totalCount.toLocaleString()}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+
+                if (pageEl) pageEl.innerHTML = renderUnifiedPagination(curState.page, filtered.length, curState.pageSize);
+            }
+            else if (currentRankingTab === 'qtype_count') {
+                if (badgeEl) { badgeEl.innerText = 'TOP 20'; badgeEl.className = 'px-2 py-0.5 rounded text-[11px] font-bold bg-indigo-100 text-indigo-700'; }
+                if (descEl) descEl.innerText = '统计学员日常练习与模考中作答频次最高的题型分布 (Top 20)';
+
+                headerEl.innerHTML = `
+                    <tr>
+                        <th class="p-2.5 font-medium w-12 text-center">排名</th>
+                        <th class="p-2.5 font-medium min-w-[200px]">题型名称</th>
+                        <th class="p-2.5 font-medium text-center min-w-[100px]">试题结构</th>
+                        <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">作答次数</th>
+                    </tr>
+                `;
+
+                const sorted = [...rawQuestionTypes].sort((a, b) => b.totalCount - a.totalCount).slice(0, 20);
+                const filtered = sorted.filter(item => !kw || item.name.toLowerCase().includes(kw) || item.type.toLowerCase().includes(kw));
+
+                const start = (curState.page - 1) * curState.pageSize;
+                const pageData = filtered.slice(start, start + curState.pageSize);
+
+                if (pageData.length === 0) {
+                    bodyEl.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-slate-400">无匹配题型数据</td></tr>`;
+                } else {
+                    bodyEl.innerHTML = pageData.map(item => {
+                        const rank = sorted.indexOf(item) + 1;
+                        const accuracyVal = parseFloat((100 - item.errorRate).toFixed(1));
+                        const accuracyRate = formatPercent(accuracyVal);
+                        return `
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="p-2.5 text-center">${getRankBadge(rank)}</td>
+                                <td class="p-2.5 font-semibold text-slate-800">
+                                    <div class="truncate max-w-[240px]" title="${item.name}">${item.name}</div>
+                                </td>
+                                <td class="p-2.5 text-center">
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-indigo-50 text-indigo-700">${item.type}</span>
+                                </td>
+                                <td class="p-2.5 text-right">
+                                    <div class="flex items-center justify-end gap-2">
+                                        <div class="w-16 bg-slate-200/80 h-1.5 rounded-full overflow-hidden shrink-0">
+                                            <div class="bg-blue-600 h-full rounded-full" style="width: ${accuracyVal}%"></div>
+                                        </div>
+                                        <span class="font-bold text-slate-800 text-xs w-12 text-right">${accuracyRate}</span>
+                                    </div>
+                                </td>
+                                <td class="p-2.5 text-right font-bold text-indigo-600">${item.totalCount.toLocaleString()}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+
+                if (pageEl) pageEl.innerHTML = renderUnifiedPagination(curState.page, filtered.length, curState.pageSize);
+            }
+        }
+
+        function renderAllRankings() {
+            renderUnifiedRanking();
+        }
+
+        // ==========================================
+        // 考点热度 (近5年真题知识点深度剖析数据及逻辑)
+        // ==========================================
+        const rawExamHeatData = [
+            { id: 1, name: "导数的几何意义与切线方程计算", freqYears: 5, freqYearsTested: [2020, 2021, 2022, 2023, 2024], difficulty: "中", star: 5, commonTypes: ["单选题", "填空题"], scoreRatio: "8.6%", totalAvgScore: "13.0分", avgScore: "8.9分", accuracy: "68.2%" },
+            { id: 2, name: "定积分的几何应用 (面积与旋转体体积)", freqYears: 5, freqYearsTested: [2020, 2021, 2022, 2023, 2024], difficulty: "较难", star: 5, commonTypes: ["问答题", "填空题"], scoreRatio: "10%", totalAvgScore: "15.0分", avgScore: "6.4分", accuracy: "42.6%" },
+            { id: 3, name: "洛必达法则求未定式极限", freqYears: 5, freqYearsTested: [2020, 2021, 2022, 2023, 2024], difficulty: "较易", star: 5, commonTypes: ["单选题", "填空题"], scoreRatio: "6.8%", totalAvgScore: "10.0分", avgScore: "7.8分", accuracy: "78.4%" },
+            { id: 4, name: "二阶常系数齐次/非齐次线性微分方程通解", freqYears: 5, freqYearsTested: [2020, 2021, 2022, 2023, 2024], difficulty: "中", star: 5, commonTypes: ["问答题", "填空题"], scoreRatio: "8%", totalAvgScore: "12.0分", avgScore: "6.2分", accuracy: "51.3%" },
+            { id: 5, name: "闭区间上连续函数的性质 (零点定理与介值定理)", freqYears: 4, freqYearsTested: [2020, 2021, 2023, 2024], difficulty: "难", star: 4, commonTypes: ["问答题"], scoreRatio: "6.5%", totalAvgScore: "10.0分", avgScore: "3.6分", accuracy: "35.8%" },
+            { id: 6, name: "多元复合函数与隐函数的一阶/二阶偏导数", freqYears: 5, freqYearsTested: [2020, 2021, 2022, 2023, 2024], difficulty: "中", star: 5, commonTypes: ["单选题", "问答题"], scoreRatio: "7.4%", totalAvgScore: "11.0分", avgScore: "6.2分", accuracy: "56.7%" },
+            { id: 7, name: "二重积分在直角坐标与极坐标下的计算", freqYears: 5, freqYearsTested: [2020, 2021, 2022, 2023, 2024], difficulty: "较难", star: 5, commonTypes: ["问答题", "填空题"], scoreRatio: "8.5%", totalAvgScore: "13.0分", avgScore: "6.0分", accuracy: "46.5%" },
+            { id: 8, name: "常数项级数的收敛性判别法 (正项与交错级数)", freqYears: 4, freqYearsTested: [2021, 2022, 2023, 2024], difficulty: "较难", star: 4, commonTypes: ["单选题", "判断题"], scoreRatio: "5.8%", totalAvgScore: "9.0分", avgScore: "4.3分", accuracy: "48.2%" },
+            { id: 9, name: "函数的单调性、极值与最值应用题", freqYears: 5, freqYearsTested: [2020, 2021, 2022, 2023, 2024], difficulty: "中", star: 5, commonTypes: ["问答题", "单选题"], scoreRatio: "7.2%", totalAvgScore: "11.0分", avgScore: "6.8分", accuracy: "62.1%" },
+            { id: 10, name: "分部积分法与有理分式不定积分", freqYears: 5, freqYearsTested: [2020, 2021, 2022, 2023, 2024], difficulty: "中", star: 5, commonTypes: ["单选题", "填空题"], scoreRatio: "6%", totalAvgScore: "9.0分", avgScore: "5.9分", accuracy: "65.4%" },
+            { id: 11, name: "泰勒公式与麦克劳林展开式的应用", freqYears: 3, freqYearsTested: [2020, 2022, 2024], difficulty: "难", star: 4, commonTypes: ["单选题", "问答题"], scoreRatio: "4.5%", totalAvgScore: "7.0分", avgScore: "2.3分", accuracy: "32.4%" },
+            { id: 12, name: "函数间断点类型的判断与连续性分析", freqYears: 5, freqYearsTested: [2020, 2021, 2022, 2023, 2024], difficulty: "易", star: 4, commonTypes: ["单选题", "判断题"], scoreRatio: "4.2%", totalAvgScore: "6.0分", avgScore: "4.9分", accuracy: "81.2%" },
+            { id: 13, name: "可分离变量与齐次一阶微分方程求解", freqYears: 4, freqYearsTested: [2020, 2021, 2023, 2024], difficulty: "中", star: 4, commonTypes: ["填空题", "单选题"], scoreRatio: "5.2%", totalAvgScore: "8.0分", avgScore: "5.1分", accuracy: "63.8%" },
+            { id: 14, name: "空间解析几何中平面方程与直线方程", freqYears: 3, freqYearsTested: [2021, 2023, 2024], difficulty: "较易", star: 3, commonTypes: ["单选题", "填空题"], scoreRatio: "3.6%", totalAvgScore: "5.5分", avgScore: "4.1分", accuracy: "74.5%" },
+            { id: 15, name: "反常积分 (广义积分) 的收敛性与计算", freqYears: 4, freqYearsTested: [2020, 2022, 2023, 2024], difficulty: "中", star: 4, commonTypes: ["单选题", "判断题"], scoreRatio: "4%", totalAvgScore: "6.0分", avgScore: "3.6分", accuracy: "59.3%" },
+            { id: 16, name: "幂级数的收敛半径、收敛区间与和函数", freqYears: 4, freqYearsTested: [2020, 2021, 2022, 2024], difficulty: "较难", star: 4, commonTypes: ["问答题", "填空题"], scoreRatio: "6.2%", totalAvgScore: "9.5分", avgScore: "4.2分", accuracy: "44.1%" },
+            { id: 17, name: "变上限积分函数的求导与极限问题", freqYears: 5, freqYearsTested: [2020, 2021, 2022, 2023, 2024], difficulty: "较难", star: 5, commonTypes: ["单选题", "填空题"], scoreRatio: "6.5%", totalAvgScore: "10.0分", avgScore: "5.0分", accuracy: "49.6%" },
+            { id: 18, name: "曲线的凹凸性、拐点与渐近线", freqYears: 4, freqYearsTested: [2020, 2022, 2023, 2024], difficulty: "较易", star: 3, commonTypes: ["单选题", "判断题"], scoreRatio: "3.8%", totalAvgScore: "6.0分", avgScore: "4.7分", accuracy: "77.8%" },
+            { id: 19, name: "多元函数的极值与条件极值 (拉格朗日乘数法)", freqYears: 4, freqYearsTested: [2021, 2022, 2023, 2024], difficulty: "较难", star: 4, commonTypes: ["问答题"], scoreRatio: "5.5%", totalAvgScore: "8.5分", avgScore: "3.8分", accuracy: "45.0%" },
+            { id: 20, name: "重要极限公式 (lim sinx/x 与 lim(1+1/x)^x)", freqYears: 5, freqYearsTested: [2020, 2021, 2022, 2023, 2024], difficulty: "易", star: 5, commonTypes: ["单选题", "填空题"], scoreRatio: "5%", totalAvgScore: "7.5分", avgScore: "6.3分", accuracy: "84.2%" },
+            { id: 21, name: "矩阵的秩、初等变换与线性方程组求解", freqYears: 5, freqYearsTested: [2020, 2021, 2022, 2023, 2024], difficulty: "中", star: 5, commonTypes: ["问答题", "填空题"], scoreRatio: "8.2%", totalAvgScore: "12.5分", avgScore: "7.4分", accuracy: "58.9%" },
+            { id: 22, name: "方阵的特征值、特征向量与相似对角化", freqYears: 4, freqYearsTested: [2020, 2022, 2023, 2024], difficulty: "较难", star: 4, commonTypes: ["问答题", "单选题"], scoreRatio: "7%", totalAvgScore: "11.0分", avgScore: "4.8分", accuracy: "43.8%" },
+            { id: 23, name: "向量组的线性相关性与极大线性无关组", freqYears: 4, freqYearsTested: [2021, 2022, 2023, 2024], difficulty: "较难", star: 4, commonTypes: ["单选题", "判断题"], scoreRatio: "5.6%", totalAvgScore: "8.5分", avgScore: "4.0分", accuracy: "47.2%" },
+            { id: 24, name: "行列式的性质与按行 (列) 展开定理", freqYears: 5, freqYearsTested: [2020, 2021, 2022, 2023, 2024], difficulty: "较易", star: 4, commonTypes: ["填空题", "单选题"], scoreRatio: "4.8%", totalAvgScore: "7.0分", avgScore: "5.5分", accuracy: "79.1%" },
+            { id: 25, name: "高阶导数的莱布尼茨公式计算", freqYears: 3, freqYearsTested: [2020, 2022, 2024], difficulty: "中", star: 3, commonTypes: ["填空题", "单选题"], scoreRatio: "3.2%", totalAvgScore: "5.0分", avgScore: "3.1分", accuracy: "61.5%" },
+            { id: 26, name: "参数方程确定的函数的一阶与二阶导数", freqYears: 4, freqYearsTested: [2020, 2021, 2023, 2024], difficulty: "中", star: 4, commonTypes: ["填空题", "单选题"], scoreRatio: "4.6%", totalAvgScore: "7.0分", avgScore: "4.1分", accuracy: "59.0%" },
+            { id: 27, name: "全微分的定义与计算及全微分方程", freqYears: 3, freqYearsTested: [2021, 2023, 2024], difficulty: "中", star: 3, commonTypes: ["单选题", "填空题"], scoreRatio: "3.5%", totalAvgScore: "5.5分", avgScore: "3.7分", accuracy: "66.4%" },
+            { id: 28, name: "定积分的分段积分与对称区间奇偶性化简", freqYears: 5, freqYearsTested: [2020, 2021, 2022, 2023, 2024], difficulty: "易", star: 4, commonTypes: ["单选题", "判断题"], scoreRatio: "4.8%", totalAvgScore: "7.0分", avgScore: "5.8分", accuracy: "82.5%" },
+            { id: 29, name: "罗尔定理、拉格朗日中值定理与柯西定理应用", freqYears: 5, freqYearsTested: [2020, 2021, 2022, 2023, 2024], difficulty: "难", star: 5, commonTypes: ["问答题"], scoreRatio: "7.8%", totalAvgScore: "12.0分", avgScore: "3.7分", accuracy: "31.2%" },
+            { id: 30, name: "一阶线性非齐次微分方程常数变易法", freqYears: 5, freqYearsTested: [2020, 2021, 2022, 2023, 2024], difficulty: "中", star: 4, commonTypes: ["填空题", "单选题"], scoreRatio: "5.5%", totalAvgScore: "8.5分", avgScore: "5.7分", accuracy: "67.3%" },
+            { id: 31, name: "傅里叶级数的收敛定理与展开式", freqYears: 2, freqYearsTested: [2021, 2024], difficulty: "难", star: 2, commonTypes: ["问答题", "单选题"], scoreRatio: "2.5%", totalAvgScore: "4.0分", avgScore: "1.1分", accuracy: "28.4%" },
+            { id: 32, name: "二次型及其矩阵表示与正定性判别", freqYears: 3, freqYearsTested: [2021, 2022, 2024], difficulty: "较难", star: 3, commonTypes: ["问答题", "单选题"], scoreRatio: "4.2%", totalAvgScore: "6.5分", avgScore: "2.8分", accuracy: "43.5%" },
+            { id: 33, name: "点到平面的距离与两平行平面的距离公式", freqYears: 2, freqYearsTested: [2022, 2023], difficulty: "易", star: 2, commonTypes: ["填空题", "单选题"], scoreRatio: "2%", totalAvgScore: "3.0分", avgScore: "2.6分", accuracy: "85%" },
+            { id: 34, name: "初等函数的连续性与复合函数连续性定理", freqYears: 4, freqYearsTested: [2020, 2021, 2023, 2024], difficulty: "易", star: 3, commonTypes: ["判断题", "单选题"], scoreRatio: "3%", totalAvgScore: "4.5分", avgScore: "3.9分", accuracy: "87.6%" },
+            { id: 35, name: "反函数与隐函数的求导法则", freqYears: 4, freqYearsTested: [2020, 2022, 2023, 2024], difficulty: "中", star: 4, commonTypes: ["单选题", "填空题"], scoreRatio: "4.1%", totalAvgScore: "6.0分", avgScore: "3.9分", accuracy: "64.2%" }
+        ];
+
+        let heatCurrentPage = 1;
+        let heatPageSize = 10;
+        let heatSortField = 'freqYears'; // 默认按考频排序
+        let heatSortOrder = 'desc'; // 'desc' | 'asc'
+
+        function toggleHeatSort(field) {
+            if (heatSortField === field) {
+                heatSortOrder = heatSortOrder === 'desc' ? 'asc' : 'desc';
+            } else {
+                heatSortField = field;
+                heatSortOrder = 'desc';
+            }
+            heatCurrentPage = 1;
+            renderHeatTable();
+        }
+
+        function handleHeatFilterChange() {
+            heatCurrentPage = 1;
+            renderHeatTable();
+        }
+
+        function renderHeatTable() {
+            const tbody = document.getElementById('heatTableBody');
+            const paginationContainer = document.getElementById('heatPaginationContainer');
+            const totalCountEl = document.getElementById('heatTotalCount');
+            const currentRangeEl = document.getElementById('heatCurrentRange');
+
+            if (!tbody) return;
+
+            // 1. 获取筛选项值
+            const freqSelect = document.getElementById('heatFilterFreq');
+            const diffSelect = document.getElementById('heatFilterDifficulty');
+            const starSelect = document.getElementById('heatFilterStar');
+
+            const freqVal = freqSelect ? freqSelect.value : 'all';
+            const diffVal = diffSelect ? diffSelect.value : 'all';
+            const starVal = starSelect ? starSelect.value : 'all';
+
+            // 2. 筛选数据
+            let filteredData = rawExamHeatData.filter(item => {
+                if (freqVal !== 'all' && item.freqYears !== parseInt(freqVal)) {
+                    return false;
+                }
+                if (diffVal !== 'all' && item.difficulty !== diffVal) {
+                    return false;
+                }
+                if (starVal !== 'all' && item.star !== parseInt(starVal)) {
+                    return false;
+                }
+                return true;
+            });
+
+            // 3. 排序数据
+            const diffWeight = { '难': 5, '较难': 4, '中': 3, '较易': 2, '易': 1 };
+            filteredData.sort((a, b) => {
+                let valA = 0;
+                let valB = 0;
+
+                if (heatSortField === 'freqYears') {
+                    valA = a.freqYears;
+                    valB = b.freqYears;
+                } else if (heatSortField === 'difficulty') {
+                    valA = diffWeight[a.difficulty] || 0;
+                    valB = diffWeight[b.difficulty] || 0;
+                } else if (heatSortField === 'star') {
+                    valA = a.star;
+                    valB = b.star;
+                } else if (heatSortField === 'scoreRatio') {
+                    valA = parseFloat(a.scoreRatio.replace('%', '')) || 0;
+                    valB = parseFloat(b.scoreRatio.replace('%', '')) || 0;
+                } else if (heatSortField === 'totalAvgScore') {
+                    valA = parseFloat(a.totalAvgScore.replace('分', '')) || 0;
+                    valB = parseFloat(b.totalAvgScore.replace('分', '')) || 0;
+                } else if (heatSortField === 'avgScore') {
+                    valA = parseFloat(a.avgScore.replace('分', '')) || 0;
+                    valB = parseFloat(b.avgScore.replace('分', '')) || 0;
+                } else if (heatSortField === 'accuracy') {
+                    valA = parseFloat(a.accuracy.replace('%', '')) || 0;
+                    valB = parseFloat(b.accuracy.replace('%', '')) || 0;
+                }
+
+                if (valA !== valB) {
+                    return heatSortOrder === 'desc' ? valB - valA : valA - valB;
+                }
+                // 次级平局排序：按星级与考频降序
+                return b.star !== a.star ? b.star - a.star : b.freqYears - a.freqYears;
+            });
+
+            // 4. 更新表头排序图标状态
+            const sortFields = ['freqYears', 'difficulty', 'star', 'scoreRatio', 'totalAvgScore', 'avgScore', 'accuracy'];
+            sortFields.forEach(f => {
+                const iconEl = document.getElementById(`sort-icon-${f}`);
+                const thEl = document.getElementById(`th-${f}`);
+                if (iconEl) {
+                    if (heatSortField === f) {
+                        iconEl.innerHTML = heatSortOrder === 'desc'
+                            ? '<i class="fas fa-sort-down text-orange-500 text-[10px]"></i>'
+                            : '<i class="fas fa-sort-up text-orange-500 text-[10px]"></i>';
+                        if (thEl) {
+                            thEl.classList.add('text-orange-600');
+                            thEl.classList.remove('text-slate-600');
+                        }
+                    } else {
+                        iconEl.innerHTML = '<i class="fas fa-sort text-slate-300 text-[10px]"></i>';
+                        if (thEl) {
+                            thEl.classList.remove('text-orange-600');
+                            thEl.classList.add('text-slate-600');
+                        }
+                    }
+                }
+            });
+
+            const total = filteredData.length;
+            const totalPages = Math.ceil(total / heatPageSize) || 1;
+            if (heatCurrentPage > totalPages) heatCurrentPage = totalPages;
+            if (heatCurrentPage < 1) heatCurrentPage = 1;
+
+            const startIdx = (heatCurrentPage - 1) * heatPageSize;
+            const endIdx = Math.min(startIdx + heatPageSize, total);
+            const pageData = filteredData.slice(startIdx, endIdx);
+
+            if (totalCountEl) totalCountEl.textContent = total;
+            if (currentRangeEl) currentRangeEl.textContent = total === 0 ? '0' : `${startIdx + 1} - ${endIdx}`;
+
+            if (total === 0) {
+                tbody.innerHTML = `<tr><td colspan="10" class="p-8 text-center text-slate-400">没有符合筛选条件的考点数据</td></tr>`;
+                if (paginationContainer) paginationContainer.innerHTML = '';
+                return;
+            }
+
+            // Difficulty tag helper
+            const getDiffBadge = (diff) => {
+                switch(diff) {
+                    case '易': return '<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-600 border border-emerald-200/60">易</span>';
+                    case '较易': return '<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-teal-50 text-teal-600 border border-teal-200/60">较易</span>';
+                    case '中': return '<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-blue-50 text-blue-600 border border-blue-200/60">中</span>';
+                    case '较难': return '<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 text-amber-600 border border-amber-200/60">较难</span>';
+                    case '难': return '<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-rose-50 text-rose-600 border border-rose-200/60">难</span>';
+                    default: return `<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-600">${diff}</span>`;
+                }
+            };
+
+            // Star rating helper without ()
+            const getStarHtml = (star) => {
+                let stars = '';
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= star) {
+                        stars += '<i class="fas fa-star text-amber-400 text-[10px]"></i>';
+                    } else {
+                        stars += '<i class="fas fa-star text-slate-200 text-[10px]"></i>';
+                    }
+                }
+                return `<div class="flex items-center gap-0.5">${stars}</div>`;
+            };
+
+            // Common question types badges
+            const getQuestionTypeBadges = (types) => {
+                return types.slice(0, 2).map(t => {
+                    let colorClass = "bg-slate-100 text-slate-700 border-slate-200";
+                    if (t === "单选题") colorClass = "bg-blue-50 text-blue-700 border-blue-200/70";
+                    else if (t === "多选题" || t === "不定项选择题") colorClass = "bg-purple-50 text-purple-700 border-purple-200/70";
+                    else if (t === "填空题") colorClass = "bg-cyan-50 text-cyan-700 border-cyan-200/70";
+                    else if (t === "判断题") colorClass = "bg-emerald-50 text-emerald-700 border-emerald-200/70";
+                    else if (t === "问答题" || t === "材料题") colorClass = "bg-orange-50 text-orange-700 border-orange-200/70";
+                    return `<span class="inline-block px-2 py-0.5 rounded text-[10px] font-medium border ${colorClass}">${t}</span>`;
+                }).join(' ');
+            };
+
+            tbody.innerHTML = pageData.map((item, idx) => {
+                const rowNum = startIdx + idx + 1;
+                const accNum = parseFloat(item.accuracy.replace('%', ''));
+                
+                // 考频只显示几次
+                const freqBadge = item.freqYears === 5 
+                    ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-rose-50 text-rose-600 border border-rose-200/60">5次</span>'
+                    : item.freqYears === 4
+                    ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-orange-50 text-orange-600 border border-orange-200/60">4次</span>'
+                    : item.freqYears === 3
+                    ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 text-amber-600 border border-amber-200/60">3次</span>'
+                    : item.freqYears === 2
+                    ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-normal bg-slate-100 text-slate-600 border border-slate-200/60">2次</span>'
+                    : '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-normal bg-slate-100 text-slate-600 border border-slate-200/60">1次</span>';
+
+                // 知识点下方只保留年份
+                const yearPills = item.freqYearsTested.map(y => `<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 font-mono">${y}</span>`).join('');
+
+                const isTop3 = rowNum <= 3 && heatCurrentPage === 1;
+                const rankBadge = isTop3 
+                    ? `<span class="inline-flex items-center justify-center w-5 h-5 rounded-full text-xs font-black ${rowNum === 1 ? 'bg-amber-400 text-white shadow-xs' : rowNum === 2 ? 'bg-slate-300 text-slate-700' : 'bg-amber-600/70 text-white'}">${rowNum}</span>`
+                    : `<span class="text-xs font-mono text-slate-400">${rowNum}</span>`;
+
+                return `
+                    <tr class="hover:bg-slate-50/80 transition-colors">
+                        <td class="p-2.5 text-center">${rankBadge}</td>
+                        <td class="p-2.5">
+                            <div class="font-semibold text-slate-800">${item.name}</div>
+                            <div class="flex items-center gap-1 mt-1">${yearPills}</div>
+                        </td>
+                        <td class="p-2.5">${freqBadge}</td>
+                        <td class="p-2.5">${getDiffBadge(item.difficulty)}</td>
+                        <td class="p-2.5">${getStarHtml(item.star)}</td>
+                        <td class="p-2.5">
+                            <div class="flex items-center gap-1 flex-wrap">
+                                ${getQuestionTypeBadges(item.commonTypes)}
+                            </div>
+                        </td>
+                        <td class="p-2.5 font-bold text-slate-700 whitespace-nowrap">${formatPercent(item.scoreRatio)}</td>
+                        <td class="p-2.5 font-medium text-slate-700 whitespace-nowrap">${formatScore(item.totalAvgScore)}</td>
+                        <td class="p-2.5 font-medium text-slate-700 whitespace-nowrap">${formatScore(item.avgScore)}</td>
+                        <td class="p-2.5 text-right pr-4">
+                            <span class="font-bold ${accNum < 50 ? 'text-rose-600' : 'text-slate-800'}">${formatPercent(item.accuracy)}</span>
+                            <div class="w-16 bg-slate-100 h-1.5 rounded-full overflow-hidden ml-auto mt-1">
+                                <div class="${accNum < 50 ? 'bg-rose-500' : 'bg-emerald-500'} h-full rounded-full" style="width: ${accNum}%"></div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Render Pagination
+            if (paginationContainer) {
+                paginationContainer.innerHTML = renderCustomPagination({
+                    total: filteredData.length,
+                    currentPage: heatCurrentPage,
+                    pageSize: heatPageSize,
+                    pageSizeOptions: [10, 20, 50, 100],
+                    pageChangeFnName: 'setHeatPage',
+                    pageSizeChangeFnName: 'setHeatPageSize',
+                    jumpInputId: 'heatJumpPageInput'
+                });
+            }
+        }
+
+        function setHeatPage(page) {
+            heatCurrentPage = page;
+            renderHeatTable();
+        }
+
+        function setHeatPageSize(newSize) {
+            heatPageSize = newSize;
+            heatCurrentPage = 1;
+            renderHeatTable();
+        }
+
         function clearFilter(id) {
             const el = document.getElementById(id);
             el.value = '';
@@ -1716,15 +2452,25 @@
             if (prov) prov.value = 'henan';
             
             const tb = document.getElementById('filterTextbook');
-            if (tb) tb.value = 'all_textbooks';
+            if (tb) tb.value = 'tb_2026';
             
             const kp = document.getElementById('filterKnowledge');
-            if (kp) kp.value = 'all_knowledge';
+            if (kp) kp.value = 'kp_core';
             
             const startInput = document.getElementById('startDate');
             const endInput = document.getElementById('endDate');
             if (startInput) startInput.value = '2026-07-24';
             if (endInput) endInput.value = '2026-07-24';
+
+            const hfFreq = document.getElementById('heatFilterFreq');
+            if (hfFreq) hfFreq.value = 'all';
+            const hfDiff = document.getElementById('heatFilterDifficulty');
+            if (hfDiff) hfDiff.value = 'all';
+            const hfStar = document.getElementById('heatFilterStar');
+            if (hfStar) hfStar.value = 'all';
+            heatSortField = 'freqYears';
+            heatSortOrder = 'desc';
+            heatCurrentPage = 1;
             
             refreshDashboardData();
         }
@@ -1732,10 +2478,14 @@
         function refreshDashboardData() {
             // Re-render weakness table
             renderWeaknessTable('chapter');
+            renderAllRankings();
+            renderHeatTable();
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             renderWeaknessTable('chapter');
+            renderAllRankings();
+            renderHeatTable();
             initCharts();
         });
     </script>
