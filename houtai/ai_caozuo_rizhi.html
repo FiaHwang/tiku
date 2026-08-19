@@ -416,10 +416,16 @@
             <!-- Tab 1 内容区: AI录题 (主功能) -->
             <div id="content-typeset" class="flex-1 flex flex-col min-h-0 overflow-hidden">
                 
-                <!-- 状态筛选栏 -->
+                <!-- 筛选栏 -->
                 <div class="p-5 pb-3 space-y-3 shrink-0">
                     <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs flex items-center justify-between gap-3 text-xs">
                         <div class="flex items-center gap-2.5">
+                            <!-- 任务类型筛选 -->
+                            <select id="taskTypeFilter" onchange="onTaskTypeSelectChange()" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500 font-medium">
+                                <option value="all">请选择任务类型</option>
+                                <option value="question">录题</option>
+                                <option value="paper">录卷</option>
+                            </select>
                             <!-- 状态筛选 -->
                             <select id="statusFilter" onchange="onStatusSelectChange()" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500 font-medium">
                                 <option value="all">请选择任务状态</option>
@@ -441,6 +447,7 @@
                                 <thead class="bg-slate-50/80 sticky top-0 z-10 border-b border-slate-200 text-slate-500 font-semibold">
                                     <tr>
                                         <th class="py-3 px-4 min-w-[240px]">任务名称</th>
+                                        <th class="py-3 px-4 w-24 text-center">任务类型</th>
                                         <th class="py-3 px-4 w-28 text-center">识别题目数</th>
                                         <th class="py-3 px-4 min-w-[160px] max-w-[260px]">任务状态</th>
                                         <th class="py-3 px-4 w-24">用时</th>
@@ -958,6 +965,7 @@
             }
         ];
 
+        let currentTaskTypeFilter = 'all';
         let currentStatusFilter = 'all';
         let activeEditTask = null;
         let activeOperatingTaskId = null;
@@ -993,12 +1001,15 @@
             const keyword = (searchEl ? searchEl.value : '').trim().toLowerCase();
 
             const filtered = tasks.filter(t => {
+                // Task Type filter
+                if (currentTaskTypeFilter !== 'all' && t.taskType !== currentTaskTypeFilter) return false;
                 // Status filter
                 if (currentStatusFilter !== 'all' && t.status !== currentStatusFilter) return false;
                 // Keyword search
                 if (keyword) {
                     const tag = `${t.category}-${t.region}-${t.subject}`;
-                    const matchText = `${t.id} ${t.taskName} ${t.creator || ''} ${tag}`.toLowerCase();
+                    const typeText = t.taskType === 'paper' ? '录卷 试卷' : '录题 试题';
+                    const matchText = `${t.id} ${t.taskName} ${t.creator || ''} ${tag} ${typeText}`.toLowerCase();
                     if (!matchText.includes(keyword)) return false;
                 }
                 return true;
@@ -1041,6 +1052,11 @@
             // 标签统一用这样表示“专升本-河南省-语文”，试题任务不显示标签
             const unifiedTag = `${task.category || '专升本'}-${task.region || '河南省'}-${task.subject || '语文'}`;
             const showTag = task.taskType !== 'question';
+
+            // 任务类型 Badge (录题 / 录卷)
+            const taskTypeBadge = task.taskType === 'paper' 
+                ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-purple-50 text-purple-700 border border-purple-200/80">录卷</span>'
+                : '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-blue-50 text-blue-700 border border-blue-200/80">录题</span>';
 
             // Status UI Rendering
             let statusBadge = '';
@@ -1124,6 +1140,9 @@
                             </div>` : ''}
                         </div>
                     </td>
+                    <td class="py-3 px-4 text-center whitespace-nowrap">
+                        ${taskTypeBadge}
+                    </td>
                     <td class="py-3 px-4 text-center font-semibold text-slate-700">
                         ${showQuestionCount ? `<span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-800">${task.questionCount} 题</span>` : '<span class="text-slate-300">-</span>'}
                     </td>
@@ -1149,6 +1168,19 @@
             `;
         }
 
+        // Task Type Filter Handler
+        function filterByTaskType(type) {
+            currentTaskTypeFilter = type;
+            const el = document.getElementById('taskTypeFilter');
+            if (el) el.value = type;
+            renderTaskList();
+        }
+
+        function onTaskTypeSelectChange() {
+            const val = document.getElementById('taskTypeFilter').value;
+            filterByTaskType(val);
+        }
+
         // Status Filter Buttons
         function filterByStatus(status) {
             currentStatusFilter = status;
@@ -1167,8 +1199,9 @@
 
         function resetFilters() {
             document.getElementById('searchInput').value = '';
-            document.getElementById('subjectFilter').value = 'all';
-            document.getElementById('formatFilter').value = 'all';
+            const taskTypeEl = document.getElementById('taskTypeFilter');
+            if (taskTypeEl) taskTypeEl.value = 'all';
+            currentTaskTypeFilter = 'all';
             filterByStatus('all');
             showToast('已重置所有筛选条件');
         }
