@@ -1119,77 +1119,168 @@
 
         <div class="mx-0 bg-white rounded-2xl p-4 card-shadow">
           <div class="space-y-0">
-            <!-- 题型项 -->
-            <div class="question-type-item">
-              <div class="flex items-center py-3 list-item-border text-xs text-gray-500">
-                <div class="w-20 flex-shrink-0">
-                  <span class="text-sm text-gray-700 font-medium">新一级题型名称</span>
+            <!-- 1. 客观题型（客观题正确率、答对、答错） -->
+            <div class="py-3.5 border-b border-gray-100 last:border-0">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-bold text-gray-800">单选题</span>
                 </div>
-                <div class="flex items-center gap-3">
-                  <span class="w-24 flex-shrink-0">正确率 <span class="text-amber-500 font-bold">35.7%</span></span>
-                  <span class="text-gray-300">|</span>
-                  <span class="w-20 flex-shrink-0 text-green-500">答对 18次</span>
-                  <span class="text-gray-300">|</span>
-                  <span class="text-red-500">答错 10次</span>
+              </div>
+              <div class="grid grid-cols-3 gap-2 bg-slate-50/80 rounded-xl p-2.5 text-center border border-slate-100/80">
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">客观题正确率</div>
+                  <div class="text-xs sm:text-sm font-bold text-amber-500">35.7%</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">答对</div>
+                  <div class="text-xs sm:text-sm font-bold text-green-600">18次</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">答错</div>
+                  <div class="text-xs sm:text-sm font-bold text-red-500">10次</div>
                 </div>
               </div>
             </div>
 
-            <div class="question-type-item">
-              <div class="flex items-center py-3 list-item-border text-xs text-gray-500">
-                <div class="w-20 flex-shrink-0">
-                  <span class="text-sm text-gray-700 font-medium">判断题</span>
+            <div class="py-3.5 border-b border-gray-100 last:border-0">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-bold text-gray-800">判断题</span>
                 </div>
-                <div class="flex items-center gap-3">
-                  <span class="w-24 flex-shrink-0">正确率 <span class="text-green-500 font-bold">88.3%</span></span>
-                  <span class="text-gray-300">|</span>
-                  <span class="w-20 flex-shrink-0 text-green-500">答对 18次</span>
-                  <span class="text-gray-300">|</span>
-                  <span class="text-red-500">答错 2次</span>
+              </div>
+              <div class="grid grid-cols-3 gap-2 bg-slate-50/80 rounded-xl p-2.5 text-center border border-slate-100/80">
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">客观题正确率</div>
+                  <div class="text-xs sm:text-sm font-bold text-green-600">88.3%</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">答对</div>
+                  <div class="text-xs sm:text-sm font-bold text-green-600">18次</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">答错</div>
+                  <div class="text-xs sm:text-sm font-bold text-red-500">2次</div>
                 </div>
               </div>
             </div>
 
-            <!-- 填空题 -->
-            <div class="question-type-item">
-              <div class="flex items-center py-3 list-item-border text-xs text-gray-500">
-                <div class="w-20 flex-shrink-0">
-                  <span class="text-sm text-gray-700 font-medium">填空题</span>
+            <!-- 2. 主观题型（主观题得分率、已答） -->
+            <div class="py-3.5 border-b border-gray-100 last:border-0">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-bold text-gray-800">填空题</span>
                 </div>
-                <div class="flex items-center gap-3">
-                  <span class="w-24 flex-shrink-0">得分率 <span class="text-green-500 font-bold">70%</span></span>
-                  <span class="text-gray-300">|</span>
-                  <span class="w-20 flex-shrink-0 text-gray-500">已答 50次</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 bg-slate-50/80 rounded-xl p-2.5 text-center border border-slate-100/80">
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">主观题得分率</div>
+                  <div class="text-xs sm:text-sm font-bold text-emerald-600">70%</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">已答</div>
+                  <div class="text-xs sm:text-sm font-bold text-gray-700">50次</div>
                 </div>
               </div>
             </div>
 
-            <!-- 简述题 -->
-            <div class="question-type-item">
-              <div class="flex items-center py-3 list-item-border text-xs text-gray-500">
-                <div class="w-20 flex-shrink-0">
-                  <span class="text-sm text-gray-700 font-medium">简述题</span>
+            <div class="py-3.5 border-b border-gray-100 last:border-0">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-bold text-gray-800">简述题</span>
                 </div>
-                <div class="flex items-center gap-3">
-                  <span class="w-24 flex-shrink-0">得分率 <span class="text-green-500 font-bold">75.4%</span></span>
-                  <span class="text-gray-300">|</span>
-                  <span class="w-20 flex-shrink-0 text-gray-500">已答 24次</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 bg-slate-50/80 rounded-xl p-2.5 text-center border border-slate-100/80">
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">主观题得分率</div>
+                  <div class="text-xs sm:text-sm font-bold text-emerald-600">75.4%</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">已答</div>
+                  <div class="text-xs sm:text-sm font-bold text-gray-700">24次</div>
                 </div>
               </div>
             </div>
 
-            <!-- 听力题 -->
-            <div class="question-type-item">
-              <div class="flex items-center py-3 list-item-border text-xs text-gray-500">
-                <div class="w-20 flex-shrink-0">
-                  <span class="text-sm text-gray-700 font-medium">听力题</span>
+            <!-- 3. 复合题型（客观题正确率、答对、答错、主观题得分率、已答 全维度） -->
+            <div class="py-3.5 border-b border-gray-100 last:border-0">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-bold text-gray-800">材料题</span>
                 </div>
-                <div class="flex items-center gap-3">
-                  <span class="w-24 flex-shrink-0">正确率 <span class="text-amber-500 font-bold">60%</span></span>
-                  <span class="text-gray-300">|</span>
-                  <span class="w-20 flex-shrink-0 text-green-500">答对 15次</span>
-                  <span class="text-gray-300">|</span>
-                  <span class="text-red-500">答错 10次</span>
+              </div>
+              <div class="grid grid-cols-5 gap-1 bg-slate-50/80 rounded-xl p-2 text-center border border-slate-100/80">
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5 leading-tight">客观题正确率</div>
+                  <div class="text-[11px] sm:text-xs font-bold text-amber-500">45.0%</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">答对</div>
+                  <div class="text-[11px] sm:text-xs font-bold text-green-600">12次</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">答错</div>
+                  <div class="text-[11px] sm:text-xs font-bold text-red-500">8次</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5 leading-tight">主观题得分率</div>
+                  <div class="text-[11px] sm:text-xs font-bold text-blue-600">68.5%</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">已答</div>
+                  <div class="text-[11px] sm:text-xs font-bold text-gray-700">20次</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="py-3.5 border-b border-gray-100 last:border-0">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-bold text-gray-800">案例分析题</span>
+                </div>
+              </div>
+              <div class="grid grid-cols-5 gap-1 bg-slate-50/80 rounded-xl p-2 text-center border border-slate-100/80">
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5 leading-tight">客观题正确率</div>
+                  <div class="text-[11px] sm:text-xs font-bold text-green-600">80.0%</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">答对</div>
+                  <div class="text-[11px] sm:text-xs font-bold text-green-600">8次</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">答错</div>
+                  <div class="text-[11px] sm:text-xs font-bold text-red-500">2次</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5 leading-tight">主观题得分率</div>
+                  <div class="text-[11px] sm:text-xs font-bold text-blue-600">82.0%</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">已答</div>
+                  <div class="text-[11px] sm:text-xs font-bold text-gray-700">10次</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 客观题：听力题 -->
+            <div class="py-3.5 border-b border-gray-100 last:border-0">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-bold text-gray-800">听力题</span>
+                </div>
+              </div>
+              <div class="grid grid-cols-3 gap-2 bg-slate-50/80 rounded-xl p-2.5 text-center border border-slate-100/80">
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">客观题正确率</div>
+                  <div class="text-xs sm:text-sm font-bold text-amber-500">60.0%</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">答对</div>
+                  <div class="text-xs sm:text-sm font-bold text-green-600">15次</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-gray-400 mb-0.5">答错</div>
+                  <div class="text-xs sm:text-sm font-bold text-red-500">10次</div>
                 </div>
               </div>
             </div>

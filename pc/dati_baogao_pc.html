@@ -822,6 +822,168 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- 题型分析 -->
+                    <div>
+                        <div class="mb-4">
+                            <h2 class="text-base font-bold text-gray-800 flex items-center gap-2">
+                                <i class="fas fa-shapes text-blue-500"></i>题型分析
+                            </h2>
+                        </div>
+                        <div class="bg-white rounded-2xl p-5 card-shadow space-y-3">
+                            <!-- 1. 客观题型（客观题正确率、答对、答错） -->
+                            <div class="flex flex-col md:flex-row md:items-center justify-between p-3.5 bg-slate-50/70 hover:bg-slate-50 rounded-xl border border-slate-100 transition-colors gap-3">
+                                <div class="flex items-center gap-2.5 flex-shrink-0 min-w-[140px]">
+                                    <span class="text-sm font-bold text-gray-800">单选题</span>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2 text-center flex-1 max-w-sm">
+                                    <div class="bg-white px-2.5 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">客观题正确率</div>
+                                        <div class="text-sm font-bold text-amber-500">35.7%</div>
+                                    </div>
+                                    <div class="bg-white px-2.5 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">答对</div>
+                                        <div class="text-sm font-bold text-green-600">18次</div>
+                                    </div>
+                                    <div class="bg-white px-2.5 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">答错</div>
+                                        <div class="text-sm font-bold text-red-500">10次</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col md:flex-row md:items-center justify-between p-3.5 bg-slate-50/70 hover:bg-slate-50 rounded-xl border border-slate-100 transition-colors gap-3">
+                                <div class="flex items-center gap-2.5 flex-shrink-0 min-w-[140px]">
+                                    <span class="text-sm font-bold text-gray-800">判断题</span>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2 text-center flex-1 max-w-sm">
+                                    <div class="bg-white px-2.5 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">客观题正确率</div>
+                                        <div class="text-sm font-bold text-green-600">88.3%</div>
+                                    </div>
+                                    <div class="bg-white px-2.5 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">答对</div>
+                                        <div class="text-sm font-bold text-green-600">18次</div>
+                                    </div>
+                                    <div class="bg-white px-2.5 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">答错</div>
+                                        <div class="text-sm font-bold text-red-500">2次</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2. 主观题型（主观题得分率、已答） -->
+                            <div class="flex flex-col md:flex-row md:items-center justify-between p-3.5 bg-slate-50/70 hover:bg-slate-50 rounded-xl border border-slate-100 transition-colors gap-3">
+                                <div class="flex items-center gap-2.5 flex-shrink-0 min-w-[140px]">
+                                    <span class="text-sm font-bold text-gray-800">填空题</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2 text-center flex-1 max-w-xs">
+                                    <div class="bg-white px-2.5 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">主观题得分率</div>
+                                        <div class="text-sm font-bold text-emerald-600">70%</div>
+                                    </div>
+                                    <div class="bg-white px-2.5 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">已答</div>
+                                        <div class="text-sm font-bold text-gray-700">50次</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col md:flex-row md:items-center justify-between p-3.5 bg-slate-50/70 hover:bg-slate-50 rounded-xl border border-slate-100 transition-colors gap-3">
+                                <div class="flex items-center gap-2.5 flex-shrink-0 min-w-[140px]">
+                                    <span class="text-sm font-bold text-gray-800">简述题</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2 text-center flex-1 max-w-xs">
+                                    <div class="bg-white px-2.5 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">主观题得分率</div>
+                                        <div class="text-sm font-bold text-emerald-600">75.4%</div>
+                                    </div>
+                                    <div class="bg-white px-2.5 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">已答</div>
+                                        <div class="text-sm font-bold text-gray-700">24次</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 3. 复合题型（客观题正确率、答对、答错、主观题得分率、已答 全维度） -->
+                            <div class="flex flex-col md:flex-row md:items-center justify-between p-3.5 bg-slate-50/70 hover:bg-slate-50 rounded-xl border border-slate-100 transition-colors gap-3">
+                                <div class="flex items-center gap-2.5 flex-shrink-0 min-w-[140px]">
+                                    <span class="text-sm font-bold text-gray-800">材料题</span>
+                                </div>
+                                <div class="grid grid-cols-5 gap-2 text-center flex-1 max-w-xl">
+                                    <div class="bg-white px-2 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">客观题正确率</div>
+                                        <div class="text-sm font-bold text-amber-500">45.0%</div>
+                                    </div>
+                                    <div class="bg-white px-2 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">答对</div>
+                                        <div class="text-sm font-bold text-green-600">12次</div>
+                                    </div>
+                                    <div class="bg-white px-2 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">答错</div>
+                                        <div class="text-sm font-bold text-red-500">8次</div>
+                                    </div>
+                                    <div class="bg-white px-2 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">主观题得分率</div>
+                                        <div class="text-sm font-bold text-blue-600">68.5%</div>
+                                    </div>
+                                    <div class="bg-white px-2 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">已答</div>
+                                        <div class="text-sm font-bold text-gray-700">20次</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col md:flex-row md:items-center justify-between p-3.5 bg-slate-50/70 hover:bg-slate-50 rounded-xl border border-slate-100 transition-colors gap-3">
+                                <div class="flex items-center gap-2.5 flex-shrink-0 min-w-[140px]">
+                                    <span class="text-sm font-bold text-gray-800">案例分析题</span>
+                                </div>
+                                <div class="grid grid-cols-5 gap-2 text-center flex-1 max-w-xl">
+                                    <div class="bg-white px-2 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">客观题正确率</div>
+                                        <div class="text-sm font-bold text-green-600">80.0%</div>
+                                    </div>
+                                    <div class="bg-white px-2 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">答对</div>
+                                        <div class="text-sm font-bold text-green-600">8次</div>
+                                    </div>
+                                    <div class="bg-white px-2 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">答错</div>
+                                        <div class="text-sm font-bold text-red-500">2次</div>
+                                    </div>
+                                    <div class="bg-white px-2 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">主观题得分率</div>
+                                        <div class="text-sm font-bold text-blue-600">82.0%</div>
+                                    </div>
+                                    <div class="bg-white px-2 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">已答</div>
+                                        <div class="text-sm font-bold text-gray-700">10次</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 客观题：听力题 -->
+                            <div class="flex flex-col md:flex-row md:items-center justify-between p-3.5 bg-slate-50/70 hover:bg-slate-50 rounded-xl border border-slate-100 transition-colors gap-3">
+                                <div class="flex items-center gap-2.5 flex-shrink-0 min-w-[140px]">
+                                    <span class="text-sm font-bold text-gray-800">听力题</span>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2 text-center flex-1 max-w-sm">
+                                    <div class="bg-white px-2.5 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">客观题正确率</div>
+                                        <div class="text-sm font-bold text-amber-500">60.0%</div>
+                                    </div>
+                                    <div class="bg-white px-2.5 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">答对</div>
+                                        <div class="text-sm font-bold text-green-600">15次</div>
+                                    </div>
+                                    <div class="bg-white px-2.5 py-1.5 rounded-lg border border-slate-100 shadow-2xs">
+                                        <div class="text-[11px] text-gray-400">答错</div>
+                                        <div class="text-sm font-bold text-red-500">10次</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Right Column: Accumulated Rankings & AI Tactics -->

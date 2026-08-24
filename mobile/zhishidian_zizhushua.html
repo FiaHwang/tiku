@@ -324,6 +324,38 @@
             font-weight: 500;
         }
 
+        /* 搜索栏样式 */
+        .search-section {
+            padding: 12px 16px;
+            background-color: #fff;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 7px 12px;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .search-input-wrapper:focus-within {
+            border-color: #2563eb;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .search-highlight {
+            color: #2563eb;
+            background-color: #eff6ff;
+            font-weight: 600;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+
         /* 动画效果 */
         @keyframes fadeIn {
             from {
@@ -643,17 +675,39 @@
                 <button onclick="window.location.href='zhishidian_lianxi_lishi.html?from=zizhushua'" style="padding: 8px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background-color: #fff; font-size: 13px; color: #666; -webkit-tap-highlight-color: transparent; cursor: pointer;">练习历史</button>
             </div>
 
+            <!-- 知识点搜索栏 -->
+            <div class="search-section">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search" style="color: #94a3b8; font-size: 14px;"></i>
+                    <input type="text" id="knowledgeSearchInput" placeholder="搜索知识点名称..." style="flex: 1; border: none; background: transparent; font-size: 14px; color: #1e293b; outline: none;" oninput="onKnowledgeSearch(this.value)">
+                    <i class="fas fa-times-circle" id="clearSearchBtn" onclick="clearKnowledgeSearch()" style="color: #94a3b8; font-size: 15px; cursor: pointer; display: none;"></i>
+                </div>
+                <div id="searchResultSummary" style="display: none; font-size: 12px; color: #64748b; margin-top: 8px; padding: 0 4px;">
+                    找到 <span id="searchResultCount" style="color: #2563eb; font-weight: 600;">0</span> 个相关知识点
+                </div>
+            </div>
+
+            <!-- 搜索无结果空状态 -->
+            <div id="emptySearchResult" style="display: none; padding: 40px 16px; text-align: center; color: #94a3b8;">
+                <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #f1f5f9; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; color: #94a3b8; font-size: 20px;">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div style="font-size: 14px; font-weight: 500; color: #64748b; margin-bottom: 4px;">未找到匹配知识点</div>
+                <div style="font-size: 12px; color: #94a3b8; margin-bottom: 16px;">请尝试其他关键词搜索</div>
+                <button onclick="clearKnowledgeSearch()" style="padding: 6px 16px; border: 1px solid #e2e8f0; border-radius: 20px; background-color: #fff; font-size: 12px; color: #64748b; cursor: pointer; -webkit-tap-highlight-color: transparent;">清空搜索</button>
+            </div>
+
             <!-- 知识分类列表 -->
             <!-- 知识点分类 1 -->
             <div class="practice-unit">
                 <div class="unit-header" onclick="toggleUnit(this)">
                     <div class="unit-title">
                         <i class="fas fa-chevron-down" style="color: #999; font-size: 14px;"></i>
-                        文学常识
+                        <span class="unit-title-text">文学常识</span>
                     </div>
                     <button class="action-btn-small primary" onclick="event.stopPropagation(); window.location.href='dati_yemian.html?mode=knowledge&type=1'">练习</button>
                 </div>
-                <div class="unit-progress">17/37 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">20.5%</span></div>
+                <div class="unit-progress">51/102 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">50.0%</span></div>
                 <div class="unit-content">
                     <!-- 练习项 -->
                     <div class="practice-item">
@@ -665,6 +719,33 @@
                             <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=1_1'">练习</button>
                         </div>
                     </div>
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">先秦两汉文学名家</div>
+                            <div class="item-stats">8/15 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">53.3%</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=1_2'">练习</button>
+                        </div>
+                    </div>
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">唐宋八大家与经典名篇</div>
+                            <div class="item-stats">12/20 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-green">60.0%</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=1_3'">练习</button>
+                        </div>
+                    </div>
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">现当代文学及代表作家</div>
+                            <div class="item-stats">14/30 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">46.7%</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=1_4'">练习</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -673,11 +754,11 @@
                 <div class="unit-header" onclick="toggleUnit(this)">
                     <div class="unit-title">
                         <i class="fas fa-chevron-down" style="color: #999; font-size: 14px;"></i>
-                        基础写作
+                        <span class="unit-title-text">基础写作</span>
                     </div>
                     <button class="action-btn-small primary" onclick="event.stopPropagation(); window.location.href='dati_yemian.html?mode=knowledge&type=2'">练习</button>
                 </div>
-                <div class="unit-progress">35/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-green">87.5%</span></div>
+                <div class="unit-progress">75/85 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-green">88.2%</span></div>
                 <div class="unit-content">
                     <div class="practice-item">
                         <div class="item-info">
@@ -688,6 +769,24 @@
                             <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=2_1'">练习</button>
                         </div>
                     </div>
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">审题立意与主题提炼</div>
+                            <div class="item-stats">18/20 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-green">90.0%</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=2_2'">练习</button>
+                        </div>
+                    </div>
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">议论文段落结构谋篇</div>
+                            <div class="item-stats">22/25 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-green">88.0%</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=2_3'">练习</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -696,19 +795,37 @@
                 <div class="unit-header" onclick="toggleUnit(this)">
                     <div class="unit-title">
                         <i class="fas fa-chevron-down" style="color: #999; font-size: 14px;"></i>
-                        古诗词背诵
+                        <span class="unit-title-text">古诗词背诵</span>
                     </div>
                     <button class="action-btn-small primary" onclick="event.stopPropagation(); window.location.href='dati_yemian.html?mode=knowledge&type=3'">练习</button>
                 </div>
-                <div class="unit-progress">16/32 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">50%</span></div>
+                <div class="unit-progress">39/70 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">55.7%</span></div>
                 <div class="unit-content">
                     <div class="practice-item">
                         <div class="item-info">
                             <div class="item-title">盛唐诗歌</div>
-                            <div class="item-stats">16/32 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">50%</span></div>
+                            <div class="item-stats">16/32 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">50.0%</span></div>
                         </div>
                         <div class="item-actions">
                             <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=3_1'">练习</button>
+                        </div>
+                    </div>
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">宋词流派与名家名篇</div>
+                            <div class="item-stats">14/22 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-green">63.6%</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=3_2'">练习</button>
+                        </div>
+                    </div>
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">古代诗文情境式默写</div>
+                            <div class="item-stats">9/16 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">56.2%</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=3_3'">练习</button>
                         </div>
                     </div>
                 </div>
@@ -719,11 +836,11 @@
                 <div class="unit-header" onclick="toggleUnit(this)">
                     <div class="unit-title">
                         <i class="fas fa-chevron-down" style="color: #999; font-size: 14px;"></i>
-                        语法知识
+                        <span class="unit-title-text">语法知识</span>
                     </div>
                     <button class="action-btn-small primary" onclick="event.stopPropagation(); window.location.href='dati_yemian.html?mode=knowledge&type=4'">练习</button>
                 </div>
-                <div class="unit-progress">0/25 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">0%</span></div>
+                <div class="unit-progress">0/55 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">0%</span></div>
                 <div class="unit-content">
                     <div class="practice-item">
                         <div class="item-info">
@@ -734,6 +851,24 @@
                             <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=4_1'">练习</button>
                         </div>
                     </div>
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">常见病句辨析与修改</div>
+                            <div class="item-stats">0/18 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">0%</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=4_2'">练习</button>
+                        </div>
+                    </div>
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">常用修辞手法及表达效果</div>
+                            <div class="item-stats">0/12 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">0%</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=4_3'">练习</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -742,11 +877,11 @@
                 <div class="unit-header" onclick="toggleUnit(this)">
                     <div class="unit-title">
                         <i class="fas fa-chevron-down" style="color: #999; font-size: 14px;"></i>
-                        阅读理解
+                        <span class="unit-title-text">阅读理解</span>
                     </div>
                     <button class="action-btn-small primary" onclick="event.stopPropagation(); window.location.href='dati_yemian.html?mode=knowledge&type=5'">练习</button>
                 </div>
-                <div class="unit-progress">5/40 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">12.5%</span></div>
+                <div class="unit-progress">25/92 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-red">27.2%</span></div>
                 <div class="unit-content">
                     <div class="practice-item">
                         <div class="item-info">
@@ -755,6 +890,24 @@
                         </div>
                         <div class="item-actions">
                             <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=5_1'">练习</button>
+                        </div>
+                    </div>
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">文言文实词与虚词辨析</div>
+                            <div class="item-stats">8/24 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">33.3%</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=5_2'">练习</button>
+                        </div>
+                    </div>
+                    <div class="practice-item">
+                        <div class="item-info">
+                            <div class="item-title">现代文主旨与结构分析</div>
+                            <div class="item-stats">12/28 &nbsp;&nbsp;&nbsp;&nbsp; 正确率: <span class="accuracy-yellow">42.8%</span></div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn-small primary" onclick="window.location.href='dati_yemian.html?mode=knowledge&type=5_3'">练习</button>
                         </div>
                     </div>
                 </div>
@@ -824,6 +977,164 @@
     </div>
 
     <script>
+        // 知识点搜索功能
+        let originalUnitsData = [];
+
+        function initSearchData() {
+            originalUnitsData = [];
+            const units = document.querySelectorAll('.practice-unit');
+            units.forEach(unit => {
+                const titleEl = unit.querySelector('.unit-title-text');
+                const unitTitle = titleEl ? titleEl.textContent.trim() : '';
+                const items = [];
+                const itemEls = unit.querySelectorAll('.practice-item');
+                itemEls.forEach(itemEl => {
+                    const itemTitleEl = itemEl.querySelector('.item-title');
+                    items.push({
+                        el: itemEl,
+                        titleEl: itemTitleEl,
+                        title: itemTitleEl ? itemTitleEl.textContent.trim() : ''
+                    });
+                });
+                originalUnitsData.push({
+                    unitEl: unit,
+                    titleEl: titleEl,
+                    title: unitTitle,
+                    contentEl: unit.querySelector('.unit-content'),
+                    iconEl: unit.querySelector('.unit-header .fa-chevron-down, .unit-header .fa-chevron-up'),
+                    items: items
+                });
+            });
+        }
+
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function escapeHtml(string) {
+            return string.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function highlightText(text, keyword) {
+            if (!keyword) return escapeHtml(text);
+            const escaped = escapeRegExp(keyword);
+            const regex = new RegExp(`(${escaped})`, 'gi');
+            return escapeHtml(text).replace(regex, '<span class="search-highlight">$1</span>');
+        }
+
+        function onKnowledgeSearch(query) {
+            if (!originalUnitsData || originalUnitsData.length === 0) {
+                initSearchData();
+            }
+
+            const trimmed = (query || '').trim();
+            const lowerQuery = trimmed.toLowerCase();
+            const clearBtn = document.getElementById('clearSearchBtn');
+            const summaryEl = document.getElementById('searchResultSummary');
+            const countEl = document.getElementById('searchResultCount');
+            const emptyEl = document.getElementById('emptySearchResult');
+
+            if (clearBtn) {
+                clearBtn.style.display = trimmed ? 'block' : 'none';
+            }
+
+            if (!trimmed) {
+                // 清空搜索状态，恢复所有分类和项
+                originalUnitsData.forEach(unitData => {
+                    unitData.unitEl.style.display = '';
+                    if (unitData.titleEl) {
+                        unitData.titleEl.textContent = unitData.title;
+                    }
+                    unitData.items.forEach(itemData => {
+                        itemData.el.style.display = '';
+                        if (itemData.titleEl) {
+                            itemData.titleEl.textContent = itemData.title;
+                        }
+                    });
+                });
+
+                if (summaryEl) summaryEl.style.display = 'none';
+                if (emptyEl) emptyEl.style.display = 'none';
+                return;
+            }
+
+            let totalMatchedItems = 0;
+            let matchedUnitsCount = 0;
+
+            originalUnitsData.forEach(unitData => {
+                const unitTitleMatches = unitData.title.toLowerCase().includes(lowerQuery);
+                let unitHasMatchedItem = false;
+
+                unitData.items.forEach(itemData => {
+                    const itemTitleMatches = itemData.title.toLowerCase().includes(lowerQuery);
+                    if (itemTitleMatches) {
+                        totalMatchedItems++;
+                        unitHasMatchedItem = true;
+                        itemData.el.style.display = '';
+                        if (itemData.titleEl) {
+                            itemData.titleEl.innerHTML = highlightText(itemData.title, trimmed);
+                        }
+                    } else if (unitTitleMatches) {
+                        // 如果一级分类匹配，显示所有子项
+                        totalMatchedItems++;
+                        itemData.el.style.display = '';
+                        if (itemData.titleEl) {
+                            itemData.titleEl.textContent = itemData.title;
+                        }
+                    } else {
+                        itemData.el.style.display = 'none';
+                        if (itemData.titleEl) {
+                            itemData.titleEl.textContent = itemData.title;
+                        }
+                    }
+                });
+
+                if (unitTitleMatches || unitHasMatchedItem) {
+                    matchedUnitsCount++;
+                    unitData.unitEl.style.display = '';
+                    if (unitData.titleEl) {
+                        unitData.titleEl.innerHTML = highlightText(unitData.title, trimmed);
+                    }
+                    // 搜索时自动展开匹配单元
+                    if (unitData.contentEl) {
+                        unitData.contentEl.style.display = 'block';
+                    }
+                    if (unitData.iconEl) {
+                        unitData.iconEl.classList.remove('fa-chevron-up');
+                        unitData.iconEl.classList.add('fa-chevron-down');
+                    }
+                } else {
+                    unitData.unitEl.style.display = 'none';
+                }
+            });
+
+            if (summaryEl && countEl) {
+                summaryEl.style.display = 'block';
+                countEl.textContent = totalMatchedItems;
+            }
+
+            if (emptyEl) {
+                if (matchedUnitsCount === 0) {
+                    emptyEl.style.display = 'block';
+                } else {
+                    emptyEl.style.display = 'none';
+                }
+            }
+        }
+
+        function clearKnowledgeSearch() {
+            const input = document.getElementById('knowledgeSearchInput');
+            if (input) {
+                input.value = '';
+                onKnowledgeSearch('');
+                input.focus();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSearchData();
+        });
+
         // toast 提示
         function showToast(msg) {
             const toast = document.getElementById('toast');
