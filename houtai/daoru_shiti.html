@@ -423,21 +423,27 @@
                             </div>
                         </div>
 
-                        <!-- 科目 -->
+                        <!-- 科目 (多选，标签化，可清除) -->
                         <div class="flex items-center gap-2">
                             <span class="text-rose-500 font-bold">*</span>
                             <span class="text-slate-600">科目</span>
-                            <div class="relative w-52">
-                                <select id="subjectSelect" class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-3 pr-7 py-1.5 text-xs text-slate-700 appearance-none focus:outline-none focus:border-blue-500 focus:bg-white transition-all cursor-pointer">
-                                    <option value="" disabled selected hidden>请选择科目</option>
-                                    <option value="高等数学">高等数学</option>
-                                    <option value="大学英语">大学英语</option>
-                                    <option value="计算机应用基础">计算机应用基础</option>
-                                    <option value="大学语文">大学语文</option>
-                                    <option value="政治理论">政治理论</option>
-                                    <option value="管理学">管理学</option>
-                                </select>
-                                <i class="fas fa-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none"></i>
+                            <div id="dsSubjectContainer" class="relative min-w-[200px] max-w-[420px]">
+                                <div id="dsSubjectTrigger" onclick="toggleDsSubjectDropdown(event)" class="min-h-[34px] w-full bg-white border border-slate-200 rounded-lg pl-2.5 pr-8 py-1 text-xs text-slate-700 focus-within:border-blue-500 transition-colors cursor-pointer flex flex-wrap items-center gap-1.5 relative select-none">
+                                    <span id="dsSubjectPlaceholder" class="text-slate-400 py-0.5">请选择科目</span>
+                                    <div id="dsSubjectTags" class="flex flex-wrap gap-1.5 items-center"></div>
+                                    
+                                    <button id="dsSubjectClearBtn" type="button" onclick="clearDsSubject(event)" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-0.5" title="清除全部">
+                                        <i class="far fa-times-circle text-sm"></i>
+                                    </button>
+                                    <div id="dsSubjectArrow" class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Multi-Select Dropdown Menu -->
+                                <div id="dsSubjectDropdown" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-30 py-1.5 max-h-52 overflow-y-auto custom-scrollbar">
+                                    <!-- Options generated dynamically -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -843,6 +849,171 @@ D. (-2, -1)
                 toast.classList.add('translate-y-12', 'opacity-0', 'pointer-events-none');
             }, 2500);
         }
+
+        // 导入试题 - 科目多选支持
+        const DS_SUBJECT_OPTIONS = [
+            '大学语文',
+            '法学',
+            '高等数学',
+            '大学英语',
+            '计算机应用基础',
+            '政治理论',
+            '管理学',
+            '植物遗传学',
+            '教育学'
+        ];
+        let dsSelectedSubjects = ['大学语文', '法学']; // 默认选中示例，精确匹配图片中的 [大学语文 x] [法学 x]
+
+        function renderDsSubjectDropdown() {
+            const dropdown = document.getElementById('dsSubjectDropdown');
+            if (!dropdown) return;
+            dropdown.innerHTML = DS_SUBJECT_OPTIONS.map(subj => {
+                const isSelected = dsSelectedSubjects.includes(subj);
+                return `
+                    <div onclick="toggleDsSubjectOption('${subj}', event)" class="px-3 py-1.5 hover:bg-slate-50 cursor-pointer flex items-center justify-between transition-colors ${isSelected ? 'bg-blue-50/60 text-blue-600 font-medium' : 'text-slate-700'}">
+                        <span class="text-xs">${subj}</span>
+                        <div class="w-4 h-4 rounded border flex items-center justify-center transition-colors ${isSelected ? 'bg-blue-600 border-blue-600 text-white' : 'border-slate-300 bg-white'}">
+                            ${isSelected ? '<i class="fas fa-check text-[9px]"></i>' : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleDsSubjectOption(subj, e) {
+            if (e) e.stopPropagation();
+            if (dsSelectedSubjects.includes(subj)) {
+                dsSelectedSubjects = dsSelectedSubjects.filter(s => s !== subj);
+            } else {
+                dsSelectedSubjects.push(subj);
+            }
+            updateDsSubjectUI();
+        }
+
+        function removeDsSubjectTag(subj, e) {
+            if (e) e.stopPropagation();
+            dsSelectedSubjects = dsSelectedSubjects.filter(s => s !== subj);
+            updateDsSubjectUI();
+        }
+
+        function updateDsSubjectUI() {
+            const placeholder = document.getElementById('dsSubjectPlaceholder');
+            const tagsContainer = document.getElementById('dsSubjectTags');
+            const clearBtn = document.getElementById('dsSubjectClearBtn');
+            const arrow = document.getElementById('dsSubjectArrow');
+
+            if (dsSelectedSubjects.length > 0) {
+                if (placeholder) placeholder.classList.add('hidden');
+                if (tagsContainer) {
+                    tagsContainer.innerHTML = dsSelectedSubjects.map(s => `
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#edf4ff] text-blue-600 text-xs font-medium border border-blue-100/80 shadow-2xs">
+                            <span>${s}</span>
+                            <span onclick="removeDsSubjectTag('${s}', event)" class="cursor-pointer text-blue-400 hover:text-blue-600 flex items-center justify-center" title="移除">
+                                <i class="fas fa-times text-[10px]"></i>
+                            </span>
+                        </span>
+                    `).join('');
+                }
+                if (clearBtn) clearBtn.classList.remove('hidden');
+                if (arrow) arrow.classList.add('hidden');
+            } else {
+                if (placeholder) placeholder.classList.remove('hidden');
+                if (tagsContainer) tagsContainer.innerHTML = '';
+                if (clearBtn) clearBtn.classList.add('hidden');
+                if (arrow) arrow.classList.remove('hidden');
+            }
+
+            renderDsSubjectDropdown();
+        }
+
+        function toggleDsSubjectDropdown(e) {
+            if (e) e.stopPropagation();
+            const dropdown = document.getElementById('dsSubjectDropdown');
+            if (dropdown) {
+                const isHidden = dropdown.classList.contains('hidden');
+                if (isHidden) {
+                    renderDsSubjectDropdown();
+                    dropdown.classList.remove('hidden');
+                } else {
+                    dropdown.classList.add('hidden');
+                }
+            }
+        }
+
+        function closeDsSubjectDropdown() {
+            const dropdown = document.getElementById('dsSubjectDropdown');
+            if (dropdown) dropdown.classList.add('hidden');
+        }
+
+        function clearDsSubject(e) {
+            if (e) e.stopPropagation();
+            dsSelectedSubjects = [];
+            updateDsSubjectUI();
+            closeDsSubjectDropdown();
+        }
+
+        document.addEventListener('click', (e) => {
+            const container = document.getElementById('dsSubjectContainer');
+            if (container && !container.contains(e.target)) {
+                closeDsSubjectDropdown();
+            }
+        });
+
+        // 页面加载完成后，读取URL参数并回显专业分类与科目
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化默认的科目 Tag 展示
+            updateDsSubjectUI();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('category');
+            const subject = urlParams.get('subject');
+            const fromPage = urlParams.get('from');
+
+            if (fromPage === 'ai_caozuo_rizhi') {
+                const backLink = document.querySelector('a[title="关闭并返回试题库"]');
+                if (backLink) {
+                    backLink.href = 'ai_caozuo_rizhi.html';
+                    backLink.title = '关闭并返回AI操作日志';
+                }
+            }
+
+            if (category) {
+                const categorySelect = document.getElementById('categorySelect');
+                if (categorySelect) {
+                    let hasOpt = Array.from(categorySelect.options).some(opt => opt.value === category);
+                    if (!hasOpt) {
+                        const opt = document.createElement('option');
+                        opt.value = category;
+                        opt.textContent = category;
+                        categorySelect.appendChild(opt);
+                    }
+                    categorySelect.value = category;
+                }
+            }
+
+            if (subject) {
+                // 如果传入了 subject，解析可能存在的多个科目并回显
+                const subList = subject.split(/[,，、\s]+/).filter(Boolean);
+                if (subList.length > 0) {
+                    dsSelectedSubjects = [];
+                    subList.forEach(s => {
+                        if (!DS_SUBJECT_OPTIONS.includes(s)) {
+                            DS_SUBJECT_OPTIONS.push(s);
+                        }
+                        if (!dsSelectedSubjects.includes(s)) {
+                            dsSelectedSubjects.push(s);
+                        }
+                    });
+                    updateDsSubjectUI();
+                }
+            }
+
+            if (category || subject) {
+                const categoryInfo = category ? `专业【${category}】` : '';
+                const subjectInfo = subject ? `科目【${dsSelectedSubjects.join('、')}】` : '';
+                showToast(`已读取并回显 ${categoryInfo} ${subjectInfo}`);
+            }
+        });
     </script>
 </body>
 </html>

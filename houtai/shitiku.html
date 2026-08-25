@@ -747,29 +747,26 @@
                     </div>
                 </div>
 
-                <!-- 2. 科目选择 (纵向排列, 专业分类选完后再显示, 默认不选, 可清除) -->
-                <div id="aiSubjectContainer" class="hidden">
+                <!-- 2. 科目选择 (多选, 纵向排列, 专业分类选完后再显示, 默认不选, 可清除) -->
+                <div id="aiSubjectContainer" class="hidden relative">
                     <label class="block text-slate-700 font-medium mb-1.5">
                         <span class="text-rose-500 mr-0.5">*</span>科目
                     </label>
-                    <div class="relative flex items-center">
-                        <select id="aiTypesetSubject" onchange="onAiSubjectChange()" class="w-full bg-white border border-slate-200 rounded-lg pl-3.5 pr-9 py-2.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors appearance-none cursor-pointer">
-                            <option value="" selected class="text-slate-400">请选择科目</option>
-                            <option value="大学语文">大学语文</option>
-                            <option value="植物遗传学">植物遗传学</option>
-                            <option value="法学">法学</option>
-                            <option value="管理学">管理学</option>
-                            <option value="高等数学">高等数学</option>
-                            <option value="大学英语">大学英语</option>
-                            <option value="计算机基础">计算机基础</option>
-                            <option value="教育学">教育学</option>
-                        </select>
-                        <button id="aiSubjectClearBtn" type="button" onclick="clearAiSubject(event)" class="hidden absolute right-2.5 text-slate-400 hover:text-slate-600 transition-colors p-1" title="清除">
+                    <div id="aiSubjectTrigger" onclick="toggleAiSubjectDropdown(event)" class="min-h-[38px] w-full bg-white border border-slate-200 rounded-lg pl-3.5 pr-9 py-1.5 text-xs text-slate-700 focus-within:border-blue-500 transition-colors cursor-pointer flex flex-wrap items-center gap-1.5 relative select-none">
+                        <span id="aiSubjectPlaceholder" class="text-slate-400 py-1">请选择科目</span>
+                        <div id="aiSubjectTags" class="flex flex-wrap gap-1.5 items-center"></div>
+                        
+                        <button id="aiSubjectClearBtn" type="button" onclick="clearAiSubject(event)" class="hidden absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600 transition-colors p-0.5" title="清除全部">
                             <i class="far fa-times-circle text-sm"></i>
                         </button>
-                        <div id="aiSubjectArrow" class="pointer-events-none absolute right-3 text-slate-400 text-xs">
+                        <div id="aiSubjectArrow" class="pointer-events-none absolute right-3 top-3 text-slate-400 text-xs">
                             <i class="fas fa-chevron-down"></i>
                         </div>
+                    </div>
+
+                    <!-- Multi-Select Dropdown Menu -->
+                    <div id="aiSubjectDropdown" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-30 py-1.5 max-h-48 overflow-y-auto custom-scrollbar">
+                        <!-- Options generated dynamically -->
                     </div>
                 </div>
 
@@ -1396,6 +1393,107 @@
             showToast('已载入示例试题文件，可直接体验AI排版录题');
         }
 
+        // AI录题 - 科目多选支持
+        const AI_SUBJECT_OPTIONS = [
+            '大学语文',
+            '植物遗传学',
+            '法学',
+            '管理学',
+            '高等数学',
+            '大学英语',
+            '计算机基础',
+            '教育学'
+        ];
+        let aiSelectedSubjects = [];
+
+        function renderAiSubjectDropdown() {
+            const dropdown = document.getElementById('aiSubjectDropdown');
+            if (!dropdown) return;
+            dropdown.innerHTML = AI_SUBJECT_OPTIONS.map(subj => {
+                const isSelected = aiSelectedSubjects.includes(subj);
+                return `
+                    <div onclick="toggleAiSubjectOption('${subj}', event)" class="px-3.5 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between transition-colors ${isSelected ? 'bg-blue-50/60 text-blue-600 font-medium' : 'text-slate-700'}">
+                        <span class="text-xs">${subj}</span>
+                        <div class="w-4 h-4 rounded border flex items-center justify-center transition-colors ${isSelected ? 'bg-blue-600 border-blue-600 text-white' : 'border-slate-300 bg-white'}">
+                            ${isSelected ? '<i class="fas fa-check text-[9px]"></i>' : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleAiSubjectOption(subj, e) {
+            if (e) e.stopPropagation();
+            if (aiSelectedSubjects.includes(subj)) {
+                aiSelectedSubjects = aiSelectedSubjects.filter(s => s !== subj);
+            } else {
+                aiSelectedSubjects.push(subj);
+            }
+            updateAiSubjectUI();
+        }
+
+        function removeAiSubjectTag(subj, e) {
+            if (e) e.stopPropagation();
+            aiSelectedSubjects = aiSelectedSubjects.filter(s => s !== subj);
+            updateAiSubjectUI();
+        }
+
+        function updateAiSubjectUI() {
+            const placeholder = document.getElementById('aiSubjectPlaceholder');
+            const tagsContainer = document.getElementById('aiSubjectTags');
+            const clearBtn = document.getElementById('aiSubjectClearBtn');
+            const arrow = document.getElementById('aiSubjectArrow');
+
+            if (aiSelectedSubjects.length > 0) {
+                if (placeholder) placeholder.classList.add('hidden');
+                if (tagsContainer) {
+                    tagsContainer.innerHTML = aiSelectedSubjects.map(s => `
+                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-xs font-medium border border-blue-100">
+                            <span>${s}</span>
+                            <span onclick="removeAiSubjectTag('${s}', event)" class="cursor-pointer text-blue-400 hover:text-blue-700 flex items-center justify-center" title="移除">
+                                <i class="fas fa-times text-[10px]"></i>
+                            </span>
+                        </span>
+                    `).join('');
+                }
+                if (clearBtn) clearBtn.classList.remove('hidden');
+                if (arrow) arrow.classList.add('hidden');
+            } else {
+                if (placeholder) placeholder.classList.remove('hidden');
+                if (tagsContainer) tagsContainer.innerHTML = '';
+                if (clearBtn) clearBtn.classList.add('hidden');
+                if (arrow) arrow.classList.remove('hidden');
+            }
+
+            renderAiSubjectDropdown();
+        }
+
+        function toggleAiSubjectDropdown(e) {
+            if (e) e.stopPropagation();
+            const dropdown = document.getElementById('aiSubjectDropdown');
+            if (dropdown) {
+                const isHidden = dropdown.classList.contains('hidden');
+                if (isHidden) {
+                    renderAiSubjectDropdown();
+                    dropdown.classList.remove('hidden');
+                } else {
+                    dropdown.classList.add('hidden');
+                }
+            }
+        }
+
+        function closeAiSubjectDropdown() {
+            const dropdown = document.getElementById('aiSubjectDropdown');
+            if (dropdown) dropdown.classList.add('hidden');
+        }
+
+        function clearAiSubject(e) {
+            if (e) e.stopPropagation();
+            aiSelectedSubjects = [];
+            updateAiSubjectUI();
+            closeAiSubjectDropdown();
+        }
+
         function onAiCategoryChange() {
             const categorySelect = document.getElementById('aiTypesetCategory');
             const clearBtn = document.getElementById('aiCategoryClearBtn');
@@ -1421,27 +1519,6 @@
             onAiCategoryChange();
         }
 
-        function onAiSubjectChange() {
-            const subjectSelect = document.getElementById('aiTypesetSubject');
-            const clearBtn = document.getElementById('aiSubjectClearBtn');
-            const arrow = document.getElementById('aiSubjectArrow');
-
-            if (subjectSelect && subjectSelect.value) {
-                if (clearBtn) clearBtn.classList.remove('hidden');
-                if (arrow) arrow.classList.add('hidden');
-            } else {
-                if (clearBtn) clearBtn.classList.add('hidden');
-                if (arrow) arrow.classList.remove('hidden');
-            }
-        }
-
-        function clearAiSubject(e) {
-            if (e) e.stopPropagation();
-            const subjectSelect = document.getElementById('aiTypesetSubject');
-            if (subjectSelect) subjectSelect.value = '';
-            onAiSubjectChange();
-        }
-
         function openAiTypesetModal() {
             const modal = document.getElementById('aiTypesetModal');
             if (modal) modal.classList.remove('hidden');
@@ -1449,6 +1526,7 @@
             // 默认不选择，提示请选择专业分类和请选择科目
             const categorySelect = document.getElementById('aiTypesetCategory');
             if (categorySelect) categorySelect.value = '';
+            clearAiSubject();
             onAiCategoryChange();
 
             initAiDropZone();
@@ -1457,6 +1535,7 @@
         function closeAiTypesetModal() {
             const modal = document.getElementById('aiTypesetModal');
             if (modal) modal.classList.add('hidden');
+            closeAiSubjectDropdown();
         }
 
         function submitAiTypesetPaper() {
@@ -1466,8 +1545,7 @@
                 return;
             }
 
-            const subject = document.getElementById('aiTypesetSubject') ? document.getElementById('aiTypesetSubject').value : '';
-            if (!subject) {
+            if (aiSelectedSubjects.length === 0) {
                 showToast('请选择科目', true);
                 return;
             }
@@ -1478,6 +1556,7 @@
             }
 
             const fileCount = aiUploadedFiles.length;
+            const subjectText = aiSelectedSubjects.join('、');
 
             closeAiTypesetModal();
 
@@ -1486,7 +1565,7 @@
             renderAiFileList();
 
             // Show prompt toast emphasizing progress check in AI operation log
-            showToast(`已成功创建 ${fileCount} 个文件的AI录题任务（${category}-${subject}）！正在跳转至AI操作日志...`);
+            showToast(`已成功创建 ${fileCount} 个文件的AI录题任务（${category}-${subjectText}）！正在跳转至AI操作日志...`);
             setTimeout(() => {
                 window.location.href = 'ai_caozuo_rizhi.html';
             }, 500);
@@ -1619,6 +1698,11 @@
             const batchMenu = document.getElementById('batchMenu');
             if (batchMenu && !batchMenu.contains(e.target) && !e.target.closest('button[onclick="toggleBatchMenu()"]')) {
                 batchMenu.classList.add('hidden');
+            }
+
+            const subjectContainer = document.getElementById('aiSubjectContainer');
+            if (subjectContainer && !subjectContainer.contains(e.target)) {
+                closeAiSubjectDropdown();
             }
         });
 

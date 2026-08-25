@@ -775,20 +775,20 @@
 
     <script>
         // Tasks Data Model
-        // 包含每个状态的试卷与试题数据；用时统一为整数分钟；有的试卷/试题不显示编辑按钮；包含任务创建人
+        // 包含每个状态的试卷与试题数据；用时统一为整数分钟；有的试卷/试题不显示编辑按钮；包含任务创建人；支持多学科/多标签展示
         let tasks = [
             {
                 id: 'TASK-AI-20260814-01',
                 taskType: 'paper',
-                taskName: '2026年河南省专升本法学统一考试模拟试卷',
+                taskName: '2026年河南省、河北省专升本法学统一考试模拟试卷',
                 category: '专升本',
-                region: '河南省',
-                subject: '法学',
+                region: '河南省、河北省',
+                subject: '语文',
                 creator: '张老师',
                 createTime: '2026-08-14 10:15:22',
                 completeTime: '2026-08-14 10:17:10',
                 status: 'success', // 'processing' | 'success' | 'failed'
-                canEdit: true,     // 显示编辑按钮
+                canEdit: false,    // 第一个已完成试卷任务隐藏编辑按钮
                 statusDesc: '已完成解析与分题',
                 questionCount: 35,
                 questionsDetail: [
@@ -840,7 +840,7 @@
                 taskName: '202608141024试题',
                 category: '专升本',
                 region: '河南省',
-                subject: '语文',
+                subject: '大学语文、大学英语',
                 creator: '李老师',
                 createTime: '2026-08-14 10:24:05',
                 completeTime: '2026-08-14 10:25:00',
@@ -871,7 +871,7 @@
                 taskName: '202608141018试题',
                 category: '专升本',
                 region: '河南省',
-                subject: '英语',
+                subject: '高等数学、计算机基础、法学',
                 creator: '王教研',
                 createTime: '2026-08-14 10:18:00',
                 completeTime: '2026-08-14 10:20:15',
@@ -887,7 +887,7 @@
                 taskName: '2026年河南省专升本公共英语历年真题及参考答案',
                 category: '专升本',
                 region: '河南省',
-                subject: '英语',
+                subject: '大学英语',
                 creator: '刘老师',
                 createTime: '2026-08-14 10:20:00',
                 completeTime: '2026-08-14 10:23:45',
@@ -902,8 +902,8 @@
                 taskType: 'paper',
                 taskName: '2026年高等数学一元微积分重点突破模拟试卷',
                 category: '专升本',
-                region: '河南省',
-                subject: '高数',
+                region: '河南省、山东省',
+                subject: '高等数学',
                 creator: '赵老师',
                 createTime: '2026-08-14 10:28:10',
                 completeTime: '-',
@@ -1051,11 +1051,21 @@
         }
 
         function renderTaskRow(task) {
-            // 标签：试题任务显示“专业-科目”（如 专升本-语文），试卷任务显示“专业-地区-科目”（如 专升本-河南省-法学）
-            const unifiedTag = task.taskType === 'question'
-                ? [task.category || '专升本', task.subject || '语文'].filter(Boolean).join('-')
-                : [task.category || '专升本', task.region || '河南省', task.subject || '法学'].filter(Boolean).join('-');
-            const showTag = true;
+            // 标签格式：
+            // 试卷任务：“专升本-河南省、河北省-语文” 或包含多科目的 “专升本-河南省-法学、管理学”
+            // 试题任务：“专升本-大学语文、大学英语”
+            const category = task.category || '专升本';
+            const rawSubject = task.subject || '';
+            const rawRegion = task.region || '';
+
+            let tagText = '';
+            if (task.taskType === 'question') {
+                tagText = [category, rawSubject || '大学语文'].filter(Boolean).join('-');
+            } else {
+                tagText = [category, rawRegion || '河南省', rawSubject || '语文'].filter(Boolean).join('-');
+            }
+
+            const tagsHtml = `<span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 text-[10.5px]">${tagText}</span>`;
 
             // 任务类型 Badge (录题 / 录卷)
             const taskTypeBadge = task.taskType === 'paper' 
@@ -1138,10 +1148,9 @@
                     <td class="py-3 px-4">
                         <div class="space-y-1">
                             <div class="font-semibold text-slate-800 text-xs truncate max-w-[320px]" title="${task.taskName}">${task.taskName}</div>
-                            ${showTag ? `
-                            <div class="text-[11px] text-slate-500 font-normal">
-                                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">${unifiedTag}</span>
-                            </div>` : ''}
+                            <div class="flex flex-wrap items-center gap-1.5 pt-0.5">
+                                ${tagsHtml}
+                            </div>
                         </div>
                     </td>
                     <td class="py-3 px-4 text-center whitespace-nowrap">
@@ -1349,8 +1358,10 @@
                 return;
             }
 
-            // 试题任务点击编辑跳转至导入试题页面
-            window.location.href = 'daoru_shiti.html';
+            // 试题任务点击编辑跳转至导入试题页面，携带专业分类和科目
+            const categoryParam = encodeURIComponent(task.category || '');
+            const subjectParam = encodeURIComponent(task.subject || '');
+            window.location.href = `daoru_shiti.html?category=${categoryParam}&subject=${subjectParam}&from=ai_caozuo_rizhi`;
         }
 
         function closeEditQuestionsDrawer() {
