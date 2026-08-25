@@ -723,7 +723,57 @@
             
             <!-- Modal Body -->
             <div class="p-6 overflow-y-auto custom-scrollbar space-y-4 text-xs">
-                <!-- 1. 文件上传区域 (支持拖拽与点击选择) -->
+                <!-- 1. 专业分类 (纵向排列, 默认不选, 可清除) -->
+                <div>
+                    <label class="block text-slate-700 font-medium mb-1.5">
+                        <span class="text-rose-500 mr-0.5">*</span>专业分类
+                    </label>
+                    <div class="relative flex items-center">
+                        <select id="aiTypesetCategory" onchange="onAiCategoryChange()" class="w-full bg-white border border-slate-200 rounded-lg pl-3.5 pr-9 py-2.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors appearance-none cursor-pointer">
+                            <option value="" selected class="text-slate-400">请选择专业分类</option>
+                            <option value="专升本">专升本</option>
+                            <option value="高起专">高起专</option>
+                            <option value="高起本">高起本</option>
+                            <option value="研究生">研究生</option>
+                            <option value="考研">考研</option>
+                            <option value="高考">高考</option>
+                        </select>
+                        <button id="aiCategoryClearBtn" type="button" onclick="clearAiCategory(event)" class="hidden absolute right-2.5 text-slate-400 hover:text-slate-600 transition-colors p-1" title="清除">
+                            <i class="far fa-times-circle text-sm"></i>
+                        </button>
+                        <div id="aiCategoryArrow" class="pointer-events-none absolute right-3 text-slate-400 text-xs">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. 科目选择 (纵向排列, 专业分类选完后再显示, 默认不选, 可清除) -->
+                <div id="aiSubjectContainer" class="hidden">
+                    <label class="block text-slate-700 font-medium mb-1.5">
+                        <span class="text-rose-500 mr-0.5">*</span>科目
+                    </label>
+                    <div class="relative flex items-center">
+                        <select id="aiTypesetSubject" onchange="onAiSubjectChange()" class="w-full bg-white border border-slate-200 rounded-lg pl-3.5 pr-9 py-2.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500 transition-colors appearance-none cursor-pointer">
+                            <option value="" selected class="text-slate-400">请选择科目</option>
+                            <option value="大学语文">大学语文</option>
+                            <option value="植物遗传学">植物遗传学</option>
+                            <option value="法学">法学</option>
+                            <option value="管理学">管理学</option>
+                            <option value="高等数学">高等数学</option>
+                            <option value="大学英语">大学英语</option>
+                            <option value="计算机基础">计算机基础</option>
+                            <option value="教育学">教育学</option>
+                        </select>
+                        <button id="aiSubjectClearBtn" type="button" onclick="clearAiSubject(event)" class="hidden absolute right-2.5 text-slate-400 hover:text-slate-600 transition-colors p-1" title="清除">
+                            <i class="far fa-times-circle text-sm"></i>
+                        </button>
+                        <div id="aiSubjectArrow" class="pointer-events-none absolute right-3 text-slate-400 text-xs">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. 文件上传区域 (支持拖拽与点击选择) -->
                 <div>
                     <label class="block text-slate-700 font-medium mb-1.5">
                         <span class="text-rose-500 mr-0.5">*</span>上传试题文件
@@ -1346,9 +1396,61 @@
             showToast('已载入示例试题文件，可直接体验AI排版录题');
         }
 
+        function onAiCategoryChange() {
+            const categorySelect = document.getElementById('aiTypesetCategory');
+            const clearBtn = document.getElementById('aiCategoryClearBtn');
+            const arrow = document.getElementById('aiCategoryArrow');
+            const subjectContainer = document.getElementById('aiSubjectContainer');
+
+            if (categorySelect && categorySelect.value) {
+                if (clearBtn) clearBtn.classList.remove('hidden');
+                if (arrow) arrow.classList.add('hidden');
+                if (subjectContainer) subjectContainer.classList.remove('hidden');
+            } else {
+                if (clearBtn) clearBtn.classList.add('hidden');
+                if (arrow) arrow.classList.remove('hidden');
+                if (subjectContainer) subjectContainer.classList.add('hidden');
+                clearAiSubject();
+            }
+        }
+
+        function clearAiCategory(e) {
+            if (e) e.stopPropagation();
+            const categorySelect = document.getElementById('aiTypesetCategory');
+            if (categorySelect) categorySelect.value = '';
+            onAiCategoryChange();
+        }
+
+        function onAiSubjectChange() {
+            const subjectSelect = document.getElementById('aiTypesetSubject');
+            const clearBtn = document.getElementById('aiSubjectClearBtn');
+            const arrow = document.getElementById('aiSubjectArrow');
+
+            if (subjectSelect && subjectSelect.value) {
+                if (clearBtn) clearBtn.classList.remove('hidden');
+                if (arrow) arrow.classList.add('hidden');
+            } else {
+                if (clearBtn) clearBtn.classList.add('hidden');
+                if (arrow) arrow.classList.remove('hidden');
+            }
+        }
+
+        function clearAiSubject(e) {
+            if (e) e.stopPropagation();
+            const subjectSelect = document.getElementById('aiTypesetSubject');
+            if (subjectSelect) subjectSelect.value = '';
+            onAiSubjectChange();
+        }
+
         function openAiTypesetModal() {
             const modal = document.getElementById('aiTypesetModal');
             if (modal) modal.classList.remove('hidden');
+
+            // 默认不选择，提示请选择专业分类和请选择科目
+            const categorySelect = document.getElementById('aiTypesetCategory');
+            if (categorySelect) categorySelect.value = '';
+            onAiCategoryChange();
+
             initAiDropZone();
         }
 
@@ -1358,12 +1460,23 @@
         }
 
         function submitAiTypesetPaper() {
+            const category = document.getElementById('aiTypesetCategory') ? document.getElementById('aiTypesetCategory').value : '';
+            if (!category) {
+                showToast('请选择专业分类', true);
+                return;
+            }
+
+            const subject = document.getElementById('aiTypesetSubject') ? document.getElementById('aiTypesetSubject').value : '';
+            if (!subject) {
+                showToast('请选择科目', true);
+                return;
+            }
+
             if (aiUploadedFiles.length === 0) {
                 showToast('请先选择或拖拽上传试题文件（支持PDF、Word、图片、TXT、Excel）', true);
                 return;
             }
 
-            const category = document.getElementById('aiTypesetCategory') ? document.getElementById('aiTypesetCategory').value : '专升本';
             const fileCount = aiUploadedFiles.length;
 
             closeAiTypesetModal();
@@ -1373,7 +1486,7 @@
             renderAiFileList();
 
             // Show prompt toast emphasizing progress check in AI operation log
-            showToast(`已成功创建 ${fileCount} 个文件的AI录题任务！正在跳转至AI操作日志...`);
+            showToast(`已成功创建 ${fileCount} 个文件的AI录题任务（${category}-${subject}）！正在跳转至AI操作日志...`);
             setTimeout(() => {
                 window.location.href = 'ai_caozuo_rizhi.html';
             }, 500);

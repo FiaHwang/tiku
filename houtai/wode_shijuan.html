@@ -1345,8 +1345,11 @@
             });
 
             searchPapers();
-            showToast('试卷信息已保存！');
-            openAiLuTiModal();
+            closeAiTypesetModal();
+            showToast('试卷信息已保存，正在进入导入组卷...');
+            setTimeout(() => {
+                window.location.href = `daoru_shijuan.html?id=${newId}&title=${encodeURIComponent(title)}&from=wode_shijuan`;
+            }, 300);
         }
 
         // AI录题 Modal Logic

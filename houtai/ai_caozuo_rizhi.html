@@ -1007,7 +1007,9 @@
                 if (currentStatusFilter !== 'all' && t.status !== currentStatusFilter) return false;
                 // Keyword search
                 if (keyword) {
-                    const tag = `${t.category}-${t.region}-${t.subject}`;
+                    const tag = t.taskType === 'question'
+                        ? `${t.category || ''}-${t.subject || ''}`
+                        : `${t.category || ''}-${t.region || ''}-${t.subject || ''}`;
                     const typeText = t.taskType === 'paper' ? '录卷 试卷' : '录题 试题';
                     const matchText = `${t.id} ${t.taskName} ${t.creator || ''} ${tag} ${typeText}`.toLowerCase();
                     if (!matchText.includes(keyword)) return false;
@@ -1049,9 +1051,11 @@
         }
 
         function renderTaskRow(task) {
-            // 标签统一用这样表示“专升本-河南省-语文”，试题任务不显示标签
-            const unifiedTag = `${task.category || '专升本'}-${task.region || '河南省'}-${task.subject || '语文'}`;
-            const showTag = task.taskType !== 'question';
+            // 标签：试题任务显示“专业-科目”（如 专升本-语文），试卷任务显示“专业-地区-科目”（如 专升本-河南省-法学）
+            const unifiedTag = task.taskType === 'question'
+                ? [task.category || '专升本', task.subject || '语文'].filter(Boolean).join('-')
+                : [task.category || '专升本', task.region || '河南省', task.subject || '法学'].filter(Boolean).join('-');
+            const showTag = true;
 
             // 任务类型 Badge (录题 / 录卷)
             const taskTypeBadge = task.taskType === 'paper' 

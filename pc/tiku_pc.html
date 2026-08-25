@@ -501,6 +501,38 @@
             border: 1px solid #d9d9d9;
         }
 
+        /* 试卷列表中的查看报告按钮美化 */
+        .score-prediction-btn.btn-view-report {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 16px;
+            background-color: #ffffff;
+            color: #ff4d4f;
+            border: 1px solid #ffa39e;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px rgba(255, 77, 79, 0.08);
+            white-space: nowrap;
+        }
+
+        .score-prediction-btn.btn-view-report:hover {
+            background-color: #fff1f0;
+            color: #cf1322;
+            border-color: #ff4d4f;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(255, 77, 79, 0.18);
+        }
+
+        .score-prediction-btn.btn-view-report:active {
+            transform: translateY(0);
+            background-color: #ffe8e6;
+            box-shadow: none;
+        }
+
         /* 右侧边栏 */
         .right-sidebar {
             width: 280px;
@@ -1446,11 +1478,13 @@
             
             const text = btn.textContent.trim();
             // 统考试卷和大联考中的特定按钮不跳转
-            if (text === '预约考试' || text === '等待考试' || text === '查看报告') {
+            if (text === '预约考试' || text === '等待考试') {
                 return;
             }
             
-            if (text === '继续答题' || text === '开始答题' || text === '再次答题' || text === '练习' || text === '补考练习') {
+            if (text.includes('查看报告') || btn.classList.contains('btn-view-report')) {
+                window.location.href = 'baogao_guda_pc.html';
+            } else if (text === '继续答题' || text === '开始答题' || text === '再次答题' || text === '练习' || text === '补考练习') {
                 window.location.href = 'dati_yemian_pc.html';
             } else if (text === '开始考试' || text === '继续考试') {
                 window.location.href = 'shijuan_xiangqing_pc.html';
@@ -2187,7 +2221,7 @@
                                     <div class="score-prediction-status" style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #666;">
                                         <span>已完成：20/20</span>
                                         <span>试卷说明</span>
-                                        <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #d9d9d9; color: #666; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
+                                        <button class="score-prediction-btn btn-view-report" onclick="window.location.href='baogao_guda_pc.html'">查看报告</button>
                                     </div>
                                 </div>
 
@@ -2209,7 +2243,7 @@
                                         <span>已完成：20/20</span>
                                         <span>试卷说明</span>
                                         <div style="display: flex; gap: 12px;">
-                                            <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #d9d9d9; color: #666; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
+                                            <button class="score-prediction-btn btn-view-report" onclick="window.location.href='baogao_guda_pc.html'">查看报告</button>
                                             <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #d9d9d9; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">考试结束</button>
                                         </div>
                                     </div>
@@ -2315,8 +2349,8 @@
                                         <span>已完成：20/20</span>
                                         <span>试卷说明</span>
                                         <div style="display: flex; gap: 8px;">
-                                            <button class="score-prediction-btn" onclick="window.location.href=\'baogao_guda_pc.html\'" style="padding: 6px 16px; background-color: #d9d9d9; color: #666; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
-                                            <button class="score-prediction-btn" onclick="window.location.href='dati_yemian_pc.html'" style="padding: 6px 16px; background-color: #ff4d4f; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">再次答题</button>
+                                            <button class="score-prediction-btn btn-view-report" onclick="window.location.href=\'baogao_guda_pc.html\'">查看报告</button>
+                                            <button class="score-prediction-btn" onclick="window.location.href='dati_yemian_pc.html'" style="padding: 6px 16px; background-color: #ff4d4f; color: #fff; border: 1px solid #ff4d4f; border-radius: 4px; font-size: 14px; cursor: pointer;">再次答题</button>
                                         </div>
                                     </div>
                                 </div>
@@ -2341,8 +2375,8 @@
                                         <span>进行中：0/20</span>
                                         <span>试卷说明</span>
                                         <div style="display: flex; gap: 8px;">
-                                            <button class="score-prediction-btn" onclick="window.location.href=\'baogao_guda_pc.html\'" style="padding: 6px 16px; background-color: #d9d9d9; color: #666; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
-                                            <button class="score-prediction-btn" onclick="window.location.href='dati_yemian_pc.html'" style="padding: 6px 16px; background-color: #ff4d4f; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">继续答题</button>
+                                            <button class="score-prediction-btn btn-view-report" onclick="window.location.href=\'baogao_guda_pc.html\'">查看报告</button>
+                                            <button class="score-prediction-btn" onclick="window.location.href='dati_yemian_pc.html'" style="padding: 6px 16px; background-color: #ff4d4f; color: #fff; border: 1px solid #ff4d4f; border-radius: 4px; font-size: 14px; cursor: pointer;">继续答题</button>
                                         </div>
                                     </div>
                                 </div>
@@ -2462,7 +2496,7 @@
                                         <div class="score-prediction-status" style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #666;">
                                             <span>已完成：20/20</span>
                                             <span>试卷说明</span>
-                                            <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #d9d9d9; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
+                                            <button class="score-prediction-btn btn-view-report" onclick="window.location.href='baogao_guda_pc.html'">查看报告</button>
                                         </div>
                                     </div>
 
@@ -2484,8 +2518,8 @@
                                             <span>已完成：20/20</span>
                                             <span>试卷说明</span>
                                             <div style="display: flex; gap: 12px;">
-                                                <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #d9d9d9; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
-                                                <button class="score-prediction-btn" onclick="window.location.href='dati_yemian_pc.html'" style="padding: 6px 16px; background-color: #ff4d4f; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">补考练习</button>
+                                                <button class="score-prediction-btn btn-view-report" onclick="window.location.href='baogao_guda_pc.html'">查看报告</button>
+                                                <button class="score-prediction-btn" onclick="window.location.href='dati_yemian_pc.html'" style="padding: 6px 16px; background-color: #ff4d4f; color: #fff; border: 1px solid #ff4d4f; border-radius: 4px; font-size: 14px; cursor: pointer;">补考练习</button>
                                             </div>
                                         </div>
                                     </div>
@@ -2529,8 +2563,8 @@
                                             <span>进行中：0/20</span>
                                             <span>试卷说明</span>
                                             <div style="display: flex; gap: 12px;">
-                                                <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #d9d9d9; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
-                                                <button class="score-prediction-btn" onclick="window.location.href='dati_yemian_pc.html'" style="padding: 6px 16px; background-color: #ff4d4f; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">继续考试</button>
+                                                <button class="score-prediction-btn btn-view-report" onclick="window.location.href='baogao_guda_pc.html'">查看报告</button>
+                                                <button class="score-prediction-btn" onclick="window.location.href='dati_yemian_pc.html'" style="padding: 6px 16px; background-color: #ff4d4f; color: #fff; border: 1px solid #ff4d4f; border-radius: 4px; font-size: 14px; cursor: pointer;">继续考试</button>
                                             </div>
                                         </div>
                                     </div>
@@ -2652,8 +2686,8 @@
                                                 <span>已完成：20/20</span>
                                                 <span>试卷说明</span>
                                                 <div style="display: flex; gap: 12px;">
-                                                    <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #d9d9d9; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
-                                                    <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #ff4d4f; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">再次估分</button>
+                                                    <button class="score-prediction-btn btn-view-report" onclick="window.location.href='baogao_guda_pc.html'">查看报告</button>
+                                                    <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #ff4d4f; color: #fff; border: 1px solid #ff4d4f; border-radius: 4px; font-size: 14px; cursor: pointer;">再次估分</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -2676,8 +2710,8 @@
                                                 <span>进行中：0/20</span>
                                                 <span>试卷说明</span>
                                                 <div style="display: flex; gap: 12px;">
-                                                    <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #d9d9d9; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
-                                                    <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #ff4d4f; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">继续估分</button>
+                                                    <button class="score-prediction-btn btn-view-report" onclick="window.location.href='baogao_guda_pc.html'">查看报告</button>
+                                                    <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #ff4d4f; color: #fff; border: 1px solid #ff4d4f; border-radius: 4px; font-size: 14px; cursor: pointer;">继续估分</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -2700,7 +2734,7 @@
                                                 <span>已完成：20/20</span>
                                                 <span>试卷说明</span>
                                                 <div style="display: flex; gap: 12px;">
-                                                    <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #d9d9d9; color: #666; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer;">查看报告</button>
+                                                    <button class="score-prediction-btn btn-view-report" onclick="window.location.href='baogao_guda_pc.html'">查看报告</button>
                                                     <button class="score-prediction-btn" style="padding: 6px 16px; background-color: #d9d9d9; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">估分结束</button>
                                                 </div>
                                             </div>

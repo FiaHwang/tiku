@@ -1051,9 +1051,13 @@ D. was repaid
                 showToast('请先在左侧录题区输入或上传试题', true);
                 return;
             }
-            showToast('试题成功导入并保存至试卷！正在返回试卷库...');
+            const urlParams = new URLSearchParams(window.location.search);
+            const fromPage = urlParams.get('from');
+            const targetUrl = (fromPage === 'wode_shijuan') ? 'wode_shijuan.html' : 'shijuanku.html';
+            const pageName = (fromPage === 'wode_shijuan') ? '我的试卷' : '试卷库';
+            showToast(`试题成功导入并保存至试卷！正在返回${pageName}...`);
             setTimeout(() => {
-                window.location.href = 'shijuanku.html';
+                window.location.href = targetUrl;
             }, 1200);
         }
 
@@ -1231,6 +1235,19 @@ D. was repaid
                 toast.classList.add('translate-y-12', 'opacity-0', 'pointer-events-none');
             }, 3000);
         }
+
+        // Initialize URL parameters and back links
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const fromPage = urlParams.get('from');
+            if (fromPage === 'wode_shijuan') {
+                const backLink = document.querySelector('a[title="关闭并返回试卷库"]');
+                if (backLink) {
+                    backLink.href = 'wode_shijuan.html';
+                    backLink.title = '关闭并返回我的试卷';
+                }
+            }
+        });
     </script>
 </body>
 </html>

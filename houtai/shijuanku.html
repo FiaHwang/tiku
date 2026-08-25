@@ -1815,8 +1815,41 @@
         function saveAndTypesetPaper() {
             const titleInput = document.getElementById('aiTypesetPaperTitle');
             const title = (titleInput && titleInput.value.trim()) ? titleInput.value.trim() : '未命名试卷';
-            createAiTypesetPaperAndRedirect(title, '试卷信息已保存！');
-            openAiLuTiModal();
+            const paperType = document.getElementById('aiTypesetPaperType').value || '线下试卷';
+            const year = document.getElementById('aiTypesetYear').value || '2026';
+            const duration = parseInt(document.getElementById('aiTypesetDuration').value) || 90;
+            const category = document.getElementById('aiTypesetCategory').value || '专升本';
+            const region = document.getElementById('aiTypesetRegion').value || '';
+            const subject = document.getElementById('aiTypesetSubject').value || '';
+
+            const fullCategory = [category, subject, region].filter(Boolean).join('-');
+            const newId = String(Date.now());
+
+            const newPaper = {
+                id: newId,
+                title: title,
+                category: fullCategory,
+                paperType: paperType,
+                year: year,
+                totalScore: 100,
+                questionCount: 50,
+                duration: duration,
+                submittedCount: 0,
+                submittedTimes: 0,
+                useStatus: '未引用',
+                enableStatus: '正常',
+                creator: '黄飞亚',
+                createTime: new Date().toISOString().replace('T', ' ').substring(0, 16),
+                published: true
+            };
+
+            papersList.unshift(newPaper);
+            closeAiTypesetModal();
+            searchPapers();
+            showToast('试卷信息已保存，正在进入导入组卷...');
+            setTimeout(() => {
+                window.location.href = `daoru_shijuan.html?id=${newId}&title=${encodeURIComponent(title)}&from=shijuanku`;
+            }, 300);
         }
 
         // AI录题 Modal Logic
