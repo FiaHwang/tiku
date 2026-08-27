@@ -432,8 +432,11 @@
                             <!-- 任务类型筛选 -->
                             <select id="taskTypeFilter" onchange="onTaskTypeSelectChange()" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500 font-medium">
                                 <option value="all">请选择任务类型</option>
-                                <option value="question">录题</option>
-                                <option value="paper">录卷</option>
+                                <option value="question">试题</option>
+                                <option value="paper">试卷</option>
+                                <option value="shuati">刷题版本</option>
+                                <option value="shijuanbao">试卷包</option>
+                                <option value="xuefu">学服作业</option>
                             </select>
                             <!-- 状态筛选 -->
                             <select id="statusFilter" onchange="onStatusSelectChange()" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500 font-medium">
@@ -983,6 +986,54 @@
                 failReason: '上传的文件清晰度不足或格式异常，AI 无法提取完整题干结构。',
                 questionCount: 0,
                 questionsDetail: []
+            },
+            {
+                id: 'TASK-AI-20260814-09',
+                taskType: 'shuati',
+                taskName: '2026年专升本计算机基础刷题库V2.0',
+                category: '专升本',
+                region: '河南省',
+                subject: '计算机基础',
+                creator: '王老师',
+                createTime: '2026-08-14 11:05:00',
+                completeTime: '2026-08-14 11:08:20',
+                status: 'success',
+                canEdit: true,
+                statusDesc: '已生成刷题版本',
+                questionCount: 120,
+                questionsDetail: []
+            },
+            {
+                id: 'TASK-AI-20260814-10',
+                taskType: 'shijuanbao',
+                taskName: '2026年河南省专升本高等数学真题全解试卷包',
+                category: '专升本',
+                region: '河南省',
+                subject: '高等数学',
+                creator: '张老师',
+                createTime: '2026-08-14 11:15:30',
+                completeTime: '2026-08-14 11:19:00',
+                status: 'success',
+                canEdit: true,
+                statusDesc: '已打包装卷完成',
+                questionCount: 150,
+                questionsDetail: []
+            },
+            {
+                id: 'TASK-AI-20260814-11',
+                taskType: 'xuefu',
+                taskName: '2026年暑期冲刺班第一周学服阶段作业',
+                category: '专升本',
+                region: '河南省',
+                subject: '大学英语',
+                creator: '学管师-李老师',
+                createTime: '2026-08-14 11:30:12',
+                completeTime: '2026-08-14 11:32:00',
+                status: 'success',
+                canEdit: true,
+                statusDesc: '作业智能分发完成',
+                questionCount: 25,
+                questionsDetail: []
             }
         ];
 
@@ -1021,6 +1072,14 @@
             const searchEl = document.getElementById('searchInput');
             const keyword = (searchEl ? searchEl.value : '').trim().toLowerCase();
 
+            const typeNames = {
+                paper: '试卷 录卷',
+                question: '试题 录题',
+                shuati: '刷题版本 刷题',
+                shijuanbao: '试卷包 卷包',
+                xuefu: '学服作业 作业'
+            };
+
             const filtered = tasks.filter(t => {
                 // Task Type filter
                 if (currentTaskTypeFilter !== 'all' && t.taskType !== currentTaskTypeFilter) return false;
@@ -1028,10 +1087,10 @@
                 if (currentStatusFilter !== 'all' && t.status !== currentStatusFilter) return false;
                 // Keyword search
                 if (keyword) {
-                    const tag = t.taskType === 'question'
+                    const tag = t.taskType === 'question' || t.taskType === 'shuati' || t.taskType === 'xuefu'
                         ? `${t.category || ''}-${t.subject || ''}`
                         : `${t.category || ''}-${t.region || ''}-${t.subject || ''}`;
-                    const typeText = t.taskType === 'paper' ? '录卷 试卷' : '录题 试题';
+                    const typeText = typeNames[t.taskType] || '试题';
                     const matchText = `${t.id} ${t.taskName} ${t.creator || ''} ${tag} ${typeText}`.toLowerCase();
                     if (!matchText.includes(keyword)) return false;
                 }
@@ -1072,15 +1131,13 @@
         }
 
         function renderTaskRow(task) {
-            // 标签格式：
-            // 试卷任务：“专升本-河南省、河北省-语文” 或包含多科目的 “专升本-河南省-法学、管理学”
-            // 试题任务：“专升本-大学语文、大学英语”
+            // 标签格式
             const category = task.category || '专升本';
             const rawSubject = task.subject || '';
             const rawRegion = task.region || '';
 
             let tagText = '';
-            if (task.taskType === 'question') {
+            if (task.taskType === 'question' || task.taskType === 'shuati' || task.taskType === 'xuefu') {
                 tagText = [category, rawSubject || '大学语文'].filter(Boolean).join('-');
             } else {
                 tagText = [category, rawRegion || '河南省', rawSubject || '语文'].filter(Boolean).join('-');
@@ -1088,10 +1145,19 @@
 
             const tagsHtml = `<span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 text-[10.5px]">${tagText}</span>`;
 
-            // 任务类型 Badge (录题 / 录卷)
-            const taskTypeBadge = task.taskType === 'paper' 
-                ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-purple-50 text-purple-700 border border-purple-200/80">录卷</span>'
-                : '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-blue-50 text-blue-700 border border-blue-200/80">录题</span>';
+            // 任务类型 Badge (试题 / 试卷 / 刷题版本 / 试卷包 / 学服作业)
+            let taskTypeBadge = '';
+            if (task.taskType === 'paper') {
+                taskTypeBadge = '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-purple-50 text-purple-700 border border-purple-200/80">试卷</span>';
+            } else if (task.taskType === 'shuati') {
+                taskTypeBadge = '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200/80">刷题版本</span>';
+            } else if (task.taskType === 'shijuanbao') {
+                taskTypeBadge = '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/80">试卷包</span>';
+            } else if (task.taskType === 'xuefu') {
+                taskTypeBadge = '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-indigo-50 text-indigo-700 border border-indigo-200/80">学服作业</span>';
+            } else {
+                taskTypeBadge = '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-blue-50 text-blue-700 border border-blue-200/80">试题</span>';
+            }
 
             // Status UI Rendering
             let statusBadge = '';
@@ -1372,6 +1438,18 @@
         function openEditQuestionsDrawer(taskId) {
             const task = tasks.find(t => t.id === taskId);
             if (!task) return;
+
+            // 刷题版本任务：编辑点击进入 shuati_zuti.html 并打开导入试题弹窗
+            if (task.taskType === 'shuati' || (task.taskName && task.taskName.includes('刷题'))) {
+                window.location.href = 'shuati_zuti.html?openModal=importQuestion';
+                return;
+            }
+
+            // 学服作业任务：编辑点击进入 zuoye_shijuan.html
+            if (task.taskType === 'xuefu' || (task.taskName && task.taskName.includes('作业'))) {
+                window.location.href = 'zuoye_shijuan.html';
+                return;
+            }
 
             // 试卷任务点击跳转至导入试卷页面
             if (task.taskType === 'paper' || (task.taskName && task.taskName.includes('试卷'))) {

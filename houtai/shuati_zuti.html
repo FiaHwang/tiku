@@ -1452,6 +1452,14 @@ B. 错误
             parsedQuestionsBuffer = parseRawQuestions(sampleQuestionsText);
             confirmImportToWorkbench();
         }
+
+        // 页面加载完成后检查 URL 参数自动打开弹窗
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('openModal') === 'importQuestion' || urlParams.get('import') === 'true') {
+                openImportQuestionModal();
+            }
+        });
     </script>
 </body>
 </html>
