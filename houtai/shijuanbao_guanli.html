@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>试卷包管理 - 库课管理平台</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1890ff',
+                        'primary-hover': '#40a9ff',
+                        'primary-dark': '#096dd9'
+                    },
+                    boxShadow: {
+                        'xs': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                        '2xs': '0 1px 1px 0 rgba(0, 0, 0, 0.03)',
+                        'modal': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* Primary nav item hover/active */
+        .primary-nav-item {
+            transition: all 0.2s ease;
+        }
+        .primary-nav-item:hover {
+            color: #2563eb;
+            background-color: #f8fafc;
+        }
+        .primary-nav-item.active {
+            color: #2563eb;
+            background-color: #eff6ff;
+            font-weight: 600;
+        }
+
+        /* Secondary menu item active */
+        .secondary-menu-item {
+            transition: all 0.15s ease;
+        }
+        .secondary-menu-item:hover {
+            color: #2563eb;
+            background-color: #f8fafc;
+        }
+        .secondary-menu-item.active {
+            color: #2563eb;
+            background-color: #eff6ff;
+            font-weight: 600;
+        }
+        
+        .modal-backdrop {
+            background-color: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(2px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-700 font-sans h-screen flex flex-col overflow-hidden text-xs">
+
+    <!-- ==================== 顶部全局 Header ==================== -->
+    <header class="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 z-20 shrink-0 shadow-xs">
+        <!-- Left Section: Logo & Platform Title -->
+        <div class="flex items-center gap-3">
+            <!-- Red Square Logo Badge -->
+            <a href="../index.html" title="返回首页" class="bg-[#e52e2e] text-white rounded px-2 py-1 flex flex-col justify-center items-center shadow-xs hover:opacity-90 transition-opacity">
+                <span class="text-sm font-black leading-tight tracking-wider">库课</span>
+                <span class="text-[8px] scale-90 font-sans tracking-tighter opacity-90 leading-none">Cook Life</span>
+            </a>
+            
+            <!-- Platform Title -->
+            <a href="../index.html" title="返回首页" class="text-lg font-bold text-slate-800 tracking-tight hover:text-blue-600 transition-colors">库课管理平台</a>
+
+            <!-- Big Question Bank Pill Button -->
+            <button class="ml-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-medium flex items-center gap-1.5 hover:bg-blue-100 transition-colors border border-blue-100">
+                <span>大题库</span>
+                <i class="fas fa-exchange-alt text-[10px]"></i>
+            </button>
+        </div>
+
+        <!-- Right Section: Search & Utilities & User Profile -->
+        <div class="flex items-center gap-4">
+            <!-- Search Box -->
+            <div class="relative flex items-center">
+                <i class="fas fa-search absolute left-3 text-slate-400 text-xs"></i>
+                <input type="text" placeholder="请输入功能或试题内容" class="bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-1.5 text-xs w-64 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+            </div>
+
+            <!-- Purple AI Cloud Circle Icon -->
+            <button class="w-7 h-7 bg-indigo-500 hover:bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-xs transition-transform active:scale-95" title="库AI助手">
+                <i class="fas fa-cloud text-xs"></i>
+            </button>
+
+            <!-- Utility Action Icons -->
+            <div class="flex items-center gap-3 text-slate-500 text-base">
+                <button class="hover:text-slate-800 transition-colors" title="文档"><i class="far fa-file-alt"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="待办"><i class="far fa-check-square"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="下发与同步"><i class="fas fa-cloud-upload-alt"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="消息通知"><i class="far fa-comment-dots"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="帮助中心"><i class="far fa-question-circle"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="意见反馈"><i class="far fa-edit"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="应用市场"><i class="fas fa-store"></i></button>
+            </div>
+
+            <div class="h-4 w-px bg-slate-200"></div>
+
+            <!-- User Info Dropdown -->
+            <div class="flex items-center gap-1.5 cursor-pointer group">
+                <span class="text-xs font-medium text-slate-700 group-hover:text-blue-600 transition-colors">黄飞亚</span>
+                <i class="fas fa-caret-down text-xs text-slate-400 group-hover:text-blue-600 transition-colors"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== Header 下方的 Tab 标签栏 ==================== -->
+    <div class="h-9 bg-slate-100 border-b border-slate-200 flex items-center px-2 gap-1 text-xs shrink-0 z-10">
+        <!-- Home Icon Item -->
+        <a href="../index.html" class="flex items-center gap-1 px-2.5 py-1 text-slate-600 font-medium hover:text-slate-900 cursor-pointer">
+            <i class="fas fa-home text-sm"></i>
+            <span>首页</span>
+        </a>
+
+        <div class="h-4 w-px bg-slate-300 mx-1"></div>
+
+        <!-- Left Arrow Scroll Button -->
+        <button class="w-6 h-6 bg-white border border-slate-200 rounded flex items-center justify-center text-slate-400 hover:text-slate-700 hover:border-slate-300 shadow-2xs">
+            <i class="fas fa-chevron-left text-[10px]"></i>
+        </button>
+
+        <!-- Tab Items Container -->
+        <div class="flex items-center gap-1 overflow-x-auto custom-scrollbar py-0.5">
+            <!-- Active Tab: 试卷包管理 -->
+            <div class="px-3 py-1 bg-white border border-blue-500 text-blue-600 rounded font-medium cursor-pointer shadow-2xs flex items-center gap-2">
+                <span>试卷包管理</span>
+                <i class="fas fa-times text-[10px] text-blue-400 hover:text-blue-600 transition-colors"></i>
+            </div>
+        </div>
+
+        <!-- Right Arrow Scroll Button -->
+        <button class="w-6 h-6 bg-white border border-slate-200 rounded flex items-center justify-center text-slate-400 hover:text-slate-700 hover:border-slate-300 shadow-2xs ml-auto">
+            <i class="fas fa-chevron-right text-[10px]"></i>
+        </button>
+    </div>
+
+    <!-- ==================== 主体内容区域 (一级导航 + 二级商品中心侧边栏 + 试卷包管理主视图) ==================== -->
+    <div class="flex flex-1 overflow-hidden">
+
+        <!-- 左侧一级导航 (Primary Icon Navigation Sidebar) -->
+        <aside class="w-16 bg-white border-r border-slate-200 flex flex-col items-center py-2 overflow-y-auto custom-scrollbar shrink-0 gap-1 select-none">
+            <a href="../index.html" class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-home text-base"></i>
+                <span class="text-[10px]">首页</span>
+            </a>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-cloud text-base"></i>
+                <span class="text-[10px]">库AI</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-share-nodes text-base"></i>
+                <span class="text-[10px]">运营</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-crosshairs text-base"></i>
+                <span class="text-[10px]">营销</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-bullhorn text-base"></i>
+                <span class="text-[10px]">推广</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-route text-base"></i>
+                <span class="text-[10px]">线索</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-users text-base"></i>
+                <span class="text-[10px]">CRM</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-comment-dots text-base"></i>
+                <span class="text-[10px]">SCRM</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-sitemap text-base"></i>
+                <span class="text-[10px]">渠道</span>
+            </div>
+
+            <!-- Active Selected Main Menu: 商品 (当前进入页面) -->
+            <a href="shijuanbao_guanli.html" class="primary-nav-item active w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer">
+                <i class="fas fa-shopping-bag text-base text-blue-600"></i>
+                <span class="text-[10px] text-blue-600 font-semibold">商品</span>
+            </a>
+
+            <!-- Main Menu: 题库 -->
+            <a href="shitiku.html" class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-file-signature text-base"></i>
+                <span class="text-[10px]">题库</span>
+            </a>
+
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-id-card text-base"></i>
+                <span class="text-[10px]">资讯</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-basket-shopping text-base"></i>
+                <span class="text-[10px]">采购</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-clipboard-list text-base"></i>
+                <span class="text-[10px]">订单</span>
+            </div>
+            <a href="zuoyeben.html" class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-graduation-cap text-base"></i>
+                <span class="text-[10px]">学服</span>
+            </a>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-comments text-base"></i>
+                <span class="text-[10px]">答疑</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-lightbulb text-base"></i>
+                <span class="text-[10px]">教务</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-user-tie text-base"></i>
+                <span class="text-[10px]">师资</span>
+            </div>
+            <a href="xuesheng_shuju.html" class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-chart-line text-base"></i>
+                <span class="text-[10px]">数据</span>
+            </a>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-headset text-base"></i>
+                <span class="text-[10px]">坐席</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-mobile-screen-button text-base"></i>
+                <span class="text-[10px]">设备</span>
+            </div>
+        </aside>
+
+        <!-- 左侧二级侧边栏: 商品中心 (Secondary Nav Sidebar) -->
+        <aside class="w-44 bg-white border-r border-slate-200 flex flex-col shrink-0 overflow-y-auto custom-scrollbar select-none">
+            
+            <!-- 商品中心 分组 -->
+            <div class="py-2">
+                <div class="px-4 py-2 flex items-center justify-between text-slate-400 font-medium text-[11px] cursor-pointer hover:text-slate-600">
+                    <span>商品中心</span>
+                    <i class="fas fa-chevron-up text-[10px]"></i>
+                </div>
+                <div class="space-y-0.5 px-2">
+                    <a href="javascript:void(0)" class="secondary-menu-item block px-3 py-2 rounded text-slate-700 text-xs">商品库</a>
+                    <a href="javascript:void(0)" class="secondary-menu-item block px-3 py-2 rounded text-slate-700 text-xs">网课管理</a>
+                    <a href="javascript:void(0)" class="secondary-menu-item block px-3 py-2 rounded text-slate-700 text-xs">直播管理</a>
+                    <a href="javascript:void(0)" class="secondary-menu-item block px-3 py-2 rounded text-slate-700 text-xs">电子书管理</a>
+                    <a href="javascript:void(0)" class="secondary-menu-item block px-3 py-2 rounded text-slate-700 text-xs">面授课管理</a>
+                    
+                    <!-- 试卷包管理: Active 选中状态 -->
+                    <a href="shijuanbao_guanli.html" class="secondary-menu-item active block px-3 py-2 rounded text-blue-600 bg-blue-50 font-semibold text-xs">试卷包管理</a>
+                    
+                    <a href="javascript:void(0)" class="secondary-menu-item block px-3 py-2 rounded text-slate-700 text-xs">图书管理</a>
+                    <a href="javascript:void(0)" class="secondary-menu-item block px-3 py-2 rounded text-slate-700 text-xs">套餐管理</a>
+                    <a href="javascript:void(0)" class="secondary-menu-item block px-3 py-2 rounded text-slate-700 text-xs">组合商品</a>
+                    <a href="javascript:void(0)" class="secondary-menu-item block px-3 py-2 rounded text-slate-700 text-xs">赠课库</a>
+                    <a href="javascript:void(0)" class="secondary-menu-item block px-3 py-2 rounded text-slate-700 text-xs">其他商品</a>
+                    <a href="javascript:void(0)" class="secondary-menu-item block px-3 py-2 rounded text-slate-700 text-xs">音频管理</a>
+                </div>
+            </div>
+
+            <div class="h-px bg-slate-100 mx-3 my-1"></div>
+
+            <!-- 资源库 分组 -->
+            <div class="py-2">
+                <div class="px-4 py-2 flex items-center justify-between text-slate-400 font-medium text-[11px] cursor-pointer hover:text-slate-600">
+                    <span>资源库</span>
+                    <i class="fas fa-chevron-up text-[10px]"></i>
+                </div>
+                <div class="space-y-0.5 px-2">
+                    <a href="javascript:void(0)" class="secondary-menu-item block px-3 py-2 rounded text-slate-700 text-xs">视频列表</a>
+                    <a href="javascript:void(0)" class="secondary-menu-item block px-3 py-2 rounded text-slate-700 text-xs">讲义管理</a>
+                </div>
+            </div>
+
+            <div class="h-px bg-slate-100 mx-3 my-1"></div>
+
+            <!-- 直播管理 分组 -->
+            <div class="py-2">
+                <div class="px-4 py-2 flex items-center justify-between text-slate-400 font-medium text-[11px] cursor-pointer hover:text-slate-600">
+                    <span>直播管理</span>
+                    <i class="fas fa-chevron-up text-[10px]"></i>
+                </div>
+                <div class="space-y-0.5 px-2">
+                    <a href="javascript:void(0)" class="secondary-menu-item block px-3 py-2 rounded text-slate-700 text-xs">回放重制</a>
+                    <a href="javascript:void(0)" class="secondary-menu-item block px-3 py-2 rounded text-slate-700 text-xs">直播列表</a>
+                </div>
+            </div>
+
+            <div class="h-px bg-slate-100 mx-3 my-1"></div>
+
+            <!-- 开课管理 分组 -->
+            <div class="py-2">
+                <div class="px-4 py-2 flex items-center justify-between text-slate-400 font-medium text-[11px] cursor-pointer hover:text-slate-600">
+                    <span>开课管理</span>
+                    <i class="fas fa-chevron-up text-[10px]"></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 右侧试卷包管理主视图 -->
+        <main class="flex-1 bg-[#f8fafc] flex flex-col overflow-hidden">
+
+            <!-- 主内容区域 (滚动区域) -->
+            <div class="flex-1 overflow-y-auto custom-scrollbar p-5 flex flex-col gap-4">
+
+                <!-- 顶部筛选过滤卡片 (白色背景框) -->
+                <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-2xs flex flex-col gap-3">
+                    <!-- 第一行筛选项 -->
+                    <div class="flex flex-wrap items-center gap-6">
+                        <!-- 专业分类 -->
+                        <div class="flex items-center gap-2">
+                            <span class="text-slate-600 whitespace-nowrap text-xs">专业分类</span>
+                            <div class="relative">
+                                <select id="filterCategory" class="border border-slate-200 rounded px-3 py-1.5 text-xs text-slate-700 bg-white focus:outline-none focus:border-blue-500 w-56 appearance-none cursor-pointer pr-8 shadow-2xs">
+                                    <option value="">请选择专业分类</option>
+                                    <option value="AI">AI</option>
+                                    <option value="事业单位">事业单位</option>
+                                    <option value="专升本">专升本</option>
+                                    <option value="大学英语">大学英语</option>
+                                </select>
+                                <i class="fas fa-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[10px]"></i>
+                            </div>
+                        </div>
+
+                        <!-- 试卷类型 -->
+                        <div class="flex items-center gap-2">
+                            <span class="text-slate-600 whitespace-nowrap text-xs">试卷类型</span>
+                            <div class="relative">
+                                <select id="filterPaperType" class="border border-slate-200 rounded px-3 py-1.5 text-xs text-slate-700 bg-white focus:outline-none focus:border-blue-500 w-56 appearance-none cursor-pointer pr-8 shadow-2xs">
+                                    <option value="">请选择试卷类型</option>
+                                    <option value="真题试卷">真题试卷</option>
+                                    <option value="模拟试卷">模拟试卷</option>
+                                    <option value="单元测试">单元测试</option>
+                                    <option value="摸底测试">摸底测试</option>
+                                </select>
+                                <i class="fas fa-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[10px]"></i>
+                            </div>
+                        </div>
+
+                        <!-- 试卷包ID -->
+                        <div class="flex items-center gap-2">
+                            <span class="text-slate-600 whitespace-nowrap text-xs">试卷包ID</span>
+                            <input type="text" id="filterPkgId" placeholder="请输入试卷ID" class="border border-slate-200 rounded px-3 py-1.5 text-xs text-slate-700 bg-white placeholder-slate-400 focus:outline-none focus:border-blue-500 w-64 shadow-2xs">
+                        </div>
+
+                        <!-- 查询 & 重置 & 高级筛选按钮 -->
+                        <div class="flex items-center gap-2 ml-auto">
+                            <button onclick="handleSearch()" class="px-4 py-1.5 bg-blue-600 text-white rounded text-xs font-medium hover:bg-blue-700 shadow-2xs transition-colors flex items-center gap-1.5 cursor-pointer">
+                                <i class="fas fa-search text-[11px]"></i>
+                                <span>查询</span>
+                            </button>
+                            <button onclick="handleResetFilter()" class="px-4 py-1.5 bg-white border border-slate-200 text-slate-700 rounded text-xs font-medium hover:bg-slate-50 hover:border-slate-300 shadow-2xs transition-colors cursor-pointer">
+                                <span>重置</span>
+                            </button>
+                            <button class="w-7 h-7 bg-white border border-slate-200 text-slate-500 rounded flex items-center justify-center hover:text-slate-700 hover:border-slate-300 shadow-2xs cursor-pointer" title="更多高级筛选">
+                                <i class="fas fa-filter text-[11px]"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 第二行筛选项 -->
+                    <div class="flex flex-wrap items-center gap-6">
+                        <!-- 试卷包名称 -->
+                        <div class="flex items-center gap-2">
+                            <span class="text-slate-600 whitespace-nowrap text-xs">试卷包名称</span>
+                            <input type="text" id="filterPkgName" placeholder="请输入试卷包名称" class="border border-slate-200 rounded px-3 py-1.5 text-xs text-slate-700 bg-white placeholder-slate-400 focus:outline-none focus:border-blue-500 w-56 shadow-2xs">
+                        </div>
+
+                        <!-- 复选框项 -->
+                        <div class="flex items-center gap-4 pl-2">
+                            <label class="flex items-center gap-1.5 text-slate-600 cursor-pointer select-none">
+                                <input type="checkbox" id="filterFree" class="text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                                <span>免费</span>
+                            </label>
+                            <label class="flex items-center gap-1.5 text-slate-600 cursor-pointer select-none">
+                                <input type="checkbox" id="filterPresale" class="text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                                <span>预售商品</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 操作按钮栏 (添加试卷包、批量操作等) -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <button onclick="openAddPkgModal()" class="px-3.5 py-1.5 bg-blue-600 text-white rounded text-xs font-medium hover:bg-blue-700 shadow-2xs transition-colors flex items-center gap-1.5 cursor-pointer">
+                            <i class="fas fa-plus text-xs"></i>
+                            <span>添加试卷包</span>
+                        </button>
+                        <button onclick="batchAction('上架')" class="px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded text-xs font-medium hover:bg-slate-50 hover:border-slate-300 shadow-2xs transition-colors cursor-pointer">
+                            <span>批量上架</span>
+                        </button>
+                        <button onclick="batchAction('下架')" class="px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded text-xs font-medium hover:bg-slate-50 hover:border-slate-300 shadow-2xs transition-colors cursor-pointer">
+                            <span>批量下架</span>
+                        </button>
+                        <button onclick="batchAction('导入')" class="px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded text-xs font-medium hover:bg-slate-50 hover:border-slate-300 shadow-2xs transition-colors cursor-pointer">
+                            <span>批量导入</span>
+                        </button>
+                        <button onclick="showModuleHelp()" class="px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded text-xs font-medium hover:bg-slate-50 hover:border-slate-300 shadow-2xs transition-colors flex items-center gap-1.5 cursor-pointer">
+                            <span>批量设置题库模块</span>
+                            <i class="far fa-question-circle text-slate-400 text-[11px]"></i>
+                        </button>
+                    </div>
+
+                    <!-- 右侧列配置 -->
+                    <button class="w-7 h-7 bg-white border border-slate-200 text-slate-500 rounded flex items-center justify-center hover:text-slate-700 hover:border-slate-300 shadow-2xs cursor-pointer" title="自定义列">
+                        <i class="fas fa-bars text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- 试卷包数据表格容器 -->
+                <div class="border border-slate-200 rounded-lg overflow-hidden bg-white shadow-2xs flex-1 flex flex-col">
+                    <div class="overflow-x-auto custom-scrollbar flex-1">
+                        <table class="w-full text-left border-collapse min-w-[1300px]">
+                            <thead>
+                                <tr class="bg-slate-50/90 border-b border-slate-200 text-slate-600 font-semibold text-xs">
+                                    <th class="py-3 px-3 w-10 text-center">
+                                        <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)" class="text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                                    </th>
+                                    <th class="py-3 px-3 font-medium text-slate-700 whitespace-nowrap min-w-[280px]">试卷包名称</th>
+                                    <th class="py-3 px-3 font-medium text-slate-700 whitespace-nowrap min-w-[90px]">试卷类型</th>
+                                    <th class="py-3 px-3 font-medium text-slate-700 whitespace-nowrap min-w-[100px]">专业分类</th>
+                                    <th class="py-3 px-3 font-medium text-slate-700 whitespace-nowrap min-w-[140px]">标签</th>
+                                    <th class="py-3 px-3 font-medium text-slate-700 whitespace-nowrap min-w-[100px] cursor-pointer hover:text-blue-600 select-none">
+                                        <div class="flex items-center gap-1">
+                                            <span>学员有效期</span>
+                                            <i class="fas fa-sort text-slate-400 text-[10px]"></i>
+                                        </div>
+                                    </th>
+                                    <th class="py-3 px-3 font-medium text-slate-700 whitespace-nowrap min-w-[90px]">
+                                        <div class="flex items-center gap-1">
+                                            <span>是否可售</span>
+                                            <i class="fas fa-filter text-slate-400 text-[10px]"></i>
+                                        </div>
+                                    </th>
+                                    <th class="py-3 px-3 font-medium text-slate-700 whitespace-nowrap min-w-[110px]">
+                                        <div class="flex items-center gap-1">
+                                            <span>已上架产品线</span>
+                                            <i class="fas fa-filter text-slate-400 text-[10px]"></i>
+                                        </div>
+                                    </th>
+                                    <th class="py-3 px-3 font-medium text-slate-700 whitespace-nowrap min-w-[90px]">
+                                        <div class="flex items-center gap-1">
+                                            <span>是否展示</span>
+                                            <i class="fas fa-filter text-slate-400 text-[10px]"></i>
+                                        </div>
+                                    </th>
+                                    <th class="py-3 px-3 font-medium text-slate-700 whitespace-nowrap min-w-[80px] cursor-pointer hover:text-blue-600 select-none">
+                                        <div class="flex items-center gap-1">
+                                            <span>划线价</span>
+                                            <i class="fas fa-sort text-slate-400 text-[10px]"></i>
+                                        </div>
+                                    </th>
+                                    <th class="py-3 px-3 font-medium text-slate-700 whitespace-nowrap min-w-[80px]">现价</th>
+                                    <th class="py-3 px-3 font-medium text-slate-700 whitespace-nowrap min-w-[240px] sticky right-0 bg-slate-50 z-10 shadow-[-4px_0_8px_-2px_rgba(0,0,0,0.05)]">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="packageTableBody" class="divide-y divide-slate-100 text-xs text-slate-600">
+                                <!-- 动态渲染数据 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 分页条 -->
+                <div class="flex items-center justify-end gap-3 text-xs text-slate-500 py-1 select-none shrink-0">
+                    <span id="totalCountText">共 6 条</span>
+                    
+                    <div class="relative inline-block">
+                        <select id="pageSizeSelect" onchange="changePageSize(this.value)" class="border border-slate-200 rounded px-2 py-1 text-xs text-slate-600 bg-white focus:outline-none focus:border-blue-500 cursor-pointer shadow-2xs">
+                            <option value="10" selected>10条/页</option>
+                            <option value="20">20条/页</option>
+                            <option value="50">50条/页</option>
+                        </select>
+                    </div>
+
+                    <!-- 翻页按钮组 -->
+                    <div class="flex items-center gap-1">
+                        <button onclick="prevPage()" class="w-6 h-6 border border-slate-200 rounded flex items-center justify-center text-slate-400 hover:text-slate-700 hover:border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs">
+                            <i class="fas fa-chevron-left text-[10px]"></i>
+                        </button>
+                        <button class="w-6 h-6 bg-blue-600 text-white rounded flex items-center justify-center font-medium shadow-2xs">
+                            1
+                        </button>
+                        <button onclick="nextPage()" class="w-6 h-6 border border-slate-200 rounded flex items-center justify-center text-slate-400 hover:text-slate-700 hover:border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs">
+                            <i class="fas fa-chevron-right text-[10px]"></i>
+                        </button>
+                    </div>
+
+                    <!-- 跳页输入 -->
+                    <div class="flex items-center gap-1.5">
+                        <span>前往</span>
+                        <input type="number" value="1" min="1" max="1" class="w-10 border border-slate-200 rounded px-1.5 py-1 text-center text-xs text-slate-700 focus:outline-none focus:border-blue-500 shadow-2xs">
+                        <span>页</span>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ==================== 添加试卷包弹窗 ==================== -->
+    <div id="addPkgModal" class="fixed inset-0 modal-backdrop z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg shadow-modal w-full max-w-[560px] overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white">
+                <h3 class="text-sm font-semibold text-slate-800 flex items-center gap-2">
+                    <i class="fas fa-plus-circle text-blue-600"></i>
+                    <span>添加试卷包</span>
+                </h3>
+                <button onclick="closeModal('addPkgModal')" class="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto custom-scrollbar space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-700 mb-1.5">
+                        <span class="text-rose-500 mr-0.5">*</span>试卷包名称
+                    </label>
+                    <input type="text" id="newPkgName" placeholder="请输入试卷包名称" class="w-full border border-slate-200 rounded-md px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-700 mb-1.5">专业分类</label>
+                        <select id="newPkgCategory" class="w-full border border-slate-200 rounded-md px-3 py-2 text-xs text-slate-700 bg-white focus:outline-none focus:border-blue-500">
+                            <option value="专升本">专升本</option>
+                            <option value="AI">AI</option>
+                            <option value="事业单位">事业单位</option>
+                            <option value="大学英语">大学英语</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-700 mb-1.5">学员有效期 (天)</label>
+                        <input type="number" id="newPkgValidDays" value="365" class="w-full border border-slate-200 rounded-md px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-700 mb-1.5">划线价 (元)</label>
+                        <input type="number" id="newPkgOriginPrice" value="0.00" step="0.01" class="w-full border border-slate-200 rounded-md px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-700 mb-1.5">现价 (元)</label>
+                        <input type="number" id="newPkgPrice" value="0.00" step="0.01" class="w-full border border-slate-200 rounded-md px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+                <div class="flex items-center gap-6 pt-1">
+                    <label class="flex items-center gap-2 text-slate-700 cursor-pointer">
+                        <input type="checkbox" id="newPkgSaleable" checked class="text-blue-600 rounded">
+                        <span>是否可售</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-slate-700 cursor-pointer">
+                        <input type="checkbox" id="newPkgShow" checked class="text-blue-600 rounded">
+                        <span>是否展示</span>
+                    </label>
+                </div>
+            </div>
+            <div class="px-6 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3">
+                <button onclick="closeModal('addPkgModal')" class="px-4 py-1.5 border border-slate-300 rounded-md text-slate-600 hover:bg-slate-100 text-xs font-medium">取消</button>
+                <button onclick="submitAddPkg()" class="px-4 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-xs font-medium">确定保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 查看学员弹窗 ==================== -->
+    <div id="studentListModal" class="fixed inset-0 modal-backdrop z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg shadow-modal w-full max-w-[640px] overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white">
+                <h3 class="text-sm font-semibold text-slate-800 flex items-center gap-2">
+                    <i class="fas fa-user-graduate text-blue-600"></i>
+                    <span id="studentModalTitle">查看已购买/已开通学员</span>
+                </h3>
+                <button onclick="closeModal('studentListModal')" class="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto custom-scrollbar">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-600 border-b border-slate-200">
+                            <th class="py-2.5 px-3">学员姓名</th>
+                            <th class="py-2.5 px-3">手机号</th>
+                            <th class="py-2.5 px-3">开通时间</th>
+                            <th class="py-2.5 px-3">到期时间</th>
+                            <th class="py-2.5 px-3">状态</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-slate-700">
+                        <tr>
+                            <td class="py-2.5 px-3 font-medium">张晓峰</td>
+                            <td class="py-2.5 px-3">138****9281</td>
+                            <td class="py-2.5 px-3">2026-08-20</td>
+                            <td class="py-2.5 px-3">2027-08-20</td>
+                            <td class="py-2.5 px-3"><span class="px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-full text-[10px]">有效</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-2.5 px-3 font-medium">李明华</td>
+                            <td class="py-2.5 px-3">159****4192</td>
+                            <td class="py-2.5 px-3">2026-08-22</td>
+                            <td class="py-2.5 px-3">2027-08-22</td>
+                            <td class="py-2.5 px-3"><span class="px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-full text-[10px]">有效</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-2.5 px-3 font-medium">王雪娇</td>
+                            <td class="py-2.5 px-3">186****7730</td>
+                            <td class="py-2.5 px-3">2026-08-25</td>
+                            <td class="py-2.5 px-3">2027-08-25</td>
+                            <td class="py-2.5 px-3"><span class="px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-full text-[10px]">有效</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="px-6 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-end">
+                <button onclick="closeModal('studentListModal')" class="px-4 py-1.5 bg-blue-600 text-white rounded text-xs font-medium hover:bg-blue-700">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- ==================== JavaScript 交互逻辑 ==================== -->
+    <script>
+        // 初始数据源（精确对应截图中的数据）
+        let packageList = [
+            {
+                id: '647494883005435904',
+                name: '【灰度】AI大模型预训练一阶段摸底',
+                type: '-',
+                category: 'AI',
+                tags: '地区：全国; ...',
+                validDays: 365,
+                saleable: '否',
+                productLine: '-',
+                show: '是',
+                originPrice: '0.00',
+                price: '0.00',
+                iconType: 'blue-play'
+            },
+            {
+                id: '626054664865042432',
+                name: '2024年河南招教考试',
+                type: '-',
+                category: '事业单位...',
+                tags: '地区：河南省...',
+                validDays: 365,
+                saleable: '是',
+                productLine: '-',
+                show: '是',
+                originPrice: '0.00',
+                price: '0.00',
+                iconType: 'red-book'
+            },
+            {
+                id: '604178332060864512',
+                name: '新增试卷',
+                type: '-',
+                category: '专升本',
+                tags: '科目：公共英语',
+                validDays: 365,
+                saleable: '否',
+                productLine: '-',
+                show: '否',
+                originPrice: '0.00',
+                price: '0.00',
+                iconType: 'blue-play'
+            },
+            {
+                id: '585785993849888768',
+                name: '2023河南语文',
+                type: '真题试卷',
+                category: '大学英语...',
+                tags: '-',
+                validDays: 365,
+                saleable: '否',
+                productLine: '-',
+                show: '是',
+                originPrice: '0.00',
+                price: '0.00',
+                iconType: 'blue-play'
+            },
+            {
+                id: '581547478419714048',
+                name: '2023河南数学',
+                type: '-',
+                category: '专升本',
+                tags: '-',
+                validDays: 365,
+                saleable: '否',
+                productLine: '-',
+                show: '是',
+                originPrice: '0.00',
+                price: '0.00',
+                iconType: 'blue-play'
+            },
+            {
+                id: '570977140150099968',
+                name: '2023河南英语',
+                type: '-',
+                category: '专升本',
+                tags: '地区：河南省...',
+                validDays: 1,
+                saleable: '否',
+                productLine: '-',
+                show: '是',
+                originPrice: '0.01',
+                price: '0.01',
+                iconType: 'cartoon-cat'
+            }
+        ];
+
+        let selectedIds = new Set();
+
+        // 页面初始化
+        window.addEventListener('DOMContentLoaded', () => {
+            renderPackageTable();
+        });
+
+        // 渲染试卷包表格
+        function renderPackageTable(data = packageList) {
+            const tbody = document.getElementById('packageTableBody');
+            if (!tbody) return;
+
+            document.getElementById('totalCountText').innerText = `共 ${data.length} 条`;
+
+            if (data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="12" class="py-12 text-center text-slate-400">
+                            <i class="fas fa-folder-open text-3xl mb-2 block opacity-40"></i>
+                            <p>暂无符合条件的试卷包记录</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = data.map((pkg, idx) => {
+                const isSelected = selectedIds.has(pkg.id);
+                
+                // 图标渲染
+                let iconHtml = '';
+                if (pkg.iconType === 'red-book') {
+                    iconHtml = `
+                        <div class="w-9 h-9 rounded bg-[#d92d20] text-white flex flex-col items-center justify-center p-0.5 shrink-0 shadow-2xs">
+                            <span class="text-[7px] scale-90 leading-none">2024年教师招聘考试</span>
+                            <span class="text-[9px] font-bold mt-0.5 leading-none">申论范文</span>
+                        </div>
+                    `;
+                } else if (pkg.iconType === 'cartoon-cat') {
+                    iconHtml = `
+                        <div class="w-9 h-9 rounded bg-blue-100 text-blue-500 flex items-center justify-center shrink-0 shadow-2xs border border-blue-200">
+                            <i class="fas fa-cat text-lg"></i>
+                        </div>
+                    `;
+                } else {
+                    iconHtml = `
+                        <div class="w-9 h-9 rounded bg-slate-100 text-slate-400 flex items-center justify-center shrink-0 border border-slate-200">
+                            <i class="fas fa-play-circle text-lg text-slate-400"></i>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <tr class="hover:bg-slate-50/80 transition-colors group ${isSelected ? 'bg-blue-50/30' : ''}">
+                        <td class="py-3 px-3 text-center">
+                            <input type="checkbox" value="${pkg.id}" ${isSelected ? 'checked' : ''} onchange="toggleSelectOne('${pkg.id}')" class="text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                        </td>
+                        <td class="py-3 px-3 text-slate-800 font-medium">
+                            <div class="flex items-center gap-2.5">
+                                ${iconHtml}
+                                <div class="flex flex-col">
+                                    <a href="shijuan_guanli.html" class="text-blue-600 hover:text-blue-700 hover:underline font-medium leading-tight line-clamp-1" title="${pkg.name}">
+                                        ${pkg.name}
+                                    </a>
+                                    <div class="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
+                                        <span>ID: ${pkg.id}</span>
+                                        <button onclick="copyText('${pkg.id}')" class="text-slate-400 hover:text-blue-600 transition-colors" title="复制ID">
+                                            <i class="far fa-copy text-[10px]"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-3 px-3 text-slate-600 whitespace-nowrap">${pkg.type}</td>
+                        <td class="py-3 px-3 text-slate-600 whitespace-nowrap">${pkg.category}</td>
+                        <td class="py-3 px-3 text-slate-600 whitespace-nowrap" title="${pkg.tags}">${pkg.tags}</td>
+                        <td class="py-3 px-3 text-slate-700 whitespace-nowrap font-medium">${pkg.validDays}</td>
+                        <td class="py-3 px-3 text-slate-600 whitespace-nowrap">${pkg.saleable}</td>
+                        <td class="py-3 px-3 text-slate-600 whitespace-nowrap">${pkg.productLine}</td>
+                        <td class="py-3 px-3 text-slate-600 whitespace-nowrap">${pkg.show}</td>
+                        <td class="py-3 px-3 text-slate-700 whitespace-nowrap">${pkg.originPrice}</td>
+                        <td class="py-3 px-3 text-slate-700 whitespace-nowrap">${pkg.price}</td>
+                        <td class="py-3 px-3 whitespace-nowrap sticky right-0 ${isSelected ? 'bg-[#f3f7fc]' : 'bg-white'} group-hover:bg-slate-50 transition-colors shadow-[-4px_0_8px_-2px_rgba(0,0,0,0.05)]">
+                            <div class="flex items-center gap-2 text-blue-600 font-medium">
+                                <a href="shijuan_guanli.html" class="hover:underline hover:text-blue-700 cursor-pointer">试卷管理</a>
+                                <button onclick="copyPackage(${idx})" class="hover:underline hover:text-blue-700 cursor-pointer">复制</button>
+                                <button onclick="viewStudents('${pkg.name}')" class="hover:underline hover:text-blue-700 cursor-pointer">查看学员</button>
+                                <button onclick="editPackage(${idx})" class="hover:underline hover:text-blue-700 cursor-pointer">编辑</button>
+                                <button onclick="deletePackage(${idx})" class="hover:underline hover:text-rose-600 cursor-pointer">删除</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 筛选与搜索
+        function handleSearch() {
+            const cat = document.getElementById('filterCategory').value;
+            const paperType = document.getElementById('filterPaperType').value;
+            const pkgId = document.getElementById('filterPkgId').value.trim();
+            const pkgName = document.getElementById('filterPkgName').value.trim();
+
+            let filtered = packageList.filter(item => {
+                let match = true;
+                if (cat && !item.category.includes(cat)) match = false;
+                if (paperType && !item.type.includes(paperType)) match = false;
+                if (pkgId && !item.id.includes(pkgId)) match = false;
+                if (pkgName && !item.name.toLowerCase().includes(pkgName.toLowerCase())) match = false;
+                return match;
+            });
+
+            renderPackageTable(filtered);
+            showToast(`已按条件筛选出 ${filtered.length} 条记录`);
+        }
+
+        // 重置筛选
+        function handleResetFilter() {
+            document.getElementById('filterCategory').value = '';
+            document.getElementById('filterPaperType').value = '';
+            document.getElementById('filterPkgId').value = '';
+            document.getElementById('filterPkgName').value = '';
+            document.getElementById('filterFree').checked = false;
+            document.getElementById('filterPresale').checked = false;
+            renderPackageTable(packageList);
+            showToast('已重置筛选条件');
+        }
+
+        // 多选操作
+        function toggleSelectAll(checkbox) {
+            if (checkbox.checked) {
+                packageList.forEach(p => selectedIds.add(p.id));
+            } else {
+                selectedIds.clear();
+            }
+            renderPackageTable();
+        }
+
+        function toggleSelectOne(id) {
+            if (selectedIds.has(id)) {
+                selectedIds.delete(id);
+            } else {
+                selectedIds.add(id);
+            }
+            const allCheck = document.getElementById('selectAllCheckbox');
+            if (allCheck) {
+                allCheck.checked = (selectedIds.size === packageList.length && packageList.length > 0);
+            }
+            renderPackageTable();
+        }
+
+        // 批量操作
+        function batchAction(actionName) {
+            if (selectedIds.size === 0) {
+                showToast(`请先勾选需要批量${actionName}的试卷包`, 'warning');
+                return;
+            }
+            showToast(`已对选中的 ${selectedIds.size} 个试卷包执行批量${actionName}`);
+        }
+
+        function showModuleHelp() {
+            showToast('题库模块设置用于配置试卷在学员端的展示归类及刷题规则', 'info');
+        }
+
+        // 添加试卷包
+        function openAddPkgModal() {
+            document.getElementById('newPkgName').value = '';
+            openModal('addPkgModal');
+        }
+
+        function submitAddPkg() {
+            const name = (document.getElementById('newPkgName').value || '').trim();
+            if (!name) {
+                showToast('请输入试卷包名称', 'warning');
+                return;
+            }
+            const category = document.getElementById('newPkgCategory').value;
+            const validDays = parseInt(document.getElementById('newPkgValidDays').value) || 365;
+            const originPrice = parseFloat(document.getElementById('newPkgOriginPrice').value || 0).toFixed(2);
+            const price = parseFloat(document.getElementById('newPkgPrice').value || 0).toFixed(2);
+            const saleable = document.getElementById('newPkgSaleable').checked ? '是' : '否';
+            const show = document.getElementById('newPkgShow').checked ? '是' : '否';
+
+            const newPkg = {
+                id: String(Date.now()) + '00',
+                name: name,
+                type: '-',
+                category: category,
+                tags: '地区：全国',
+                validDays: validDays,
+                saleable: saleable,
+                productLine: '-',
+                show: show,
+                originPrice: originPrice,
+                price: price,
+                iconType: 'blue-play'
+            };
+
+            packageList.unshift(newPkg);
+            closeModal('addPkgModal');
+            renderPackageTable();
+            showToast(`已成功创建试卷包「${name}」`);
+        }
+
+        // 复制试卷包
+        function copyPackage(index) {
+            const target = packageList[index];
+            if (!target) return;
+            const copyItem = {
+                ...target,
+                id: String(Date.now()),
+                name: target.name + ' (副本)'
+            };
+            packageList.splice(index + 1, 0, copyItem);
+            renderPackageTable();
+            showToast(`已复制生成「${copyItem.name}」`);
+        }
+
+        // 查看学员
+        function viewStudents(pkgName) {
+            document.getElementById('studentModalTitle').innerText = `已开通学员 - ${pkgName}`;
+            openModal('studentListModal');
+        }
+
+        // 编辑试卷包
+        function editPackage(index) {
+            const target = packageList[index];
+            if (!target) return;
+            const newName = prompt('修改试卷包名称：', target.name);
+            if (newName && newName.trim()) {
+                target.name = newName.trim();
+                renderPackageTable();
+                showToast('已更新试卷包名称');
+            }
+        }
+
+        // 删除试卷包
+        function deletePackage(index) {
+            const target = packageList[index];
+            if (!target) return;
+            if (confirm(`确定要删除试卷包「${target.name}」吗？`)) {
+                packageList.splice(index, 1);
+                selectedIds.delete(target.id);
+                renderPackageTable();
+                showToast('已删除该试卷包');
+            }
+        }
+
+        // 复制文本
+        function copyText(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(`已复制试卷包ID: ${text}`);
+                });
+            } else {
+                showToast(`已复制试卷包ID: ${text}`);
+            }
+        }
+
+        // 弹窗通用控制
+        function openModal(id) {
+            document.getElementById(id)?.classList.remove('hidden');
+        }
+        function closeModal(id) {
+            document.getElementById(id)?.classList.add('hidden');
+        }
+
+        // Toast 消息提示
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            let iconClass = 'fas fa-check-circle text-emerald-500';
+            let borderClass = 'border-slate-200';
+            if (type === 'warning') {
+                iconClass = 'fas fa-exclamation-circle text-amber-500';
+            } else if (type === 'info') {
+                iconClass = 'fas fa-info-circle text-blue-500';
+            }
+
+            toast.className = `flex items-center gap-2 bg-white text-slate-800 text-xs px-4 py-2.5 rounded-lg shadow-lg border ${borderClass} animate-fade-in transition-all`;
+            toast.innerHTML = `
+                <i class="${iconClass} text-sm"></i>
+                <span class="font-medium">${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-10px)';
+                setTimeout(() => toast.remove(), 250);
+            }, 2500);
+        }
+    </script>
+</body>
+</html>

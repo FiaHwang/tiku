@@ -60,7 +60,7 @@
         }
 
         .modal-backdrop {
-            background-color: rgba(15, 23, 42, 0.4);
+            background-color: rgba(15, 23, 42, 0.45);
             backdrop-filter: blur(2px);
         }
 
@@ -84,6 +84,20 @@
         .tool-btn.active {
             background-color: #eff6ff;
             color: #2563eb;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .animate-scale-in {
+            animation: scaleIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
     </style>
 </head>
@@ -160,10 +174,16 @@
 
         <!-- Tab Items Container -->
         <div class="flex items-center gap-1 overflow-x-auto custom-scrollbar py-0.5">
+            <!-- 作业列表 Tab (带有关闭叉号) -->
+            <a href="zuoyeben.html" class="px-3 py-1 bg-slate-200/70 hover:bg-slate-200 text-slate-600 rounded font-normal cursor-pointer transition-colors flex items-center gap-1.5" title="关闭作业列表">
+                <span>作业列表</span>
+                <i class="fas fa-times text-[10px] text-slate-400 hover:text-slate-600"></i>
+            </a>
+
             <!-- Active Tab: 导入试卷 -->
             <div class="px-3 py-1 bg-white border border-blue-500 text-blue-600 rounded font-medium cursor-pointer shadow-2xs flex items-center gap-2">
-                <span>导入试卷</span>
-                <a href="shijuanku.html" title="关闭并返回试卷库" class="text-blue-400 hover:text-blue-700 transition-colors">
+                <span id="currentTabLabel">导入试卷</span>
+                <a href="zuoyeben.html" title="关闭并返回作业本" class="text-blue-400 hover:text-blue-700 transition-colors">
                     <i class="fas fa-times text-[10px]"></i>
                 </a>
             </div>
@@ -175,7 +195,7 @@
         </button>
     </div>
 
-    <!-- 主体内容区域 (双栏导航 + 导入试卷工作台) -->
+    <!-- 主体内容区域 (双栏导航 + 布置作业工作台) -->
     <div class="flex flex-1 overflow-hidden">
 
         <!-- 左侧一级导航 (Primary Icon Navigation Sidebar) -->
@@ -220,13 +240,10 @@
                 <i class="fas fa-shopping-bag text-base"></i>
                 <span class="text-[10px]">商品</span>
             </a>
-
-            <!-- Active Selected Main Menu: 题库 -->
-            <div class="primary-nav-item active w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer">
-                <i class="fas fa-file-signature text-base text-blue-600"></i>
-                <span class="text-[10px] text-blue-600 font-semibold">题库</span>
-            </div>
-
+            <a href="shitiku.html" class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-file-signature text-base"></i>
+                <span class="text-[10px]">题库</span>
+            </a>
             <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
                 <i class="fas fa-id-card text-base"></i>
                 <span class="text-[10px]">资讯</span>
@@ -239,10 +256,13 @@
                 <i class="fas fa-clipboard-list text-base"></i>
                 <span class="text-[10px]">订单</span>
             </div>
-            <a href="zuoyeben.html" class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
-                <i class="fas fa-graduation-cap text-base"></i>
-                <span class="text-[10px]">学服</span>
+
+            <!-- Active Selected Main Menu: 学服 -->
+            <a href="zuoyeben.html" class="primary-nav-item active w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer">
+                <i class="fas fa-graduation-cap text-base text-blue-600"></i>
+                <span class="text-[10px] text-blue-600 font-semibold">学服</span>
             </a>
+
             <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
                 <i class="fas fa-comments text-base"></i>
                 <span class="text-[10px]">答疑</span>
@@ -269,144 +289,120 @@
             </div>
         </aside>
 
-        <!-- 左侧二级子导航 (Secondary Sub-Navigation Sidebar) -->
-        <aside class="w-32 bg-white border-r border-slate-200 overflow-y-auto custom-scrollbar py-3 px-2 flex flex-col gap-2.5 shrink-0">
+        <!-- 左侧二级子导航 (Secondary Sub-Navigation Sidebar - 保持与zuoyeben.html完全一致) -->
+        <aside class="w-36 bg-white border-r border-slate-200 overflow-y-auto custom-scrollbar py-3 px-2 flex flex-col gap-2 shrink-0 select-none">
             
-            <!-- Group 1: 试题管理 -->
+            <!-- Group 1: 学员 (默认展开) -->
             <div class="space-y-1">
-                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleMenu('group-1')">
-                    <span>试题管理</span>
-                    <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-1"></i>
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleSubMenu('menu-xuesheng')">
+                    <span>学员</span>
+                    <i class="fas fa-chevron-up text-[9px] transition-transform duration-200" id="arrow-menu-xuesheng"></i>
                 </div>
-                <div class="space-y-0.5" id="group-1">
-                    <a href="shitiku.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">
-                        试题库
-                    </a>
-                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
-                        错题反馈
-                    </div>
-                    <a href="shuati_zuti.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">
-                        刷题版本
-                    </a>
-                    <a href="ai_caozuo_rizhi.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">
-                        AI操作日志
-                    </a>
-                </div>
-            </div>
-
-            <!-- Group 2: 试卷管理 -->
-            <div class="space-y-1">
-                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleMenu('group-2')">
-                    <span>试卷管理</span>
-                    <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-2"></i>
-                </div>
-                <div class="space-y-0.5" id="group-2">
-                    <a href="shijuanku.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">
-                        试卷库
-                    </a>
-                    <a href="wode_shijuan.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">
-                        我的试卷
-                    </a>
-                </div>
-            </div>
-
-            <!-- Group 3: 题库运营 -->
-            <div class="space-y-1">
-                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleMenu('group-3')">
-                    <span>题库运营</span>
-                    <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-3"></i>
-                </div>
-                <div class="space-y-0.5" id="group-3">
-                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
-                        试卷考试
-                    </div>
-                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
-                        章节刷题
-                    </div>
-                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
-                        每日练习
-                    </div>
-                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
-                        固定刷题
-                    </div>
-                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
-                        强化通关练
-                    </div>
-                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
-                        赠题列表
-                    </div>
-                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
-                        热门标签
-                    </div>
-                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
-                        测评考试
-                    </div>
-                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
-                        知识点练习
-                    </div>
-                    <a href="xuesheng_shuju.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">
-                        学生数据看板
-                    </a>
-                    <a href="xuesheng_shuju2.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">
-                        学生数据看板2
-                    </a>
-                </div>
-            </div>
-
-            <!-- Group 4: 资源配置 -->
-            <div class="space-y-1">
-                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleMenu('group-4')">
-                    <span>资源配置</span>
-                    <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-4"></i>
-                </div>
-                <div class="space-y-0.5" id="group-4">
-                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
-                        知识点体系
-                    </div>
-                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
-                        教材章节
+                <div class="space-y-0.5" id="menu-xuesheng">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        学员课程
                     </div>
                 </div>
             </div>
 
-            <!-- Group 5: 题库设置 -->
+            <!-- Group 2: 数据看板 (默认展开) -->
             <div class="space-y-1">
-                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleMenu('group-5')">
-                    <span>题库设置</span>
-                    <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-5"></i>
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleSubMenu('menu-shuju')">
+                    <span>数据看板</span>
+                    <i class="fas fa-chevron-up text-[9px] transition-transform duration-200" id="arrow-menu-shuju"></i>
                 </div>
-                <div class="space-y-0.5" id="group-5">
-                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
-                        题型管理
-                    </div>
-                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
-                        试题难度
-                    </div>
-                    <a href="shijuan_leixing.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">
-                        试卷类型
-                    </a>
-                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
-                        错题类型
-                    </div>
-                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
-                        字段设置
-                    </div>
-                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
-                        赠题原因
+                <div class="space-y-0.5" id="menu-shuju">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        学管师看板
                     </div>
                 </div>
             </div>
+
+            <!-- Group 3: 服务 (默认展开) -->
+            <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleSubMenu('menu-fuwu')">
+                    <span>服务</span>
+                    <i class="fas fa-chevron-up text-[9px] transition-transform duration-200" id="arrow-menu-fuwu"></i>
+                </div>
+                <div class="space-y-0.5" id="menu-fuwu">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        约课管理
+                    </div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        直播跟课
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 4: 工具 (默认展开) -->
+            <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleSubMenu('menu-gongju')">
+                    <span>工具</span>
+                    <i class="fas fa-chevron-up text-[9px] transition-transform duration-200" id="arrow-menu-gongju"></i>
+                </div>
+                <div class="space-y-0.5" id="menu-gongju">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        学习计划
+                    </div>
+                    <!-- 作业本 (选中激活) -->
+                    <a href="zuoyeben.html" class="secondary-subitem active px-2.5 py-1.5 rounded-md text-xs bg-blue-50 text-blue-600 font-semibold cursor-pointer block whitespace-nowrap">
+                        作业本
+                    </a>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        单词任务
+                    </div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        资料包
+                    </div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        AI督学
+                    </div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        学员回访
+                    </div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        问卷调查
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 5: 设置 (默认展开) -->
+            <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleSubMenu('menu-shezhi')">
+                    <span>设置</span>
+                    <i class="fas fa-chevron-up text-[9px] transition-transform duration-200" id="arrow-menu-shezhi"></i>
+                </div>
+                <div class="space-y-0.5" id="menu-shezhi">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        学管师管理
+                    </div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        服务商品
+                    </div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        标签管理
+                    </div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        直播排班
+                    </div>
+                </div>
+            </div>
+
         </aside>
 
-        <!-- 右侧主工作台：导入试卷双分栏内容 -->
+        <!-- 右侧主工作台：布置作业双分栏内容 -->
         <main class="flex-1 p-3.5 flex gap-3.5 overflow-hidden bg-slate-100">
             
             <!-- 左侧：录题区 -->
             <section class="w-1/2 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-col overflow-hidden">
                 <!-- 录题区头部 -->
                 <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between shrink-0">
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-3">
                         <h2 class="font-bold text-slate-800 text-sm tracking-tight">录题区</h2>
+                        <!-- 增加的「切换作业模式」按钮 -->
+                        <button type="button" onclick="openSwitchModeModal()" class="text-xs text-blue-600 hover:text-blue-700 hover:underline transition-colors font-medium cursor-pointer flex items-center gap-1">
+                            <span>切换作业模式</span>
+                        </button>
                     </div>
                     <div class="flex items-center gap-2.5">
                         <button type="button" onclick="loadSampleQuestions()" class="text-xs text-blue-600 hover:text-blue-700 hover:underline transition-colors font-medium">查看示例</button>
@@ -417,13 +413,13 @@
 
                         <!-- 隐藏的文件选择器 -->
                         <input type="file" id="manualFileInput" accept=".txt,.doc,.docx,.pdf" class="hidden" onchange="handleManualFileUpload(event)">
-                        <button id="manualUploadBtn" type="button" onclick="document.getElementById('manualFileInput').click()" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium shadow-2xs transition-colors flex items-center gap-1">
+                        <button id="manualUploadBtn" type="button" onclick="document.getElementById('manualFileInput').click()" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium shadow-2xs transition-colors flex items-center gap-1 cursor-pointer">
                             <i class="fas fa-upload text-[10px]"></i>
                             <span>试题上传</span>
                         </button>
 
                         <!-- 试题上传右侧的 AI录题 按钮 (录题区有内容时与试题上传一起隐藏) -->
-                        <button id="aiTypesetTriggerBtn" type="button" onclick="openAiTypesetModal()" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-medium shadow-2xs transition-colors flex items-center gap-1.5">
+                        <button id="aiTypesetTriggerBtn" type="button" onclick="openAiTypesetModal()" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-medium shadow-2xs transition-colors flex items-center gap-1.5 cursor-pointer">
                             <span>AI录题</span>
                         </button>
                     </div>
@@ -485,12 +481,14 @@
             <section class="w-1/2 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-col overflow-hidden">
                 <!-- 识别结果头部 -->
                 <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between shrink-0">
-                    <h2 class="font-bold text-slate-800 text-sm tracking-tight">识别结果</h2>
                     <div class="flex items-center gap-2">
-                        <button type="button" onclick="saveDraft()" class="px-3.5 py-1 text-xs text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 rounded font-medium transition-colors">
+                        <h2 class="font-bold text-slate-800 text-sm tracking-tight">识别结果</h2>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="saveDraft()" class="px-3.5 py-1 text-xs text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 rounded font-medium transition-colors cursor-pointer">
                             暂存
                         </button>
-                        <button type="button" onclick="confirmImport()" class="px-4 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium shadow-2xs transition-colors">
+                        <button type="button" onclick="confirmImport()" class="px-4 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium shadow-2xs transition-colors cursor-pointer">
                             确定导入
                         </button>
                     </div>
@@ -519,9 +517,102 @@
         </main>
     </div>
 
-    <!-- AI排版录题 Modal (跟试题库完全一致) -->
+    <!-- ==================== 切换作业模式 弹窗 (与截图100%对齐) ==================== -->
+    <div id="switchModeModal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl border border-slate-200/80 w-full max-w-[500px] overflow-hidden flex flex-col animate-scale-in">
+            <!-- Modal Header: 标题 + 关闭叉号 -->
+            <div class="px-6 pt-5 pb-3 flex items-center justify-between bg-white">
+                <h3 class="text-base font-bold text-slate-800 tracking-tight">切换作业模式</h3>
+                <button type="button" onclick="closeSwitchModeModal()" class="text-slate-400 hover:text-slate-600 p-1 text-sm leading-none transition-colors cursor-pointer" title="关闭">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="px-6 py-3 space-y-4 text-xs overflow-y-auto custom-scrollbar max-h-[75vh]">
+                <!-- 黄色/米橙色 提示卡片 -->
+                <div class="bg-[#fff8ee] border border-[#fde8cd] rounded-lg p-3.5 text-slate-700 leading-relaxed space-y-1.5">
+                    <div class="flex items-center gap-2 text-amber-600 font-bold text-xs">
+                        <i class="fas fa-exclamation-circle text-amber-500 text-sm"></i>
+                        <span>提示</span>
+                    </div>
+                    <div class="text-[12px] text-slate-700 space-y-1 pl-0.5">
+                        <p>1.切换作业模式将清空原作业模式已录入的内容，请谨慎操作；</p>
+                        <p>2.评分方式涉及AI批改时，“上传文件”作业模式无法选中。</p>
+                    </div>
+                </div>
+
+                <!-- 作业模式 单选组 -->
+                <div class="pt-1">
+                    <label class="block text-slate-800 mb-2 font-normal text-xs">
+                        <span class="text-rose-500 mr-1">*</span>作业模式
+                    </label>
+                    <div class="space-y-3 pl-0.5">
+                        <label class="flex items-center gap-2.5 text-xs text-slate-800 cursor-pointer select-none">
+                            <input type="radio" name="switchHomeworkMode" value="手动布置-批量建题" checked onchange="handleHomeworkModeChange(this.value)" class="text-blue-600 focus:ring-blue-500 border-slate-300 w-4 h-4 cursor-pointer">
+                            <span>手动布置-批量建题</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 text-xs text-slate-600 cursor-pointer select-none">
+                            <input type="radio" name="switchHomeworkMode" value="手动布置-题库导入" onchange="handleHomeworkModeChange(this.value)" class="text-blue-600 focus:ring-blue-500 border-slate-300 w-4 h-4 cursor-pointer">
+                            <span>手动布置-题库导入</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 text-xs text-slate-600 cursor-pointer select-none">
+                            <input type="radio" name="switchHomeworkMode" value="上传文件" onchange="handleHomeworkModeChange(this.value)" class="text-blue-600 focus:ring-blue-500 border-slate-300 w-4 h-4 cursor-pointer">
+                            <span>上传文件</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 专业分类 下拉选择 -->
+                <div id="switchCategoryContainer">
+                    <label class="block text-slate-800 mb-1.5 font-normal text-xs">
+                        <span class="text-rose-500 mr-1">*</span>专业分类
+                    </label>
+                    <div class="relative">
+                        <select id="switchModeCategory" onchange="updateSwitchSubjectOptions(this.value)" class="w-full border border-slate-200 rounded px-3 py-2 text-xs text-slate-700 bg-white appearance-none focus:outline-none focus:border-blue-500 hover:border-slate-300 transition-colors pr-8 cursor-pointer shadow-2xs">
+                            <option value="专升本" selected>专升本</option>
+                            <option value="AI">AI</option>
+                            <option value="事业单位">事业单位</option>
+                            <option value="大学英语">大学英语</option>
+                        </select>
+                        <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[10px]"></i>
+                    </div>
+                </div>
+
+                <!-- 科目 下拉选择 -->
+                <div id="switchSubjectContainer">
+                    <label class="block text-slate-800 mb-1.5 font-normal text-xs">
+                        <span class="text-rose-500 mr-1">*</span>科目
+                    </label>
+                    <div class="relative">
+                        <select id="switchModeSubject" class="w-full border border-slate-200 rounded px-3 py-2 text-xs text-slate-700 bg-white appearance-none focus:outline-none focus:border-blue-500 hover:border-slate-300 transition-colors pr-8 cursor-pointer shadow-2xs">
+                            <option value="" disabled selected class="text-slate-400">请选择科目</option>
+                            <option value="公共英语">公共英语</option>
+                            <option value="高等数学">高等数学</option>
+                            <option value="大学语文">大学语文</option>
+                            <option value="管理学">管理学</option>
+                            <option value="教育理论">教育理论</option>
+                        </select>
+                        <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[10px]"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer: 取消 / 确定 -->
+            <div class="px-6 py-4 border-t border-slate-100 bg-white flex items-center justify-end gap-3">
+                <button type="button" onclick="closeSwitchModeModal()" class="px-6 py-2 border border-slate-300 rounded text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-400 transition-colors text-xs font-normal cursor-pointer">
+                    取消
+                </button>
+                <button type="button" onclick="confirmSwitchMode()" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-xs font-normal shadow-xs cursor-pointer">
+                    确 定
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI排版录题 Modal (保持完整可用) -->
     <div id="aiTypesetModal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-backdrop">
-        <div class="bg-white rounded-xl shadow-2xl border border-slate-200 w-11/12 max-w-xl max-h-[90vh] flex flex-col overflow-hidden">
+        <div class="bg-white rounded-xl shadow-2xl border border-slate-200 w-11/12 max-w-xl max-h-[90vh] flex flex-col overflow-hidden animate-scale-in">
             <!-- Modal Header -->
             <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                 <div class="flex items-center gap-2">
@@ -561,7 +652,7 @@
                                 <span class="text-slate-400"> 或将文件直接拖拽至此处</span>
                             </div>
                             
-                            <!-- 支持的文件格式徽章: PDF -> Word -> Excel -> TXT -> 图片 -->
+                            <!-- 支持的文件格式徽章 -->
                             <div class="flex flex-wrap items-center justify-center gap-1.5 mt-1">
                                 <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-rose-50 text-rose-600 border border-rose-200">PDF (.pdf)</span>
                                 <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-600 border border-blue-200">Word (.doc / .docx)</span>
@@ -607,14 +698,14 @@
                             <span>录题进度提示</span>
                             <span class="bg-blue-200 text-blue-800 text-[10px] px-1.5 py-0.2 rounded font-normal">后台异步解析</span>
                         </div>
-                        <div>提交后系统将启动 AI 智能识别。您可以随时前往左侧菜单<a href="ai_caozuo_rizhi.html" class="text-blue-700 font-semibold underline underline-offset-2 hover:text-blue-800">「AI操作日志-AI录题」</a>查看任务状态。</div>
+                        <div>提交后系统将启动 AI 智能识别。您可以随时前往左侧菜单「AI操作日志」查看任务状态。</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Modal Footer (确定按钮在没有添加文件时禁用) -->
+            <!-- Modal Footer -->
             <div class="px-6 py-4 border-t border-slate-100 bg-white flex items-center justify-end gap-2.5">
-                <button onclick="closeAiTypesetModal()" class="px-4 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-lg text-xs font-medium transition-colors">取消</button>
+                <button onclick="closeAiTypesetModal()" class="px-4 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-lg text-xs font-medium transition-colors cursor-pointer">取消</button>
                 <button id="aiTypesetSubmitBtn" onclick="submitAiTypesetPaper()" disabled class="px-5 py-1.5 bg-slate-200 text-slate-400 rounded-lg text-xs font-medium cursor-not-allowed transition-colors flex items-center gap-1.5">
                     <span>确定</span>
                 </button>
@@ -624,13 +715,13 @@
 
     <!-- 视频预览 Modal -->
     <div id="videoPreviewModal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-backdrop">
-        <div class="bg-white rounded-xl shadow-2xl border border-slate-200 w-11/12 max-w-lg overflow-hidden">
+        <div class="bg-white rounded-xl shadow-2xl border border-slate-200 w-11/12 max-w-lg overflow-hidden animate-scale-in">
             <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
                 <div class="flex items-center gap-2">
                     <i class="fas fa-video text-blue-600 text-sm"></i>
                     <span class="font-bold text-slate-800 text-xs">视频解析预览</span>
                 </div>
-                <button onclick="closeVideoModal()" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
+                <button onclick="closeVideoModal()" class="text-slate-400 hover:text-slate-600 cursor-pointer"><i class="fas fa-times"></i></button>
             </div>
             <div class="p-6 flex flex-col items-center justify-center bg-slate-900 text-white min-h-[220px]">
                 <div class="w-12 h-12 rounded-full bg-blue-600/80 flex items-center justify-center mb-3 cursor-pointer hover:scale-105 transition-transform">
@@ -640,7 +731,7 @@
                 <div class="text-[11px] text-slate-400 mt-1">视频正在缓冲中，支持0.5x~2.0x倍速播放</div>
             </div>
             <div class="px-5 py-3 border-t border-slate-100 bg-white flex justify-end">
-                <button onclick="closeVideoModal()" class="px-4 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-xs font-medium">关闭</button>
+                <button onclick="closeVideoModal()" class="px-4 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-xs font-medium cursor-pointer">关闭</button>
             </div>
         </div>
     </div>
@@ -652,7 +743,7 @@
     </div>
 
     <script>
-        // Sample questions formatted text matching the uploaded screenshot
+        // Sample questions formatted text
         const SAMPLE_TEXT = `一、单选题-选词填空-单选4项（共3题，每题2分。）
 1. The hard work you do now ______ later in life.
 A. will be repaid
@@ -668,8 +759,8 @@ D. was repaid
 易错题：否
 是否真题：是
 真题标签：真题地区：河南省-真题年份：2022; 真题地区：北京市-真题年份：2023
-试题来源：2023河南省专升本语文真题试卷
-录排编码：【职教1★第2题】
+试题来源：2023河南省专升本英语模拟测试卷
+录排编码：【职教1★第1题】
 
 二、多选题-多选题-4项（共2题，每题2分。）
 2. The hard work you do now ______ later in life.
@@ -686,26 +777,146 @@ D. was repaid
 易错题：否
 是否真题：是
 真题标签：真题地区：河南省-真题年份：2022
-试题来源：2023河南省专升本语文真题试卷
-录排编码：【职教1★第3题】`;
+试题来源：2023河南省专升本英语模拟测试卷
+录排编码：【职教1★第2题】`;
 
+        let currentHomeworkMode = '手动布置-批量建题';
+        let currentCategory = '专升本';
+        let currentSubject = '公共英语';
+        let currentHomeworkName = '新作业';
         let aiUploadedFiles = [];
 
         document.addEventListener('DOMContentLoaded', () => {
             initAiDropZone();
+            parseQueryParams();
         });
 
+        // 解析 URL 参数
+        function parseQueryParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const hwName = urlParams.get('name');
+            const hwMode = urlParams.get('mode');
+
+            if (hwName) {
+                currentHomeworkName = hwName;
+                document.getElementById('currentTabLabel').innerText = '导入试卷';
+                document.title = '库课管理平台 - 导入试卷';
+            }
+            if (hwMode) {
+                currentHomeworkMode = hwMode;
+                const tag = document.getElementById('currentHomeworkTag');
+                if (tag) tag.innerText = `模式：${hwMode}`;
+            }
+        }
+
+        // ================= 切换作业模式弹窗交互 =================
+        function handleHomeworkModeChange(modeValue) {
+            const catContainer = document.getElementById('switchCategoryContainer');
+            const subContainer = document.getElementById('switchSubjectContainer');
+            if (modeValue === '手动布置-题库导入' || modeValue === '上传文件' || modeValue === '题库导入') {
+                if (catContainer) catContainer.classList.add('hidden');
+                if (subContainer) subContainer.classList.add('hidden');
+            } else {
+                if (catContainer) catContainer.classList.remove('hidden');
+                if (subContainer) subContainer.classList.remove('hidden');
+            }
+        }
+
+        function openSwitchModeModal() {
+            // 匹配单选项
+            const modeRadios = document.querySelectorAll('input[name="switchHomeworkMode"]');
+            modeRadios.forEach(r => {
+                r.checked = (r.value === currentHomeworkMode);
+            });
+
+            handleHomeworkModeChange(currentHomeworkMode);
+
+            // 匹配专业与科目
+            const catSelect = document.getElementById('switchModeCategory');
+            if (catSelect) {
+                catSelect.value = currentCategory || '专升本';
+                updateSwitchSubjectOptions(catSelect.value);
+            }
+            const subSelect = document.getElementById('switchModeSubject');
+            if (subSelect && currentSubject) {
+                subSelect.value = currentSubject;
+            }
+
+            document.getElementById('switchModeModal').classList.remove('hidden');
+        }
+
+        function closeSwitchModeModal() {
+            document.getElementById('switchModeModal').classList.add('hidden');
+        }
+
+        // 联动专业与科目
+        function updateSwitchSubjectOptions(category) {
+            const subjectSelect = document.getElementById('switchModeSubject');
+            if (!subjectSelect) return;
+
+            let options = [];
+            if (category === '专升本') {
+                options = ['公共英语', '高等数学', '大学语文', '管理学', '教育理论', '生理学'];
+            } else if (category === 'AI') {
+                options = ['人工智能导论', '大语言模型原理', '机器学习与实战', 'Python编程基础'];
+            } else if (category === '事业单位') {
+                options = ['职业能力倾向测验', '综合应用能力', '公共基础知识'];
+            } else if (category === '大学英语') {
+                options = ['大学英语四级', '大学英语六级', '考研英语（一）', '考研英语（二）'];
+            } else {
+                options = ['科目一', '科目二', '科目三'];
+            }
+
+            subjectSelect.innerHTML = `<option value="" disabled class="text-slate-400">请选择科目</option>` + 
+                options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+            
+            if (options.length > 0) {
+                subjectSelect.value = options[0];
+            }
+        }
+
+        // 确认切换作业模式
+        function confirmSwitchMode() {
+            const selectedMode = document.querySelector('input[name="switchHomeworkMode"]:checked')?.value || '手动布置-批量建题';
+            const catSelect = document.getElementById('switchModeCategory');
+            const subSelect = document.getElementById('switchModeSubject');
+
+            const selectedCat = catSelect ? catSelect.value : '专升本';
+            const selectedSub = subSelect ? subSelect.value : '';
+
+            // 如果模式改变，清空原已录入内容
+            if (selectedMode !== currentHomeworkMode) {
+                const textarea = document.getElementById('questionTextarea');
+                if (textarea && textarea.value.trim().length > 0) {
+                    textarea.value = '';
+                    handleTextareaInput();
+                }
+            }
+
+            currentHomeworkMode = selectedMode;
+            currentCategory = selectedCat;
+            currentSubject = selectedSub;
+
+            const tag = document.getElementById('currentHomeworkTag');
+            if (tag) {
+                tag.innerText = `模式：${currentHomeworkMode} | ${currentCategory}${currentSubject ? ' · ' + currentSubject : ''}`;
+            }
+            
+            closeSwitchModeModal();
+            showToast(`已成功切换至「${currentHomeworkMode}」模式`);
+        }
+
         // Toggle sub-menu expansion
-        function toggleMenu(groupId) {
-            const el = document.getElementById(groupId);
-            const arrow = document.getElementById(`arrow-${groupId}`);
+        function toggleSubMenu(menuId) {
+            const el = document.getElementById(menuId);
+            const arrow = document.getElementById(`arrow-${menuId}`);
             if (el) {
                 if (el.classList.contains('hidden')) {
                     el.classList.remove('hidden');
-                    if (arrow) arrow.style.transform = 'rotate(0deg)';
+                    if (arrow) arrow.classList.replace('fa-chevron-down', 'fa-chevron-up');
                 } else {
                     el.classList.add('hidden');
-                    if (arrow) arrow.style.transform = 'rotate(180deg)';
+                    if (arrow) arrow.classList.replace('fa-chevron-up', 'fa-chevron-down');
                 }
             }
         }
@@ -732,13 +943,11 @@ D. was repaid
             const val = textarea.value.trim();
 
             if (val.length > 0) {
-                // 有内容时显示清空内容，隐藏试题上传和AI排版
                 clearBtn.classList.remove('hidden');
                 if (manualUploadBtn) manualUploadBtn.classList.add('hidden');
                 if (aiTypesetBtn) aiTypesetBtn.classList.add('hidden');
                 parseAndRenderQuestions(val);
             } else {
-                // 清空时隐藏清空内容，显示试题上传和AI排版
                 clearBtn.classList.add('hidden');
                 if (manualUploadBtn) manualUploadBtn.classList.remove('hidden');
                 if (aiTypesetBtn) aiTypesetBtn.classList.remove('hidden');
@@ -778,7 +987,7 @@ D. was repaid
                 <div class="p-2.5 bg-emerald-50/80 border border-emerald-200 rounded-lg text-xs text-slate-700 flex items-center justify-between">
                     <div class="flex items-center gap-1.5">
                         <i class="fas fa-circle-check text-emerald-600"></i>
-                        <span>解析出 <span class="text-blue-600 font-bold underline underline-offset-2">${questions.length}</span> 道题，所有题目均解析正确</span>
+                        <span>解析出 <span class="text-blue-600 font-bold underline underline-offset-2">${questions.length}</span> 道题，题目结构均校验正确</span>
                     </div>
                     <span class="text-[11px] text-emerald-700 bg-emerald-100/60 px-2 py-0.5 rounded">解析完成</span>
                 </div>
@@ -800,7 +1009,6 @@ D. was repaid
                 const lines = block.trim().split('\n').map(l => l.trim()).filter(l => l);
                 if (lines.length === 0) return;
 
-                // If block starts with Section Header
                 if (/^[一二三四五六七八九十]+、/.test(lines[0])) {
                     currentGroup = lines[0].replace(/[。\.]$/, '');
                     lines.shift();
@@ -818,9 +1026,9 @@ D. was repaid
                     answer: 'A',
                     analysis: '',
                     videoCode: '6D1F8A8F75107E3713358DE27D943A99',
-                    knowledge: '专升本英语知识点体系：谓语动词 | 一般将来时；教师英语知识点体系：一般将来时',
-                    chapter: '专升本英语教材：章节名称；教师资格英语教材：关联该教材的章节名称',
-                    source: '2023河南省专升本语文真题试卷',
+                    knowledge: '专升本英语知识点体系：谓语动词 | 一般将来时',
+                    chapter: '专升本英语教材：第一单元 语法精讲',
+                    source: '2023河南省专升本英语模拟测试卷',
                     code: `【职教1★第${idx + 1}题】`,
                     difficulty: '中',
                     isWrong: '否',
@@ -828,7 +1036,6 @@ D. was repaid
                     realTags: ['真题地区：河南省-真题年份：2022', '真题地区：北京市-真题年份：2023']
                 };
 
-                // Parse fields
                 lines.forEach(line => {
                     if (/^\d+[\.、]/.test(line)) {
                         q.stem = line.replace(/^\d+[\.、]\s*/, '');
@@ -873,7 +1080,6 @@ D. was repaid
         }
 
         function renderQuestionCards(questions) {
-            // Group by group title
             const groups = {};
             questions.forEach(q => {
                 if (!groups[q.group]) groups[q.group] = [];
@@ -884,7 +1090,6 @@ D. was repaid
             for (const groupTitle in groups) {
                 html += `
                     <div class="space-y-3">
-                        <!-- 大题分组标题 -->
                         <div class="text-xs font-bold text-slate-800 flex items-center gap-2 pb-1 border-b border-slate-100">
                             <span class="w-1.5 h-3.5 bg-blue-600 rounded-full"></span>
                             <span>${groupTitle}</span>
@@ -900,7 +1105,6 @@ D. was repaid
                         tagPills.push(`<span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-[11px] font-medium border border-slate-200/70">${rt}</span>`);
                     });
 
-                    // Options HTML
                     let optionsHtml = '';
                     if (q.options.length > 0) {
                         optionsHtml = `
@@ -918,14 +1122,13 @@ D. was repaid
                                             <span>${opt}</span>
                                         </div>
                                     `;
-                                }).join('')}
+                                 }).join('')}
                             </div>
                         `;
                     }
 
                     html += `
                         <div class="bg-white rounded-lg border border-slate-200/90 p-4 hover:border-blue-200 transition-colors shadow-2xs">
-                            <!-- 题目头信息与标签 -->
                             <div class="flex items-start gap-2">
                                 <span class="font-bold text-slate-800 text-sm shrink-0">${q.num}、</span>
                                 <div class="flex flex-wrap items-center gap-1.5 flex-1">
@@ -933,15 +1136,12 @@ D. was repaid
                                 </div>
                             </div>
 
-                            <!-- 题干 -->
                             <div class="mt-2.5 text-xs text-slate-800 font-medium leading-relaxed">
                                 ${q.stem}
                             </div>
 
-                            <!-- 选项 -->
                             ${optionsHtml}
 
-                            <!-- 属性与解析元数据区域 -->
                             <div class="mt-4 pt-3 border-t border-slate-100 space-y-2 text-xs text-slate-600">
                                 <div class="grid grid-cols-[60px_1fr] items-baseline gap-2">
                                     <span class="text-slate-400 text-right">答案</span>
@@ -957,7 +1157,7 @@ D. was repaid
                                     <span class="text-slate-400 text-right">视频解析</span>
                                     <div class="flex items-center gap-2">
                                         <span class="font-mono text-slate-700">${q.videoCode}</span>
-                                        <button onclick="previewVideo('${q.videoCode}')" class="text-blue-600 hover:text-blue-800 text-[11px] underline">预览</button>
+                                        <button onclick="previewVideo('${q.videoCode}')" class="text-blue-600 hover:text-blue-800 text-[11px] underline cursor-pointer">预览</button>
                                     </div>
                                 </div>
 
@@ -980,16 +1180,6 @@ D. was repaid
                                     <span class="text-slate-400 text-right">录排编码</span>
                                     <span class="text-slate-700">${q.code}</span>
                                 </div>
-
-                                <div class="grid grid-cols-[60px_1fr] items-baseline gap-2">
-                                    <span class="text-slate-400 text-right">易错题</span>
-                                    <span class="text-slate-700">${q.isWrong}</span>
-                                </div>
-
-                                <div class="grid grid-cols-[60px_1fr] items-baseline gap-2">
-                                    <span class="text-slate-400 text-right">是否真题</span>
-                                    <span class="text-slate-700">${q.isReal}</span>
-                                </div>
                             </div>
                         </div>
                     `;
@@ -1001,7 +1191,6 @@ D. was repaid
             return html;
         }
 
-        // File upload from Left Area manual button
         function handleManualFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1016,7 +1205,6 @@ D. was repaid
             event.target.value = '';
         }
 
-        // Rich text toolbar helpers
         function execCmd(cmd) {
             showToast(`已应用格式：${cmd}`);
         }
@@ -1047,7 +1235,6 @@ D. was repaid
             handleTextareaInput();
         }
 
-        // Preview video modal
         function previewVideo(code) {
             document.getElementById('videoCodeDisplay').textContent = `视频ID: ${code}`;
             document.getElementById('videoPreviewModal').classList.remove('hidden');
@@ -1057,28 +1244,23 @@ D. was repaid
             document.getElementById('videoPreviewModal').classList.add('hidden');
         }
 
-        // Action buttons
         function saveDraft() {
-            showToast('试题录入草稿已暂存！');
+            showToast('作业试题内容已暂存为草稿！');
         }
 
         function confirmImport() {
             const textarea = document.getElementById('questionTextarea');
             if (!textarea.value.trim()) {
-                showToast('请先在左侧录题区输入或上传试题', true);
+                showToast('请先在左侧录题区输入或上传作业试题', true);
                 return;
             }
-            const urlParams = new URLSearchParams(window.location.search);
-            const fromPage = urlParams.get('from');
-            const targetUrl = (fromPage === 'wode_shijuan') ? 'wode_shijuan.html' : 'shijuanku.html';
-            const pageName = (fromPage === 'wode_shijuan') ? '我的试卷' : '试卷库';
-            showToast(`试题成功导入并保存至试卷！正在返回${pageName}...`);
+            showToast(`作业「${currentHomeworkName}」试题已成功保存！正在返回作业列表...`);
             setTimeout(() => {
-                window.location.href = targetUrl;
-            }, 1200);
+                window.location.href = 'zuoye_liebiao.html';
+            }, 1000);
         }
 
-        // ---------------- AI 排版 Modal Functions (与试题库完全一致) ----------------
+        // ---------------- AI 排版 Modal Functions ----------------
         function openAiTypesetModal() {
             aiUploadedFiles = [];
             renderAiFileList();
@@ -1188,7 +1370,7 @@ D. was repaid
                                 </div>
                             </div>
                         </div>
-                        <button type="button" onclick="removeAiFile(${idx})" class="text-slate-400 hover:text-rose-600 p-1 transition-colors" title="移除文件">
+                        <button type="button" onclick="removeAiFile(${idx})" class="text-slate-400 hover:text-rose-600 p-1 transition-colors cursor-pointer" title="移除文件">
                             <i class="fas fa-trash-can text-xs"></i>
                         </button>
                     </div>
@@ -1214,23 +1396,15 @@ D. was repaid
             }
 
             const fileCount = aiUploadedFiles.length;
-            const firstName = aiUploadedFiles[0].name;
-
             closeAiTypesetModal();
 
-            // Simulate automatic filling & parsing into the workspace
             const textarea = document.getElementById('questionTextarea');
             textarea.value = SAMPLE_TEXT;
             handleTextareaInput();
 
-            showToast(`已成功创建 ${fileCount} 个文件的AI录题任务！正在跳转至AI操作日志...`);
-            
+            showToast(`已成功录入 ${fileCount} 个文件的试题！`);
             aiUploadedFiles = [];
             renderAiFileList();
-
-            setTimeout(() => {
-                window.location.href = 'ai_caozuo_rizhi.html';
-            }, 500);
         }
 
         function showToast(msg, isError = false) {
@@ -1252,19 +1426,6 @@ D. was repaid
                 toast.classList.add('translate-y-12', 'opacity-0', 'pointer-events-none');
             }, 3000);
         }
-
-        // Initialize URL parameters and back links
-        document.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const fromPage = urlParams.get('from');
-            if (fromPage === 'wode_shijuan') {
-                const backLink = document.querySelector('a[title="关闭并返回试卷库"]');
-                if (backLink) {
-                    backLink.href = 'wode_shijuan.html';
-                    backLink.title = '关闭并返回我的试卷';
-                }
-            }
-        });
     </script>
 </body>
 </html>

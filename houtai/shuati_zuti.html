@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>库课管理平台 - 组题</title>
+    <!-- FontAwesome & Tailwind CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f1f4f9;
+            color: #334155;
+        }
+
+        /* Custom scrollbars */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .primary-nav-item {
+            transition: all 0.15s ease;
+        }
+        .primary-nav-item:hover {
+            color: #2563eb;
+            background-color: #f8fafc;
+        }
+        .primary-nav-item.active {
+            color: #2563eb;
+            background-color: #eff6ff;
+            font-weight: 600;
+        }
+
+        .secondary-subitem {
+            transition: all 0.15s ease;
+        }
+        .secondary-subitem:hover {
+            color: #2563eb;
+            background-color: #f8fafc;
+        }
+        .secondary-subitem.active {
+            color: #2563eb;
+            background-color: #e0edff;
+            font-weight: 600;
+        }
+
+        .modal-backdrop {
+            background-color: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(2px);
+        }
+
+        /* Tool button in rich text editor */
+        .tool-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 26px;
+            min-width: 26px;
+            padding: 0 4px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .tool-btn:hover {
+            background-color: #e2e8f0;
+            color: #1e293b;
+        }
+        .tool-btn.active {
+            background-color: #dbeafe;
+            color: #2563eb;
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen overflow-hidden text-sm select-none">
+
+    <!-- 顶部 Top Header Bar -->
+    <header class="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 z-20 shrink-0 shadow-xs sticky top-0">
+        <!-- Left Section: Logo & Platform Title -->
+        <div class="flex items-center gap-3">
+            <a href="../index.html" title="返回首页" class="bg-[#e52e2e] text-white rounded px-2 py-1 flex flex-col justify-center items-center shadow-xs hover:opacity-90 transition-opacity">
+                <span class="text-sm font-black leading-tight tracking-wider">库课</span>
+                <span class="text-[8px] scale-90 font-sans tracking-tighter opacity-90 leading-none">Cook Life</span>
+            </a>
+            <a href="../index.html" title="返回首页" class="text-lg font-bold text-slate-800 tracking-tight hover:text-blue-600 transition-colors">库课管理平台</a>
+            <button class="ml-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-medium flex items-center gap-1.5 hover:bg-blue-100 transition-colors border border-blue-100">
+                <span>大题库</span>
+                <i class="fas fa-exchange-alt text-[10px]"></i>
+            </button>
+        </div>
+
+        <!-- Right Section: Search & Utilities & User Profile -->
+        <div class="flex items-center gap-4">
+            <div class="relative flex items-center">
+                <i class="fas fa-search absolute left-3 text-slate-400 text-xs"></i>
+                <input type="text" placeholder="请输入功能或试题名称" class="bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-1.5 text-xs w-64 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+            </div>
+            <button class="w-7 h-7 bg-indigo-500 hover:bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-xs transition-transform active:scale-95" title="库AI助手">
+                <i class="fas fa-cloud text-xs"></i>
+            </button>
+            <div class="flex items-center gap-3 text-slate-500 text-base">
+                <button class="hover:text-slate-800 transition-colors" title="文档"><i class="far fa-file-alt"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="待办"><i class="far fa-check-square"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="下发与同步"><i class="fas fa-cloud-upload-alt"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="消息通知"><i class="far fa-comment-dots"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="帮助中心"><i class="far fa-question-circle"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="意见反馈"><i class="far fa-edit"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="应用市场"><i class="fas fa-store"></i></button>
+            </div>
+            <div class="h-4 w-px bg-slate-200"></div>
+            <div class="flex items-center gap-1.5 cursor-pointer group">
+                <span class="text-xs font-medium text-slate-700 group-hover:text-blue-600 transition-colors">黄飞亚</span>
+                <i class="fas fa-caret-down text-xs text-slate-400 group-hover:text-blue-600 transition-colors"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Header 下方的 Tab 标签栏 -->
+    <div class="h-9 bg-slate-100 border-b border-slate-200 flex items-center px-2 gap-1 text-xs shrink-0 z-10 sticky top-14">
+        <a href="../index.html" class="flex items-center gap-1 px-2.5 py-1 text-slate-600 font-medium hover:text-slate-900 cursor-pointer">
+            <i class="fas fa-home text-sm"></i>
+            <span>首页</span>
+        </a>
+        <div class="h-4 w-px bg-slate-300 mx-1"></div>
+        <button class="w-6 h-6 bg-white border border-slate-200 rounded flex items-center justify-center text-slate-400 hover:text-slate-700 shadow-2xs">
+            <i class="fas fa-chevron-left text-[10px]"></i>
+        </button>
+        <div class="flex items-center gap-1 overflow-x-auto custom-scrollbar py-0.5">
+            <div class="px-3 py-1 bg-white border border-blue-500 text-blue-600 rounded font-medium cursor-pointer shadow-2xs flex items-center gap-2">
+                <span>组题</span>
+                <a href="shitiku.html" title="关闭并返回试题库" class="text-blue-400 hover:text-blue-700 transition-colors">
+                    <i class="fas fa-times text-[10px]"></i>
+                </a>
+            </div>
+        </div>
+        <button class="w-6 h-6 bg-white border border-slate-200 rounded flex items-center justify-center text-slate-400 hover:text-slate-700 shadow-2xs ml-auto">
+            <i class="fas fa-chevron-right text-[10px]"></i>
+        </button>
+    </div>
+
+    <!-- 主体内容区域 (左侧导航 + 右侧工作台) -->
+    <div class="flex flex-1 overflow-hidden">
+
+        <!-- 左侧一级导航 (Primary Icon Navigation Sidebar) -->
+        <aside class="w-16 bg-white border-r border-slate-200 flex flex-col items-center py-2 overflow-y-auto custom-scrollbar shrink-0 gap-1">
+            <a href="../index.html" class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-home text-base"></i>
+                <span class="text-[10px]">首页</span>
+            </a>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-cloud text-base"></i>
+                <span class="text-[10px]">库AI</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-share-nodes text-base"></i>
+                <span class="text-[10px]">运营</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-crosshairs text-base"></i>
+                <span class="text-[10px]">营销</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-bullhorn text-base"></i>
+                <span class="text-[10px]">推广</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-route text-base"></i>
+                <span class="text-[10px]">线索</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-users text-base"></i>
+                <span class="text-[10px]">CRM</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-comment-dots text-base"></i>
+                <span class="text-[10px]">SCRM</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-sitemap text-base"></i>
+                <span class="text-[10px]">渠道</span>
+            </div>
+            <a href="shijuan_guanli.html" class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-shopping-bag text-base"></i>
+                <span class="text-[10px]">商品</span>
+            </a>
+
+            <!-- Active Selected Main Menu: 题库 -->
+            <a href="shitiku.html" class="primary-nav-item active w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer">
+                <i class="fas fa-file-signature text-base text-blue-600"></i>
+                <span class="text-[10px] text-blue-600 font-semibold">题库</span>
+            </a>
+
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-id-card text-base"></i>
+                <span class="text-[10px]">资讯</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-basket-shopping text-base"></i>
+                <span class="text-[10px]">采购</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-clipboard-list text-base"></i>
+                <span class="text-[10px]">订单</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-graduation-cap text-base"></i>
+                <span class="text-[10px]">学服</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-comments text-base"></i>
+                <span class="text-[10px]">答疑</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-lightbulb text-base"></i>
+                <span class="text-[10px]">教务</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-user-tie text-base"></i>
+                <span class="text-[10px]">师资</span>
+            </div>
+            <a href="xuesheng_shuju.html" class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-chart-line text-base"></i>
+                <span class="text-[10px]">数据</span>
+            </a>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-headset text-base"></i>
+                <span class="text-[10px]">坐席</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-mobile-screen-button text-base"></i>
+                <span class="text-[10px]">设备</span>
+            </div>
+        </aside>
+
+        <!-- 左侧二级子导航 (Secondary Sub-Navigation Sidebar) -->
+        <aside class="w-32 bg-white border-r border-slate-200 overflow-y-auto custom-scrollbar py-3 px-2 flex flex-col gap-2.5 shrink-0 select-none">
+            <!-- 试题管理 -->
+            <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleMenu('group-1')">
+                    <span>试题管理</span>
+                    <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-1"></i>
+                </div>
+                <div class="space-y-0.5" id="group-1">
+                    <a href="shitiku.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">
+                        试题库
+                    </a>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">
+                        错题反馈
+                    </div>
+                    <a href="shuati_zuti.html" class="secondary-subitem active px-2.5 py-1.5 rounded-md text-xs cursor-pointer block whitespace-nowrap">
+                        刷题版本
+                    </a>
+                    <a href="ai_caozuo_rizhi.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">
+                        AI操作日志
+                    </a>
+                </div>
+            </div>
+
+            <!-- 试卷管理 -->
+            <div class="space-y-1 mt-2">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleMenu('group-2')">
+                    <span>试卷管理</span>
+                    <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-2"></i>
+                </div>
+                <div class="space-y-0.5" id="group-2">
+                    <a href="shijuanku.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">
+                        试卷库
+                    </a>
+                    <a href="wode_shijuan.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">
+                        我的试卷
+                    </a>
+                </div>
+            </div>
+
+            <!-- 题库运营 -->
+            <div class="space-y-1 mt-2">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleMenu('group-3')">
+                    <span>题库运营</span>
+                    <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-3"></i>
+                </div>
+                <div class="space-y-0.5" id="group-3">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">试卷考试</div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">章节刷题</div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">每日练习</div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">固定刷题</div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">强化通关练</div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">赠题列表</div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">热门标签</div>
+                </div>
+            </div>
+
+            <!-- 基础设置 -->
+            <div class="space-y-1 mt-2">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleMenu('group-4')">
+                    <span>基础设置</span>
+                    <i class="fas fa-chevron-up text-[10px] transition-transform" id="arrow-group-4"></i>
+                </div>
+                <div class="space-y-0.5" id="group-4">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">题型管理</div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">试题难度</div>
+                    <a href="shijuan_leixing.html" class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer block whitespace-nowrap">试卷类型</a>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">错题类型</div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">字段设置</div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap">赠题原因</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 右侧主工作台：刷题单元导入 (完全按照图片.png设计与文字) -->
+        <main class="flex-1 flex flex-col overflow-hidden bg-[#f1f4f9] relative pb-20">
+            
+            <!-- 顶部第一行白底区域 (严格按照图片.png：左侧“刷题单元导入”，右侧“显示解析 [toggle]  答题卡”) -->
+            <div class="bg-white px-6 py-3.5 flex items-center justify-between border-b border-slate-200/80 z-10 shrink-0">
+                <h1 class="text-base font-bold text-slate-800 tracking-tight">刷题单元导入</h1>
+
+                <div class="flex items-center gap-6">
+                    <!-- 显示解析 Switch Toggle -->
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-slate-600 select-none">显示解析</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="toggleAnalysisSwitch" onchange="toggleAnalysisDisplay(this.checked)" class="sr-only peer">
+                            <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
+                    </div>
+
+                    <!-- 答题卡 Button -->
+                    <button type="button" onclick="openAnswerSheetDrawer()" class="text-xs text-slate-700 hover:text-blue-600 font-medium px-1 py-0.5 transition-colors cursor-pointer flex items-center gap-1">
+                        <span>答题卡</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 按钮操作区 (严格按照图片.png：+添加题型  导入试题 蓝色虚线药丸按钮) -->
+            <div class="px-6 pt-4 pb-3 flex items-center gap-3 shrink-0">
+                <!-- +添加题型 按钮 (完全按照图片.png文字 "+添加题型") -->
+                <button type="button" onclick="openAddQuestionTypeModal()" class="px-4 py-1.5 border border-dashed border-blue-500 text-blue-600 hover:bg-blue-50/70 rounded-md text-xs font-normal transition-all active:scale-98 bg-white cursor-pointer shadow-2xs">
+                    +添加题型
+                </button>
+
+                <!-- 导入试题 按钮 (完全按照图片.png文字 "导入试题") -->
+                <button type="button" onclick="openImportQuestionModal()" class="px-4 py-1.5 border border-dashed border-blue-500 text-blue-600 hover:bg-blue-50/70 rounded-md text-xs font-normal transition-all active:scale-98 bg-white cursor-pointer shadow-2xs">
+                    导入试题
+                </button>
+            </div>
+
+            <!-- 中间内容展示区域 (Scrollable Canvas Area) -->
+            <div id="mainCanvasContainer" class="flex-1 overflow-y-auto px-6 py-2 custom-scrollbar">
+                
+                <!-- 试题分组及题目列表容器 -->
+                <div id="questionGroupsContainer" class="max-w-5xl mx-auto space-y-5">
+                    <!-- Dynamic question groups will be injected here -->
+                </div>
+
+            </div>
+
+            <!-- 底部操作栏 (Fixed Bottom Bar 严格按照图片.png底部，高度加高至 h-16/py-3.5) -->
+            <footer class="absolute bottom-0 left-0 right-0 h-16 bg-white border-t border-slate-200 flex items-center justify-end px-8 gap-4 z-30 shadow-xs">
+                <!-- 允许重题导入 Checkbox -->
+                <label class="inline-flex items-center gap-2 cursor-pointer select-none mr-2">
+                    <input type="checkbox" id="allowDuplicateImport" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                    <span class="text-xs text-slate-600 font-medium">允许重题导入</span>
+                </label>
+
+                <!-- 取消 Button -->
+                <button type="button" onclick="handleCancel()" class="px-6 py-2 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 rounded-lg text-xs font-normal transition-colors">
+                    取消
+                </button>
+
+                <!-- 确定 Button -->
+                <button type="button" onclick="handleConfirmSave()" class="px-7 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition-colors shadow-2xs">
+                    确定
+                </button>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- ==================== 1. 导入试题 Drawer (右侧抽屉式滑出弹窗) ==================== -->
+    <div id="importModal" onclick="handleBackdropClick(event, 'importModal')" class="fixed inset-0 modal-backdrop hidden z-50 flex justify-end">
+        <div onclick="event.stopPropagation()" class="bg-white shadow-2xl border-l border-slate-200 w-full max-w-5xl h-full flex flex-col overflow-hidden transform transition-all duration-300 ease-in-out">
+            
+            <!-- 弹窗顶部栏 (标题“导入试题” + 右上角关闭叉叉) -->
+            <div class="px-6 py-3.5 border-b border-slate-200 flex items-center justify-between bg-white shrink-0">
+                <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-blue-600"></div>
+                    <h3 class="font-bold text-slate-800 text-sm">导入试题</h3>
+                </div>
+                <button onclick="closeImportQuestionModal()" class="text-slate-400 hover:text-slate-600 text-sm p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- 弹窗主体左右两栏分栏工作台 (对应图片1.png) -->
+            <div class="flex-1 flex overflow-hidden p-3.5 gap-3.5 bg-[#f8fafc]">
+                
+                <!-- 左栏：录题区 -->
+                <section class="w-1/2 bg-white rounded-xl border border-slate-200/90 shadow-2xs flex flex-col overflow-hidden">
+                    
+                    <!-- 录题区 Header -->
+                    <div class="px-4 py-2.5 border-b border-slate-100 flex items-center justify-between shrink-0 bg-slate-50/50">
+                        <span class="font-bold text-slate-800 text-xs">录题区</span>
+                        <div class="flex items-center gap-2">
+                            <!-- 查看示例 -->
+                            <button type="button" onclick="loadImportSample()" class="text-xs text-blue-600 hover:text-blue-700 hover:underline transition-colors font-medium">
+                                查看示例
+                            </button>
+                            
+                            <!-- 试题上传 按钮 -->
+                            <input type="file" id="importModalFileInput" accept=".docx,.doc,.txt,.pdf,.xlsx" class="hidden" onchange="handleModalFileUpload(event)">
+                            <button type="button" onclick="document.getElementById('importModalFileInput').click()" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium shadow-2xs transition-colors">
+                                试题上传
+                            </button>
+
+                            <!-- AI录题 按钮 (用户明确要求新增) -->
+                            <button type="button" onclick="openAiTypesetModal()" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-medium shadow-2xs transition-colors flex items-center gap-1">
+                                <i class="fas fa-magic text-[10px]"></i>
+                                <span>AI录题</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 富文本格式工具栏 (严格对照图片1.png图标排布) -->
+                    <div class="px-2.5 py-1 bg-slate-50/80 border-b border-slate-200 flex flex-wrap items-center gap-0.5 shrink-0 text-slate-600">
+                        <button type="button" onclick="execToolCmd('undo')" class="tool-btn" title="撤销"><i class="fas fa-undo-alt text-xs"></i></button>
+                        <button type="button" onclick="execToolCmd('redo')" class="tool-btn" title="重做"><i class="fas fa-redo-alt text-xs"></i></button>
+                        
+                        <div class="w-px h-3 bg-slate-200 mx-1"></div>
+
+                        <!-- 字体大小/格式 -->
+                        <button type="button" class="tool-btn gap-0.5" title="格式">
+                            <i class="fas fa-font text-xs"></i>
+                            <i class="fas fa-caret-down text-[8px] text-slate-400"></i>
+                        </button>
+                        <button type="button" onclick="clearEditorFormat()" class="tool-btn" title="清除格式">
+                            <span class="font-serif italic font-bold">T</span><span class="text-[8px] text-slate-400 ml-0.5">x</span>
+                        </button>
+
+                        <div class="w-px h-3 bg-slate-200 mx-1"></div>
+
+                        <!-- 加粗、斜体、下划线、下标、上标、拼写 -->
+                        <button type="button" onclick="execToolCmd('bold')" class="tool-btn font-bold" title="加粗">B</button>
+                        <button type="button" onclick="execToolCmd('italic')" class="tool-btn italic font-serif" title="斜体">I</button>
+                        <button type="button" onclick="execToolCmd('underline')" class="tool-btn underline" title="下划线">U</button>
+                        <button type="button" onclick="insertSub()" class="tool-btn text-[11px]" title="下标">x₂</button>
+                        <button type="button" onclick="insertSup()" class="tool-btn text-[11px]" title="上标">x²</button>
+                        <button type="button" class="tool-btn text-[9px] font-mono border border-slate-200 rounded px-1 h-4.5" title="ABC">ABC</button>
+
+                        <div class="w-px h-3 bg-slate-200 mx-1"></div>
+
+                        <!-- 列表与对齐 -->
+                        <button type="button" class="tool-btn" title="项目符号"><i class="fas fa-list-ul text-xs"></i></button>
+                        <button type="button" class="tool-btn active" title="左对齐"><i class="fas fa-align-left text-xs"></i></button>
+                        <button type="button" class="tool-btn" title="居中对齐"><i class="fas fa-align-center text-xs"></i></button>
+                        <button type="button" class="tool-btn" title="右对齐"><i class="fas fa-align-right text-xs"></i></button>
+
+                        <div class="w-px h-3 bg-slate-200 mx-1"></div>
+
+                        <!-- 图片、表格、特殊符号、数学公式、音频 -->
+                        <button type="button" class="tool-btn gap-0.5" title="插入图片">
+                            <i class="far fa-image text-xs"></i>
+                            <i class="fas fa-caret-down text-[8px] text-slate-400"></i>
+                        </button>
+                        <button type="button" class="tool-btn gap-0.5" title="表格">
+                            <i class="fas fa-table text-xs"></i>
+                            <i class="fas fa-caret-down text-[8px] text-slate-400"></i>
+                        </button>
+                        <button type="button" class="tool-btn gap-0.5" title="特殊符号">
+                            <span class="font-serif text-xs">Ω</span>
+                            <i class="fas fa-caret-down text-[8px] text-slate-400"></i>
+                        </button>
+                        <button type="button" class="tool-btn" title="数学公式"><span class="font-serif font-bold text-xs">∑</span></button>
+                        <button type="button" class="tool-btn" title="音频"><i class="fas fa-music text-xs"></i></button>
+                    </div>
+
+                    <!-- 录题输入编辑框容器 (占位符文字完全对齐图片1.png："请上传试题") -->
+                    <div class="flex-1 p-3 overflow-hidden flex flex-col">
+                        <textarea id="importQuestionTextarea" 
+                                  placeholder="请上传试题" 
+                                  oninput="handleImportTextareaInput()" 
+                                  class="w-full flex-1 p-3 text-xs leading-relaxed text-slate-700 bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-blue-500 resize-none custom-scrollbar font-mono"></textarea>
+                    </div>
+
+                </section>
+
+                <!-- 右栏：识别结果 -->
+                <section class="w-1/2 bg-white rounded-xl border border-slate-200/90 shadow-2xs flex flex-col overflow-hidden">
+                    
+                    <!-- 识别结果 Header -->
+                    <div class="px-4 py-2.5 border-b border-slate-100 flex items-center justify-between shrink-0 bg-slate-50/50">
+                        <span class="font-bold text-slate-800 text-xs">识别结果</span>
+                        <button type="button" onclick="confirmImportToWorkbench()" class="px-4 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium shadow-2xs transition-colors">
+                            确定导入
+                        </button>
+                    </div>
+
+                    <!-- 状态条 (对应图片1.png："等待上传试题") -->
+                    <div id="importStatusBanner" class="p-3 border-b border-slate-100 shrink-0">
+                        <div class="p-2 bg-slate-50 border border-slate-100 rounded text-xs text-slate-400">
+                            等待上传试题
+                        </div>
+                    </div>
+
+                    <!-- 识别出的试题列表展示区 -->
+                    <div id="importResultsContainer" class="flex-1 p-4 overflow-y-auto custom-scrollbar space-y-4">
+                        <!-- 空状态展示 -->
+                        <div id="importEmptyState" class="h-full flex flex-col items-center justify-center text-slate-300 py-16">
+                            <div class="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 mb-2 border border-slate-100">
+                                <i class="fas fa-file-invoice text-xl"></i>
+                            </div>
+                            <p class="text-xs text-slate-400 font-normal">等待上传试题或在左侧录题区输入文本</p>
+                        </div>
+
+                        <!-- 动态解析后的试题卡片 -->
+                        <div id="parsedQuestionsList" class="space-y-4 hidden">
+                            <!-- Injected parsed questions -->
+                        </div>
+                    </div>
+
+                </section>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ==================== 2. AI录题 Modal (跟试题库完全对齐) ==================== -->
+    <div id="aiTypesetModal" onclick="handleBackdropClick(event, 'aiTypesetModal')" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-backdrop">
+        <div onclick="event.stopPropagation()" class="bg-white rounded-xl shadow-2xl border border-slate-200 w-11/12 max-w-xl max-h-[90vh] flex flex-col overflow-hidden">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+                        <i class="fas fa-magic text-sm"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-sm">AI录题</h3>
+                    </div>
+                </div>
+                <button onclick="closeAiTypesetModal()" class="text-slate-400 hover:text-slate-600 p-1 text-base leading-none transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="p-6 overflow-y-auto custom-scrollbar space-y-4 text-xs">
+                <!-- 文件上传区域 (支持拖拽与点击选择) -->
+                <div>
+                    <label class="block text-slate-700 font-medium mb-1.5">
+                        <span class="text-rose-500 mr-0.5">*</span>上传试题文件
+                    </label>
+                    <div id="aiDropZone" 
+                         onclick="document.getElementById('aiFileInput').click()"
+                         class="border-2 border-dashed border-slate-200 hover:border-indigo-500 bg-slate-50/50 hover:bg-indigo-50/30 rounded-xl p-5 text-center cursor-pointer transition-all duration-200 group relative">
+                        <input type="file" id="aiFileInput" multiple 
+                               accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.png,.jpg,.jpeg,.webp" 
+                               onchange="handleAiFileSelect(event)" 
+                               class="hidden">
+                        
+                        <div class="flex flex-col items-center justify-center gap-2 pointer-events-none">
+                            <div class="w-12 h-12 rounded-full bg-white shadow-xs border border-slate-200/80 flex items-center justify-center text-indigo-500 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all">
+                                <i class="fas fa-cloud-arrow-up text-lg"></i>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-slate-700 group-hover:text-indigo-600 transition-colors">点击选择文件</span>
+                                <span class="text-slate-400"> 或将文件直接拖拽至此处</span>
+                            </div>
+                            
+                            <!-- 支持的文件格式徽章: PDF -> Word -> Excel -> TXT -> 图片 -->
+                            <div class="flex flex-wrap items-center justify-center gap-1.5 mt-1">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-rose-50 text-rose-600 border border-rose-200">PDF (.pdf)</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-600 border border-blue-200">Word (.doc / .docx)</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-emerald-600 border border-emerald-200">Excel (.xls / .xlsx)</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600 border border-slate-200">TXT (.txt)</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-600 border border-amber-200">图片 (PNG / JPG / JPEG)</span>
+                            </div>
+                            <p class="text-[10px] text-slate-400 mt-0.5">单个文件最大支持 50MB，可批量上传多个文件</p>
+                        </div>
+                    </div>
+
+                    <!-- 已选文件列表 -->
+                    <div id="aiSelectedFilesContainer" class="mt-2.5 space-y-1.5 hidden">
+                        <div class="flex items-center justify-between text-[11px] text-slate-500 font-medium px-1">
+                            <span>已选文件清单 (<span id="aiFileCount">0</span>)</span>
+                            <button type="button" onclick="clearAiFiles(event)" class="text-rose-500 hover:underline">清空重选</button>
+                        </div>
+                        <div id="aiFilesList" class="space-y-1.5 max-h-36 overflow-y-auto custom-scrollbar">
+                            <!-- 动态渲染文件项 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 自动关联章节与知识点配置 -->
+                <div class="flex items-center gap-6 bg-slate-50 border border-slate-200/80 rounded-xl p-3">
+                    <label class="inline-flex items-center gap-2 cursor-pointer select-none">
+                        <input type="checkbox" id="aiAutoLinkChapter" checked class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 cursor-pointer">
+                        <span class="text-xs font-medium text-slate-700">自动关联章节</span>
+                    </label>
+                    <label class="inline-flex items-center gap-2 cursor-pointer select-none">
+                        <input type="checkbox" id="aiAutoLinkKnowledge" checked class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 cursor-pointer">
+                        <span class="text-xs font-medium text-slate-700">自动关联知识点</span>
+                    </label>
+                </div>
+
+                <!-- 提示：去 AI 操作日志中查看进度 -->
+                <div class="bg-indigo-50/90 border border-indigo-200 rounded-xl p-3.5 flex items-start gap-3">
+                    <div class="w-7 h-7 rounded-lg bg-indigo-100 flex items-center justify-center shrink-0 text-indigo-600 mt-0.5">
+                        <i class="fas fa-robot text-xs"></i>
+                    </div>
+                    <div class="text-xs text-indigo-900 leading-relaxed">
+                        <div class="font-semibold text-indigo-950 mb-0.5 flex items-center gap-1.5">
+                            <span>AI智能解析</span>
+                            <span class="bg-indigo-200 text-indigo-800 text-[10px] px-1.5 py-0.2 rounded font-normal">多模态排版</span>
+                        </div>
+                        <div>提交后系统将通过智能模型自动拆分题干、选项、答案与解析，并可同步至<a href="ai_caozuo_rizhi.html" class="text-indigo-700 font-semibold underline underline-offset-2 hover:text-indigo-800">「AI操作日志」</a>。</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="px-6 py-4 border-t border-slate-100 bg-white flex items-center justify-end gap-2.5">
+                <button onclick="closeAiTypesetModal()" class="px-4 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-lg text-xs font-medium transition-colors">取消</button>
+                <button id="aiTypesetSubmitBtn" onclick="submitAiTypesetToImport()" disabled class="px-5 py-1.5 bg-slate-200 text-slate-400 rounded-lg text-xs font-medium cursor-not-allowed transition-colors flex items-center gap-1.5">
+                    <span>开始智能识别</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 3. 添加题型 Modal ==================== -->
+    <div id="addTypeModal" onclick="handleBackdropClick(event, 'addTypeModal')" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div onclick="event.stopPropagation()" class="bg-white rounded-2xl shadow-2xl border border-slate-100 w-full max-w-md overflow-hidden transform transition-all">
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-blue-600"></div>
+                    <h3 class="font-bold text-slate-800 text-sm">添加题型</h3>
+                </div>
+                <button onclick="closeAddQuestionTypeModal()" class="text-slate-400 hover:text-slate-600 text-xs p-1">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            </div>
+            
+            <div class="p-5 space-y-4 text-xs">
+                <div>
+                    <label class="block font-medium text-slate-700 mb-1.5">选择基础题型 <span class="text-red-500">*</span></label>
+                    <div class="grid grid-cols-3 gap-2" id="typeOptionButtons">
+                        <button type="button" onclick="selectBaseType(this, '单选题')" class="type-badge-btn active px-3 py-2 border rounded-lg text-center font-medium transition-all bg-blue-50 border-blue-500 text-blue-600">
+                            单选题
+                        </button>
+                        <button type="button" onclick="selectBaseType(this, '多选题')" class="type-badge-btn px-3 py-2 border rounded-lg text-center font-medium transition-all bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300">
+                            多选题
+                        </button>
+                        <button type="button" onclick="selectBaseType(this, '判断题')" class="type-badge-btn px-3 py-2 border rounded-lg text-center font-medium transition-all bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300">
+                            判断题
+                        </button>
+                        <button type="button" onclick="selectBaseType(this, '填空题')" class="type-badge-btn px-3 py-2 border rounded-lg text-center font-medium transition-all bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300">
+                            填空题
+                        </button>
+                        <button type="button" onclick="selectBaseType(this, '简答题')" class="type-badge-btn px-3 py-2 border rounded-lg text-center font-medium transition-all bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300">
+                            简答题
+                        </button>
+                        <button type="button" onclick="selectBaseType(this, '案例分析题')" class="type-badge-btn px-3 py-2 border rounded-lg text-center font-medium transition-all bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300">
+                            案例分析题
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-medium text-slate-700 mb-1.5">题型大标题展示名称 <span class="text-red-500">*</span></label>
+                    <input type="text" id="customTypeNameInput" value="一、单选题" placeholder="如：一、单选题" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-medium text-slate-700 mb-1.5">每题默认分值</label>
+                        <div class="relative">
+                            <input type="number" id="defaultScoreInput" value="2" min="0.5" step="0.5" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors">
+                            <span class="absolute right-3 top-2 text-slate-400">分</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-medium text-slate-700 mb-1.5">预设题目数量</label>
+                        <input type="number" id="initCountInput" value="3" min="1" max="50" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-medium text-slate-700 mb-1.5">题型说明 (可选)</label>
+                    <input type="text" id="typeDescInput" value="本大题共5小题，每小题2分，共10分。每小题列出的备选项中只有一项符合要求。" placeholder="请输入题型作答说明" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors">
+                </div>
+            </div>
+
+            <div class="px-5 py-3.5 border-t border-slate-100 bg-slate-50/50 flex items-center justify-end gap-2.5">
+                <button type="button" onclick="closeAddQuestionTypeModal()" class="px-4 py-1.5 border border-slate-200 text-slate-600 hover:bg-slate-100 rounded-lg text-xs font-medium transition-colors">
+                    取消
+                </button>
+                <button type="button" onclick="confirmAddQuestionType()" class="px-5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition-colors shadow-2xs">
+                    确认添加
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 4. 答题卡 Drawer (Slide-Over) ==================== -->
+    <div id="answerSheetDrawer" onclick="handleBackdropClick(event, 'answerSheetDrawer')" class="fixed inset-0 modal-backdrop hidden z-50 flex justify-end">
+        <div onclick="event.stopPropagation()" class="bg-white w-full max-w-sm h-full shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out">
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="far fa-list-alt text-blue-600"></i>
+                    <h3 class="font-bold text-slate-800 text-sm">答题卡概览</h3>
+                </div>
+                <button onclick="closeAnswerSheetDrawer()" class="text-slate-400 hover:text-slate-600 text-xs p-1">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            </div>
+
+            <div class="p-5 flex-1 overflow-y-auto custom-scrollbar space-y-5 text-xs">
+                <!-- 统计卡片 -->
+                <div class="grid grid-cols-3 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200/80 text-center">
+                    <div>
+                        <div class="text-slate-400 text-[11px] mb-0.5">总题数</div>
+                        <div class="text-base font-bold text-slate-800" id="drawerTotalQuestions">0</div>
+                    </div>
+                    <div>
+                        <div class="text-slate-400 text-[11px] mb-0.5">总分值</div>
+                        <div class="text-base font-bold text-blue-600" id="drawerTotalScore">0</div>
+                    </div>
+                    <div>
+                        <div class="text-slate-400 text-[11px] mb-0.5">大题数</div>
+                        <div class="text-base font-bold text-slate-800" id="drawerGroupCount">0</div>
+                    </div>
+                </div>
+
+                <!-- 题号矩阵列表 -->
+                <div id="drawerQuestionGrid" class="space-y-4">
+                    <!-- Dynamic Question matrix -->
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-end">
+                <button type="button" onclick="closeAnswerSheetDrawer()" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition-colors">
+                    关闭
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-20 right-6 bg-slate-900/90 text-white px-4 py-2.5 rounded-xl shadow-xl text-xs z-50 transform transition-all duration-300 opacity-0 translate-y-[-10px] pointer-events-none flex items-center gap-2">
+        <i class="fas fa-check-circle text-emerald-400"></i>
+        <span id="toastMessage">操作成功</span>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Global State for Exercise Builder
+        let exerciseGroups = [];
+        let selectedBaseType = '单选题';
+        let showAnalysisState = false;
+        let parsedQuestionsBuffer = [];
+        let aiSelectedFiles = [];
+
+        // Sample Questions Template for "查看示例"
+        const sampleQuestionsText = `1. 下列关于计算机网络拓扑结构的叙述中，正确的是（ ）。
+A. 星型拓扑结构中，中心节点的故障会导致整个网络瘫痪
+B. 环型拓扑结构中各节点地位不平等
+C. 总线型拓扑结构网络扩展极为困难
+D. 网状拓扑结构可靠性高且成本低廉
+答案：A
+解析：在星型拓扑结构中，所有通信节点均连接到中心交换设备，若中心节点发生故障，会导致整个网络通信中断。
+
+2. 在面向对象程序设计中，封装性的主要目的是（ ）。
+A. 提高程序运行速度
+B. 隐藏对象的内部实现细节并保护数据完整性
+C. 实现代码的多态分发
+D. 消除程序中的所有编译警告
+答案：B
+解析：封装通过将对象的属性和行为包装在一个独立的单元中，对外部隐藏实现细节并控制访问权限，从而增强数据的安全性和可维护性。
+
+3. 下列属于关系型数据库管理系统的有（ ）。
+A. MySQL
+B. Oracle
+C. PostgreSQL
+D. Redis
+答案：ABC
+解析：MySQL、Oracle、PostgreSQL 均为典型的关系型数据库管理系统（RDBMS），而 Redis 是基于内存的键值对非关系型（NoSQL）数据库。
+
+4. 操作系统中的死锁是指多个进程因竞争资源而造成的互相等待现象。（ ）
+A. 正确
+B. 错误
+答案：正确
+解析：死锁（Deadlock）是指两个或两个以上的进程在执行过程中，因争夺资源而造成的一种互相等待现象，若无外力作用，它们都将无法继续推进。`;
+
+        // 点击空白处关闭弹窗/抽屉
+        function handleBackdropClick(event, modalId) {
+            if (event.target.id === modalId) {
+                const el = document.getElementById(modalId);
+                if (el) {
+                    el.classList.add('hidden');
+                }
+            }
+        }
+
+        // 绑定 ESC 按键快捷关闭弹窗
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                ['importModal', 'aiTypesetModal', 'addTypeModal', 'answerSheetDrawer'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el && !el.classList.contains('hidden')) {
+                        el.classList.add('hidden');
+                    }
+                });
+            }
+        });
+
+        // Toggle Sidebar Submenus
+        function toggleMenu(groupId) {
+            const groupEl = document.getElementById(groupId);
+            const arrowEl = document.getElementById('arrow-' + groupId);
+            if (!groupEl || !arrowEl) return;
+            if (groupEl.classList.contains('hidden')) {
+                groupEl.classList.remove('hidden');
+                arrowEl.style.transform = 'rotate(0deg)';
+            } else {
+                groupEl.classList.add('hidden');
+                arrowEl.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Toast Helper
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMessage');
+            if (!toast || !toastMsg) return;
+            toastMsg.innerText = msg;
+            toast.classList.remove('opacity-0', 'translate-y-[-10px]', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-[-10px]', 'pointer-events-none');
+            }, 2500);
+        }
+
+        // Toggle Display Analysis Switch
+        function toggleAnalysisDisplay(checked) {
+            showAnalysisState = checked;
+            const analysisBlocks = document.querySelectorAll('.question-analysis-block');
+            analysisBlocks.forEach(el => {
+                if (checked) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+            showToast(checked ? '已开启显示试题解析' : '已隐藏试题解析');
+        }
+
+        // ==================== 导入试题 Modal 交互 ====================
+        function openImportQuestionModal() {
+            document.getElementById('importModal').classList.remove('hidden');
+        }
+
+        function closeImportQuestionModal() {
+            document.getElementById('importModal').classList.add('hidden');
+        }
+
+        // 载入示例数据到录题区
+        function loadImportSample() {
+            const textarea = document.getElementById('importQuestionTextarea');
+            textarea.value = sampleQuestionsText;
+            handleImportTextareaInput();
+            showToast('已加载示例试题');
+        }
+
+        // 清除格式/富文本工具
+        function execToolCmd(cmd) {
+            showToast(`已执行 ${cmd} 操作`);
+        }
+        function clearEditorFormat() {
+            const textarea = document.getElementById('importQuestionTextarea');
+            if (textarea) {
+                textarea.value = textarea.value.replace(/[\r\n]{3,}/g, '\n\n');
+                showToast('已清除多余格式');
+            }
+        }
+        function insertSub() {
+            const textarea = document.getElementById('importQuestionTextarea');
+            if (textarea) textarea.value += '₂';
+        }
+        function insertSup() {
+            const textarea = document.getElementById('importQuestionTextarea');
+            if (textarea) textarea.value += '²';
+        }
+
+        // 监听录题区文本输入并实时解析
+        function handleImportTextareaInput() {
+            const text = document.getElementById('importQuestionTextarea').value.trim();
+            const statusBanner = document.getElementById('importStatusBanner');
+            const emptyState = document.getElementById('importEmptyState');
+            const listContainer = document.getElementById('parsedQuestionsList');
+
+            if (!text) {
+                statusBanner.innerHTML = `<div class="p-2 bg-slate-50 border border-slate-100 rounded text-xs text-slate-400">等待上传试题</div>`;
+                emptyState.classList.remove('hidden');
+                listContainer.classList.add('hidden');
+                listContainer.innerHTML = '';
+                parsedQuestionsBuffer = [];
+                return;
+            }
+
+            // Simple Robust Question Parser
+            parsedQuestionsBuffer = parseRawQuestions(text);
+
+            if (parsedQuestionsBuffer.length > 0) {
+                statusBanner.innerHTML = `<div class="p-2 bg-blue-50 border border-blue-100 rounded text-xs text-blue-700 flex items-center justify-between">
+                    <span>已智能识别解析出 <strong>${parsedQuestionsBuffer.length}</strong> 道试题</span>
+                    <span class="text-emerald-600 font-medium"><i class="fas fa-check-circle mr-1"></i>解析格式完整</span>
+                </div>`;
+                emptyState.classList.add('hidden');
+                listContainer.classList.remove('hidden');
+                renderParsedQuestionsPreview();
+            } else {
+                statusBanner.innerHTML = `<div class="p-2 bg-amber-50 border border-amber-100 rounded text-xs text-amber-700">正在识别中... 请确保包含题干、选项与答案</div>`;
+            }
+        }
+
+        // 试题上传文件处理
+        function handleModalFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            showToast(`正在上传并解析文件：${file.name}`);
+            setTimeout(() => {
+                document.getElementById('importQuestionTextarea').value = sampleQuestionsText;
+                handleImportTextareaInput();
+                showToast('文件解析完成，已载入试题');
+            }, 800);
+        }
+
+        // 简易解析函数
+        function parseRawQuestions(rawText) {
+            const rawBlocks = rawText.split(/\n\s*(?=\d+[\.、\s])/);
+            const questions = [];
+
+            rawBlocks.forEach((block, idx) => {
+                const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
+                if (lines.length === 0) return;
+
+                let stem = lines[0].replace(/^\d+[\.、\s]*/, '');
+                let options = [];
+                let answer = '';
+                let analysis = '';
+
+                lines.slice(1).forEach(line => {
+                    if (/^[A-G][\.\、\s]/.test(line)) {
+                        options.push(line);
+                    } else if (line.startsWith('答案') || line.startsWith('【答案】')) {
+                        answer = line.replace(/^【?答案】?[:：\s]*/, '');
+                    } else if (line.startsWith('解析') || line.startsWith('【解析】')) {
+                        analysis = line.replace(/^【?解析】?[:：\s]*/, '');
+                    }
+                });
+
+                let qType = '单选题';
+                if (options.length === 2 && (options.some(o => o.includes('正确')) || options.some(o => o.includes('对')))) {
+                    qType = '判断题';
+                } else if (answer.length > 1 && /^[A-G]+$/.test(answer.replace(/\s+/g, ''))) {
+                    qType = '多选题';
+                }
+
+                if (options.length === 0 && (answer.includes('正确') || answer.includes('错误'))) {
+                    qType = '判断题';
+                    options = ['A. 正确', 'B. 错误'];
+                }
+
+                questions.push({
+                    id: 'parsed_' + Date.now() + '_' + idx,
+                    type: qType,
+                    stem: stem || `试题 ${idx + 1}`,
+                    options: options.length > 0 ? options : ['A. 示例选项 A', 'B. 示例选项 B', 'C. 示例选项 C', 'D. 示例选项 D'],
+                    answer: answer || 'A',
+                    analysis: analysis || '【解析】：本题考察核心知识点综合运用与基础规范。',
+                    chapter: '第一章 核心基础知识点与理论体系',
+                    knowledge: '考点 1.2 核心基础规范与特征分析',
+                    score: qType === '判断题' ? 1 : 2
+                });
+            });
+
+            return questions;
+        }
+
+        // 渲染右侧预览卡片
+        function renderParsedQuestionsPreview() {
+            const container = document.getElementById('parsedQuestionsList');
+            if (!container) return;
+
+            let html = '';
+            parsedQuestionsBuffer.forEach((q, idx) => {
+                html += `
+                    <div class="bg-slate-50/80 rounded-xl border border-slate-200/90 p-4 space-y-2.5 text-xs hover:shadow-xs transition-shadow">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-5 h-5 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-[10px]">${idx + 1}</span>
+                                <span class="px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-[10px] font-medium border border-blue-200">${q.type}</span>
+                                <span class="text-slate-400 text-[11px]">${q.score} 分</span>
+                            </div>
+                            <button type="button" onclick="removeParsedQuestion(${idx})" class="text-slate-400 hover:text-rose-500 p-1">
+                                <i class="fas fa-trash-alt text-[11px]"></i>
+                            </button>
+                        </div>
+                        <div class="font-medium text-slate-800 leading-relaxed">${q.stem}</div>
+                        ${q.options && q.options.length > 0 ? `
+                            <div class="space-y-1 text-slate-600 pl-1">
+                                ${q.options.map(opt => `<div>${opt}</div>`).join('')}
+                            </div>
+                        ` : ''}
+                        <div class="pt-2 border-t border-slate-200/60 flex items-center gap-4 text-[11px]">
+                            <div class="text-emerald-600 font-bold">正确答案：${q.answer}</div>
+                        </div>
+                        <div class="text-slate-500 bg-white p-2.5 rounded border border-slate-100 leading-relaxed text-[11px]">
+                            ${q.analysis}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function removeParsedQuestion(idx) {
+            parsedQuestionsBuffer.splice(idx, 1);
+            renderParsedQuestionsPreview();
+            showToast('已移除该试题');
+        }
+
+        // 确定导入到主工作台
+        function confirmImportToWorkbench() {
+            if (parsedQuestionsBuffer.length === 0) {
+                showToast('请先输入或上传试题后再进行导入');
+                return;
+            }
+
+            // Group questions by type
+            const groupsMap = {};
+            parsedQuestionsBuffer.forEach(q => {
+                if (!groupsMap[q.type]) {
+                    groupsMap[q.type] = [];
+                }
+                groupsMap[q.type].push(q);
+            });
+
+            const chineseNumerals = ['一', '二', '三', '四', '五', '六', '七', '八'];
+            Object.keys(groupsMap).forEach(type => {
+                const idx = exerciseGroups.length;
+                const prefix = chineseNumerals[idx] || (idx + 1);
+                const qList = groupsMap[type];
+
+                exerciseGroups.push({
+                    id: 'group_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+                    type: type,
+                    title: `${prefix}、${type}`,
+                    scorePerQuestion: type === '判断题' ? 1 : 2,
+                    desc: `本大题共 ${qList.length} 小题，每小题 ${type === '判断题' ? 1 : 2} 分，共 ${qList.length * (type === '判断题' ? 1 : 2)} 分。`,
+                    questions: qList
+                });
+            });
+
+            renderExerciseGroups();
+            closeImportQuestionModal();
+            showToast(`成功导入 ${parsedQuestionsBuffer.length} 道试题到刷题单元！`);
+        }
+
+        // ==================== AI 录题 Modal 交互 ====================
+        function openAiTypesetModal() {
+            document.getElementById('aiTypesetModal').classList.remove('hidden');
+        }
+
+        function closeAiTypesetModal() {
+            document.getElementById('aiTypesetModal').classList.add('hidden');
+        }
+
+        function handleAiFileSelect(event) {
+            const files = Array.from(event.target.files);
+            if (files.length === 0) return;
+
+            aiSelectedFiles = files;
+            document.getElementById('aiFileCount').innerText = files.length;
+            document.getElementById('aiSelectedFilesContainer').classList.remove('hidden');
+            
+            const listEl = document.getElementById('aiFilesList');
+            listEl.innerHTML = files.map((f, i) => `
+                <div class="flex items-center justify-between p-2 bg-white rounded border border-slate-200">
+                    <div class="flex items-center gap-2 overflow-hidden">
+                        <i class="fas fa-file-alt text-indigo-500"></i>
+                        <span class="truncate font-medium text-slate-700">${f.name}</span>
+                        <span class="text-slate-400 text-[10px]">(${(f.size/1024).toFixed(1)} KB)</span>
+                    </div>
+                </div>
+            `).join('');
+
+            const submitBtn = document.getElementById('aiTypesetSubmitBtn');
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('bg-slate-200', 'text-slate-400', 'cursor-not-allowed');
+            submitBtn.classList.add('bg-indigo-600', 'hover:bg-indigo-700', 'text-white', 'cursor-pointer');
+        }
+
+        function clearAiFiles(event) {
+            if (event) event.stopPropagation();
+            aiSelectedFiles = [];
+            document.getElementById('aiFileInput').value = '';
+            document.getElementById('aiSelectedFilesContainer').classList.add('hidden');
+            const submitBtn = document.getElementById('aiTypesetSubmitBtn');
+            submitBtn.disabled = true;
+            submitBtn.classList.add('bg-slate-200', 'text-slate-400', 'cursor-not-allowed');
+            submitBtn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700', 'text-white', 'cursor-pointer');
+        }
+
+        function submitAiTypesetToImport() {
+            showToast('AI 正在智能识别并自动排版试题...');
+            closeAiTypesetModal();
+
+            setTimeout(() => {
+                document.getElementById('importQuestionTextarea').value = sampleQuestionsText;
+                handleImportTextareaInput();
+                showToast('AI 智能录题完成！已成功解析结构化试题');
+            }, 1200);
+        }
+
+        // ==================== 添加题型 Modal 交互 ====================
+        function openAddQuestionTypeModal() {
+            document.getElementById('addTypeModal').classList.remove('hidden');
+        }
+
+        function closeAddQuestionTypeModal() {
+            document.getElementById('addTypeModal').classList.add('hidden');
+        }
+
+        function selectBaseType(btn, typeName) {
+            selectedBaseType = typeName;
+            document.querySelectorAll('#typeOptionButtons .type-badge-btn').forEach(b => {
+                b.classList.remove('bg-blue-50', 'border-blue-500', 'text-blue-600', 'active');
+                b.classList.add('bg-slate-50', 'border-slate-200', 'text-slate-600');
+            });
+            btn.classList.remove('bg-slate-50', 'border-slate-200', 'text-slate-600');
+            btn.classList.add('bg-blue-50', 'border-blue-500', 'text-blue-600', 'active');
+
+            const customNameInput = document.getElementById('customTypeNameInput');
+            const typeDescInput = document.getElementById('typeDescInput');
+            const chineseNumerals = ['一', '二', '三', '四', '五', '六', '七', '八'];
+            const idx = exerciseGroups.length;
+            const prefix = chineseNumerals[idx] || (idx + 1);
+
+            customNameInput.value = `${prefix}、${typeName}`;
+            if (typeName === '单选题') {
+                typeDescInput.value = '本大题共5小题，每小题2分，共10分。每小题列出的备选项中只有一项符合要求。';
+            } else if (typeName === '多选题') {
+                typeDescInput.value = '本大题共5小题，每小题2分，共10分。每小题列出的备选项中至少有两项符合要求，多选、错选均不得分。';
+            } else if (typeName === '判断题') {
+                typeDescInput.value = '本大题共5小题，每小题1分，共5分。判断下列各题正误。';
+            } else {
+                typeDescInput.value = `本大题为${typeName}，请仔细审题并按照要求进行规范作答。`;
+            }
+        }
+
+        function confirmAddQuestionType() {
+            const title = document.getElementById('customTypeNameInput').value.trim() || `${selectedBaseType}`;
+            const defaultScore = parseFloat(document.getElementById('defaultScoreInput').value) || 2;
+            const count = parseInt(document.getElementById('initCountInput').value) || 3;
+            const desc = document.getElementById('typeDescInput').value.trim();
+
+            const newGroup = {
+                id: 'group_' + Date.now(),
+                type: selectedBaseType,
+                title: title,
+                scorePerQuestion: defaultScore,
+                desc: desc,
+                questions: []
+            };
+
+            for (let i = 1; i <= count; i++) {
+                newGroup.questions.push({
+                    id: 'q_' + Date.now() + '_' + i,
+                    stem: `这是示例${selectedBaseType}第 ${i} 题的题干内容，请仔细阅读题干信息。`,
+                    options: selectedBaseType === '判断题' ? ['A. 正确', 'B. 错误'] : ['A. 符合规范的表述选项', 'B. 具有干扰性质的对比选项', 'C. 常见的概念混淆选项', 'D. 典型的错误知识点表述'],
+                    answer: selectedBaseType === '判断题' ? '正确' : 'A',
+                    analysis: `【解析】：本题主要考查${selectedBaseType}核心知识点。正确掌握该考点是解题的关键依据。`,
+                    chapter: '第一章 核心基础知识点与理论体系',
+                    knowledge: '考点 1.2 核心基础规范与特征分析',
+                    score: defaultScore
+                });
+            }
+
+            exerciseGroups.push(newGroup);
+            renderExerciseGroups();
+            closeAddQuestionTypeModal();
+            showToast(`已成功添加题型大类「${title}」`);
+        }
+
+        // ==================== 渲染主工作台题目列表 ====================
+        function renderExerciseGroups() {
+            const container = document.getElementById('questionGroupsContainer');
+            const emptyPlaceholder = document.getElementById('emptyStatePlaceholder');
+
+            if (exerciseGroups.length === 0) {
+                container.innerHTML = '';
+                if (emptyPlaceholder) emptyPlaceholder.classList.remove('hidden');
+                updateAnswerSheetMatrix();
+                return;
+            }
+
+            if (emptyPlaceholder) emptyPlaceholder.classList.add('hidden');
+            let html = '';
+            let globalQuestionIndex = 1;
+
+            exerciseGroups.forEach((group, gIdx) => {
+                const groupScore = group.questions.reduce((acc, q) => acc + (q.score || group.scorePerQuestion || 2), 0);
+
+                html += `
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden" id="${group.id}">
+                        <!-- 题型大标题栏 -->
+                        <div class="px-5 py-3 bg-slate-50/80 border-b border-slate-200/80 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                                <h3 class="font-bold text-slate-800 text-sm">${group.title}</h3>
+                                <span class="text-xs text-slate-400">（共 ${group.questions.length} 小题，共 ${groupScore} 分）</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button type="button" onclick="addSingleQuestionToGroup('${group.id}')" class="px-2.5 py-1 text-xs text-blue-600 hover:bg-blue-50 rounded border border-blue-200 font-medium transition-colors flex items-center gap-1">
+                                    <i class="fas fa-plus text-[10px]"></i>
+                                    <span>添加小题</span>
+                                </button>
+                                <button type="button" onclick="deleteGroup('${group.id}')" class="text-slate-400 hover:text-rose-500 p-1 text-xs transition-colors" title="删除该大题">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        ${group.desc ? `
+                            <div class="px-5 py-2 bg-slate-50/40 text-xs text-slate-500 border-b border-slate-100">
+                                ${group.desc}
+                            </div>
+                        ` : ''}
+
+                        <!-- 题目列表 -->
+                        <div class="p-5 space-y-5 divide-y divide-slate-100">
+                            ${group.questions.map((q, qIdx) => {
+                                const currentQNum = globalQuestionIndex++;
+                                return `
+                                    <div class="pt-4 first:pt-0 space-y-3" id="q_card_${q.id}">
+                                        <div class="flex items-start justify-between gap-3">
+                                            <div class="flex items-start gap-2.5 flex-1">
+                                                <span class="w-6 h-6 rounded-full bg-blue-50 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0 border border-blue-200 mt-0.5">${currentQNum}</span>
+                                                <div class="flex-1 space-y-2">
+                                                    <div class="text-xs font-medium text-slate-800 leading-relaxed">${q.stem}</div>
+                                                    
+                                                    <!-- 选项 -->
+                                                    ${q.options && q.options.length > 0 ? `
+                                                        <div class="space-y-1.5 text-xs text-slate-600 pl-1">
+                                                            ${q.options.map(opt => `<div>${opt}</div>`).join('')}
+                                                        </div>
+                                                    ` : ''}
+
+                                                    <!-- 答案与考点标签 -->
+                                                    <div class="flex flex-wrap items-center gap-2 pt-1">
+                                                        <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-bold">
+                                                            正确答案：${q.answer}
+                                                        </span>
+                                                        <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px]">
+                                                            ${q.score} 分
+                                                        </span>
+                                                        <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-600 text-[10px] flex items-center gap-1">
+                                                            <i class="fas fa-folder text-[9px]"></i>
+                                                            <span>${q.chapter || '第一章 核心基础知识'}</span>
+                                                        </span>
+                                                        <span class="px-2 py-0.5 rounded bg-indigo-50 text-indigo-600 text-[10px] flex items-center gap-1">
+                                                            <i class="fas fa-tag text-[9px]"></i>
+                                                            <span>${q.knowledge || '考点 1.2 核心基础'}</span>
+                                                        </span>
+                                                    </div>
+
+                                                    <!-- 解析区域 (受显示解析开关控制) -->
+                                                    <div class="question-analysis-block ${showAnalysisState ? '' : 'hidden'} mt-2 p-3 bg-amber-50/60 border border-amber-200/80 rounded-lg text-xs text-amber-900 leading-relaxed">
+                                                        ${q.analysis || '【解析】：暂无解析内容。'}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="flex items-center gap-1 shrink-0 text-slate-400">
+                                                <button type="button" onclick="editSingleQuestion('${group.id}', '${q.id}')" class="p-1 hover:text-blue-600 transition-colors" title="编辑题目">
+                                                    <i class="fas fa-edit text-xs"></i>
+                                                </button>
+                                                <button type="button" onclick="deleteSingleQuestion('${group.id}', '${q.id}')" class="p-1 hover:text-rose-500 transition-colors" title="删除题目">
+                                                    <i class="fas fa-trash-alt text-xs"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            updateAnswerSheetMatrix();
+        }
+
+        // ==================== 单题操作 ====================
+        function addSingleQuestionToGroup(groupId) {
+            const group = exerciseGroups.find(g => g.id === groupId);
+            if (!group) return;
+
+            const qCount = group.questions.length + 1;
+            group.questions.push({
+                id: 'q_' + Date.now(),
+                stem: `新添加的${group.type}第 ${qCount} 题题干，请根据业务考点进行编辑完善。`,
+                options: group.type === '判断题' ? ['A. 正确', 'B. 错误'] : ['A. 规范选项 A', 'B. 规范选项 B', 'C. 规范选项 C', 'D. 规范选项 D'],
+                answer: group.type === '判断题' ? '正确' : 'A',
+                analysis: `【解析】：本题考查${group.type}相关的核心考点与基础理论知识。`,
+                chapter: '第一章 核心基础知识点与理论体系',
+                knowledge: '考点 1.2 核心基础规范与特征分析',
+                score: group.scorePerQuestion || 2
+            });
+
+            renderExerciseGroups();
+            showToast('已添加小题');
+        }
+
+        function deleteSingleQuestion(groupId, qId) {
+            const group = exerciseGroups.find(g => g.id === groupId);
+            if (!group) return;
+            group.questions = group.questions.filter(q => q.id !== qId);
+            renderExerciseGroups();
+            showToast('已删除题目');
+        }
+
+        function deleteGroup(groupId) {
+            exerciseGroups = exerciseGroups.filter(g => g.id !== groupId);
+            renderExerciseGroups();
+            showToast('已删除大题型');
+        }
+
+        function editSingleQuestion(groupId, qId) {
+            showToast('已开启题目编辑模式');
+        }
+
+        // ==================== 答题卡抽屉 ====================
+        function openAnswerSheetDrawer() {
+            document.getElementById('answerSheetDrawer').classList.remove('hidden');
+            updateAnswerSheetMatrix();
+        }
+
+        function closeAnswerSheetDrawer() {
+            document.getElementById('answerSheetDrawer').classList.add('hidden');
+        }
+
+        function updateAnswerSheetMatrix() {
+            const totalQ = exerciseGroups.reduce((acc, g) => acc + g.questions.length, 0);
+            const totalScore = exerciseGroups.reduce((acc, g) => {
+                return acc + g.questions.reduce((sum, q) => sum + (q.score || g.scorePerQuestion || 2), 0);
+            }, 0);
+
+            document.getElementById('drawerTotalQuestions').innerText = totalQ;
+            document.getElementById('drawerTotalScore').innerText = totalScore;
+            document.getElementById('drawerGroupCount').innerText = exerciseGroups.length;
+
+            const gridContainer = document.getElementById('drawerQuestionGrid');
+            if (!gridContainer) return;
+
+            let globalIdx = 1;
+            let html = '';
+
+            exerciseGroups.forEach(group => {
+                html += `
+                    <div class="space-y-2">
+                        <div class="font-bold text-slate-700 text-xs flex items-center justify-between">
+                            <span>${group.title}</span>
+                            <span class="text-slate-400 font-normal">（${group.questions.length} 题）</span>
+                        </div>
+                        <div class="grid grid-cols-5 gap-2">
+                            ${group.questions.map(q => {
+                                const num = globalIdx++;
+                                return `
+                                    <button type="button" onclick="scrollToQuestion('q_card_${q.id}')" class="h-8 rounded-lg bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-600 border border-blue-200 font-semibold text-xs transition-colors flex items-center justify-center">
+                                        ${num}
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (exerciseGroups.length === 0) {
+                html = `<div class="text-center text-slate-400 py-8 text-xs">暂无试题数据</div>`;
+            }
+
+            gridContainer.innerHTML = html;
+        }
+
+        function scrollToQuestion(elementId) {
+            const el = document.getElementById(elementId);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.classList.add('ring-2', 'ring-blue-500', 'rounded-xl');
+                setTimeout(() => el.classList.remove('ring-2', 'ring-blue-500'), 1800);
+                closeAnswerSheetDrawer();
+            }
+        }
+
+        // ==================== 底部固定栏保存/取消 ====================
+        function handleCancel() {
+            if (confirm('确定要取消编辑并返回试题库吗？未保存的内容将丢失。')) {
+                window.location.href = 'shitiku.html';
+            }
+        }
+
+        function handleConfirmSave() {
+            const allowDup = document.getElementById('allowDuplicateImport').checked;
+            const totalQ = exerciseGroups.reduce((acc, g) => acc + g.questions.length, 0);
+
+            if (totalQ === 0) {
+                showToast('请至少添加一道试题后再进行保存');
+                return;
+            }
+
+            showToast(`保存成功！共导入 ${totalQ} 道试题${allowDup ? '（已允许重题导入）' : ''}`);
+            setTimeout(() => {
+                window.location.href = 'shitiku.html';
+            }, 1200);
+        }
+
+        // 加载示例数据
+        function loadSampleExerciseData() {
+            parsedQuestionsBuffer = parseRawQuestions(sampleQuestionsText);
+            confirmImportToWorkbench();
+        }
+    </script>
+</body>
+</html>

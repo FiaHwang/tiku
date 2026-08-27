@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>库课管理平台 - 作业本</title>
+    <!-- FontAwesome & Tailwind CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f1f5f9;
+            color: #334155;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Custom scrollbars */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Nav hover and active states */
+        .primary-nav-item {
+            transition: all 0.15s ease;
+        }
+        .primary-nav-item:hover {
+            color: #2563eb;
+            background-color: #f8fafc;
+        }
+        .primary-nav-item.active {
+            color: #2563eb;
+            background-color: #eff6ff;
+            font-weight: 600;
+        }
+
+        .secondary-subitem {
+            transition: all 0.15s ease;
+        }
+
+        .modal-backdrop {
+            background-color: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(2px);
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .animate-scale-in {
+            animation: scaleIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen text-sm select-none">
+
+    <!-- 顶部 Top Header Bar -->
+    <header class="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 z-20 shrink-0 shadow-xs">
+        <!-- Left Section: Logo & Platform Title -->
+        <div class="flex items-center gap-3">
+            <!-- Red Square Logo Badge -->
+            <a href="../index.html" title="返回首页" class="bg-[#e52e2e] text-white rounded px-2 py-1 flex flex-col justify-center items-center shadow-xs hover:opacity-90 transition-opacity">
+                <span class="text-sm font-black leading-tight tracking-wider">库课</span>
+                <span class="text-[8px] scale-90 font-sans tracking-tighter opacity-90 leading-none">Cook Life</span>
+            </a>
+            
+            <!-- Platform Title -->
+            <a href="../index.html" title="返回首页" class="text-lg font-bold text-slate-800 tracking-tight hover:text-blue-600 transition-colors">库课管理平台</a>
+
+            <!-- Big Question Bank Pill Button -->
+            <button class="ml-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-medium flex items-center gap-1.5 hover:bg-blue-100 transition-colors border border-blue-100">
+                <span>大题库</span>
+                <i class="fas fa-exchange-alt text-[10px]"></i>
+            </button>
+        </div>
+
+        <!-- Right Section: Search & Utilities & User Profile -->
+        <div class="flex items-center gap-4">
+            <!-- Search Box -->
+            <div class="relative flex items-center">
+                <i class="fas fa-search absolute left-3 text-slate-400 text-xs"></i>
+                <input type="text" placeholder="请输入功能或作业本标题" class="bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-1.5 text-xs w-64 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white transition-all">
+            </div>
+
+            <!-- Purple AI Cloud Circle Icon -->
+            <button class="w-7 h-7 bg-indigo-500 hover:bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-xs transition-transform active:scale-95" title="库AI助手">
+                <i class="fas fa-cloud text-xs"></i>
+            </button>
+
+            <!-- Utility Action Icons -->
+            <div class="flex items-center gap-3 text-slate-500 text-base">
+                <button class="hover:text-slate-800 transition-colors" title="文档"><i class="far fa-file-alt"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="待办"><i class="far fa-check-square"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="下发与同步"><i class="fas fa-cloud-upload-alt"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="消息通知"><i class="far fa-comment-dots"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="帮助中心"><i class="far fa-question-circle"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="意见反馈"><i class="far fa-edit"></i></button>
+                <button class="hover:text-slate-800 transition-colors" title="应用市场"><i class="fas fa-store"></i></button>
+            </div>
+
+            <div class="h-4 w-px bg-slate-200"></div>
+
+            <!-- User Info Dropdown -->
+            <div class="flex items-center gap-1.5 cursor-pointer group">
+                <span class="text-xs font-medium text-slate-700 group-hover:text-blue-600 transition-colors">黄飞亚</span>
+                <i class="fas fa-caret-down text-xs text-slate-400 group-hover:text-blue-600 transition-colors"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Header 下方的 Tab 标签栏 -->
+    <div class="h-9 bg-slate-100 border-b border-slate-200 flex items-center px-2 gap-1 text-xs shrink-0 z-10">
+        <!-- Home Icon Item -->
+        <a href="../index.html" class="flex items-center gap-1 px-2.5 py-1 text-slate-600 font-medium hover:text-slate-900 cursor-pointer">
+            <i class="fas fa-home text-sm"></i>
+            <span>首页</span>
+        </a>
+
+        <div class="h-4 w-px bg-slate-300 mx-1"></div>
+
+        <!-- Left Arrow Scroll Button -->
+        <button class="w-6 h-6 bg-white border border-slate-200 rounded flex items-center justify-center text-slate-400 hover:text-slate-700 hover:border-slate-300 shadow-2xs">
+            <i class="fas fa-chevron-left text-[10px]"></i>
+        </button>
+
+        <!-- Tab Items Container -->
+        <div class="flex items-center gap-1 overflow-x-auto custom-scrollbar py-0.5">
+            <!-- Active Tab: 作业本 -->
+            <div class="px-3 py-1 bg-white border border-blue-500 text-blue-600 rounded font-medium cursor-pointer shadow-2xs flex items-center gap-2">
+                <span>作业本</span>
+                <i class="fas fa-times text-[10px] text-blue-400 hover:text-blue-700 transition-colors"></i>
+            </div>
+        </div>
+
+        <!-- Right Arrow Scroll Button -->
+        <button class="w-6 h-6 bg-white border border-slate-200 rounded flex items-center justify-center text-slate-400 hover:text-slate-700 hover:border-slate-300 shadow-2xs ml-auto">
+            <i class="fas fa-chevron-right text-[10px]"></i>
+        </button>
+    </div>
+
+    <!-- 主体内容区域 (双栏导航 + 主工作台) -->
+    <div class="flex flex-1 overflow-hidden">
+
+        <!-- 左侧一级导航 (Primary Icon Navigation Sidebar) -->
+        <aside class="w-16 bg-white border-r border-slate-200 flex flex-col items-center py-2 overflow-y-auto custom-scrollbar shrink-0 gap-1">
+            <a href="../index.html" class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-home text-base"></i>
+                <span class="text-[10px]">首页</span>
+            </a>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-cloud text-base"></i>
+                <span class="text-[10px]">库AI</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-share-nodes text-base"></i>
+                <span class="text-[10px]">运营</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-crosshairs text-base"></i>
+                <span class="text-[10px]">营销</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-bullhorn text-base"></i>
+                <span class="text-[10px]">推广</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-route text-base"></i>
+                <span class="text-[10px]">线索</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-users text-base"></i>
+                <span class="text-[10px]">CRM</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-comment-dots text-base"></i>
+                <span class="text-[10px]">SCRM</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-sitemap text-base"></i>
+                <span class="text-[10px]">渠道</span>
+            </div>
+
+            <!-- Main Menu: 商品 -->
+            <a href="shijuanbao_guanli.html" class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-shopping-bag text-base"></i>
+                <span class="text-[10px]">商品</span>
+            </a>
+
+            <!-- Main Menu: 题库 -->
+            <a href="shitiku.html" class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-file-signature text-base"></i>
+                <span class="text-[10px]">题库</span>
+            </a>
+
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-id-card text-base"></i>
+                <span class="text-[10px]">资讯</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-basket-shopping text-base"></i>
+                <span class="text-[10px]">采购</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-clipboard-list text-base"></i>
+                <span class="text-[10px]">订单</span>
+            </div>
+
+            <!-- Active Selected Main Menu: 学服 -->
+            <a href="zuoyeben.html" class="primary-nav-item active w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer">
+                <i class="fas fa-graduation-cap text-base text-blue-600"></i>
+                <span class="text-[10px] text-blue-600 font-semibold">学服</span>
+            </a>
+
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-comments text-base"></i>
+                <span class="text-[10px]">答疑</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-lightbulb text-base"></i>
+                <span class="text-[10px]">教务</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-user-tie text-base"></i>
+                <span class="text-[10px]">师资</span>
+            </div>
+            <a href="xuesheng_shuju.html" class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-chart-line text-base"></i>
+                <span class="text-[10px]">数据</span>
+            </a>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-headset text-base"></i>
+                <span class="text-[10px]">坐席</span>
+            </div>
+            <div class="primary-nav-item w-12 h-11 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-slate-600">
+                <i class="fas fa-mobile-screen-button text-base"></i>
+                <span class="text-[10px]">设备</span>
+            </div>
+        </aside>
+
+        <!-- 左侧二级子导航 (Secondary Sub-Navigation Sidebar - 完美吻合用户截图结构) -->
+        <aside class="w-36 bg-white border-r border-slate-200 overflow-y-auto custom-scrollbar py-3 px-2 flex flex-col gap-2 shrink-0 select-none">
+            
+            <!-- Group 1: 学员 (默认展开) -->
+            <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleSubMenu('menu-xuesheng')">
+                    <span>学员</span>
+                    <i class="fas fa-chevron-up text-[9px] transition-transform duration-200" id="arrow-menu-xuesheng"></i>
+                </div>
+                <div class="space-y-0.5" id="menu-xuesheng">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        学员课程
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 2: 数据看板 (默认展开) -->
+            <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleSubMenu('menu-shuju')">
+                    <span>数据看板</span>
+                    <i class="fas fa-chevron-up text-[9px] transition-transform duration-200" id="arrow-menu-shuju"></i>
+                </div>
+                <div class="space-y-0.5" id="menu-shuju">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        学管师看板
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 3: 服务 (默认展开) -->
+            <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleSubMenu('menu-fuwu')">
+                    <span>服务</span>
+                    <i class="fas fa-chevron-up text-[9px] transition-transform duration-200" id="arrow-menu-fuwu"></i>
+                </div>
+                <div class="space-y-0.5" id="menu-fuwu">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        约课管理
+                    </div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        直播跟课
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 4: 工具 (默认展开，去除了作业列表菜单) -->
+            <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleSubMenu('menu-gongju')">
+                    <span>工具</span>
+                    <i class="fas fa-chevron-up text-[9px] transition-transform duration-200" id="arrow-menu-gongju"></i>
+                </div>
+                <div class="space-y-0.5" id="menu-gongju">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        学习计划
+                    </div>
+                    <!-- 作业本 高亮激活 -->
+                    <a href="zuoyeben.html" class="secondary-subitem active px-2.5 py-1.5 rounded-md text-xs bg-blue-50 text-blue-600 font-semibold cursor-pointer block whitespace-nowrap">
+                        作业本
+                    </a>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        单词任务
+                    </div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        资料包
+                    </div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        AI督学
+                    </div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        学员回访
+                    </div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        问卷调查
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 5: 设置 (默认展开) -->
+            <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium px-2 py-1 cursor-pointer hover:text-slate-600" onclick="toggleSubMenu('menu-shezhi')">
+                    <span>设置</span>
+                    <i class="fas fa-chevron-up text-[9px] transition-transform duration-200" id="arrow-menu-shezhi"></i>
+                </div>
+                <div class="space-y-0.5" id="menu-shezhi">
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        学管师管理
+                    </div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        服务商品
+                    </div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        标签管理
+                    </div>
+                    <div class="secondary-subitem px-2.5 py-1.5 rounded-md text-xs text-slate-600 cursor-pointer whitespace-nowrap hover:bg-slate-50 hover:text-blue-600">
+                        直播排班
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 右侧作业本主视图工作台 -->
+        <main class="flex-1 bg-white flex flex-col overflow-hidden">
+
+            <!-- 页面标题 -->
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
+                <h1 class="text-base font-bold text-slate-900 tracking-tight">作业本</h1>
+            </div>
+
+            <!-- 主内容滚动区 -->
+            <div class="flex-1 overflow-y-auto custom-scrollbar p-6 flex flex-col gap-4">
+
+                <!-- 顶部分组筛选栏 (极简灰色外框布局) -->
+                <div class="bg-slate-50/70 border border-slate-100 rounded-lg p-3.5 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex flex-wrap items-center gap-4">
+                        <!-- 创建时间 -->
+                        <div class="flex items-center gap-2">
+                            <span class="text-slate-600 whitespace-nowrap text-xs">创建时间</span>
+                            <div class="flex items-center bg-white border border-slate-200 rounded-md px-3 py-1.5 text-xs text-slate-700 shadow-2xs hover:border-slate-300 focus-within:border-blue-500 transition-colors">
+                                <i class="far fa-clock text-slate-400 mr-2 text-xs"></i>
+                                <input type="text" id="filterStartTime" value="2025-08-27 00:00:00" class="w-36 focus:outline-none bg-transparent text-slate-700 text-xs">
+                                <span class="text-slate-400 mx-2">-</span>
+                                <input type="text" id="filterEndTime" value="2026-08-27 23:59:59" class="w-36 focus:outline-none bg-transparent text-slate-700 text-xs">
+                            </div>
+                        </div>
+
+                        <!-- 作业本名称 -->
+                        <div class="flex items-center gap-2">
+                            <span class="text-slate-600 whitespace-nowrap text-xs">作业本名称</span>
+                            <input type="text" id="filterZuoyebenName" placeholder="请输入作业本名称" class="border border-slate-200 rounded-md px-3 py-1.5 text-xs text-slate-700 bg-white placeholder-slate-400 focus:outline-none focus:border-blue-500 w-52 shadow-2xs transition-colors">
+                        </div>
+
+                        <!-- 关联类型 -->
+                        <div class="flex items-center gap-2">
+                            <span class="text-slate-600 whitespace-nowrap text-xs">关联类型</span>
+                            <select id="filterRelationType" class="border border-slate-200 rounded-md px-3 py-1.5 text-xs text-slate-600 bg-white focus:outline-none focus:border-blue-500 w-44 shadow-2xs cursor-pointer transition-colors">
+                                <option value="">请选择关联类型</option>
+                                <option value="商品">商品</option>
+                                <option value="班型">班型</option>
+                                <option value="科目">科目</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 查询 / 重置 按钮 -->
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="searchZuoyeben()" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-medium shadow-2xs transition-colors cursor-pointer flex items-center gap-1.5">
+                            <i class="fas fa-search text-[10px]"></i>
+                            <span>查 询</span>
+                        </button>
+                        <button type="button" onclick="resetSearch()" class="px-4 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-md text-xs font-medium transition-colors cursor-pointer">
+                            重 置
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 动作按钮行: + 新增作业本 | 批量分配学管师 -->
+                <div class="flex items-center gap-2.5 pt-1">
+                    <button type="button" onclick="openAddModal()" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium shadow-2xs transition-colors cursor-pointer flex items-center gap-1">
+                        <i class="fas fa-plus text-[10px]"></i>
+                        <span>新增作业本</span>
+                    </button>
+                    <button type="button" onclick="batchAssignTeacher()" class="px-3.5 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded text-xs font-medium transition-colors cursor-pointer">
+                        批量分配学管师
+                    </button>
+                </div>
+
+                <!-- 数据表格区域 -->
+                <div class="border border-slate-200 rounded-lg overflow-hidden bg-white shadow-2xs">
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-medium">
+                                    <th class="py-3 px-3 w-10 text-center">
+                                        <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
+                                    </th>
+                                    <th class="py-3 px-3 font-medium text-slate-700">作业本名称</th>
+                                    <th class="py-3 px-3 font-medium text-slate-700">专业分类</th>
+                                    <th class="py-3 px-3 font-medium text-slate-700">关联商品/班型/科目</th>
+                                    <th class="py-3 px-3 font-medium text-slate-700">关联类型</th>
+                                    <th class="py-3 px-3 font-medium text-slate-700">学管师</th>
+                                    <th class="py-3 px-3 font-medium text-slate-700">作业数</th>
+                                    <th class="py-3 px-3 font-medium text-slate-700">创建时间</th>
+                                    <th class="py-3 px-3 font-medium text-slate-700">创建人</th>
+                                    <th class="py-3 px-3 font-medium text-slate-700 w-28">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="zuoyebenTbody" class="divide-y divide-slate-100 text-slate-700">
+                                <!-- 动态内容渲染 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 底部分页栏 (完美对应截图样式) -->
+                <div class="flex items-center justify-end gap-3 text-xs text-slate-500 pt-2 shrink-0">
+                    <span id="totalCountText">共 1 条</span>
+                    <select class="border border-slate-200 rounded px-2 py-1 text-xs text-slate-600 bg-white focus:outline-none focus:border-blue-500 cursor-pointer">
+                        <option value="10">10条/页</option>
+                        <option value="20">20条/页</option>
+                        <option value="50">50条/页</option>
+                    </select>
+                    <div class="flex items-center gap-1">
+                        <button class="w-6 h-6 border border-slate-200 rounded bg-slate-50 text-slate-300 cursor-not-allowed flex items-center justify-center">
+                            <i class="fas fa-chevron-left text-[9px]"></i>
+                        </button>
+                        <button class="w-6 h-6 border border-blue-500 bg-blue-600 text-white rounded font-medium flex items-center justify-center">
+                            1
+                        </button>
+                        <button class="w-6 h-6 border border-slate-200 rounded bg-slate-50 text-slate-300 cursor-not-allowed flex items-center justify-center">
+                            <i class="fas fa-chevron-right text-[9px]"></i>
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-1 text-slate-500 ml-1">
+                        <span>前往</span>
+                        <input type="text" value="1" class="w-8 border border-slate-200 rounded text-center py-0.5 text-xs focus:outline-none focus:border-blue-500">
+                        <span>页</span>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- 新增/编辑作业本 模态框 -->
+    <div id="addZuoyebenModal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden animate-scale-in">
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <h3 id="modalTitle" class="font-bold text-slate-800 text-sm">新增作业本</h3>
+                <button type="button" onclick="closeAddModal()" class="text-slate-400 hover:text-slate-600 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4 text-xs">
+                <div>
+                    <label class="block text-slate-700 font-medium mb-1"><span class="text-rose-500 mr-0.5">*</span>作业本名称</label>
+                    <input type="text" id="inputName" placeholder="请输入作业本名称" class="w-full border border-slate-200 rounded px-3 py-2 text-slate-700 focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-slate-700 font-medium mb-1"><span class="text-rose-500 mr-0.5">*</span>专业分类</label>
+                    <select id="inputCategory" class="w-full border border-slate-200 rounded px-3 py-2 text-slate-700 focus:outline-none focus:border-blue-500 bg-white">
+                        <option value="专升本" selected>专升本</option>
+                        <option value="AI">AI</option>
+                        <option value="事业单位">事业单位</option>
+                        <option value="大学英语">大学英语</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-slate-700 font-medium mb-1"><span class="text-rose-500 mr-0.5">*</span>关联类型</label>
+                    <select id="inputRelationType" class="w-full border border-slate-200 rounded px-3 py-2 text-slate-700 focus:outline-none focus:border-blue-500 bg-white">
+                        <option value="商品" selected>商品</option>
+                        <option value="班型">班型</option>
+                        <option value="科目">科目</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-slate-700 font-medium mb-1"><span class="text-rose-500 mr-0.5">*</span>关联名称（商品/班型/科目）</label>
+                    <input type="text" id="inputRelationTarget" value="招银分校集训专用营商品（1）" placeholder="请输入关联对象名称" class="w-full border border-slate-200 rounded px-3 py-2 text-slate-700 focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-slate-700 font-medium mb-1">学管师</label>
+                    <input type="text" id="inputTeacher" placeholder="未分配（填 - 代表未分配）" class="w-full border border-slate-200 rounded px-3 py-2 text-slate-700 focus:outline-none focus:border-blue-500">
+                </div>
+            </div>
+            <div class="px-6 py-3 border-t border-slate-100 bg-white flex items-center justify-end gap-2.5">
+                <button type="button" onclick="closeAddModal()" class="px-4 py-1.5 border border-slate-200 text-slate-600 hover:bg-slate-50 rounded text-xs">取消</button>
+                <button type="button" onclick="submitSaveZuoyeben()" class="px-5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium">确 定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast 提示框 -->
+    <div id="toastNotification" class="fixed bottom-6 right-6 z-50 bg-slate-800 text-white text-xs px-4 py-2.5 rounded-lg shadow-xl flex items-center gap-2 transform transition-all duration-300 translate-y-12 opacity-0 pointer-events-none">
+        <i id="toastIcon" class="fas fa-circle-check text-emerald-400"></i>
+        <span id="toastMessage">操作成功</span>
+    </div>
+
+    <script>
+        // 模版数据 (完全吻合截图)
+        let zuoyebenData = [
+            {
+                id: 'ZB20260702001',
+                name: '作业本',
+                category: '专升本',
+                target: '招银分校集训专用营商品（1）',
+                relationType: '商品',
+                teacher: '-',
+                homeworkCount: 1,
+                createTime: '2026-07-02 17:42:58',
+                creator: '郭超强'
+            }
+        ];
+
+        let editingId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTable();
+        });
+
+        // 渲染作业本表格
+        function renderTable(list = zuoyebenData) {
+            const tbody = document.getElementById('zuoyebenTbody');
+            document.getElementById('totalCountText').innerText = `共 ${list.length} 条`;
+
+            if (list.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="py-12 text-center text-slate-400">
+                            <i class="far fa-folder-open text-2xl mb-2 text-slate-300 block"></i>
+                            <span>暂无符合条件的作业本数据</span>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = list.map((item, index) => `
+                <tr class="hover:bg-slate-50/80 transition-colors">
+                    <td class="py-3 px-3 text-center">
+                        <input type="checkbox" value="${item.id}" class="row-checkbox rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
+                    </td>
+                    <td class="py-3 px-3 font-medium text-slate-800">${escapeHtml(item.name)}</td>
+                    <td class="py-3 px-3 text-slate-600">${escapeHtml(item.category)}</td>
+                    <td class="py-3 px-3 text-slate-600">${escapeHtml(item.target)}</td>
+                    <td class="py-3 px-3 text-slate-600">${escapeHtml(item.relationType)}</td>
+                    <td class="py-3 px-3 text-slate-600">${escapeHtml(item.teacher)}</td>
+                    <td class="py-3 px-3 text-slate-600">${item.homeworkCount}</td>
+                    <td class="py-3 px-3 text-slate-500">${item.createTime}</td>
+                    <td class="py-3 px-3 text-slate-600">${escapeHtml(item.creator)}</td>
+                    <td class="py-3 px-3">
+                        <div class="flex items-center gap-3">
+                            <button type="button" onclick="editZuoyeben(${index})" class="text-blue-600 hover:text-blue-800 hover:underline cursor-pointer font-medium">编辑</button>
+                            <a href="zuoye_liebiao.html?zbName=${encodeURIComponent(item.name)}" class="text-blue-600 hover:text-blue-800 hover:underline cursor-pointer font-medium">作业列表</a>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // 侧边栏子菜单折叠/展开
+        function toggleSubMenu(menuId) {
+            const menuEl = document.getElementById(menuId);
+            const arrowEl = document.getElementById('arrow-' + menuId);
+            if (!menuEl) return;
+            if (menuEl.classList.contains('hidden')) {
+                menuEl.classList.remove('hidden');
+                if (arrowEl) arrowEl.classList.replace('fa-chevron-down', 'fa-chevron-up');
+            } else {
+                menuEl.classList.add('hidden');
+                if (arrowEl) arrowEl.classList.replace('fa-chevron-up', 'fa-chevron-down');
+            }
+        }
+
+        // 全选 / 取消全选
+        function toggleSelectAll(checkbox) {
+            const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+            rowCheckboxes.forEach(cb => cb.checked = checkbox.checked);
+        }
+
+        // 检索
+        function searchZuoyeben() {
+            const nameKey = (document.getElementById('filterZuoyebenName').value || '').trim().toLowerCase();
+            const relKey = document.getElementById('filterRelationType').value;
+
+            const filtered = zuoyebenData.filter(item => {
+                const matchName = !nameKey || item.name.toLowerCase().includes(nameKey);
+                const matchRel = !relKey || item.relationType === relKey;
+                return matchName && matchRel;
+            });
+
+            renderTable(filtered);
+            showToast(`已搜索出 ${filtered.length} 条记录`);
+        }
+
+        // 重置检索
+        function resetSearch() {
+            document.getElementById('filterZuoyebenName').value = '';
+            document.getElementById('filterRelationType').value = '';
+            renderTable(zuoyebenData);
+            showToast('已重置查询条件');
+        }
+
+        // 打开新增弹窗 (按要求先不弹窗)
+        function openAddModal() {
+            showToast('新增作业本暂不打开弹窗');
+        }
+
+        // 打开编辑弹窗
+        function editZuoyeben(index) {
+            const item = zuoyebenData[index];
+            if (!item) return;
+            editingId = item.id;
+            document.getElementById('modalTitle').innerText = '编辑作业本';
+            document.getElementById('inputName').value = item.name;
+            document.getElementById('inputCategory').value = item.category;
+            document.getElementById('inputRelationType').value = item.relationType;
+            document.getElementById('inputRelationTarget').value = item.target;
+            document.getElementById('inputTeacher').value = item.teacher === '-' ? '' : item.teacher;
+            document.getElementById('addZuoyebenModal').classList.remove('hidden');
+        }
+
+        function closeAddModal() {
+            document.getElementById('addZuoyebenModal').classList.add('hidden');
+        }
+
+        // 提交保存作业本
+        function submitSaveZuoyeben() {
+            const name = (document.getElementById('inputName').value || '').trim();
+            const category = document.getElementById('inputCategory').value;
+            const relationType = document.getElementById('inputRelationType').value;
+            const target = (document.getElementById('inputRelationTarget').value || '').trim();
+            const teacher = (document.getElementById('inputTeacher').value || '').trim() || '-';
+
+            if (!name) {
+                showToast('请输入作业本名称', 'error');
+                return;
+            }
+
+            const now = new Date();
+            const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+            if (editingId) {
+                const targetObj = zuoyebenData.find(x => x.id === editingId);
+                if (targetObj) {
+                    targetObj.name = name;
+                    targetObj.category = category;
+                    targetObj.relationType = relationType;
+                    targetObj.target = target || '关联明细(1)';
+                    targetObj.teacher = teacher;
+                }
+                showToast(`已成功更新作业本「${name}」`);
+            } else {
+                const newItem = {
+                    id: 'ZB' + Date.now(),
+                    name: name,
+                    category: category,
+                    target: target || '招银分校集训专用营商品（1）',
+                    relationType: relationType,
+                    teacher: teacher,
+                    homeworkCount: 0,
+                    createTime: timeStr,
+                    creator: '黄飞亚'
+                };
+                zuoyebenData.unshift(newItem);
+                showToast(`已成功创建作业本「${name}」`);
+            }
+
+            closeAddModal();
+            renderTable();
+        }
+
+        // 批量分配学管师
+        function batchAssignTeacher() {
+            const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+            if (checkedBoxes.length === 0) {
+                showToast('请先勾选需要分配学管师的作业本', 'error');
+                return;
+            }
+            const teacherName = prompt('请输入学管师姓名：', '王老师');
+            if (teacherName) {
+                const selectedIds = Array.from(checkedBoxes).map(cb => cb.value);
+                zuoyebenData.forEach(item => {
+                    if (selectedIds.includes(item.id)) {
+                        item.teacher = teacherName;
+                    }
+                });
+                renderTable();
+                showToast(`已批量为 ${selectedIds.length} 项作业本分配学管师「${teacherName}」`);
+            }
+        }
+
+        // HTML 转义
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        // Toast 提示函数
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toastNotification');
+            const toastMsg = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.innerText = message;
+            if (type === 'error') {
+                toastIcon.className = 'fas fa-circle-exclamation text-rose-400';
+            } else {
+                toastIcon.className = 'fas fa-circle-check text-emerald-400';
+            }
+
+            toast.classList.remove('translate-y-12', 'opacity-0', 'pointer-events-none');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-12', 'opacity-0', 'pointer-events-none');
+            }, 2600);
+        }
+    </script>
+</body>
+</html>

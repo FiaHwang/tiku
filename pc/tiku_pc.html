@@ -1476,6 +1476,12 @@
             const btn = e.target.closest('.action-btn, .score-prediction-btn');
             if (!btn) return;
             
+            // 如果按钮元素带有内联 onclick 属性，优先执行内联事件逻辑，全局监听不进行覆盖覆盖
+            const onclickAttr = btn.getAttribute('onclick');
+            if (onclickAttr && onclickAttr.includes('window.location.href')) {
+                return;
+            }
+
             const text = btn.textContent.trim();
             // 统考试卷和大联考中的特定按钮不跳转
             if (text === '预约考试' || text === '等待考试') {
@@ -2563,7 +2569,7 @@
                                             <span>进行中：0/20</span>
                                             <span>试卷说明</span>
                                             <div style="display: flex; gap: 12px;">
-                                                <button class="score-prediction-btn btn-view-report" onclick="window.location.href='baogao_guda_pc.html'">查看报告</button>
+                                                <button class="score-prediction-btn btn-view-report" onclick="window.location.href='baogao_bukao_pc.html?from=daliankao'">查看报告</button>
                                                 <button class="score-prediction-btn" onclick="window.location.href='dati_yemian_pc.html'" style="padding: 6px 16px; background-color: #ff4d4f; color: #fff; border: 1px solid #ff4d4f; border-radius: 4px; font-size: 14px; cursor: pointer;">继续考试</button>
                                             </div>
                                         </div>

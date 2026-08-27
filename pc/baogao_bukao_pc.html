@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>报告 - 库课网校</title>
+    <title>试卷报告 - 库课网校</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -189,19 +189,13 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
         }
-
-        /* 图表 Tooltip 动画 */
-        .chart-tooltip {
-            transition: all 0.2s ease-out;
-            pointer-events: none;
-        }
     </style>
 </head>
 <body>
 
     <!-- 顶部导航栏 -->
     <header class="top-nav">
-        <div class="logo" onclick="window.location.href = '../index.html'">
+        <div class="logo" onclick="window.location.href = 'tiku_pc.html'">
             <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=red%20background%20with%20white%20chinese%20characters%20%E5%BA%93%E8%AF%BE%20with%20registered%20trademark%20symbol%20simple%20clean%20logo&image_size=square" alt="库课网校" />
             <span style="font-weight: bold; color: #333; margin-left: 8px;">库课网校</span>
         </div>
@@ -234,7 +228,7 @@
     <!-- Main Container -->
     <div class="main-container max-w-[1240px] w-full mx-auto my-6 px-6 flex-1 flex flex-col">
         
-        <!-- Breadcrumb & Header Title (Aligned to Left Column) -->
+        <!-- Breadcrumb & Header Title -->
         <div class="grid grid-cols-12 gap-6 items-center mb-5">
             <div class="col-span-12 lg:col-span-8 flex items-center justify-between relative min-h-[36px]">
                 <div onclick="window.history.back()" class="cursor-pointer text-slate-600 hover:text-sky-600 font-medium text-sm flex items-center gap-2 transition-colors z-10">
@@ -249,7 +243,7 @@
             <div class="hidden lg:block lg:col-span-4"></div>
         </div>
 
-        <!-- Desktop Split Layout (Left: Stats & Breakdown, Right: Answer Sheet with reduced width) -->
+        <!-- Desktop Split Layout -->
         <div class="grid grid-cols-12 gap-6 items-start">
             
             <!-- Left Side: Stats, Analysis, Charts & Question Breakdown (8/12 width) -->
@@ -264,7 +258,7 @@
 
                     <div class="border-t border-dashed border-slate-200"></div>
 
-                    <!-- Dashboard Grid: Row 1 (4 Score & Time Metrics) -->
+                    <!-- Dashboard Grid: 4 Score & Time Metrics (No ranking metrics for Bukao report) -->
                     <div class="grid grid-cols-4 gap-2.5">
                         <div class="text-center p-3 rounded-xl bg-sky-50/70 border border-sky-100">
                             <div class="text-xl font-extrabold text-[#0ea5e9]">33.5<span class="text-xs font-normal text-[#0ea5e9]">/100</span></div>
@@ -284,19 +278,7 @@
                         </div>
                     </div>
 
-                    <!-- Dashboard Grid: Row 2 (Ranking Metrics) -->
-                    <div class="grid grid-cols-2 gap-3 pt-1">
-                        <div class="text-center p-3 rounded-xl bg-teal-50/70 border border-teal-100">
-                            <div class="text-2xl font-extrabold text-teal-600">33<span class="text-xs font-normal text-teal-600">/89</span></div>
-                            <div class="text-xs text-slate-500 mt-1">排名位次</div>
-                        </div>
-                        <div class="text-center p-3 rounded-xl bg-teal-50/70 border border-teal-100">
-                            <div class="text-2xl font-extrabold text-teal-600">40.05%</div>
-                            <div class="text-xs text-slate-500 mt-1">排名百分比</div>
-                        </div>
-                    </div>
-
-                    <!-- Dashboard Grid: Row 3 (Question Status Breakdown) -->
+                    <!-- Dashboard Grid: Question Status Breakdown -->
                     <div class="grid grid-cols-5 gap-2 pt-1 text-center bg-slate-50 rounded-xl p-3 border border-slate-100">
                         <div>
                             <div class="text-sm font-bold text-[#0ea5e9]">10 题</div>
@@ -506,7 +488,7 @@
                             <circle cx="395" cy="125" r="5" fill="#84cc16" stroke="#ffffff" stroke-width="2" class="cursor-pointer" />
                         </svg>
 
-                        <!-- White Tooltip Box at Point 1 -->
+                        <!-- Tooltip Box -->
                         <div class="absolute bg-white text-xs p-2.5 rounded-lg border border-slate-200 shadow-lg flex flex-col gap-0.5" style="left: 14%; top: 10%;">
                             <div class="font-bold text-slate-500 text-[11px]">第1次</div>
                             <div class="font-medium text-slate-700">得分：50分</div>
@@ -700,7 +682,7 @@
                                 <div class="space-y-2">
                                     <div class="text-xs font-bold text-slate-700">一、单项选择题</div>
                                     <div class="grid grid-cols-5 gap-2">
-                                        <!-- Numbers 1 to 15 (zinc-500 correctly answered) -->
+                                        <!-- Numbers 1 to 15 -->
                                         <div onclick="goToQuestion(1)" class="q-card-btn h-9 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">1</div>
                                         <div onclick="goToQuestion(2)" class="q-card-btn h-9 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">2</div>
                                         <div onclick="goToQuestion(3)" class="q-card-btn h-9 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">3</div>
@@ -722,22 +704,18 @@
                                 <div class="space-y-2 mt-3">
                                     <div class="text-xs font-bold text-slate-700">二、填空题</div>
                                     <div class="grid grid-cols-5 gap-2">
-                                        <!-- 16: Answered with full points (5分, green) -->
                                         <div onclick="goToQuestion(16)" class="q-card-btn flex flex-col items-center gap-0.5">
                                             <div class="w-full h-9 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">16</div>
                                             <span class="text-[10px] font-bold text-emerald-500">5分</span>
                                         </div>
-                                        <!-- 17: Unanswered (0分, red) -->
                                         <div onclick="goToQuestion(17)" class="q-card-btn flex flex-col items-center gap-0.5">
                                             <div class="w-full h-9 bg-white text-zinc-400 border border-zinc-300 rounded-lg flex items-center justify-center font-bold text-xs">17</div>
                                             <span class="text-[10px] font-bold text-red-500">0分</span>
                                         </div>
-                                        <!-- 18: Unanswered (0分, red) -->
                                         <div onclick="goToQuestion(18)" class="q-card-btn flex flex-col items-center gap-0.5">
                                             <div class="w-full h-9 bg-white text-zinc-400 border border-zinc-300 rounded-lg flex items-center justify-center font-bold text-xs">18</div>
                                             <span class="text-[10px] font-bold text-red-500">0分</span>
                                         </div>
-                                        <!-- 19: Answered with full points (5分, green) -->
                                         <div onclick="goToQuestion(19)" class="q-card-btn flex flex-col items-center gap-0.5">
                                             <div class="w-full h-9 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">19</div>
                                             <span class="text-[10px] font-bold text-emerald-500">5分</span>
@@ -753,27 +731,22 @@
                                 <div class="space-y-2">
                                     <div class="text-xs font-bold text-slate-700">三、简答题</div>
                                     <div class="grid grid-cols-5 gap-2">
-                                        <!-- 20: Answered with partial points (2分, yellow) -->
                                         <div onclick="goToQuestion(20)" class="q-card-btn flex flex-col items-center gap-0.5">
                                             <div class="w-full h-9 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">20</div>
                                             <span class="text-[10px] font-bold text-amber-500">2分</span>
                                         </div>
-                                        <!-- 21: Answered with 0 points (0分, red) -->
                                         <div onclick="goToQuestion(21)" class="q-card-btn flex flex-col items-center gap-0.5">
                                             <div class="w-full h-9 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">21</div>
                                             <span class="text-[10px] font-bold text-red-500">0分</span>
                                         </div>
-                                        <!-- 22: Answered with partial points (2分, yellow) -->
                                         <div onclick="goToQuestion(22)" class="q-card-btn flex flex-col items-center gap-0.5">
                                             <div class="w-full h-9 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">22</div>
                                             <span class="text-[10px] font-bold text-amber-500">2分</span>
                                         </div>
-                                        <!-- 23: Unanswered (0分, red) -->
                                         <div onclick="goToQuestion(23)" class="q-card-btn flex flex-col items-center gap-0.5">
                                             <div class="w-full h-9 bg-white text-zinc-400 border border-zinc-300 rounded-lg flex items-center justify-center font-bold text-xs">23</div>
                                             <span class="text-[10px] font-bold text-red-500">0分</span>
                                         </div>
-                                        <!-- 24: Answered with partial points (2分, yellow) -->
                                         <div onclick="goToQuestion(24)" class="q-card-btn flex flex-col items-center gap-0.5">
                                             <div class="w-full h-9 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">24</div>
                                             <span class="text-[10px] font-bold text-amber-500">2分</span>
@@ -785,7 +758,7 @@
                         </div>
                     </div>
 
-                    <!-- Bottom Controls nested directly inside the Sidebar card (5 buttons vertical stack) -->
+                    <!-- Bottom Controls nested in Sidebar -->
                     <div class="pt-3 border-t border-slate-100 flex flex-col gap-2.5">
                         <button onclick="window.location.href='shiti_jiexi_pc.html?type=all'" class="w-full h-9 bg-sky-500 hover:bg-sky-600 text-white rounded-lg font-medium text-xs transition-colors shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
                             全部解析
@@ -796,8 +769,8 @@
                         <button onclick="window.location.href='cuotiben_pc.html'" class="w-full h-9 border border-sky-500 text-sky-600 hover:bg-sky-50 bg-white rounded-lg font-medium text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
                             查看错题本
                         </button>
-                        <button id="btn-reanswer" onclick="window.location.href='dati_yemian_pc.html'" class="w-full h-9 border border-sky-500 text-sky-600 hover:bg-sky-50 bg-white rounded-lg font-medium text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
-                            再次答题/继续答题
+                        <button onclick="window.location.href='dati_yemian_pc.html'" class="w-full h-9 border border-sky-500 text-sky-600 hover:bg-sky-50 bg-white rounded-lg font-medium text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
+                            补考练习/继续考试
                         </button>
                         <button onclick="window.history.back()" class="w-full h-9 border border-sky-500 text-sky-600 hover:bg-sky-50 bg-white rounded-lg font-medium text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
                             返回
@@ -851,15 +824,11 @@
                 }
             }
 
-            // 当来源为大联考、统考试卷时，隐藏最近5次报告与再次答题按钮，与移动端保持完全一致
+            // 当来源为大联考、统考试卷时，隐藏最近5次报告卡片
             if (from === 'tongkao' || from === 'daliankao' || from === '统考试卷' || from === '大联考') {
                 const card = document.getElementById('recent-reports-card');
                 if (card) {
                     card.style.display = 'none';
-                }
-                const btn = document.getElementById('btn-reanswer');
-                if (btn) {
-                    btn.style.display = 'none';
                 }
             }
         })();
