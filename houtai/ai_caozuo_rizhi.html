@@ -802,6 +802,54 @@
         // 包含每个状态的试卷与试题数据；用时统一为整数分钟；有的试卷/试题不显示编辑按钮；包含任务创建人；支持多学科/多标签展示
         let tasks = [
             {
+                id: 'TASK-AI-20260814-11',
+                taskType: 'xuefu',
+                taskName: '2026年暑期冲刺班第一周学服阶段作业',
+                category: '专升本',
+                region: '河南省',
+                subject: '大学英语',
+                creator: '学管师-李老师',
+                createTime: '2026-08-14 11:30:12',
+                completeTime: '2026-08-14 11:32:00',
+                status: 'success',
+                canEdit: true,
+                statusDesc: '作业智能分发完成',
+                questionCount: 25,
+                questionsDetail: []
+            },
+            {
+                id: 'TASK-AI-20260814-10',
+                taskType: 'shijuanbao',
+                taskName: '2026年河南省专升本高等数学真题全解试卷包',
+                category: '专升本',
+                region: '河南省',
+                subject: '高等数学',
+                creator: '张老师',
+                createTime: '2026-08-14 11:15:30',
+                completeTime: '2026-08-14 11:19:00',
+                status: 'success',
+                canEdit: true,
+                statusDesc: '已打包装卷完成',
+                questionCount: 150,
+                questionsDetail: []
+            },
+            {
+                id: 'TASK-AI-20260814-09',
+                taskType: 'shuati',
+                taskName: '2026年专升本计算机基础刷题库V2.0',
+                category: '专升本',
+                region: '河南省',
+                subject: '计算机基础',
+                creator: '王老师',
+                createTime: '2026-08-14 11:05:00',
+                completeTime: '2026-08-14 11:08:20',
+                status: 'success',
+                canEdit: true,
+                statusDesc: '已生成刷题版本',
+                questionCount: 120,
+                questionsDetail: []
+            },
+            {
                 id: 'TASK-AI-20260814-01',
                 taskType: 'paper',
                 taskName: '2026年河南省、河北省专升本法学统一考试模拟试卷',
@@ -986,54 +1034,6 @@
                 failReason: '上传的文件清晰度不足或格式异常，AI 无法提取完整题干结构。',
                 questionCount: 0,
                 questionsDetail: []
-            },
-            {
-                id: 'TASK-AI-20260814-09',
-                taskType: 'shuati',
-                taskName: '2026年专升本计算机基础刷题库V2.0',
-                category: '专升本',
-                region: '河南省',
-                subject: '计算机基础',
-                creator: '王老师',
-                createTime: '2026-08-14 11:05:00',
-                completeTime: '2026-08-14 11:08:20',
-                status: 'success',
-                canEdit: true,
-                statusDesc: '已生成刷题版本',
-                questionCount: 120,
-                questionsDetail: []
-            },
-            {
-                id: 'TASK-AI-20260814-10',
-                taskType: 'shijuanbao',
-                taskName: '2026年河南省专升本高等数学真题全解试卷包',
-                category: '专升本',
-                region: '河南省',
-                subject: '高等数学',
-                creator: '张老师',
-                createTime: '2026-08-14 11:15:30',
-                completeTime: '2026-08-14 11:19:00',
-                status: 'success',
-                canEdit: true,
-                statusDesc: '已打包装卷完成',
-                questionCount: 150,
-                questionsDetail: []
-            },
-            {
-                id: 'TASK-AI-20260814-11',
-                taskType: 'xuefu',
-                taskName: '2026年暑期冲刺班第一周学服阶段作业',
-                category: '专升本',
-                region: '河南省',
-                subject: '大学英语',
-                creator: '学管师-李老师',
-                createTime: '2026-08-14 11:30:12',
-                completeTime: '2026-08-14 11:32:00',
-                status: 'success',
-                canEdit: true,
-                statusDesc: '作业智能分发完成',
-                questionCount: 25,
-                questionsDetail: []
             }
         ];
 
@@ -1087,7 +1087,7 @@
                 if (currentStatusFilter !== 'all' && t.status !== currentStatusFilter) return false;
                 // Keyword search
                 if (keyword) {
-                    const tag = t.taskType === 'question' || t.taskType === 'shuati' || t.taskType === 'xuefu'
+                    const tag = t.taskType === 'question' || t.taskType === 'xuefu'
                         ? `${t.category || ''}-${t.subject || ''}`
                         : `${t.category || ''}-${t.region || ''}-${t.subject || ''}`;
                     const typeText = typeNames[t.taskType] || '试题';
@@ -1137,7 +1137,7 @@
             const rawRegion = task.region || '';
 
             let tagText = '';
-            if (task.taskType === 'question' || task.taskType === 'shuati' || task.taskType === 'xuefu') {
+            if (task.taskType === 'question' || task.taskType === 'xuefu') {
                 tagText = [category, rawSubject || '大学语文'].filter(Boolean).join('-');
             } else {
                 tagText = [category, rawRegion || '河南省', rawSubject || '语文'].filter(Boolean).join('-');
