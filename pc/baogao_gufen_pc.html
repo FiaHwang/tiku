@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>报告 - 库课网校</title>
+    <title>估分报告 - 库课网校</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -189,12 +189,6 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
         }
-
-        /* 图表 Tooltip 动画 */
-        .chart-tooltip {
-            transition: all 0.2s ease-out;
-            pointer-events: none;
-        }
     </style>
 </head>
 <body>
@@ -234,7 +228,7 @@
     <!-- Main Container -->
     <div class="main-container max-w-[1240px] w-full mx-auto my-6 px-6 flex-1 flex flex-col">
         
-        <!-- Breadcrumb & Header Title (Aligned to Left Column) -->
+        <!-- Breadcrumb & Header Title -->
         <div class="grid grid-cols-12 gap-6 items-center mb-5">
             <div class="col-span-12 lg:col-span-8 flex items-center justify-between relative min-h-[36px]">
                 <div onclick="window.history.back()" class="cursor-pointer text-slate-600 hover:text-sky-600 font-medium text-sm flex items-center gap-2 transition-colors z-10">
@@ -242,17 +236,17 @@
                     <span>返回</span>
                 </div>
                 <div class="text-xl font-bold text-slate-800 text-center tracking-wide absolute inset-x-0 mx-auto pointer-events-none">
-                    报告
+                    估分报告
                 </div>
                 <div class="w-12"></div>
             </div>
             <div class="hidden lg:block lg:col-span-4"></div>
         </div>
 
-        <!-- Desktop Split Layout (Left: Stats & Breakdown, Right: Answer Sheet with reduced width) -->
+        <!-- Desktop Split Layout (Left: Stats & Breakdown, Right: Answer Sheet with controls) -->
         <div class="grid grid-cols-12 gap-6 items-start">
             
-            <!-- Left Side: Stats, Analysis, Charts & Question Breakdown (8/12 width) -->
+            <!-- Left Side: Stats, Charts & Question Breakdown (8/12 width) -->
             <div class="col-span-12 lg:col-span-8 space-y-5">
                 
                 <!-- 1. Exam Header & Dashboard Metrics Card -->
@@ -296,7 +290,7 @@
                         </div>
                     </div>
 
-                    <!-- Dashboard Grid: Row 3 (Question Status Breakdown) -->
+                    <!-- Dashboard Grid: Row 3 (Question Status Breakdown - 5 cols for 估分) -->
                     <div class="grid grid-cols-5 gap-2 pt-1 text-center bg-slate-50 rounded-xl p-3 border border-slate-100">
                         <div>
                             <div class="text-sm font-bold text-[#0ea5e9]">10 题</div>
@@ -312,38 +306,16 @@
                         </div>
                         <div>
                             <div class="text-sm font-bold text-amber-500">3 题</div>
-                            <div class="text-xs text-slate-500 mt-0.5">已答</div>
+                            <div class="text-xs text-slate-500 mt-0.5">已估</div>
                         </div>
                         <div>
                             <div class="text-sm font-bold text-slate-400">3 题</div>
-                            <div class="text-xs text-slate-500 mt-0.5">未答</div>
+                            <div class="text-xs text-slate-500 mt-0.5">未估</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 2. Subjective Correction Notices Card -->
-                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-3 text-xs text-slate-700">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div class="flex items-center gap-2.5 p-3 rounded-xl bg-amber-50/80 text-amber-800 border border-amber-200/60">
-                            <i class="fas fa-spinner fa-spin text-amber-500 text-sm"></i>
-                            <span>主观题AI批改中，请稍后再查看...</span>
-                        </div>
-                        <div class="flex items-center gap-2.5 p-3 rounded-xl bg-emerald-50/80 text-emerald-800 border border-emerald-200/60">
-                            <i class="fas fa-check-circle text-emerald-500 text-sm"></i>
-                            <span class="font-medium">主观题AI批改完毕，分数仅供参考</span>
-                        </div>
-                        <div class="flex items-center gap-2.5 p-3 rounded-xl bg-amber-50/80 text-amber-800 border border-amber-200/60">
-                            <i class="fas fa-spinner fa-spin text-amber-500 text-sm"></i>
-                            <span>主观题老师批改中，请稍后再查看...</span>
-                        </div>
-                        <div class="flex items-center gap-2.5 p-3 rounded-xl bg-emerald-50/80 text-emerald-800 border border-emerald-200/60">
-                            <i class="fas fa-check-circle text-emerald-500 text-sm"></i>
-                            <span class="font-medium">主观题老师批改完毕</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. AI Study Recommendation Card -->
+                <!-- AI Study Recommendation Card -->
                 <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-3">
                     <div class="text-sm font-bold text-slate-800 flex items-center gap-2">
                         <span class="w-1.5 h-4 bg-sky-500 rounded-full"></span>
@@ -356,7 +328,7 @@
                     </div>
                 </div>
 
-                <!-- 4. Global Statistics Card -->
+                <!-- 2. Global Statistics Card -->
                 <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-4">
                     <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
                         <span class="w-1.5 h-4 bg-teal-500 rounded-full"></span>
@@ -386,7 +358,7 @@
                     </div>
                 </div>
 
-                <!-- 5. Global Score Distribution Chart -->
+                <!-- 3. Global Score Distribution Chart Card -->
                 <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-3">
                     <div class="flex justify-between items-center">
                         <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
@@ -444,79 +416,7 @@
                     </div>
                 </div>
 
-                <!-- 6. Recent 5 Reports Trend Chart Card (受 URL 参数控制) -->
-                <div id="recent-reports-card" class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-3">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
-                            <span class="w-1.5 h-4 bg-sky-500 rounded-full"></span>
-                            <span>最近5次报告</span>
-                        </h3>
-                        
-                        <!-- Legend -->
-                        <div class="flex items-center gap-4 text-xs text-slate-600">
-                            <div class="flex items-center gap-1.5">
-                                <span class="w-3 h-3 rounded-full bg-[#0ea5e9]"></span>
-                                <span>得分</span>
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <span class="w-3 h-3 rounded-full bg-[#84cc16]"></span>
-                                <span>用时</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="relative w-full bg-slate-50/70 rounded-xl p-3 border border-slate-100 overflow-visible">
-                        <svg viewBox="0 0 460 220" class="w-full h-auto overflow-visible">
-                            <!-- Horizontal Grid Lines -->
-                            <line x1="45" y1="15" x2="445" y2="15" stroke="#e2e8f0" stroke-dasharray="3 3" />
-                            <line x1="45" y1="65" x2="445" y2="65" stroke="#e2e8f0" stroke-dasharray="3 3" />
-                            <line x1="45" y1="115" x2="445" y2="115" stroke="#e2e8f0" stroke-dasharray="3 3" />
-                            <line x1="45" y1="165" x2="445" y2="165" stroke="#cbd5e1" />
-
-                            <!-- Y-Axis Labels -->
-                            <text x="35" y="19" font-size="11" fill="#94a3b8" text-anchor="end">150</text>
-                            <text x="35" y="69" font-size="11" fill="#94a3b8" text-anchor="end">100</text>
-                            <text x="35" y="119" font-size="11" fill="#94a3b8" text-anchor="end">50</text>
-                            <text x="35" y="169" font-size="11" fill="#94a3b8" text-anchor="end">0</text>
-
-                            <!-- X-Axis Labels -->
-                            <text x="75" y="195" font-size="11" fill="#64748b" text-anchor="middle">第1次</text>
-                            <text x="155" y="195" font-size="11" fill="#64748b" text-anchor="middle">第2次</text>
-                            <text x="235" y="195" font-size="11" fill="#64748b" text-anchor="middle">第3次</text>
-                            <text x="315" y="195" font-size="11" fill="#64748b" text-anchor="middle">第4次</text>
-                            <text x="395" y="195" font-size="11" fill="#64748b" text-anchor="middle">第5次</text>
-
-                            <!-- Blue Line (得分) -->
-                            <path d="M 75,115 L 155,80 L 235,80 L 315,120 L 395,35" fill="none" stroke="#0ea5e9" stroke-width="2.5" />
-
-                            <!-- Green Line (用时) -->
-                            <path d="M 75,95 L 155,115 L 235,115 L 315,140 L 395,125" fill="none" stroke="#84cc16" stroke-width="2.5" />
-
-                            <!-- Blue Dots -->
-                            <circle cx="75" cy="115" r="5" fill="#0ea5e9" stroke="#ffffff" stroke-width="2" class="cursor-pointer" />
-                            <circle cx="155" cy="80" r="5" fill="#0ea5e9" stroke="#ffffff" stroke-width="2" class="cursor-pointer" />
-                            <circle cx="235" cy="80" r="5" fill="#0ea5e9" stroke="#ffffff" stroke-width="2" class="cursor-pointer" />
-                            <circle cx="315" cy="120" r="5" fill="#0ea5e9" stroke="#ffffff" stroke-width="2" class="cursor-pointer" />
-                            <circle cx="395" cy="35" r="5" fill="#0ea5e9" stroke="#ffffff" stroke-width="2" class="cursor-pointer" />
-
-                            <!-- Green Dots -->
-                            <circle cx="75" cy="95" r="5" fill="#84cc16" stroke="#ffffff" stroke-width="2" class="cursor-pointer" />
-                            <circle cx="155" cy="115" r="5" fill="#84cc16" stroke="#ffffff" stroke-width="2" class="cursor-pointer" />
-                            <circle cx="235" cy="115" r="5" fill="#84cc16" stroke="#ffffff" stroke-width="2" class="cursor-pointer" />
-                            <circle cx="315" cy="140" r="5" fill="#84cc16" stroke="#ffffff" stroke-width="2" class="cursor-pointer" />
-                            <circle cx="395" cy="125" r="5" fill="#84cc16" stroke="#ffffff" stroke-width="2" class="cursor-pointer" />
-                        </svg>
-
-                        <!-- White Tooltip Box at Point 1 -->
-                        <div class="absolute bg-white text-xs p-2.5 rounded-lg border border-slate-200 shadow-lg flex flex-col gap-0.5" style="left: 14%; top: 10%;">
-                            <div class="font-bold text-slate-500 text-[11px]">第1次</div>
-                            <div class="font-medium text-slate-700">得分：50分</div>
-                            <div class="font-medium text-slate-700">用时：40分钟</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 7. Answer Status & Question Breakdown Card -->
+                <!-- 4. Answer Status & Question Breakdown Card -->
                 <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80 space-y-4">
                     <div class="flex justify-between items-center pb-2 border-b border-slate-100">
                         <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
@@ -534,7 +434,7 @@
                     <!-- 一、新一级题型客观题 -->
                     <div class="space-y-2 p-3 bg-slate-50 rounded-xl border border-slate-100">
                         <h5 class="text-xs font-bold text-slate-700">一、新一级题型客观题</h5>
-                        <div class="grid grid-cols-4 gap-2 text-center py-1">
+                        <div class="grid grid-cols-3 gap-2 text-center py-1">
                             <div>
                                 <div class="text-sm font-bold text-slate-800">20.5%</div>
                                 <div class="text-xs text-slate-500 mt-0.5">正确率</div>
@@ -547,17 +447,13 @@
                                 <div class="text-sm font-bold text-slate-800">3.5/10</div>
                                 <div class="text-xs text-slate-500 mt-0.5">得分</div>
                             </div>
-                            <div>
-                                <div class="text-sm font-bold text-slate-800">2分钟20秒</div>
-                                <div class="text-xs text-slate-500 mt-0.5">用时</div>
-                            </div>
                         </div>
                     </div>
 
                     <!-- 二、简答题/填空题主观题 -->
                     <div class="space-y-2 p-3 bg-slate-50 rounded-xl border border-slate-100">
                         <h5 class="text-xs font-bold text-slate-700">二、简答题/填空题主观题</h5>
-                        <div class="grid grid-cols-4 gap-2 text-center py-1">
+                        <div class="grid grid-cols-3 gap-2 text-center py-1">
                             <div>
                                 <div class="text-sm font-bold text-slate-800">35%</div>
                                 <div class="text-xs text-slate-500 mt-0.5">得分率</div>
@@ -570,17 +466,13 @@
                                 <div class="text-sm font-bold text-slate-800">3.5/10</div>
                                 <div class="text-xs text-slate-500 mt-0.5">得分</div>
                             </div>
-                            <div>
-                                <div class="text-sm font-bold text-slate-800">2分钟20秒</div>
-                                <div class="text-xs text-slate-500 mt-0.5">用时</div>
-                            </div>
                         </div>
                     </div>
 
                     <!-- 三、材料题（包含主观题和客观题） -->
                     <div class="space-y-2 p-3 bg-slate-50 rounded-xl border border-slate-100">
                         <h5 class="text-xs font-bold text-slate-700">三、材料题（包含主观题和客观题）</h5>
-                        <div class="grid grid-cols-6 gap-2 text-center py-1">
+                        <div class="grid grid-cols-5 gap-2 text-center py-1">
                             <div>
                                 <div class="text-sm font-bold text-slate-800">20.5%</div>
                                 <div class="text-xs text-slate-500 mt-0.5">正确率</div>
@@ -601,17 +493,13 @@
                                 <div class="text-sm font-bold text-slate-800">3.5/20</div>
                                 <div class="text-xs text-slate-500 mt-0.5">得分</div>
                             </div>
-                            <div class="whitespace-nowrap">
-                                <div class="text-sm font-bold text-slate-800">2分钟20秒</div>
-                                <div class="text-xs text-slate-500 mt-0.5">用时</div>
-                            </div>
                         </div>
                     </div>
 
                     <!-- 四、材料题（只包含客观题） -->
                     <div class="space-y-2 p-3 bg-slate-50 rounded-xl border border-slate-100">
                         <h5 class="text-xs font-bold text-slate-700">四、材料题（只包含客观题）</h5>
-                        <div class="grid grid-cols-4 gap-2 text-center py-1">
+                        <div class="grid grid-cols-3 gap-2 text-center py-1">
                             <div>
                                 <div class="text-sm font-bold text-slate-800">20.5%</div>
                                 <div class="text-xs text-slate-500 mt-0.5">正确率</div>
@@ -624,17 +512,13 @@
                                 <div class="text-sm font-bold text-slate-800">3.5/10</div>
                                 <div class="text-xs text-slate-500 mt-0.5">得分</div>
                             </div>
-                            <div>
-                                <div class="text-sm font-bold text-slate-800">2分钟20秒</div>
-                                <div class="text-xs text-slate-500 mt-0.5">用时</div>
-                            </div>
                         </div>
                     </div>
 
                     <!-- 五、材料题（只包含主观题） -->
                     <div class="space-y-2 p-3 bg-slate-50 rounded-xl border border-slate-100">
                         <h5 class="text-xs font-bold text-slate-700">五、材料题（只包含主观题）</h5>
-                        <div class="grid grid-cols-4 gap-2 text-center py-1">
+                        <div class="grid grid-cols-3 gap-2 text-center py-1">
                             <div>
                                 <div class="text-sm font-bold text-slate-800">35%</div>
                                 <div class="text-xs text-slate-500 mt-0.5">得分率</div>
@@ -646,10 +530,6 @@
                             <div>
                                 <div class="text-sm font-bold text-slate-800">3.5/10</div>
                                 <div class="text-xs text-slate-500 mt-0.5">得分</div>
-                            </div>
-                            <div>
-                                <div class="text-sm font-bold text-slate-800">2分钟20秒</div>
-                                <div class="text-xs text-slate-500 mt-0.5">用时</div>
                             </div>
                         </div>
                     </div>
@@ -675,27 +555,27 @@
 
                     <!-- Collapsible Answer Sheet Body -->
                     <div id="answer-sheet-body" class="space-y-4">
-                        <!-- Legend Indicators -->
+                        <!-- Legend Indicators for Score Estimation -->
                         <div class="flex flex-wrap gap-x-3 gap-y-1.5 text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
                             <div class="flex items-center gap-1">
                                 <div class="w-3 h-3 bg-zinc-500 rounded"></div>
                                 <span>正确</span>
                             </div>
                             <div class="flex items-center gap-1">
-                                <div class="w-3 h-3 bg-zinc-400 rounded"></div>
-                                <span>错误</span>
-                            </div>
-                            <div class="flex items-center gap-1">
                                 <div class="w-3 h-3 bg-zinc-700 rounded"></div>
                                 <span>半对</span>
                             </div>
                             <div class="flex items-center gap-1">
+                                <div class="w-3 h-3 bg-zinc-400 rounded"></div>
+                                <span>错误</span>
+                            </div>
+                            <div class="flex items-center gap-1">
                                 <div class="w-3 h-3 bg-white border border-slate-400 rounded"></div>
-                                <span>已答</span>
+                                <span>已估</span>
                             </div>
                             <div class="flex items-center gap-1">
                                 <div class="w-3 h-3 bg-white border border-slate-200 rounded"></div>
-                                <span>未答</span>
+                                <span>未估</span>
                             </div>
                         </div>
 
@@ -794,19 +674,24 @@
                         </div>
                     </div>
 
-                    <!-- Bottom Controls nested directly inside the Sidebar card (5 buttons vertical stack) -->
+                    <!-- Bottom Controls nested directly inside the Sidebar card -->
                     <div class="pt-3 border-t border-slate-100 flex flex-col gap-2.5">
-                        <button onclick="window.location.href='shiti_jiexi_pc.html?type=all'" class="w-full h-9 bg-sky-500 hover:bg-sky-600 text-white rounded-lg font-medium text-xs transition-colors shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+                        <button onclick="alert('分享成功！')" class="w-full h-9 bg-sky-500 hover:bg-sky-600 text-white rounded-lg font-medium text-xs transition-colors shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+                            <i class="fas fa-share-alt"></i>
+                            <span>邀好友估分</span>
+                        </button>
+                        <button onclick="alert('资料获取中...')" class="w-full h-9 border border-sky-500 text-sky-600 hover:bg-sky-50 bg-white rounded-lg font-medium text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
+                            <i class="fas fa-file-download"></i>
+                            <span>考后资料获取</span>
+                        </button>
+                        <button onclick="window.location.href='shiti_jiexi_pc.html?type=all'" class="w-full h-9 border border-sky-500 text-sky-600 hover:bg-sky-50 bg-white rounded-lg font-medium text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
                             全部解析
                         </button>
                         <button onclick="window.location.href='shiti_jiexi_pc.html?type=wrong'" class="w-full h-9 border border-sky-500 text-sky-600 hover:bg-sky-50 bg-white rounded-lg font-medium text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
                             错题解析
                         </button>
-                        <button onclick="window.location.href='cuotiben_pc.html'" class="w-full h-9 border border-sky-500 text-sky-600 hover:bg-sky-50 bg-white rounded-lg font-medium text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
-                            查看错题本
-                        </button>
-                        <button id="btn-reanswer" onclick="window.location.href='dati_yemian_pc.html'" class="w-full h-9 border border-sky-500 text-sky-600 hover:bg-sky-50 bg-white rounded-lg font-medium text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
-                            再次答题/继续答题
+                        <button onclick="window.location.href='dati_yemian_pc.html'" class="w-full h-9 border border-sky-500 text-sky-600 hover:bg-sky-50 bg-white rounded-lg font-medium text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
+                            再次估分/继续估分/估分结束
                         </button>
                         <button onclick="window.history.back()" class="w-full h-9 border border-sky-500 text-sky-600 hover:bg-sky-50 bg-white rounded-lg font-medium text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
                             返回
@@ -850,25 +735,12 @@
 
         (function() {
             const urlParams = new URLSearchParams(window.location.search);
-            const from = urlParams.get('from');
             const title = urlParams.get('title') || urlParams.get('name');
 
             if (title) {
                 const titleEl = document.getElementById('paper-title');
                 if (titleEl) {
                     titleEl.textContent = decodeURIComponent(title);
-                }
-            }
-
-            // 当来源为大联考、统考试卷时，隐藏最近5次报告与再次答题按钮，与移动端保持完全一致
-            if (from === 'tongkao' || from === 'daliankao' || from === '统考试卷' || from === '大联考') {
-                const card = document.getElementById('recent-reports-card');
-                if (card) {
-                    card.style.display = 'none';
-                }
-                const btn = document.getElementById('btn-reanswer');
-                if (btn) {
-                    btn.style.display = 'none';
                 }
             }
         })();

@@ -498,7 +498,11 @@
         }
 
         function viewReport(subject) {
-            window.location.href = 'dati_baogao_pc.html?title=' + encodeURIComponent(subject);
+            if (subject === '估分试卷') {
+                window.location.href = 'baogao_gufen_pc.html?title=' + encodeURIComponent(subject);
+            } else {
+                window.location.href = 'dati_baogao_pc.html?title=' + encodeURIComponent(subject);
+            }
         }
 
         function viewAnalysis(subject) {
