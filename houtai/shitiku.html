@@ -781,7 +781,7 @@
                          onclick="document.getElementById('aiFileInput').click()"
                          class="border-2 border-dashed border-slate-200 hover:border-blue-500 bg-slate-50/50 hover:bg-blue-50/30 rounded-xl p-5 text-center cursor-pointer transition-all duration-200 group relative">
                         <input type="file" id="aiFileInput" multiple 
-                               accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.png,.jpg,.jpeg,.webp" 
+                               accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.webp" 
                                onchange="handleAiFileSelect(event)" 
                                class="hidden">
                         
@@ -798,7 +798,6 @@
                             <div class="flex flex-wrap items-center justify-center gap-1.5 mt-1">
                                 <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-rose-50 text-rose-600 border border-rose-200">PDF (.pdf)</span>
                                 <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-600 border border-blue-200">Word (.doc / .docx)</span>
-                                <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-emerald-600 border border-emerald-200">Excel (.xls / .xlsx)</span>
                                 <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600 border border-slate-200">TXT (.txt)</span>
                                 <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-600 border border-amber-200">图片 (PNG / JPG / JPEG)</span>
                             </div>
@@ -1242,9 +1241,6 @@
             if (['doc', 'docx'].includes(ext)) {
                 return { type: 'Word', icon: 'fa-file-word', color: 'text-blue-500 bg-blue-50 border-blue-200', badge: 'bg-blue-50 text-blue-600 border-blue-200' };
             }
-            if (['xls', 'xlsx'].includes(ext)) {
-                return { type: 'Excel', icon: 'fa-file-excel', color: 'text-emerald-500 bg-emerald-50 border-emerald-200', badge: 'bg-emerald-50 text-emerald-600 border-emerald-200' };
-            }
             if (['png', 'jpg', 'jpeg', 'webp', 'bmp'].includes(ext)) {
                 return { type: '图片', icon: 'fa-file-image', color: 'text-amber-500 bg-amber-50 border-amber-200', badge: 'bg-amber-50 text-amber-600 border-amber-200' };
             }
@@ -1304,7 +1300,7 @@
         }
 
         function processUploadedFiles(files) {
-            const allowedExts = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt', 'png', 'jpg', 'jpeg', 'webp'];
+            const allowedExts = ['pdf', 'doc', 'docx', 'txt', 'png', 'jpg', 'jpeg', 'webp'];
             let addedCount = 0;
 
             files.forEach(file => {
@@ -1325,7 +1321,7 @@
                 renderAiFileList();
                 showToast(`已成功添加 ${addedCount} 个试题文件`);
             } else {
-                showToast('请上传支持的格式：PDF、Word、图片、TXT 或 Excel', true);
+                showToast('请上传支持的格式：PDF、Word、图片或 TXT', true);
             }
         }
 
@@ -1565,7 +1561,7 @@
             }
 
             if (aiUploadedFiles.length === 0) {
-                showToast('请先选择或拖拽上传试题文件（支持PDF、Word、图片、TXT、Excel）', true);
+                showToast('请先选择或拖拽上传试题文件（支持PDF、Word、图片、TXT）', true);
                 return;
             }
 

@@ -622,7 +622,7 @@
                     </div>
                     <div>
                         <h3 class="font-bold text-slate-800 text-sm">新建 AI 录题任务</h3>
-                        <p class="text-[11px] text-slate-400">支持 PDF、Word、图片、TXT、Excel 等格式多文件批量解析</p>
+                        <p class="text-[11px] text-slate-400">支持 PDF、Word、图片、TXT 等格式多文件批量解析</p>
                     </div>
                 </div>
                 <button onclick="closeNewTaskModal()" class="text-slate-400 hover:text-slate-600 p-1 text-base leading-none">
@@ -640,7 +640,7 @@
                          onclick="document.getElementById('modalFileInput').click()"
                          class="border-2 border-dashed border-slate-200 hover:border-blue-500 bg-slate-50/50 hover:bg-blue-50/30 rounded-xl p-5 text-center cursor-pointer transition-all duration-200 group">
                         <input type="file" id="modalFileInput" multiple 
-                               accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.png,.jpg,.jpeg,.webp" 
+                               accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.webp" 
                                onchange="handleModalFileSelect(event)" 
                                class="hidden">
                         
@@ -655,7 +655,6 @@
                             <div class="flex flex-wrap items-center justify-center gap-1.5 mt-1">
                                 <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-rose-50 text-rose-600 border border-rose-200">PDF</span>
                                 <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-600 border border-blue-200">Word</span>
-                                <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-emerald-600 border border-emerald-200">Excel</span>
                                 <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600 border border-slate-200">TXT</span>
                                 <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-600 border border-amber-200">图片 (PNG / JPG / JPEG)</span>
                             </div>

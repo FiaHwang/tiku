@@ -570,7 +570,7 @@
                          onclick="document.getElementById('aiFileInput').click()"
                          class="border-2 border-dashed border-slate-200 hover:border-indigo-500 bg-slate-50/50 hover:bg-indigo-50/30 rounded-xl p-5 text-center cursor-pointer transition-all duration-200 group relative">
                         <input type="file" id="aiFileInput" multiple 
-                               accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.png,.jpg,.jpeg,.webp" 
+                               accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.webp" 
                                onchange="handleAiFileSelect(event)" 
                                class="hidden">
                         
@@ -583,11 +583,10 @@
                                 <span class="text-slate-400"> 或将文件直接拖拽至此处</span>
                             </div>
                             
-                            <!-- 支持的文件格式徽章: PDF -> Word -> Excel -> TXT -> 图片 -->
+                            <!-- 支持的文件格式徽章: PDF -> Word -> TXT -> 图片 -->
                             <div class="flex flex-wrap items-center justify-center gap-1.5 mt-1">
                                 <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-rose-50 text-rose-600 border border-rose-200">PDF (.pdf)</span>
                                 <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-600 border border-blue-200">Word (.doc / .docx)</span>
-                                <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-emerald-600 border border-emerald-200">Excel (.xls / .xlsx)</span>
                                 <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600 border border-slate-200">TXT (.txt)</span>
                                 <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-600 border border-amber-200">图片 (PNG / JPG / JPEG)</span>
                             </div>

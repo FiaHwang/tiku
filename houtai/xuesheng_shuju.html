@@ -696,7 +696,7 @@
                                         </td>
                                         <td class="p-2.5 text-slate-600">学历提升产品线</td>
                                         <td class="p-2.5">45,820 次</td>
-                                        <td class="p-2.5 text-right">18 分钟</td>
+                                        <td class="p-2.5 text-right">18分钟</td>
                                     </tr>
                                     <tr class="hover:bg-slate-50/60 transition-colors">
                                         <td class="p-2.5 font-medium flex items-center gap-1.5">
@@ -705,7 +705,7 @@
                                         </td>
                                         <td class="p-2.5 text-slate-600">学历提升产品线</td>
                                         <td class="p-2.5">32,150 次</td>
-                                        <td class="p-2.5 text-right">9 分钟</td>
+                                        <td class="p-2.5 text-right">9分钟</td>
                                     </tr>
                                     <tr class="hover:bg-slate-50/60 transition-colors">
                                         <td class="p-2.5 font-medium flex items-center gap-1.5">
@@ -714,7 +714,7 @@
                                         </td>
                                         <td class="p-2.5 text-slate-600">学历提升产品线</td>
                                         <td class="p-2.5">18,650 次</td>
-                                        <td class="p-2.5 text-right">48 分钟</td>
+                                        <td class="p-2.5 text-right">1小时15分钟</td>
                                     </tr>
                                     <tr class="hover:bg-slate-50/60 transition-colors">
                                         <td class="p-2.5 font-medium flex items-center gap-1.5">
@@ -723,7 +723,7 @@
                                         </td>
                                         <td class="p-2.5 text-slate-600">学历提升产品线</td>
                                         <td class="p-2.5">15,280 次</td>
-                                        <td class="p-2.5 text-right">15 分钟</td>
+                                        <td class="p-2.5 text-right">15分钟</td>
                                     </tr>
 
                                     <!-- 职业资格产品线 -->
@@ -734,7 +734,7 @@
                                         </td>
                                         <td class="p-2.5 text-slate-600">职业资格产品线</td>
                                         <td class="p-2.5">24,300 次</td>
-                                        <td class="p-2.5 text-right">45 分钟</td>
+                                        <td class="p-2.5 text-right">1小时</td>
                                     </tr>
                                     <tr class="hover:bg-slate-50/60 transition-colors">
                                         <td class="p-2.5 font-medium flex items-center gap-1.5">
@@ -743,7 +743,7 @@
                                         </td>
                                         <td class="p-2.5 text-slate-600">职业资格产品线</td>
                                         <td class="p-2.5">17,850 次</td>
-                                        <td class="p-2.5 text-right">32 分钟</td>
+                                        <td class="p-2.5 text-right">32分钟</td>
                                     </tr>
                                     <tr class="hover:bg-slate-50/60 transition-colors">
                                         <td class="p-2.5 font-medium flex items-center gap-1.5">
@@ -752,7 +752,7 @@
                                         </td>
                                         <td class="p-2.5 text-slate-600">职业资格产品线</td>
                                         <td class="p-2.5">13,920 次</td>
-                                        <td class="p-2.5 text-right">13 分钟</td>
+                                        <td class="p-2.5 text-right">13分钟</td>
                                     </tr>
 
                                     <!-- 考研辅导产品线 -->
@@ -763,7 +763,7 @@
                                         </td>
                                         <td class="p-2.5 text-slate-600">考研辅导产品线</td>
                                         <td class="p-2.5">19,800 次</td>
-                                        <td class="p-2.5 text-right">52 分钟</td>
+                                        <td class="p-2.5 text-right">1小时3分钟</td>
                                     </tr>
                                     <tr class="hover:bg-slate-50/60 transition-colors">
                                         <td class="p-2.5 font-medium flex items-center gap-1.5">
@@ -772,7 +772,7 @@
                                         </td>
                                         <td class="p-2.5 text-slate-600">考研辅导产品线</td>
                                         <td class="p-2.5">16,400 次</td>
-                                        <td class="p-2.5 text-right">35 分钟</td>
+                                        <td class="p-2.5 text-right">35分钟</td>
                                     </tr>
                                     <tr class="hover:bg-slate-50/60 transition-colors">
                                         <td class="p-2.5 font-medium flex items-center gap-1.5">
@@ -781,7 +781,7 @@
                                         </td>
                                         <td class="p-2.5 text-slate-600">考研辅导产品线</td>
                                         <td class="p-2.5">11,560 次</td>
-                                        <td class="p-2.5 text-right">10 分钟</td>
+                                        <td class="p-2.5 text-right">10分钟</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1128,6 +1128,41 @@
                 return parseFloat(num.toFixed(1)) + '分';
             }
             return str;
+        }
+
+        // 统一时长格式化工具（大于等于1小时使用“X小时”或“X小时Y分钟”，小于1小时使用“Y分钟”）
+        function formatDuration(val, richHtml = false) {
+            if (val === null || val === undefined || val === '') return '';
+            let mins = 0;
+            if (typeof val === 'number') {
+                mins = Math.round(val);
+            } else {
+                const str = String(val).trim();
+                if (str.includes('小时') || str.includes('分钟') || str.includes('分')) {
+                    let h = 0;
+                    let m = 0;
+                    const hMatch = str.match(/(\d+)\s*小时/);
+                    if (hMatch) h = parseInt(hMatch[1], 10);
+                    const mMatch = str.match(/(\d+(?:\.\d+)?)\s*(?:分钟|分)/);
+                    if (mMatch) m = parseFloat(mMatch[1]);
+                    mins = Math.round(h * 60 + m);
+                } else {
+                    mins = Math.round(parseFloat(str));
+                }
+            }
+            if (isNaN(mins)) return String(val);
+
+            if (mins < 60) {
+                return richHtml ? `${mins} <span class="text-xs font-normal text-slate-400">分钟</span>` : `${mins}分钟`;
+            }
+            const hours = Math.floor(mins / 60);
+            const remMins = mins % 60;
+            if (remMins === 0) {
+                return richHtml ? `${hours} <span class="text-xs font-normal text-slate-400">小时</span>` : `${hours}小时`;
+            }
+            return richHtml 
+                ? `${hours} <span class="text-xs font-normal text-slate-400">小时</span> ${remMins} <span class="text-xs font-normal text-slate-400">分钟</span>` 
+                : `${hours}小时${remMins}分钟`;
         }
 
         function getAccuracyValue(accStr) {
