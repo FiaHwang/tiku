@@ -935,7 +935,7 @@
                 </div>
 
                 <!-- 考点热度 全景表格 -->
-                <div class="overflow-x-auto min-h-[380px] max-h-[560px] overflow-y-auto custom-scrollbar border border-slate-100 rounded-lg">
+                <div class="overflow-x-auto border border-slate-100 rounded-lg">
                     <table class="w-full text-left text-xs">
                         <thead class="sticky top-0 bg-slate-50 z-10 text-slate-600 border-b border-slate-200 select-none">
                             <tr>
@@ -1791,12 +1791,12 @@
         let currentRankingTab = 'kp_error';
         let unifiedSearchKeyword = '';
         let stateRanking = {
-            kp_error: { page: 1, pageSize: 20 },
-            kp_count: { page: 1, pageSize: 20 },
-            chap_error: { page: 1, pageSize: 15 },
-            chap_count: { page: 1, pageSize: 15 },
-            qtype_error: { page: 1, pageSize: 20 },
-            qtype_count: { page: 1, pageSize: 20 }
+            kp_error: { page: 1, pageSize: 10 },
+            kp_count: { page: 1, pageSize: 10 },
+            chap_error: { page: 1, pageSize: 10 },
+            chap_count: { page: 1, pageSize: 10 },
+            qtype_error: { page: 1, pageSize: 10 },
+            qtype_count: { page: 1, pageSize: 10 }
         };
 
         // 辅助：根据排名生成高亮徽章
