@@ -584,10 +584,17 @@
 
                         <!-- 搜索栏 -->
                         <div class="mb-2.5 flex items-center gap-2">
-                            <div id="treeSearchContainer" class="flex-1">
-                                <input type="text" id="treeSearchInput" placeholder="输入关键字进行搜索" oninput="handleTreeSearch()"
-                                    class="w-full bg-white border border-slate-200 hover:border-slate-300 rounded-md px-3 py-1.5 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors">
+                            <div id="treeSearchContainer" class="flex-1 relative">
+                                <input type="text" id="treeSearchInput" placeholder="输入关键字进行搜索" oninput="handleTreeInput(event)" onkeydown="if(event.key === 'Enter') handleTreeSearch()"
+                                    class="w-full bg-white border border-slate-200 hover:border-slate-300 rounded-md pl-3 pr-8 py-1.5 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors">
+                                <button id="treeSearchClearBtn" onclick="clearTreeSearch()" type="button" title="清空" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-0.5 flex items-center justify-center cursor-pointer">
+                                    <i class="fas fa-circle-xmark text-xs"></i>
+                                </button>
                             </div>
+                            <button onclick="handleTreeSearch()" type="button" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-md text-xs font-medium flex items-center gap-1 transition-colors shrink-0 cursor-pointer shadow-2xs">
+                                <i class="fas fa-magnifying-glass text-[11px]"></i>
+                                <span>搜索</span>
+                            </button>
                         </div>
 
                         <div class="overflow-x-auto max-h-[380px] overflow-y-auto">
@@ -595,7 +602,7 @@
                                 <thead id="weaknessTableHead" class="sticky top-0 bg-white z-10 shadow-2xs">
                                     <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
                                         <th class="p-2 font-medium">章节名称</th>
-                                        <th class="p-2 font-medium">作答次数</th>
+                                        <th class="p-2 font-medium">做题次数</th>
                                         <th class="p-2 font-medium text-right">正确率</th>
                                     </tr>
                                 </thead>
@@ -683,6 +690,7 @@
                                     <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
                                         <th class="p-2.5 font-medium">功能模块</th>
                                         <th class="p-2.5 font-medium">产品线</th>
+                                        <th class="p-2.5 font-medium">做题次数</th>
                                         <th class="p-2.5 font-medium">交卷次数</th>
                                         <th class="p-2.5 font-medium text-right">作答时长</th>
                                     </tr>
@@ -695,6 +703,7 @@
                                             <span>章节练习</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">学历提升产品线</td>
+                                        <td class="p-2.5">183,280 次</td>
                                         <td class="p-2.5">45,820 次</td>
                                         <td class="p-2.5 text-right">18分钟</td>
                                     </tr>
@@ -704,6 +713,7 @@
                                             <span>每日一练</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">学历提升产品线</td>
+                                        <td class="p-2.5">160,750 次</td>
                                         <td class="p-2.5">32,150 次</td>
                                         <td class="p-2.5 text-right">9分钟</td>
                                     </tr>
@@ -713,6 +723,7 @@
                                             <span>统考试卷</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">学历提升产品线</td>
+                                        <td class="p-2.5">1,865,000 次</td>
                                         <td class="p-2.5">18,650 次</td>
                                         <td class="p-2.5 text-right">1小时15分钟</td>
                                     </tr>
@@ -722,6 +733,7 @@
                                             <span>固定刷题</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">学历提升产品线</td>
+                                        <td class="p-2.5">76,400 次</td>
                                         <td class="p-2.5">15,280 次</td>
                                         <td class="p-2.5 text-right">15分钟</td>
                                     </tr>
@@ -733,6 +745,7 @@
                                             <span>真题试卷</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">职业资格产品线</td>
+                                        <td class="p-2.5">2,430,000 次</td>
                                         <td class="p-2.5">24,300 次</td>
                                         <td class="p-2.5 text-right">1小时</td>
                                     </tr>
@@ -742,6 +755,7 @@
                                             <span>测评考试</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">职业资格产品线</td>
+                                        <td class="p-2.5">178,500 次</td>
                                         <td class="p-2.5">17,850 次</td>
                                         <td class="p-2.5 text-right">32分钟</td>
                                     </tr>
@@ -751,6 +765,7 @@
                                             <span>知识点练习</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">职业资格产品线</td>
+                                        <td class="p-2.5">69,600 次</td>
                                         <td class="p-2.5">13,920 次</td>
                                         <td class="p-2.5 text-right">13分钟</td>
                                     </tr>
@@ -762,6 +777,7 @@
                                             <span>大联考</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">考研辅导产品线</td>
+                                        <td class="p-2.5">1,980,000 次</td>
                                         <td class="p-2.5">19,800 次</td>
                                         <td class="p-2.5 text-right">1小时3分钟</td>
                                     </tr>
@@ -771,6 +787,7 @@
                                             <span>估分试卷</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">考研辅导产品线</td>
+                                        <td class="p-2.5">164,000 次</td>
                                         <td class="p-2.5">16,400 次</td>
                                         <td class="p-2.5 text-right">35分钟</td>
                                     </tr>
@@ -780,6 +797,7 @@
                                             <span>AI闯关练</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">考研辅导产品线</td>
+                                        <td class="p-2.5">57,800 次</td>
                                         <td class="p-2.5">11,560 次</td>
                                         <td class="p-2.5 text-right">10分钟</td>
                                     </tr>
@@ -842,7 +860,7 @@
                     <button type="button" onclick="switchRankingTab('kp_count')" id="btnTab-kp_count"
                         class="ranking-tab-btn px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all bg-transparent text-slate-600 hover:bg-slate-200/70 hover:text-slate-900">
                         <i class="fas fa-fire text-[11px] text-amber-500"></i>
-                        <span>作答次数最多的知识点</span>
+                        <span>做题次数最多的知识点</span>
                         <span class="px-1.5 py-0.2 text-[10px] rounded bg-slate-200 text-slate-600">Top 100</span>
                     </button>
 
@@ -856,7 +874,7 @@
                     <button type="button" onclick="switchRankingTab('chap_count')" id="btnTab-chap_count"
                         class="ranking-tab-btn px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all bg-transparent text-slate-600 hover:bg-slate-200/70 hover:text-slate-900">
                         <i class="fas fa-layer-group text-[11px] text-blue-500"></i>
-                        <span>作答次数最多的章节</span>
+                        <span>做题次数最多的章节</span>
                         <span class="px-1.5 py-0.2 text-[10px] rounded bg-slate-200 text-slate-600">Top 50</span>
                     </button>
 
@@ -870,7 +888,7 @@
                     <button type="button" onclick="switchRankingTab('qtype_count')" id="btnTab-qtype_count"
                         class="ranking-tab-btn px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all bg-transparent text-slate-600 hover:bg-slate-200/70 hover:text-slate-900">
                         <i class="fas fa-chart-pie text-[11px] text-indigo-500"></i>
-                        <span>作答次数最多的题型</span>
+                        <span>做题次数最多的题型</span>
                         <span class="px-1.5 py-0.2 text-[10px] rounded bg-slate-200 text-slate-600">Top 20</span>
                     </button>
                 </div>
@@ -1245,7 +1263,7 @@
                         <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
                             <th class="p-2 font-medium">题型名称</th>
                             <th class="p-2 font-medium text-center">试题结构</th>
-                            <th class="p-2 font-medium">作答次数</th>
+                            <th class="p-2 font-medium">做题次数</th>
                             <th class="p-2 font-medium text-right">正确率</th>
                         </tr>
                     `;
@@ -1292,7 +1310,7 @@
                     head.innerHTML = `
                         <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
                             <th class="p-2 font-medium">${type === 'chapter' ? '章节名称' : '知识点名称'}</th>
-                            <th class="p-2 font-medium">作答次数</th>
+                            <th class="p-2 font-medium">做题次数</th>
                             <th class="p-2 font-medium text-right">正确率</th>
                         </tr>
                     `;
@@ -1331,6 +1349,30 @@
             renderWeaknessTable(currentWeaknessTab);
         }
 
+        function handleTreeInput(e) {
+            const val = e.target.value;
+            const clearBtn = document.getElementById('treeSearchClearBtn');
+            if (clearBtn) {
+                if (val && val.length > 0) {
+                    clearBtn.classList.remove('hidden');
+                } else {
+                    clearBtn.classList.add('hidden');
+                }
+            }
+        }
+
+        function clearTreeSearch() {
+            const input = document.getElementById('treeSearchInput');
+            const clearBtn = document.getElementById('treeSearchClearBtn');
+            if (input) {
+                input.value = '';
+            }
+            if (clearBtn) {
+                clearBtn.classList.add('hidden');
+            }
+            handleTreeSearch();
+        }
+
         function handleTreeSearch() {
             const kw = document.getElementById('treeSearchInput') ? document.getElementById('treeSearchInput').value.trim() : '';
             renderWeaknessTable(currentWeaknessTab, kw);
@@ -1342,7 +1384,12 @@
             document.getElementById('tabKnowledge').className = type === 'knowledge' ? 'px-2 py-0.5 rounded-md font-medium text-slate-600 hover:text-blue-600 bg-white shadow-2xs' : 'px-2 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600';
             document.getElementById('tabQType').className = type === 'questionType' ? 'px-2 py-0.5 rounded-md font-medium text-slate-600 hover:text-blue-600 bg-white shadow-2xs' : 'px-2 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600';
             
-            renderWeaknessTable(type);
+            const input = document.getElementById('treeSearchInput');
+            const clearBtn = document.getElementById('treeSearchClearBtn');
+            if (input) input.value = '';
+            if (clearBtn) clearBtn.classList.add('hidden');
+
+            renderWeaknessTable(type, '');
         }
 
         let userSegmentChartInstance, activeUsersChartInstance, pastYearsPreferenceChartInstance;
@@ -2009,7 +2056,7 @@
                         <th class="p-2.5 font-medium w-12 text-center">排名</th>
                         <th class="p-2.5 font-medium min-w-[240px]">知识点名称</th>
                         <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
-                        <th class="p-2.5 font-medium text-right min-w-[120px]">作答次数</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">做题次数</th>
                     </tr>
                 `;
 
@@ -2057,7 +2104,7 @@
                         <th class="p-2.5 font-medium w-12 text-center">排名</th>
                         <th class="p-2.5 font-medium min-w-[240px]">知识点名称</th>
                         <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
-                        <th class="p-2.5 font-medium text-right min-w-[120px]">作答次数</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">做题次数</th>
                     </tr>
                 `;
 
@@ -2105,7 +2152,7 @@
                         <th class="p-2.5 font-medium w-12 text-center">排名</th>
                         <th class="p-2.5 font-medium min-w-[240px]">章节名称</th>
                         <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
-                        <th class="p-2.5 font-medium text-right min-w-[120px]">作答次数</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">做题次数</th>
                     </tr>
                 `;
 
@@ -2153,7 +2200,7 @@
                         <th class="p-2.5 font-medium w-12 text-center">排名</th>
                         <th class="p-2.5 font-medium min-w-[240px]">章节名称</th>
                         <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
-                        <th class="p-2.5 font-medium text-right min-w-[120px]">作答次数</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">做题次数</th>
                     </tr>
                 `;
 
@@ -2202,7 +2249,7 @@
                         <th class="p-2.5 font-medium min-w-[200px]">题型名称</th>
                         <th class="p-2.5 font-medium text-center min-w-[100px]">试题结构</th>
                         <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
-                        <th class="p-2.5 font-medium text-right min-w-[120px]">作答次数</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">做题次数</th>
                     </tr>
                 `;
 
@@ -2254,7 +2301,7 @@
                         <th class="p-2.5 font-medium min-w-[200px]">题型名称</th>
                         <th class="p-2.5 font-medium text-center min-w-[100px]">试题结构</th>
                         <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
-                        <th class="p-2.5 font-medium text-right min-w-[120px]">作答次数</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">做题次数</th>
                     </tr>
                 `;
 
