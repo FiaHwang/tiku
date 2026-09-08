@@ -441,6 +441,7 @@
                                 <option value="processing">进行中</option>
                                 <option value="success">已完成</option>
                                 <option value="failed">已失败</option>
+                                <option value="canceled">已取消</option>
                             </select>
                         </div>
                     </div>
@@ -1031,6 +1032,22 @@
                 failReason: '上传的文件清晰度不足或格式异常，AI 无法提取完整题干结构。',
                 questionCount: 0,
                 questionsDetail: []
+            },
+            {
+                id: 'TASK-AI-20260814-12',
+                taskType: 'question',
+                taskName: '202608140930试题',
+                category: '专升本',
+                region: '河南省',
+                subject: '管理学',
+                creator: '周老师',
+                createTime: '2026-08-14 09:30:00',
+                completeTime: '-',
+                status: 'canceled',
+                canEdit: false,
+                statusDesc: '已取消',
+                questionCount: 0,
+                questionsDetail: []
             }
         ];
 
@@ -1105,9 +1122,9 @@
             document.getElementById('totalTaskCount').textContent = filtered.length;
         }
 
-        // Helper function to calculate duration in minutes (用时统一为整数分钟；最少为1分钟；失败或进行中时不显示用时)
+        // Helper function to calculate duration in minutes (用时统一为整数分钟；最少为1分钟；失败、取消或进行中时不显示用时)
         function calculateDurationInMinutes(createTimeStr, completeTimeStr, status) {
-            if (status === 'failed' || status === 'processing') return '-';
+            if (status === 'failed' || status === 'canceled' || status === 'processing') return '-';
             if (!createTimeStr) return '-';
 
             const createDate = new Date(createTimeStr.replace(/-/g, '/'));
@@ -1219,10 +1236,26 @@
                         </button>
                     </div>
                 `;
+            } else if (task.status === 'canceled') {
+                statusBadge = `
+                    <div class="flex items-center gap-1.5 text-slate-500 font-medium">
+                        <i class="fas fa-ban text-xs"></i>
+                        <span>已取消</span>
+                    </div>
+                `;
+
+                actionButtons = `
+                    <div class="flex items-center justify-end">
+                        <button onclick="retryTask('${task.id}')" class="px-2.5 py-1 bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-600 rounded-lg text-xs font-medium transition-colors flex items-center gap-1">
+                            <i class="fas fa-rotate-right text-[10px]"></i>
+                            <span>重试</span>
+                        </button>
+                    </div>
+                `;
             }
 
             const durationText = calculateDurationInMinutes(task.createTime, task.completeTime, task.status);
-            const completeTimeText = task.status === 'failed' ? '-' : (task.completeTime || '-');
+            const completeTimeText = (task.status === 'failed' || task.status === 'canceled') ? '-' : (task.completeTime || '-');
 
             // 排版中不要显示试题数（显示 -）
             const showQuestionCount = task.status !== 'processing' && task.questionCount > 0;
@@ -1356,7 +1389,7 @@
                 return;
             }
             tasks.forEach(t => {
-                if (selectedTaskIds.has(t.id) && t.status === 'failed') {
+                if (selectedTaskIds.has(t.id) && (t.status === 'failed' || t.status === 'canceled')) {
                     t.status = 'processing';
                     t.progress = 15;
                     t.statusDesc = '已重启任务，正在重新排版解析...';
@@ -1364,7 +1397,7 @@
             });
             updateStatCounters();
             renderTaskList();
-            showToast(`已批量重新发起选中的失败任务`);
+            showToast(`已批量重新发起选中的失败/取消任务`);
         }
 
         function batchCancelSelected() {
@@ -1375,16 +1408,16 @@
             let canceled = 0;
             tasks.forEach(t => {
                 if (selectedTaskIds.has(t.id) && (t.status === 'processing' || t.status === 'pending')) {
-                    t.status = 'failed';
+                    t.status = 'canceled';
                     t.progress = 0;
-                    t.statusDesc = '已被业务人员手动终止';
-                    t.failReason = '用户在任务队列中手动终止了此排版进程。';
+                    t.statusDesc = '已被业务人员手动取消';
+                    delete t.failReason;
                     canceled++;
                 }
             });
             updateStatCounters();
             renderTaskList();
-            showToast(`已成功终止 ${canceled} 个正在运行的任务`);
+            showToast(`已成功取消 ${canceled} 个正在运行的任务`);
         }
 
         // Lifecycle Actions on Individual Task
@@ -1392,12 +1425,13 @@
             const task = tasks.find(t => t.id === taskId);
             if (!task) return;
             if (confirm(`确定要终止任务【${task.taskName}】吗？`)) {
-                task.status = 'failed';
-                task.statusDesc = '任务已手动终止';
-                task.failReason = '用户手动取消了本次 AI 排版任务。';
+                task.status = 'canceled';
+                task.statusDesc = '任务已手动取消';
+                delete task.failReason;
                 task.completeTime = '-';
+                updateStatCounters();
                 renderTaskList();
-                showToast(`已终止任务 ${task.taskName}`);
+                showToast(`已取消任务 ${task.taskName}`);
             }
         }
 
