@@ -1129,8 +1129,15 @@
             const durationText = calculateDurationInMinutes(task.createTime, task.completeTime, task.status);
             const completeTimeText = task.completeTime || '-';
 
-            // 排版中不要显示试题数（显示 -）
-            const showQuestionCount = task.status !== 'processing' && task.questionCount > 0;
+            // 识别题目数展示逻辑：已失败和已取消显示 0；进行中未识别完成显示 -；所有数字均不带“题”字
+            let questionCountDisplay = '';
+            if (task.status === 'failed' || task.status === 'canceled') {
+                questionCountDisplay = `<span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">0</span>`;
+            } else if (task.status === 'processing') {
+                questionCountDisplay = `<span class="text-slate-300">-</span>`;
+            } else {
+                questionCountDisplay = `<span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-800">${task.questionCount !== undefined ? task.questionCount : 0}</span>`;
+            }
 
             return `
                 <tr class="hover:bg-slate-50/80 transition-colors">
@@ -1146,7 +1153,7 @@
                         ${taskTypeBadge}
                     </td>
                     <td class="py-3 px-4 text-center font-semibold text-slate-700">
-                        ${showQuestionCount ? `<span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-800">${task.questionCount} 题</span>` : '<span class="text-slate-300">-</span>'}
+                        ${questionCountDisplay}
                     </td>
                     <td class="py-3 px-4">
                         ${statusBadge}
@@ -1285,6 +1292,7 @@
                     t.progress = 0;
                     t.statusDesc = '已被业务人员手动取消';
                     t.completeTime = nowTimeStr;
+                    t.questionCount = 0;
                     delete t.failReason;
                     canceled++;
                 }
@@ -1303,6 +1311,7 @@
                 task.statusDesc = '任务已手动取消';
                 delete task.failReason;
                 task.completeTime = formatCurrentDateTime();
+                task.questionCount = 0;
                 updateStatCounters();
                 renderTaskList();
                 showToast(`已取消任务 ${task.taskName}`);
