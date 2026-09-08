@@ -440,6 +440,7 @@
                                 <option value="all">请选择任务状态</option>
                                 <option value="processing">进行中</option>
                                 <option value="success">已完成</option>
+                                <option value="imported">已导入</option>
                                 <option value="failed">已失败</option>
                                 <option value="canceled">已取消</option>
                             </select>
@@ -796,113 +797,23 @@
     </div>
 
     <script>
-        // Tasks Data Model
-        // 包含每个状态的试卷与试题数据；用时统一为整数分钟；有的试卷/试题不显示编辑按钮；包含任务创建人；支持多学科/多标签展示
+        // Tasks Data Model: 覆盖5种任务类型（试卷、试题、刷题版本、试卷包、学服作业）与5种任务状态（进行中、已完成、已导入、已失败、已取消）
         let tasks = [
             {
-                id: 'TASK-AI-20260814-11',
-                taskType: 'xuefu',
-                taskName: '2026年暑期冲刺班第一周学服阶段作业',
-                category: '专升本',
-                region: '河南省',
-                subject: '大学英语',
-                creator: '学管师-李老师',
-                createTime: '2026-08-14 11:30:12',
-                completeTime: '2026-08-14 11:32:00',
-                status: 'success',
-                canEdit: true,
-                statusDesc: '作业智能分发完成',
-                questionCount: 25,
-                questionsDetail: []
-            },
-            {
-                id: 'TASK-AI-20260814-10',
-                taskType: 'shijuanbao',
-                taskName: '2026年河南省专升本高等数学真题全解试卷包',
-                category: '专升本',
-                region: '河南省',
-                subject: '高等数学',
-                creator: '张老师',
-                createTime: '2026-08-14 11:15:30',
-                completeTime: '2026-08-14 11:19:00',
-                status: 'success',
-                canEdit: true,
-                statusDesc: '已打包装卷完成',
-                questionCount: 150,
-                questionsDetail: []
-            },
-            {
-                id: 'TASK-AI-20260814-09',
+                id: 'TASK-AI-20260814-05',
                 taskType: 'shuati',
-                taskName: '2026年专升本计算机基础刷题库V2.0',
+                taskName: '2026年专升本计算机基础高频必刷题库V2.0',
                 category: '专升本',
                 region: '河南省',
                 subject: '计算机基础',
                 creator: '王老师',
-                createTime: '2026-08-14 11:05:00',
-                completeTime: '2026-08-14 11:08:20',
-                status: 'success',
-                canEdit: true,
-                statusDesc: '已生成刷题版本',
+                createTime: '2026-08-14 10:28:10',
+                completeTime: '-',
+                status: 'processing',
+                canEdit: false,
+                statusDesc: '正在进行中',
                 questionCount: 120,
                 questionsDetail: []
-            },
-            {
-                id: 'TASK-AI-20260814-01',
-                taskType: 'paper',
-                taskName: '2026年河南省、河北省专升本法学统一考试模拟试卷',
-                category: '专升本',
-                region: '河南省、河北省',
-                subject: '语文',
-                creator: '张老师',
-                createTime: '2026-08-14 10:15:22',
-                completeTime: '2026-08-14 10:17:10',
-                status: 'success', // 'processing' | 'success' | 'failed'
-                canEdit: false,    // 第一个已完成试卷任务隐藏编辑按钮
-                statusDesc: '已完成解析与分题',
-                questionCount: 35,
-                questionsDetail: [
-                    {
-                        id: 1,
-                        type: '单选题',
-                        score: 2,
-                        stem: '根据我国《刑法》规定，下列哪一情形构成正当防卫？',
-                        options: [
-                            { key: 'A', text: '甲预见到乙可能要偷窃，提前将乙打伤' },
-                            { key: 'B', text: '乙持刀正在行凶，甲为保护他人生命安全将乙制服致轻伤' },
-                            { key: 'C', text: '丙在盗窃得手逃跑5天后被失主拦截打伤' },
-                            { key: 'D', text: '丁被野生动物袭击时将他人的宠物狗打死' }
-                        ],
-                        answer: 'B',
-                        analysis: '正当防卫是指为了使国家、公共利益、本人或者他人的人身、财产和其他权利免受正在进行的不法侵害，而采取的制止不法侵害的行为。乙持刀正在行凶属于现实且紧迫的不法侵害，甲的行为完全符合正当防卫构成要件。'
-                    },
-                    {
-                        id: 2,
-                        type: '多选题',
-                        score: 4,
-                        stem: '下列各项法律权利中，属于我国宪法规定的公民基本政治权利的有（ ）。',
-                        options: [
-                            { key: 'A', text: '选举权与被选举权' },
-                            { key: 'B', text: '言论、出版、结社自由' },
-                            { key: 'C', text: '劳动权与受教育权' },
-                            { key: 'D', text: '宗教信仰自由' }
-                        ],
-                        answer: 'A,B',
-                        analysis: '公民的政治权利和自由包括选举权和被选举权，以及言论、出版、集会、结社、游行、示威的自由。劳动权和受教育权属于社会经济文化权利；宗教信仰自由为独立的公民基本权利。'
-                    },
-                    {
-                        id: 3,
-                        type: '判断题',
-                        score: 1,
-                        stem: '无权代理行为只要未经被代理人追认，就一律自始绝对不发生任何法律效力。',
-                        options: [
-                            { key: 'A', text: '正确' },
-                            { key: 'B', text: '错误' }
-                        ],
-                        answer: 'B',
-                        analysis: '错误。表见代理属于广义的无权代理，即使未获被代理人追认，为了保护善意第三人的合理信赖，该代理行为依然发生有效法律后果。'
-                    }
-                ]
             },
             {
                 id: 'TASK-AI-20260814-02',
@@ -936,79 +847,46 @@
                 ]
             },
             {
-                id: 'TASK-AI-20260814-03',
-                taskType: 'question',
-                taskName: '202608141018试题',
-                category: '专升本',
-                region: '河南省',
-                subject: '高等数学、计算机基础、法学',
-                creator: '王教研',
-                createTime: '2026-08-14 10:18:00',
-                completeTime: '2026-08-14 10:20:15',
-                status: 'success',
-                canEdit: false,    // 有的试题任务不显示编辑按钮
-                statusDesc: '已完成自动入库',
-                questionCount: 30,
-                questionsDetail: []
-            },
-            {
-                id: 'TASK-AI-20260814-04',
+                id: 'TASK-AI-20260814-01',
                 taskType: 'paper',
-                taskName: '2026年河南省专升本公共英语历年真题及参考答案',
+                taskName: '2026年河南省、河北省专升本法学统一考试模拟试卷',
                 category: '专升本',
-                region: '河南省',
-                subject: '大学英语',
-                creator: '刘老师',
-                createTime: '2026-08-14 10:20:00',
-                completeTime: '2026-08-14 10:23:45',
-                status: 'success',
-                canEdit: true,     // 显示编辑按钮，点击跳转至导入试卷
-                statusDesc: '已完成归档入库',
-                questionCount: 40,
-                questionsDetail: []
-            },
-            {
-                id: 'TASK-AI-20260814-05',
-                taskType: 'paper',
-                taskName: '2026年高等数学一元微积分重点突破模拟试卷',
-                category: '专升本',
-                region: '河南省、山东省',
-                subject: '高等数学',
-                creator: '赵老师',
-                createTime: '2026-08-14 10:28:10',
-                completeTime: '-',
-                status: 'processing',
+                region: '河南省、河北省',
+                subject: '语文',
+                creator: '张老师',
+                createTime: '2026-08-14 10:15:22',
+                completeTime: '2026-08-14 10:17:10',
+                status: 'imported', // 已导入任务状态，没有编辑按钮
                 canEdit: false,
-                statusDesc: '正在进行中',
-                questionCount: 22,
-                questionsDetail: []
-            },
-            {
-                id: 'TASK-AI-20260814-06',
-                taskType: 'question',
-                taskName: '202608141029试题',
-                category: '专升本',
-                region: '河南省',
-                subject: '管理学',
-                creator: '陈编辑',
-                createTime: '2026-08-14 10:29:40',
-                completeTime: '-',
-                status: 'processing',
-                canEdit: false,
-                statusDesc: '正在进行中',
-                questionCount: 15,
-                questionsDetail: []
+                statusDesc: '已导入试卷库',
+                questionCount: 35,
+                questionsDetail: [
+                    {
+                        id: 1,
+                        type: '单选题',
+                        score: 2,
+                        stem: '根据我国《刑法》规定，下列哪一情形构成正当防卫？',
+                        options: [
+                            { key: 'A', text: '甲预见到乙可能要偷窃，提前将乙打伤' },
+                            { key: 'B', text: '乙持刀正在行凶，甲为保护他人生命安全将乙制服致轻伤' },
+                            { key: 'C', text: '丙在盗窃得手逃跑5天后被失主拦截打伤' },
+                            { key: 'D', text: '丁被野生动物袭击时将他人的宠物狗打死' }
+                        ],
+                        answer: 'B',
+                        analysis: '正当防卫是指为了使国家、公共利益、本人或者他人的人身、财产和其他权利免受正在进行的不法侵害，而采取的制止不法侵害的行为。乙持刀正在行凶属于现实且紧迫的不法侵害，甲的行为完全符合正当防卫构成要件。'
+                    }
+                ]
             },
             {
                 id: 'TASK-AI-20260814-07',
-                taskType: 'paper',
-                taskName: '2026年专升本教育理论综合冲刺密卷',
+                taskType: 'shijuanbao',
+                taskName: '2026年专升本高等数学真题全解试卷包',
                 category: '专升本',
                 region: '河南省',
-                subject: '教育学',
+                subject: '高等数学',
                 creator: '孙老师',
                 createTime: '2026-08-14 09:40:00',
-                completeTime: '-',
+                completeTime: '2026-08-14 09:43:20', // 失败的时间
                 status: 'failed',
                 canEdit: false,
                 statusDesc: '处理失败',
@@ -1017,32 +895,15 @@
                 questionsDetail: []
             },
             {
-                id: 'TASK-AI-20260814-08',
-                taskType: 'question',
-                taskName: '202608140955试题',
-                category: '专升本',
-                region: '河南省',
-                subject: '植物遗传学',
-                creator: '周老师',
-                createTime: '2026-08-14 09:55:00',
-                completeTime: '-',
-                status: 'failed',
-                canEdit: false,
-                statusDesc: '处理失败',
-                failReason: '上传的文件清晰度不足或格式异常，AI 无法提取完整题干结构。',
-                questionCount: 0,
-                questionsDetail: []
-            },
-            {
                 id: 'TASK-AI-20260814-12',
-                taskType: 'question',
-                taskName: '202608140930试题',
+                taskType: 'xuefu',
+                taskName: '2026年暑期冲刺班第一周学服阶段作业',
                 category: '专升本',
                 region: '河南省',
-                subject: '管理学',
+                subject: '大学英语',
                 creator: '周老师',
                 createTime: '2026-08-14 09:30:00',
-                completeTime: '-',
+                completeTime: '2026-08-14 09:32:15', // 取消的时间
                 status: 'canceled',
                 canEdit: false,
                 statusDesc: '已取消',
@@ -1098,7 +959,12 @@
                 // Task Type filter
                 if (currentTaskTypeFilter !== 'all' && t.taskType !== currentTaskTypeFilter) return false;
                 // Status filter
-                if (currentStatusFilter !== 'all' && t.status !== currentStatusFilter) return false;
+                if (currentStatusFilter !== 'all') {
+                    const effectiveStatus = (t.status === 'imported' || (t.status === 'success' && t.canEdit === false))
+                        ? 'imported'
+                        : t.status;
+                    if (currentStatusFilter !== effectiveStatus) return false;
+                }
                 // Keyword search
                 if (keyword) {
                     const tag = t.taskType === 'question' || t.taskType === 'xuefu'
@@ -1122,22 +988,24 @@
             document.getElementById('totalTaskCount').textContent = filtered.length;
         }
 
-        // Helper function to calculate duration in minutes (用时统一为整数分钟；最少为1分钟；失败、取消或进行中时不显示用时)
+        // Helper function to format current date time
+        function formatCurrentDateTime() {
+            const now = new Date();
+            const pad = n => String(n).padStart(2, '0');
+            return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+        }
+
+        // Helper function to calculate duration in minutes (用时统一为整数分钟；最少为1分钟；进行中时不显示用时)
         function calculateDurationInMinutes(createTimeStr, completeTimeStr, status) {
-            if (status === 'failed' || status === 'canceled' || status === 'processing') return '-';
-            if (!createTimeStr) return '-';
+            if (status === 'processing') return '-';
+            if (!createTimeStr || !completeTimeStr || completeTimeStr === '-') return '-';
 
             const createDate = new Date(createTimeStr.replace(/-/g, '/'));
             if (isNaN(createDate.getTime())) return '-';
 
-            let endDate;
-            if (completeTimeStr && completeTimeStr !== '-') {
-                endDate = new Date(completeTimeStr.replace(/-/g, '/'));
-            } else {
-                return '-';
-            }
-
+            const endDate = new Date(completeTimeStr.replace(/-/g, '/'));
             if (isNaN(endDate.getTime())) return '-';
+
             const diffSeconds = Math.max(1, (endDate.getTime() - createDate.getTime()) / 1000);
             // 统一为整数分钟，最少为1分钟
             const minutes = Math.max(1, Math.round(diffSeconds / 60));
@@ -1177,7 +1045,20 @@
             let statusBadge = '';
             let actionButtons = '';
 
-            if (task.status === 'success') {
+            if (task.status === 'imported' || (task.status === 'success' && task.canEdit === false)) {
+                statusBadge = `
+                    <div class="flex items-center gap-1.5 text-teal-600 font-medium">
+                        <i class="fas fa-file-circle-check text-xs"></i>
+                        <span>已导入</span>
+                    </div>
+                `;
+
+                actionButtons = `
+                    <div class="flex items-center justify-end text-slate-300 font-mono">
+                        -
+                    </div>
+                `;
+            } else if (task.status === 'success') {
                 statusBadge = `
                     <div class="flex items-center gap-1.5 text-emerald-600 font-medium">
                         <i class="fas fa-circle-check text-xs"></i>
@@ -1185,23 +1066,14 @@
                     </div>
                 `;
 
-                // 有的试卷不显示编辑按钮
-                if (task.canEdit !== false) {
-                    actionButtons = `
-                        <div class="flex items-center justify-end">
-                            <button onclick="openEditQuestionsDrawer('${task.id}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium transition-all shadow-2xs flex items-center gap-1">
-                                <i class="fas fa-pen-to-square text-[10px]"></i>
-                                <span>编辑</span>
-                            </button>
-                        </div>
-                    `;
-                } else {
-                    actionButtons = `
-                        <div class="flex items-center justify-end text-slate-300 font-mono">
-                            -
-                        </div>
-                    `;
-                }
+                actionButtons = `
+                    <div class="flex items-center justify-end">
+                        <button onclick="openEditQuestionsDrawer('${task.id}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium transition-all shadow-2xs flex items-center gap-1">
+                            <i class="fas fa-pen-to-square text-[10px]"></i>
+                            <span>编辑</span>
+                        </button>
+                    </div>
+                `;
             } else if (task.status === 'processing') {
                 statusBadge = `
                     <div class="flex items-center gap-1.5 text-blue-600 font-medium">
@@ -1255,7 +1127,7 @@
             }
 
             const durationText = calculateDurationInMinutes(task.createTime, task.completeTime, task.status);
-            const completeTimeText = (task.status === 'failed' || task.status === 'canceled') ? '-' : (task.completeTime || '-');
+            const completeTimeText = task.completeTime || '-';
 
             // 排版中不要显示试题数（显示 -）
             const showQuestionCount = task.status !== 'processing' && task.questionCount > 0;
@@ -1406,11 +1278,13 @@
                 return;
             }
             let canceled = 0;
+            const nowTimeStr = formatCurrentDateTime();
             tasks.forEach(t => {
                 if (selectedTaskIds.has(t.id) && (t.status === 'processing' || t.status === 'pending')) {
                     t.status = 'canceled';
                     t.progress = 0;
                     t.statusDesc = '已被业务人员手动取消';
+                    t.completeTime = nowTimeStr;
                     delete t.failReason;
                     canceled++;
                 }
@@ -1428,7 +1302,7 @@
                 task.status = 'canceled';
                 task.statusDesc = '任务已手动取消';
                 delete task.failReason;
-                task.completeTime = '-';
+                task.completeTime = formatCurrentDateTime();
                 updateStatCounters();
                 renderTaskList();
                 showToast(`已取消任务 ${task.taskName}`);
