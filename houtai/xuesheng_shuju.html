@@ -557,7 +557,7 @@
 
                 <div class="stat-card bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-2xs">
                     <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
-                        <span>做题用户数</span>
+                        <span>答题用户数</span>
                         <i class="fas fa-users text-emerald-500"></i>
                     </div>
                     <div class="text-lg font-bold text-slate-800">42,180 <span class="text-xs font-normal text-slate-400">人</span></div>
@@ -602,7 +602,7 @@
                                 <thead id="weaknessTableHead" class="sticky top-0 bg-white z-10 shadow-2xs">
                                     <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
                                         <th class="p-2 font-medium">章节名称</th>
-                                        <th class="p-2 font-medium">做题次数</th>
+                                        <th class="p-2 font-medium">答题量</th>
                                         <th class="p-2 font-medium text-right">正确率</th>
                                     </tr>
                                 </thead>
@@ -624,7 +624,7 @@
                             </h3>
                             <div class="flex items-center gap-1 text-xs bg-slate-100 p-0.5 rounded-lg">
                                 <button id="btnSegAccuracy" onclick="switchUserSegment('accuracy')" class="px-2 py-0.5 rounded-md font-medium text-slate-700 bg-white shadow-2xs">按正确率</button>
-                                <button id="btnSegVolume" onclick="switchUserSegment('volume')" class="px-2 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600">按做题量</button>
+                                <button id="btnSegVolume" onclick="switchUserSegment('volume')" class="px-2 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600" title="人均日均答题量">按答题量</button>
                                 <button id="btnSegUserType" onclick="switchUserSegment('userType')" class="px-2 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600">按新老用户</button>
                             </div>
                         </div>
@@ -639,7 +639,7 @@
                                     <table class="w-full text-left text-xs">
                                         <thead>
                                             <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
-                                                <th class="p-1.5 font-medium">分层区间</th>
+                                                <th class="p-1.5 font-medium" id="userSegmentHeaderTh">分层区间</th>
                                                 <th class="p-1.5 font-medium">用户数量</th>
                                                 <th class="p-1.5 font-medium text-right">占比</th>
                                             </tr>
@@ -658,8 +658,8 @@
                             <div class="text-slate-400">正确率主流</div>
                             <div class="font-bold text-blue-600 text-xs mt-0.5">50% - 75%</div>
                         </div>
-                        <div class="bg-slate-50 p-2 rounded-lg">
-                            <div class="text-slate-400">做题量主流</div>
+                        <div class="bg-slate-50 p-2 rounded-lg" title="人均日均答题量">
+                            <div class="text-slate-400">答题量主流</div>
                             <div class="font-bold text-emerald-600 text-xs mt-0.5">31 - 60 道</div>
                         </div>
                         <div class="bg-slate-50 p-2 rounded-lg">
@@ -671,7 +671,7 @@
 
             </div>
 
-            <!-- SECTION 2: 功能模块分析 与 做题用户数柱状图 (左右排列) -->
+            <!-- SECTION 2: 功能模块分析 与 答题用户数柱状图 (左右排列) -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 pb-6">
                 
                 <!-- 1. 功能模块分析 (Module Analysis) - 6 Cols -->
@@ -690,9 +690,9 @@
                                     <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
                                         <th class="p-2.5 font-medium">功能模块</th>
                                         <th class="p-2.5 font-medium">产品线</th>
-                                        <th class="p-2.5 font-medium">做题次数</th>
+                                        <th class="p-2.5 font-medium">答题量</th>
                                         <th class="p-2.5 font-medium">交卷次数</th>
-                                        <th class="p-2.5 font-medium text-right">作答时长</th>
+                                        <th class="p-2.5 font-medium text-right">人均日均作答时长</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-100 text-slate-700">
@@ -703,8 +703,8 @@
                                             <span>章节练习</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">学历提升产品线</td>
-                                        <td class="p-2.5">183,280 次</td>
-                                        <td class="p-2.5">45,820 次</td>
+                                        <td class="p-2.5">183,280</td>
+                                        <td class="p-2.5">45,820</td>
                                         <td class="p-2.5 text-right">18分钟</td>
                                     </tr>
                                     <tr class="hover:bg-slate-50/60 transition-colors">
@@ -713,8 +713,8 @@
                                             <span>每日一练</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">学历提升产品线</td>
-                                        <td class="p-2.5">160,750 次</td>
-                                        <td class="p-2.5">32,150 次</td>
+                                        <td class="p-2.5">160,750</td>
+                                        <td class="p-2.5">32,150</td>
                                         <td class="p-2.5 text-right">9分钟</td>
                                     </tr>
                                     <tr class="hover:bg-slate-50/60 transition-colors">
@@ -723,8 +723,8 @@
                                             <span>统考试卷</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">学历提升产品线</td>
-                                        <td class="p-2.5">1,865,000 次</td>
-                                        <td class="p-2.5">18,650 次</td>
+                                        <td class="p-2.5">1,865,000</td>
+                                        <td class="p-2.5">18,650</td>
                                         <td class="p-2.5 text-right">1小时15分钟</td>
                                     </tr>
                                     <tr class="hover:bg-slate-50/60 transition-colors">
@@ -733,8 +733,8 @@
                                             <span>固定刷题</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">学历提升产品线</td>
-                                        <td class="p-2.5">76,400 次</td>
-                                        <td class="p-2.5">15,280 次</td>
+                                        <td class="p-2.5">76,400</td>
+                                        <td class="p-2.5">15,280</td>
                                         <td class="p-2.5 text-right">15分钟</td>
                                     </tr>
 
@@ -745,8 +745,8 @@
                                             <span>真题试卷</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">职业资格产品线</td>
-                                        <td class="p-2.5">2,430,000 次</td>
-                                        <td class="p-2.5">24,300 次</td>
+                                        <td class="p-2.5">2,430,000</td>
+                                        <td class="p-2.5">24,300</td>
                                         <td class="p-2.5 text-right">1小时</td>
                                     </tr>
                                     <tr class="hover:bg-slate-50/60 transition-colors">
@@ -755,8 +755,8 @@
                                             <span>测评考试</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">职业资格产品线</td>
-                                        <td class="p-2.5">178,500 次</td>
-                                        <td class="p-2.5">17,850 次</td>
+                                        <td class="p-2.5">178,500</td>
+                                        <td class="p-2.5">17,850</td>
                                         <td class="p-2.5 text-right">32分钟</td>
                                     </tr>
                                     <tr class="hover:bg-slate-50/60 transition-colors">
@@ -765,8 +765,8 @@
                                             <span>知识点练习</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">职业资格产品线</td>
-                                        <td class="p-2.5">69,600 次</td>
-                                        <td class="p-2.5">13,920 次</td>
+                                        <td class="p-2.5">69,600</td>
+                                        <td class="p-2.5">13,920</td>
                                         <td class="p-2.5 text-right">13分钟</td>
                                     </tr>
 
@@ -777,8 +777,8 @@
                                             <span>大联考</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">考研辅导产品线</td>
-                                        <td class="p-2.5">1,980,000 次</td>
-                                        <td class="p-2.5">19,800 次</td>
+                                        <td class="p-2.5">1,980,000</td>
+                                        <td class="p-2.5">19,800</td>
                                         <td class="p-2.5 text-right">1小时3分钟</td>
                                     </tr>
                                     <tr class="hover:bg-slate-50/60 transition-colors">
@@ -787,8 +787,8 @@
                                             <span>估分试卷</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">考研辅导产品线</td>
-                                        <td class="p-2.5">164,000 次</td>
-                                        <td class="p-2.5">16,400 次</td>
+                                        <td class="p-2.5">164,000</td>
+                                        <td class="p-2.5">16,400</td>
                                         <td class="p-2.5 text-right">35分钟</td>
                                     </tr>
                                     <tr class="hover:bg-slate-50/60 transition-colors">
@@ -797,8 +797,8 @@
                                             <span>AI闯关练</span>
                                         </td>
                                         <td class="p-2.5 text-slate-600">考研辅导产品线</td>
-                                        <td class="p-2.5">57,800 次</td>
-                                        <td class="p-2.5">11,560 次</td>
+                                        <td class="p-2.5">57,800</td>
+                                        <td class="p-2.5">11,560</td>
                                         <td class="p-2.5 text-right">10分钟</td>
                                     </tr>
                                 </tbody>
@@ -807,13 +807,13 @@
                     </div>
                 </div>
 
-                <!-- 2. 做题用户数柱状图 (Day/Week/Month) - 6 Cols -->
+                <!-- 2. 答题用户数柱状图 (Day/Week/Month) - 6 Cols -->
                 <div class="lg:col-span-6 bg-white rounded-xl p-4 border border-slate-200/80 shadow-2xs flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <h3 class="font-bold text-slate-800 flex items-center gap-2">
                                 <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
-                                <span>做题用户数</span>
+                                <span>答题用户数</span>
                             </h3>
                             <div class="flex items-center gap-1 text-xs bg-slate-100 p-0.5 rounded-lg">
                                 <button id="btnActiveDay" onclick="switchActivePeriod('day')" class="px-2.5 py-0.5 rounded-md font-medium text-slate-700 bg-white shadow-2xs">日</button>
@@ -822,7 +822,7 @@
                             </div>
                         </div>
 
-                        <!-- 做题用户数柱状图 -->
+                        <!-- 答题用户数柱状图 -->
                         <div class="h-48 relative">
                             <canvas id="activeUsersChart"></canvas>
                         </div>
@@ -830,15 +830,15 @@
 
                     <div class="grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-slate-100 text-center text-xs">
                         <div class="bg-slate-50 p-2 rounded-lg">
-                            <div class="text-slate-400">日均做题用户数</div>
+                            <div class="text-slate-400">日均答题用户数</div>
                             <div class="font-bold text-slate-800 mt-0.5">42,800 人</div>
                         </div>
                         <div class="bg-slate-50 p-2 rounded-lg">
-                            <div class="text-slate-400">周均做题用户数</div>
+                            <div class="text-slate-400">周均答题用户数</div>
                             <div class="font-bold text-blue-600 mt-0.5">185,200 人</div>
                         </div>
                         <div class="bg-slate-50 p-2 rounded-lg">
-                            <div class="text-slate-400">月做题用户数</div>
+                            <div class="text-slate-400">月答题用户数</div>
                             <div class="font-bold text-purple-600 mt-0.5">640,000 人</div>
                         </div>
                     </div>
@@ -860,7 +860,7 @@
                     <button type="button" onclick="switchRankingTab('kp_count')" id="btnTab-kp_count"
                         class="ranking-tab-btn px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all bg-transparent text-slate-600 hover:bg-slate-200/70 hover:text-slate-900">
                         <i class="fas fa-fire text-[11px] text-amber-500"></i>
-                        <span>做题次数最多的知识点</span>
+                        <span>答题量最多的知识点</span>
                         <span class="px-1.5 py-0.2 text-[10px] rounded bg-slate-200 text-slate-600">Top 100</span>
                     </button>
 
@@ -874,7 +874,7 @@
                     <button type="button" onclick="switchRankingTab('chap_count')" id="btnTab-chap_count"
                         class="ranking-tab-btn px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all bg-transparent text-slate-600 hover:bg-slate-200/70 hover:text-slate-900">
                         <i class="fas fa-layer-group text-[11px] text-blue-500"></i>
-                        <span>做题次数最多的章节</span>
+                        <span>答题量最多的章节</span>
                         <span class="px-1.5 py-0.2 text-[10px] rounded bg-slate-200 text-slate-600">Top 50</span>
                     </button>
 
@@ -888,7 +888,7 @@
                     <button type="button" onclick="switchRankingTab('qtype_count')" id="btnTab-qtype_count"
                         class="ranking-tab-btn px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all bg-transparent text-slate-600 hover:bg-slate-200/70 hover:text-slate-900">
                         <i class="fas fa-chart-pie text-[11px] text-indigo-500"></i>
-                        <span>做题次数最多的题型</span>
+                        <span>答题量最多的题型</span>
                         <span class="px-1.5 py-0.2 text-[10px] rounded bg-slate-200 text-slate-600">Top 20</span>
                     </button>
                 </div>
@@ -921,33 +921,39 @@
                             <h3 class="font-bold text-slate-800 text-sm md:text-base">真题考点热度</h3>
                         </div>
 
-                        <!-- 考频选择 Tab (近5年 / 近10年) -->
-                        <div class="inline-flex items-center p-0.5 bg-slate-100 rounded-lg border border-slate-200/60 text-xs font-medium">
-                            <button type="button" id="heatPeriodTab5" onclick="switchHeatPeriod(5)" 
-                                class="px-2.5 py-1 rounded-md transition-all bg-white text-orange-600 font-semibold shadow-2xs cursor-pointer">
-                                近5年
-                            </button>
-                            <button type="button" id="heatPeriodTab10" onclick="switchHeatPeriod(10)" 
-                                class="px-2.5 py-1 rounded-md transition-all text-slate-500 hover:text-slate-800 cursor-pointer">
-                                近10年
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- 筛选项 (难度) -->
-                    <div class="flex items-center gap-2 flex-wrap text-xs">
-                        <!-- 难度筛选 -->
-                        <div class="relative min-w-[95px]">
-                            <select id="heatFilterDifficulty" onchange="handleHeatFilterChange()"
-                                class="w-full appearance-none bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-md pl-2.5 pr-6 py-1.5 text-slate-700 focus:outline-none focus:border-orange-500 cursor-pointer">
-                                <option value="all">全部难度</option>
-                                <option value="难">难</option>
-                                <option value="较难">较难</option>
-                                <option value="中">中</option>
-                                <option value="较易">较易</option>
-                                <option value="易">易</option>
-                            </select>
-                            <i class="fas fa-chevron-down absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>
+                        <!-- 手动调整近几年 (默认近5年，最多支持50年) -->
+                        <div class="inline-flex items-center gap-2 bg-slate-100/90 p-1 rounded-lg border border-slate-200/70 text-xs">
+                            <div class="flex items-center bg-white rounded-md border border-slate-200 shadow-2xs pl-2 pr-1 py-0.5">
+                                <span class="text-slate-500 font-medium select-none">近</span>
+                                <input type="number" id="heatYearsInput" min="1" max="50" value="5"
+                                    onchange="handleHeatYearsInputChange(this.value)"
+                                    onkeydown="if(event.key==='Enter') handleHeatYearsInputChange(this.value)"
+                                    class="w-8 text-center font-bold text-orange-600 focus:outline-none text-xs bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                                <span class="text-slate-500 font-medium select-none mr-1">年</span>
+                                <div class="flex flex-col border-l border-slate-200 pl-0.5">
+                                    <button type="button" onclick="adjustHeatYears(1)" title="增加1年" class="px-1 text-slate-400 hover:text-orange-600 cursor-pointer text-[9px] leading-tight transition-colors">
+                                        <i class="fas fa-chevron-up"></i>
+                                    </button>
+                                    <button type="button" onclick="adjustHeatYears(-1)" title="减少1年" class="px-1 text-slate-400 hover:text-orange-600 cursor-pointer text-[9px] leading-tight transition-colors">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- 快捷选择胶囊 -->
+                            <div class="inline-flex items-center gap-1">
+                                <button type="button" id="heatQuick3" onclick="setHeatYears(3)" 
+                                    class="heat-quick-tab px-2 py-0.5 rounded-md transition-all text-slate-500 hover:text-slate-800 cursor-pointer">
+                                    近3年
+                                </button>
+                                <button type="button" id="heatQuick5" onclick="setHeatYears(5)" 
+                                    class="heat-quick-tab px-2 py-0.5 rounded-md transition-all bg-white text-orange-600 font-semibold shadow-2xs cursor-pointer">
+                                    近5年
+                                </button>
+                                <button type="button" id="heatQuick10" onclick="setHeatYears(10)" 
+                                    class="heat-quick-tab px-2 py-0.5 rounded-md transition-all text-slate-500 hover:text-slate-800 cursor-pointer">
+                                    近10年
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -963,12 +969,6 @@
                                     <div class="flex items-center gap-1">
                                         <span id="th-freqYears-text">考频</span>
                                         <span id="sort-icon-freqYears"><i class="fas fa-sort-down text-orange-500 text-[10px]"></i></span>
-                                    </div>
-                                </th>
-                                <th class="p-2.5 font-semibold min-w-[75px] cursor-pointer hover:text-orange-600 transition-colors" onclick="toggleHeatSort('difficulty')" id="th-difficulty">
-                                    <div class="flex items-center gap-1">
-                                        <span>难度</span>
-                                        <span id="sort-icon-difficulty"><i class="fas fa-sort text-slate-300 text-[10px]"></i></span>
                                     </div>
                                 </th>
                                 <th class="p-2.5 font-semibold min-w-[120px]">常考题型</th>
@@ -1030,58 +1030,58 @@
 
         const chapterTreeNodes = [
             {
-                id: "c1", name: "绪论", level: 1, count: "48,200次", accuracy: "72.5%", time: "2分钟", status: "掌握良好", alert: false, open: true,
+                id: "c1", name: "绪论", level: 1, count: "48,200", accuracy: "72.5%", time: "2分钟", status: "掌握良好", alert: false, open: true,
                 children: [
                     {
-                        id: "c1-1", name: "中医学理论体系的形成和发展", level: 2, count: "28,400次", accuracy: "45.2%", time: "3分钟", status: "重点薄弱", alert: true, open: true,
+                        id: "c1-1", name: "中医学理论体系的形成和发展", level: 2, count: "28,400", accuracy: "45.2%", time: "3分钟", status: "重点薄弱", alert: true, open: true,
                         children: [
                             {
-                                id: "c1-1-1", name: "中医学理论体系的形成", level: 3, count: "15,200次", accuracy: "42.1%", time: "4分钟", status: "重点薄弱", alert: true, open: true,
+                                id: "c1-1-1", name: "中医学理论体系的形成", level: 3, count: "15,200", accuracy: "42.1%", time: "4分钟", status: "重点薄弱", alert: true, open: true,
                                 children: [
                                     {
-                                        id: "c1-1-1-1", name: "经典著作奠基（黄帝内经/难经）", level: 4, count: "8,900次", accuracy: "39.5%", time: "4分钟", status: "重点薄弱", alert: true, open: true,
+                                        id: "c1-1-1-1", name: "经典著作奠基（黄帝内经/难经）", level: 4, count: "8,900", accuracy: "39.5%", time: "4分钟", status: "重点薄弱", alert: true, open: true,
                                         children: [
-                                            { id: "c1-1-1-1-1", name: "《黄帝内经》诊法与理论精要", level: 5, count: "4,200次", accuracy: "35.8%", time: "5分钟", status: "重点薄弱", alert: true }
+                                            { id: "c1-1-1-1-1", name: "《黄帝内经》诊法与理论精要", level: 5, count: "4,200", accuracy: "35.8%", time: "5分钟", status: "重点薄弱", alert: true }
                                         ]
                                     }
                                 ]
                             },
-                            { id: "c1-1-2", name: "中医学理论体系的发展", level: 3, count: "13,200次", accuracy: "48.5%", time: "3分钟", status: "重点薄弱", alert: true }
+                            { id: "c1-1-2", name: "中医学理论体系的发展", level: 3, count: "13,200", accuracy: "48.5%", time: "3分钟", status: "重点薄弱", alert: true }
                         ]
                     },
-                    { id: "c1-2", name: "中医学理论体系的主要特点", level: 2, count: "19,800次", accuracy: "68.4%", time: "2分钟", status: "掌握良好", alert: false }
+                    { id: "c1-2", name: "中医学理论体系的主要特点", level: 2, count: "19,800", accuracy: "68.4%", time: "2分钟", status: "掌握良好", alert: false }
                 ]
             },
             {
-                id: "c2", name: "中医学的哲学基础", level: 1, count: "35,100次", accuracy: "52.4%", time: "4分钟", status: "中度薄弱", alert: false, open: false,
+                id: "c2", name: "中医学的哲学基础", level: 1, count: "35,100", accuracy: "52.4%", time: "4分钟", status: "中度薄弱", alert: false, open: false,
                 children: [
-                    { id: "c2-1", name: "精气学说与阴阳五行", level: 2, count: "18,200次", accuracy: "54.1%", time: "3分钟", status: "中度薄弱", alert: false }
+                    { id: "c2-1", name: "精气学说与阴阳五行", level: 2, count: "18,200", accuracy: "54.1%", time: "3分钟", status: "中度薄弱", alert: false }
                 ]
             },
-            { id: "c3", name: "中医学的主要思维方式", level: 1, count: "22,400次", accuracy: "61%", time: "2分钟", status: "掌握良好", alert: false },
-            { id: "c4", name: "藏象", level: 1, count: "41,800次", accuracy: "44.2%", time: "4分钟", status: "重点薄弱", alert: true },
-            { id: "c5", name: "精气血津液神", level: 1, count: "29,600次", accuracy: "58%", time: "3分钟", status: "中度薄弱", alert: false },
-            { id: "c6", name: "经络", level: 1, count: "21,500次", accuracy: "49.1%", time: "4分钟", status: "重点薄弱", alert: true },
-            { id: "c7", name: "体质", level: 1, count: "18,300次", accuracy: "65.2%", time: "2分钟", status: "掌握良好", alert: false },
-            { id: "c8", name: "病因", level: 1, count: "26,100次", accuracy: "53.8%", time: "3分钟", status: "中度薄弱", alert: false },
-            { id: "c9", name: "病机", level: 1, count: "31,200次", accuracy: "46.7%", time: "4分钟", status: "重点薄弱", alert: true },
-            { id: "c10", name: "养生与防治原则", level: 1, count: "15,800次", accuracy: "74.1%", time: "2分钟", status: "掌握良好", alert: false }
+            { id: "c3", name: "中医学的主要思维方式", level: 1, count: "22,400", accuracy: "61%", time: "2分钟", status: "掌握良好", alert: false },
+            { id: "c4", name: "藏象", level: 1, count: "41,800", accuracy: "44.2%", time: "4分钟", status: "重点薄弱", alert: true },
+            { id: "c5", name: "精气血津液神", level: 1, count: "29,600", accuracy: "58%", time: "3分钟", status: "中度薄弱", alert: false },
+            { id: "c6", name: "经络", level: 1, count: "21,500", accuracy: "49.1%", time: "4分钟", status: "重点薄弱", alert: true },
+            { id: "c7", name: "体质", level: 1, count: "18,300", accuracy: "65.2%", time: "2分钟", status: "掌握良好", alert: false },
+            { id: "c8", name: "病因", level: 1, count: "26,100", accuracy: "53.8%", time: "3分钟", status: "中度薄弱", alert: false },
+            { id: "c9", name: "病机", level: 1, count: "31,200", accuracy: "46.7%", time: "4分钟", status: "重点薄弱", alert: true },
+            { id: "c10", name: "养生与防治原则", level: 1, count: "15,800", accuracy: "74.1%", time: "2分钟", status: "掌握良好", alert: false }
         ];
 
         const knowledgeTreeNodes = [
             {
-                id: "k1", name: "核心概念与理论基础", level: 1, count: "38,500次", accuracy: "48.2%", time: "3分钟", status: "重点薄弱", alert: true, open: true,
+                id: "k1", name: "核心概念与理论基础", level: 1, count: "38,500", accuracy: "48.2%", time: "3分钟", status: "重点薄弱", alert: true, open: true,
                 children: [
                     {
-                        id: "k1-1", name: "阴阳五行生克规律", level: 2, count: "22,100次", accuracy: "42.8%", time: "4分钟", status: "重点薄弱", alert: true, open: true,
+                        id: "k1-1", name: "阴阳五行生克规律", level: 2, count: "22,100", accuracy: "42.8%", time: "4分钟", status: "重点薄弱", alert: true, open: true,
                         children: [
                             {
-                                id: "k1-1-1", name: "五行相生与相克关系", level: 3, count: "14,800次", accuracy: "39.2%", time: "4分钟", status: "重点薄弱", alert: true, open: true,
+                                id: "k1-1-1", name: "五行相生与相克关系", level: 3, count: "14,800", accuracy: "39.2%", time: "4分钟", status: "重点薄弱", alert: true, open: true,
                                 children: [
                                     {
-                                        id: "k1-1-1-1", name: "五行乘侮与母子相及病理辨析", level: 4, count: "9,200次", accuracy: "36.5%", time: "4分钟", status: "重点薄弱", alert: true, open: true,
+                                        id: "k1-1-1-1", name: "五行乘侮与母子相及病理辨析", level: 4, count: "9,200", accuracy: "36.5%", time: "4分钟", status: "重点薄弱", alert: true, open: true,
                                         children: [
-                                            { id: "k1-1-1-1-1", name: "木旺乘土与土虚木乘典例判断", level: 5, count: "4,800次", accuracy: "33.1%", time: "5分钟", status: "重点薄弱", alert: true }
+                                            { id: "k1-1-1-1-1", name: "木旺乘土与土虚木乘典例判断", level: 5, count: "4,800", accuracy: "33.1%", time: "5分钟", status: "重点薄弱", alert: true }
                                         ]
                                     }
                                 ]
@@ -1090,31 +1090,31 @@
                     }
                 ]
             },
-            { id: "k2", name: "藏象学说与五脏生理功能", level: 1, count: "32,100次", accuracy: "52%", time: "3分钟", status: "中度薄弱", alert: false },
-            { id: "k3", name: "病因辨证与六淫邪气特征", level: 1, count: "28,400次", accuracy: "58.6%", time: "3分钟", status: "中度薄弱", alert: false }
+            { id: "k2", name: "藏象学说与五脏生理功能", level: 1, count: "32,100", accuracy: "52%", time: "3分钟", status: "中度薄弱", alert: false },
+            { id: "k3", name: "病因辨证与六淫邪气特征", level: 1, count: "28,400", accuracy: "58.6%", time: "3分钟", status: "中度薄弱", alert: false }
         ];
 
         const questionTypeData = [
-            { name: "问答题-综合证明题", struct: "问答题", count: "38,500次", accuracy: "27.2%", time: "9分钟", status: "重点薄弱", alert: true },
-            { name: "问答题-算法编程", struct: "问答题", count: "31,200次", accuracy: "31.6%", time: "9分钟", status: "重点薄弱", alert: true },
-            { name: "材料题-综合案例分析", struct: "材料题", count: "42,100次", accuracy: "35.1%", time: "8分钟", status: "重点薄弱", alert: true },
-            { name: "问答题-长难句翻译与纠错", struct: "问答题", count: "58,600次", accuracy: "38.5%", time: "5分钟", status: "重点薄弱", alert: true },
-            { name: "问答题-建模与综合计算", struct: "问答题", count: "52,400次", accuracy: "41.8%", time: "7分钟", status: "重点薄弱", alert: true },
-            { name: "问答题-议论文写作", struct: "问答题", count: "46,800次", accuracy: "44.3%", time: "12分钟", status: "重点薄弱", alert: true },
-            { name: "问答题-政治与时政论述", struct: "问答题", count: "63,200次", accuracy: "47.7%", time: "6分钟", status: "重点薄弱", alert: true },
-            { name: "多选题-多选5项", struct: "多选题", count: "142,500次", accuracy: "50.2%", time: "2分钟", status: "中度薄弱", alert: false },
-            { name: "不定项选择题-不定项选择4项", struct: "不定项选择题", count: "98,600次", accuracy: "52.4%", time: "2分钟", status: "中度薄弱", alert: false },
-            { name: "问答题-概念要点简答", struct: "问答题", count: "78,900次", accuracy: "54.8%", time: "3分钟", status: "中度薄弱", alert: false },
-            { name: "单选题-阅读理解推理", struct: "单选题", count: "168,400次", accuracy: "57.9%", time: "2分钟", status: "中度薄弱", alert: false },
-            { name: "单选题-完形填空", struct: "单选题", count: "125,600次", accuracy: "61.3%", time: "1分钟", status: "中度薄弱", alert: false },
-            { name: "问答题-应用文书信小作文", struct: "问答题", count: "54,100次", accuracy: "64.8%", time: "7分钟", status: "掌握良好", alert: false },
-            { name: "材料题-材料分析解答", struct: "材料题", count: "71,200次", accuracy: "67.2%", time: "5分钟", status: "掌握良好", alert: false },
-            { name: "填空题-图表状态追踪", struct: "填空题", count: "49,800次", accuracy: "70.5%", time: "2分钟", status: "掌握良好", alert: false },
-            { name: "问答题-名词解释精准定义", struct: "问答题", count: "65,400次", accuracy: "73.8%", time: "2分钟", status: "掌握良好", alert: false },
-            { name: "单选题-单选4项", struct: "单选题", count: "385,400次", accuracy: "77%", time: "1分钟", status: "掌握良好", alert: false },
-            { name: "填空题-数值计算", struct: "填空题", count: "189,500次", accuracy: "79.4%", time: "1分钟", status: "掌握良好", alert: false },
-            { name: "判断题-正误判断", struct: "判断题", count: "156,400次", accuracy: "82.8%", time: "1分钟", status: "掌握良好", alert: false },
-            { name: "单选题-阅读理解细节定位", struct: "单选题", count: "214,500次", accuracy: "85.5%", time: "2分钟", status: "掌握良好", alert: false }
+            { name: "问答题-综合证明题", struct: "问答题", count: "38,500", accuracy: "27.2%", time: "9分钟", status: "重点薄弱", alert: true },
+            { name: "问答题-算法编程", struct: "问答题", count: "31,200", accuracy: "31.6%", time: "9分钟", status: "重点薄弱", alert: true },
+            { name: "材料题-综合案例分析", struct: "材料题", count: "42,100", accuracy: "35.1%", time: "8分钟", status: "重点薄弱", alert: true },
+            { name: "问答题-长难句翻译与纠错", struct: "问答题", count: "58,600", accuracy: "38.5%", time: "5分钟", status: "重点薄弱", alert: true },
+            { name: "问答题-建模与综合计算", struct: "问答题", count: "52,400", accuracy: "41.8%", time: "7分钟", status: "重点薄弱", alert: true },
+            { name: "问答题-议论文写作", struct: "问答题", count: "46,800", accuracy: "44.3%", time: "12分钟", status: "重点薄弱", alert: true },
+            { name: "问答题-政治与时政论述", struct: "问答题", count: "63,200", accuracy: "47.7%", time: "6分钟", status: "重点薄弱", alert: true },
+            { name: "多选题-多选5项", struct: "多选题", count: "142,500", accuracy: "50.2%", time: "2分钟", status: "中度薄弱", alert: false },
+            { name: "不定项选择题-不定项选择4项", struct: "不定项选择题", count: "98,600", accuracy: "52.4%", time: "2分钟", status: "中度薄弱", alert: false },
+            { name: "问答题-概念要点简答", struct: "问答题", count: "78,900", accuracy: "54.8%", time: "3分钟", status: "中度薄弱", alert: false },
+            { name: "单选题-阅读理解推理", struct: "单选题", count: "168,400", accuracy: "57.9%", time: "2分钟", status: "中度薄弱", alert: false },
+            { name: "单选题-完形填空", struct: "单选题", count: "125,600", accuracy: "61.3%", time: "1分钟", status: "中度薄弱", alert: false },
+            { name: "问答题-应用文书信小作文", struct: "问答题", count: "54,100", accuracy: "64.8%", time: "7分钟", status: "掌握良好", alert: false },
+            { name: "材料题-材料分析解答", struct: "材料题", count: "71,200", accuracy: "67.2%", time: "5分钟", status: "掌握良好", alert: false },
+            { name: "填空题-图表状态追踪", struct: "填空题", count: "49,800", accuracy: "70.5%", time: "2分钟", status: "掌握良好", alert: false },
+            { name: "问答题-名词解释精准定义", struct: "问答题", count: "65,400", accuracy: "73.8%", time: "2分钟", status: "掌握良好", alert: false },
+            { name: "单选题-单选4项", struct: "单选题", count: "385,400", accuracy: "77%", time: "1分钟", status: "掌握良好", alert: false },
+            { name: "填空题-数值计算", struct: "填空题", count: "189,500", accuracy: "79.4%", time: "1分钟", status: "掌握良好", alert: false },
+            { name: "判断题-正误判断", struct: "判断题", count: "156,400", accuracy: "82.8%", time: "1分钟", status: "掌握良好", alert: false },
+            { name: "单选题-阅读理解细节定位", struct: "单选题", count: "214,500", accuracy: "85.5%", time: "2分钟", status: "掌握良好", alert: false }
         ];
 
         // 统一百分比格式化工具（去除末尾无意义的 .0 等）
@@ -1228,7 +1228,7 @@
                                     <span class="text-xs ${isSelected ? 'text-slate-900 font-semibold' : 'text-slate-700'}">${node.name}</span>
                                 </div>
                             </td>
-                            <td class="p-2 text-slate-600">${node.count}</td>
+                            <td class="p-2 text-slate-600">${String(node.count || '').replace(/次/g, '')}</td>
                             <td class="p-2 font-bold text-right ${nodeAcc < 50 ? 'text-rose-600' : 'text-slate-800'}">${formatPercent(node.accuracy)}</td>
                         </tr>
                     `);
@@ -1263,7 +1263,7 @@
                         <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
                             <th class="p-2 font-medium">题型名称</th>
                             <th class="p-2 font-medium text-center">试题结构</th>
-                            <th class="p-2 font-medium">做题次数</th>
+                            <th class="p-2 font-medium">答题量</th>
                             <th class="p-2 font-medium text-right">正确率</th>
                         </tr>
                     `;
@@ -1299,7 +1299,7 @@
                             <tr class="hover:bg-slate-50 transition-colors">
                                 <td class="p-2 font-semibold text-slate-800">${item.name}</td>
                                 <td class="p-2 text-center">${getStructBadge(structName)}</td>
-                                <td class="p-2 text-slate-600">${item.count}</td>
+                                <td class="p-2 text-slate-600">${String(item.count || '').replace(/次/g, '')}</td>
                                 <td class="p-2 font-bold text-right ${itemAcc < 50 ? 'text-rose-600' : 'text-slate-800'}">${formatPercent(item.accuracy)}</td>
                             </tr>
                         `;
@@ -1310,7 +1310,7 @@
                     head.innerHTML = `
                         <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
                             <th class="p-2 font-medium">${type === 'chapter' ? '章节名称' : '知识点名称'}</th>
-                            <th class="p-2 font-medium">做题次数</th>
+                            <th class="p-2 font-medium">答题量</th>
                             <th class="p-2 font-medium text-right">正确率</th>
                         </tr>
                     `;
@@ -1403,7 +1403,7 @@
                 colors: ['#f43f5e', '#f59e0b', '#3b82f6', '#10b981']
             },
             volume: {
-                title: '做题量分层',
+                title: '答题量分层 (人均日均)',
                 labels: ['0-30道', '31-60道', '61-90道', '91-120道', '121-150道', '150道以上'],
                 counts: [6270, 7840, 4930, 2240, 895, 225],
                 ratios: ['28%', '35%', '22%', '10%', '4%', '1%'],
@@ -1426,6 +1426,13 @@
             if (btnAccuracy) btnAccuracy.className = type === 'accuracy' ? 'px-2 py-0.5 rounded-md font-medium text-slate-700 bg-white shadow-2xs' : 'px-2 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600';
             if (btnVolume) btnVolume.className = type === 'volume' ? 'px-2 py-0.5 rounded-md font-medium text-slate-700 bg-white shadow-2xs' : 'px-2 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600';
             if (btnUserType) btnUserType.className = type === 'userType' ? 'px-2 py-0.5 rounded-md font-medium text-slate-700 bg-white shadow-2xs' : 'px-2 py-0.5 rounded-md font-medium text-slate-500 hover:text-blue-600';
+
+            const thRange = document.getElementById('userSegmentHeaderTh');
+            if (thRange) {
+                thRange.innerHTML = type === 'volume' 
+                    ? '分层区间 <span class="text-[10px] text-blue-500 font-normal ml-0.5" title="人均日均答题量">(人均日均)</span>' 
+                    : '分层区间';
+            }
 
             const item = userSegmentData[type];
             if (!item) return;
@@ -1457,17 +1464,17 @@
             day: {
                 labels: ['07-18', '07-19', '07-20', '07-21', '07-22', '07-23', '07-24'],
                 data: [32400, 35100, 31800, 38600, 41200, 43500, 45800],
-                label: '日做题用户数'
+                label: '日答题用户数'
             },
             week: {
                 labels: ['5.28-6.2', '6.3-6.9', '6.10-6.16', '6.17-6.23', '6.24-6.30', '7.1-7.7', '7.8-7.14', '7.15-7.24'],
                 data: [98000, 138000, 142000, 156000, 168000, 175000, 182000, 141000],
-                label: '周做题用户数'
+                label: '周答题用户数'
             },
             month: {
                 labels: ['2.15-2.28', '3.1-3.31', '4.1-4.30', '5.1-5.31', '6.1-6.30', '7.1-7.24'],
                 data: [180000, 380000, 450000, 510000, 580000, 490000],
-                label: '月做题用户数'
+                label: '月答题用户数'
             }
         };
 
@@ -2056,7 +2063,7 @@
                         <th class="p-2.5 font-medium w-12 text-center">排名</th>
                         <th class="p-2.5 font-medium min-w-[240px]">知识点名称</th>
                         <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
-                        <th class="p-2.5 font-medium text-right min-w-[120px]">做题次数</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">答题量</th>
                     </tr>
                 `;
 
@@ -2104,7 +2111,7 @@
                         <th class="p-2.5 font-medium w-12 text-center">排名</th>
                         <th class="p-2.5 font-medium min-w-[240px]">知识点名称</th>
                         <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
-                        <th class="p-2.5 font-medium text-right min-w-[120px]">做题次数</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">答题量</th>
                     </tr>
                 `;
 
@@ -2152,7 +2159,7 @@
                         <th class="p-2.5 font-medium w-12 text-center">排名</th>
                         <th class="p-2.5 font-medium min-w-[240px]">章节名称</th>
                         <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
-                        <th class="p-2.5 font-medium text-right min-w-[120px]">做题次数</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">答题量</th>
                     </tr>
                 `;
 
@@ -2200,7 +2207,7 @@
                         <th class="p-2.5 font-medium w-12 text-center">排名</th>
                         <th class="p-2.5 font-medium min-w-[240px]">章节名称</th>
                         <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
-                        <th class="p-2.5 font-medium text-right min-w-[120px]">做题次数</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">答题量</th>
                     </tr>
                 `;
 
@@ -2249,7 +2256,7 @@
                         <th class="p-2.5 font-medium min-w-[200px]">题型名称</th>
                         <th class="p-2.5 font-medium text-center min-w-[100px]">试题结构</th>
                         <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
-                        <th class="p-2.5 font-medium text-right min-w-[120px]">做题次数</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">答题量</th>
                     </tr>
                 `;
 
@@ -2301,7 +2308,7 @@
                         <th class="p-2.5 font-medium min-w-[200px]">题型名称</th>
                         <th class="p-2.5 font-medium text-center min-w-[100px]">试题结构</th>
                         <th class="p-2.5 font-medium text-right min-w-[140px]">正确率</th>
-                        <th class="p-2.5 font-medium text-right min-w-[120px]">做题次数</th>
+                        <th class="p-2.5 font-medium text-right min-w-[120px]">答题量</th>
                     </tr>
                 `;
 
@@ -2391,30 +2398,70 @@
             { id: 35, name: "反函数与隐函数的求导法则", freqYears: 5, freqYearsTested: [2020, 2022, 2023, 2024], freq10: 9, freq10Tested: [2016, 2018, 2020, 2022, 2023, 2024], difficulty: "中", star: 4, commonTypes: ["单选题", "填空题"], scoreRatio: "4.1%", totalAvgScore: "6.0分", avgScore: "3.9分", accuracy: "64.2%" }
         ];
 
-        let currentHeatPeriod = 5; // 默认近5年 (支持 5 | 10)
+        let currentHeatPeriod = 5; // 默认近5年 (支持手动调整 1~10 年)
         let heatCurrentPage = 1;
         let heatPageSize = 10;
         let heatSortField = 'freqYears'; // 默认按考频排序
         let heatSortOrder = 'desc'; // 'desc' | 'asc'
 
-        function switchHeatPeriod(period) {
-            if (currentHeatPeriod === period) return;
-            currentHeatPeriod = period;
-
-            // 更新 Tab 选中状态
-            const tab5 = document.getElementById('heatPeriodTab5');
-            const tab10 = document.getElementById('heatPeriodTab10');
-            if (tab5 && tab10) {
-                if (period === 5) {
-                    tab5.className = 'px-2.5 py-1 rounded-md transition-all bg-white text-orange-600 font-semibold shadow-2xs cursor-pointer';
-                    tab10.className = 'px-2.5 py-1 rounded-md transition-all text-slate-500 hover:text-slate-800 cursor-pointer';
-                } else {
-                    tab10.className = 'px-2.5 py-1 rounded-md transition-all bg-white text-orange-600 font-semibold shadow-2xs cursor-pointer';
-                    tab5.className = 'px-2.5 py-1 rounded-md transition-all text-slate-500 hover:text-slate-800 cursor-pointer';
-                }
+        // 动态计算考频与考查年份（基准最新年为 2024，最多支持50年）
+        function getHeatItemFreq(item, period) {
+            if (period === 5) return item.freqYears;
+            if (period === 10) return item.freq10;
+            if (period <= 10) {
+                const startYear = 2025 - period;
+                const tested = (item.freq10Tested || []).filter(y => y >= startYear);
+                if (tested.length === 0) return 0;
+                const totalYearsCount = (item.freq10Tested && item.freq10Tested.length) ? item.freq10Tested.length : 1;
+                const ratio = (item.freq10 || item.freqYears) / totalYearsCount;
+                return Math.max(tested.length, Math.round(tested.length * ratio));
             }
+            // period > 10 (最多支持50年)
+            const baseFreq10 = item.freq10 || Math.round(item.freqYears * 1.8);
+            const extraYears = period - 10;
+            const annualRate = baseFreq10 / 10;
+            const extraFreq = Math.round(extraYears * annualRate * 0.85);
+            return baseFreq10 + extraFreq;
+        }
 
-            // 更新表头文字
+        function getHeatItemTestedYears(item, period) {
+            let years = [];
+            if (period === 5) {
+                years = [...(item.freqYearsTested || [])];
+            } else if (period <= 10) {
+                const startYear = 2025 - period;
+                years = (item.freq10Tested || []).filter(y => y >= startYear);
+            } else {
+                years = [...(item.freq10Tested || [])];
+            }
+            // 按照由新到旧排序 (降序：2024 -> 2023 -> 2022...)
+            return years.sort((a, b) => b - a);
+        }
+
+        function setHeatYears(years) {
+            let n = parseInt(years, 10);
+            if (isNaN(n) || n < 1) n = 1;
+            if (n > 50) n = 50;
+            currentHeatPeriod = n;
+
+            // 同步输入框
+            const inputEl = document.getElementById('heatYearsInput');
+            if (inputEl) inputEl.value = n;
+
+            // 同步快捷标签高亮状态
+            const quickTabs = [3, 5, 10];
+            quickTabs.forEach(q => {
+                const btn = document.getElementById(`heatQuick${q}`);
+                if (btn) {
+                    if (q === n) {
+                        btn.className = 'heat-quick-tab px-2 py-0.5 rounded-md transition-all bg-white text-orange-600 font-semibold shadow-2xs cursor-pointer';
+                    } else {
+                        btn.className = 'heat-quick-tab px-2 py-0.5 rounded-md transition-all text-slate-500 hover:text-slate-800 cursor-pointer';
+                    }
+                }
+            });
+
+            // 保持表头为简洁的“考频”，不加年份后缀
             const thText = document.getElementById('th-freqYears-text');
             if (thText) {
                 thText.textContent = '考频';
@@ -2423,6 +2470,19 @@
             // 重置页码并重新渲染表格
             heatCurrentPage = 1;
             renderHeatTable();
+        }
+
+        function adjustHeatYears(delta) {
+            setHeatYears(currentHeatPeriod + delta);
+        }
+
+        function handleHeatYearsInputChange(val) {
+            setHeatYears(val);
+        }
+
+        // 向下兼容旧调用
+        function switchHeatPeriod(period) {
+            setHeatYears(period);
         }
 
         function toggleHeatSort(field) {
@@ -2449,33 +2509,20 @@
 
             if (!tbody) return;
 
-            // 1. 获取筛选项值
-            const diffSelect = document.getElementById('heatFilterDifficulty');
-            const diffVal = diffSelect ? diffSelect.value : 'all';
+            // 1. 数据副本
+            let filteredData = [...rawExamHeatData];
 
-            // 2. 筛选数据
-            let filteredData = rawExamHeatData.filter(item => {
-                if (diffVal !== 'all' && item.difficulty !== diffVal) {
-                    return false;
-                }
-                return true;
-            });
-
-            // 3. 排序数据
-            const diffWeight = { '难': 5, '较难': 4, '中': 3, '较易': 2, '易': 1 };
+            // 2. 排序数据
             filteredData.sort((a, b) => {
                 let valA = 0;
                 let valB = 0;
 
-                const freqA = currentHeatPeriod === 10 ? a.freq10 : a.freqYears;
-                const freqB = currentHeatPeriod === 10 ? b.freq10 : b.freqYears;
+                const freqA = getHeatItemFreq(a, currentHeatPeriod);
+                const freqB = getHeatItemFreq(b, currentHeatPeriod);
 
                 if (heatSortField === 'freqYears') {
                     valA = freqA;
                     valB = freqB;
-                } else if (heatSortField === 'difficulty') {
-                    valA = diffWeight[a.difficulty] || 0;
-                    valB = diffWeight[b.difficulty] || 0;
                 } else if (heatSortField === 'scoreRatio') {
                     valA = parseFloat(a.scoreRatio.replace('%', '')) || 0;
                     valB = parseFloat(b.scoreRatio.replace('%', '')) || 0;
@@ -2497,8 +2544,8 @@
                 return freqB - freqA;
             });
 
-            // 4. 更新表头排序图标状态
-            const sortFields = ['freqYears', 'difficulty', 'scoreRatio', 'totalAvgScore', 'avgScore', 'accuracy'];
+            // 3. 更新表头排序图标状态
+            const sortFields = ['freqYears', 'scoreRatio', 'totalAvgScore', 'avgScore', 'accuracy'];
             sortFields.forEach(f => {
                 const iconEl = document.getElementById(`sort-icon-${f}`);
                 const thEl = document.getElementById(`th-${f}`);
@@ -2534,22 +2581,10 @@
             if (currentRangeEl) currentRangeEl.textContent = total === 0 ? '0' : `${startIdx + 1} - ${endIdx}`;
 
             if (total === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-slate-400">没有符合筛选条件的考点数据</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-slate-400">没有符合筛选条件的考点数据</td></tr>`;
                 if (paginationContainer) paginationContainer.innerHTML = '';
                 return;
             }
-
-            // Difficulty tag helper
-            const getDiffBadge = (diff) => {
-                switch(diff) {
-                    case '易': return '<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-600 border border-emerald-200/60">易</span>';
-                    case '较易': return '<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-teal-50 text-teal-600 border border-teal-200/60">较易</span>';
-                    case '中': return '<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-blue-50 text-blue-600 border border-blue-200/60">中</span>';
-                    case '较难': return '<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 text-amber-600 border border-amber-200/60">较难</span>';
-                    case '难': return '<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-rose-50 text-rose-600 border border-rose-200/60">难</span>';
-                    default: return `<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-600">${diff}</span>`;
-                }
-            };
 
             // Common question types badges
             const getQuestionTypeBadges = (types) => {
@@ -2567,8 +2602,8 @@
             tbody.innerHTML = pageData.map((item, idx) => {
                 const rowNum = startIdx + idx + 1;
                 const accNum = parseFloat(item.accuracy.replace('%', ''));
-                const itemFreq = currentHeatPeriod === 10 ? item.freq10 : item.freqYears;
-                const itemYearsTested = currentHeatPeriod === 10 ? item.freq10Tested : item.freqYearsTested;
+                const itemFreq = getHeatItemFreq(item, currentHeatPeriod);
+                const itemYearsTested = getHeatItemTestedYears(item, currentHeatPeriod);
                 
                 // 考频徽章 (考查题数/次数，同一年份可包含多次考查)
                 let freqBadge = '';
@@ -2580,12 +2615,37 @@
                     freqBadge = `<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 text-amber-600 border border-amber-200/60">${itemFreq}次</span>`;
                 } else if (itemFreq >= 3) {
                     freqBadge = `<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-teal-50 text-teal-600 border border-teal-200/60">${itemFreq}次</span>`;
-                } else {
+                } else if (itemFreq > 0) {
                     freqBadge = `<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-normal bg-slate-100 text-slate-600 border border-slate-200/60">${itemFreq}次</span>`;
+                } else {
+                    freqBadge = `<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-normal bg-slate-50 text-slate-400 border border-slate-200/50">0次</span>`;
                 }
 
-                // 知识点下方年份标签
-                const yearPills = itemYearsTested.map(y => `<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 font-mono whitespace-nowrap">${y}</span>`).join('');
+                // 知识点下方年份标签 (超出5个时再省略：<=5个直接显示；>5个展示最新的前5个并提供+N年展开/收起与悬浮全量提示)
+                let yearPills = '';
+                if (itemYearsTested.length === 0) {
+                    yearPills = `<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-50 text-slate-400 font-mono">近${currentHeatPeriod}年未考查</span>`;
+                } else if (itemYearsTested.length <= 5) {
+                    yearPills = itemYearsTested.map(y => `<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 font-mono whitespace-nowrap">${y}</span>`).join('');
+                } else {
+                    const visibleYears = itemYearsTested.slice(0, 5);
+                    const hiddenYears = itemYearsTested.slice(5);
+                    const allYearsText = itemYearsTested.join('、');
+                    const rowId = item.id;
+                    yearPills = `
+                        <div class="inline-flex items-center gap-1 flex-wrap">
+                            ${visibleYears.map(y => `<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 font-mono whitespace-nowrap">${y}</span>`).join('')}
+                            <span id="heatMoreYears_${rowId}" class="hidden flex-wrap items-center gap-1">
+                                ${hiddenYears.map(y => `<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 font-mono whitespace-nowrap">${y}</span>`).join('')}
+                            </span>
+                            <button type="button" onclick="toggleExpandYears(${rowId})" id="heatExpandBtn_${rowId}"
+                                title="全部考查年份：${allYearsText}"
+                                class="text-[10px] px-1.5 py-0.5 rounded bg-orange-50 hover:bg-orange-100 text-orange-600 border border-orange-200/80 font-medium transition-colors cursor-pointer select-none">
+                                +${hiddenYears.length}年
+                            </button>
+                        </div>
+                    `;
+                }
 
                 const isTop3 = rowNum <= 3 && heatCurrentPage === 1;
                 const rankBadge = isTop3 
@@ -2597,10 +2657,9 @@
                         <td class="p-2.5 text-center">${rankBadge}</td>
                         <td class="p-2.5">
                             <div class="font-semibold text-slate-800">${item.name}</div>
-                            <div class="flex flex-wrap items-center gap-1 mt-1 max-w-[220px]">${yearPills}</div>
+                            <div class="flex flex-wrap items-center gap-1 mt-1 max-w-[280px]">${yearPills}</div>
                         </td>
                         <td class="p-2.5">${freqBadge}</td>
-                        <td class="p-2.5">${getDiffBadge(item.difficulty)}</td>
                         <td class="p-2.5">
                             <div class="flex items-center gap-1 flex-wrap">
                                 ${getQuestionTypeBadges(item.commonTypes)}
@@ -2642,6 +2701,27 @@
             heatPageSize = newSize;
             heatCurrentPage = 1;
             renderHeatTable();
+        }
+
+        function toggleExpandYears(rowId) {
+            const moreSpan = document.getElementById(`heatMoreYears_${rowId}`);
+            const btn = document.getElementById(`heatExpandBtn_${rowId}`);
+            if (!moreSpan || !btn) return;
+            const isHidden = moreSpan.classList.contains('hidden');
+            if (isHidden) {
+                moreSpan.classList.remove('hidden');
+                moreSpan.classList.add('inline-flex');
+                btn.textContent = '收起';
+                btn.classList.remove('bg-orange-50', 'text-orange-600', 'border-orange-200/80');
+                btn.classList.add('bg-slate-100', 'text-slate-600', 'border-slate-200');
+            } else {
+                moreSpan.classList.add('hidden');
+                moreSpan.classList.remove('inline-flex');
+                const hiddenCount = moreSpan.children.length;
+                btn.textContent = `+${hiddenCount}年`;
+                btn.classList.remove('bg-slate-100', 'text-slate-600', 'border-slate-200');
+                btn.classList.add('bg-orange-50', 'text-orange-600', 'border-orange-200/80');
+            }
         }
 
         function updateProductLineClearBtn() {
@@ -2716,10 +2796,7 @@
             if (startInput) startInput.value = '2026-07-24';
             if (endInput) endInput.value = '2026-07-24';
 
-            const hfFreq = document.getElementById('heatFilterFreq');
-            if (hfFreq) hfFreq.value = 'all';
-            const hfDiff = document.getElementById('heatFilterDifficulty');
-            if (hfDiff) hfDiff.value = 'all';
+            setHeatYears(5);
             heatSortField = 'freqYears';
             heatSortOrder = 'desc';
             heatCurrentPage = 1;
@@ -2741,7 +2818,7 @@
             updateProductLineClearBtn();
             renderWeaknessTable('chapter');
             renderAllRankings();
-            renderHeatTable();
+            setHeatYears(5);
             initCharts();
         });
     </script>

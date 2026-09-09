@@ -317,7 +317,7 @@
 <body>
     <div class="header">
         <div class="header-top" style="position: relative; display: flex; align-items: center; justify-content: center;">
-            <i class="fas fa-chevron-left" onclick="history.back()" style="position: absolute; left: 0; font-size: 18px; color: #333; cursor: pointer;"></i>
+            <i class="fas fa-chevron-left" onclick="handleShuatiMuluBack()" style="position: absolute; left: 0; font-size: 18px; color: #333; cursor: pointer;"></i>
             <div class="header-title">刷题版本名称/教材名称</div>
         </div>
         
@@ -354,7 +354,7 @@
                             <div class="item-stats">12/15 | 正确率: 80%</div>
                         </div>
                         <div class="item-actions">
-                            <button class="action-btn-small" onclick="window.location.href='baogao_zhangjie.html'" style="padding: 0 10px;">查看报告</button>
+                            <button class="action-btn-small" onclick="window.location.href='baogao_zhangjie.html?from=shuati_mulu.html'" style="padding: 0 10px;">查看报告</button>
                             <button class="action-btn-small primary" style="padding: 0 10px;">继续答题</button>
                         </div>
                     </div>
@@ -364,7 +364,7 @@
                             <div class="item-stats">12/35 | 正确率: 70.3%</div>
                         </div>
                         <div class="item-actions">
-                            <button class="action-btn-small" style="padding: 0 10px;">查看解析</button>
+                            <button class="action-btn-small" onclick="window.location.href='baogao_zhangjie.html?from=shuati_mulu.html'" style="padding: 0 10px;">查看报告</button>
                             <button class="action-btn-small primary" style="padding: 0 10px;">继续答题</button>
                         </div>
                     </div>
@@ -927,6 +927,26 @@
                 });
             });
         })();
+
+        // 统一目录页返回逻辑：彻底防止与报告页产生死循环
+        function handleShuatiMuluBack() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const from = urlParams.get('from');
+            if (from) {
+                window.location.replace(from.endsWith('.html') ? from : `${from}.html`);
+                return;
+            }
+            // 若前序来源包含报告页或答题页，说明刚从下级功能退出，返回上一级业务页面（即题库主页）
+            if (document.referrer && (document.referrer.includes('baogao') || document.referrer.includes('dati'))) {
+                window.location.replace('tiku.html');
+                return;
+            }
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.replace('tiku.html');
+            }
+        }
     </script>
 </body>
 </html>
