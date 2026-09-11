@@ -702,6 +702,11 @@
             color: #1890ff;
         }
 
+        .feature-tab:nth-child(6) .feature-icon {
+            background-color: #eff6ff;
+            color: #2563eb;
+        }
+
         .feature-label {
             font-size: 12px;
             color: #666;
@@ -1366,6 +1371,10 @@
                         <div class="feature-icon"><i class="fas fa-trophy"></i></div>
                         <div class="feature-label">答题排行</div>
                     </div>
+                    <div class="feature-tab" onclick="window.location.href='ai_ceping_pc.html'" title="进入AI测评" style="cursor: pointer;">
+                        <div class="feature-icon"><i class="fas fa-brain"></i></div>
+                        <div class="feature-label">AI测评</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1523,6 +1532,8 @@
                     window.location.href = 'lianxi_lishi_pc.html';
                 } else if (label === '答题报告') {
                     window.location.href = 'dati_baogao_pc.html';
+                } else if (label === 'AI测评') {
+                    window.location.href = 'ai_ceping_pc.html';
                 }
             });
         });

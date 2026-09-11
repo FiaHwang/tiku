@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI智能测评 - 智能规划你的升学之路</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        brandBlue: '#1d4ed8'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            padding-top: 60px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #ffffff;
+            color: #1e293b;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* 统一顶部导航栏 */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 60px;
+            background-color: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo img {
+            height: 32px;
+            margin-right: 16px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-item {
+            font-size: 14px;
+            color: #333;
+            text-decoration: none;
+            padding: 4px 0;
+            position: relative;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .nav-item:hover {
+            color: #ff4d4f;
+        }
+
+        .nav-item.active {
+            color: #ff4d4f;
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #ff4d4f;
+        }
+
+        .search-user {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            padding: 4px 8px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 4px 8px;
+            font-size: 14px;
+        }
+
+        .search-btn {
+            background-color: #ff4d4f;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 12px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .user-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-link {
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .user-link:hover {
+            color: #ff4d4f;
+        }
+
+        .notification {
+            position: relative;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background-color: #ff4d4f;
+            color: #fff;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* 自定义下拉框原生样式去除 */
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        /* 平滑滚动 */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-white">
+
+    <!-- 顶部统一导航栏 (与其他PC端页面一致) -->
+    <header class="top-nav">
+        <div class="logo" onclick="window.location.href='../index.html'" style="cursor: pointer;">
+            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=red%20background%20with%20white%20chinese%20characters%20%E5%BA%93%E8%AF%BE%20with%20registered%20trademark%20symbol%20simple%20clean%20logo&image_size=square" alt="库课网校">
+            <span style="font-weight: bold; color: #333; font-size: 16px;">库课网校</span>
+        </div>
+        <div class="nav-menu">
+            <a href="tiku_pc.html" class="nav-item">首页</a>
+            <a href="#" class="nav-item">课程中心</a>
+            <a href="tiku_pc.html" class="nav-item active">题库</a>
+            <a href="#" class="nav-item">资讯</a>
+            <a href="#" class="nav-item">直播日历</a>
+            <a href="#" class="nav-item">各地专升本</a>
+        </div>
+        <div class="search-user">
+            <div class="search-box">
+                <input type="text" placeholder="请输入搜索内容">
+                <button class="search-btn">搜索</button>
+            </div>
+            <div class="user-links">
+                <a href="xuexi_zhongxin_pc.html" class="user-link">学习中心</a>
+                <div class="notification" style="cursor: pointer;" onclick="window.location.href='xiaoxi_pc.html'">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="user-avatar" onclick="window.location.href='xuexi_zhongxin_pc.html'">
+                    <i class="fas fa-user" style="font-size: 18px; color: #666;"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 顶部主视觉 Banner 与内容 (包含蓝色背景区) -->
+    <div class="relative bg-gradient-to-b from-[#185adb] via-[#2563eb] to-[#3b82f6] text-white pt-8 pb-24 px-6 overflow-hidden">
+        
+        <!-- 背景光效装饰纹理 -->
+        <div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-blue-400/20 blur-3xl pointer-events-none"></div>
+        <div class="absolute top-10 right-0 w-[30rem] h-[30rem] rounded-full bg-indigo-500/20 blur-3xl pointer-events-none"></div>
+
+        <!-- Banner 头部栏 (品牌标识与分享按钮，去除返回题库按钮) -->
+        <div class="max-w-6xl mx-auto flex items-center justify-between relative z-10">
+            <!-- 品牌标识 -->
+            <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-2xl bg-white flex items-center justify-center shadow-md">
+                    <i class="fas fa-graduation-cap text-[#2563eb] text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white leading-tight">AI智能测评</h1>
+                    <p class="text-xs text-blue-100/90 mt-0.5 font-normal">智能规划你的升学之路</p>
+                </div>
+            </div>
+
+            <!-- 右侧操作区 (分享浮窗容器) -->
+            <div class="relative flex items-center gap-3" id="shareWrapper">
+                <button id="shareBtn" onclick="toggleSharePopover(event)" class="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-all duration-200 shadow-sm cursor-pointer hover:scale-105" title="分享测评">
+                    <i class="fas fa-share-nodes text-base"></i>
+                </button>
+
+                <!-- 分享浮窗 (匹配浮窗容器 2) -->
+                <div id="sharePopover" class="hidden absolute right-0 top-full mt-3.5 z-50 bg-white rounded-2xl p-4 shadow-[0_16px_40px_rgba(15,23,42,0.22)] border border-slate-100/90 w-[220px] transition-all duration-200">
+                    <!-- 向上小三角形指示针 -->
+                    <div class="absolute -top-1.5 right-3.5 w-3 h-3 bg-white rotate-45 border-l border-t border-slate-100"></div>
+                    
+                    <!-- 浮窗配图 (紫霞落日古树) -->
+                    <div class="relative overflow-hidden rounded-xl bg-slate-100 aspect-square shadow-xs">
+                        <img src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=600&auto=format&fit=crop&q=80" 
+                             alt="扫描二维码查看" 
+                             class="w-full h-full object-cover select-none">
+                    </div>
+                    
+                    <!-- 浮窗底部文字 -->
+                    <div class="text-center font-bold text-[14px] text-[#24334a] mt-3.5 select-none tracking-tight">
+                        扫描二维码查看
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Banner 核心 Slogan 与 数据指标 -->
+        <div class="max-w-4xl mx-auto text-center mt-12 mb-6 relative z-10">
+            <h2 class="text-3xl sm:text-4xl md:text-[40px] font-extrabold tracking-tight text-white flex items-center justify-center gap-2 drop-shadow-sm">
+                <span>速测！10分钟摸清上岸概率</span>
+                <span class="text-amber-300 text-2xl md:text-3xl animate-pulse">✨</span>
+            </h2>
+            <p class="text-sm md:text-base text-blue-100/90 mt-3 font-medium">
+                AI智能测评系统，精准定位薄弱点，科学规划升学路径
+            </p>
+
+            <!-- 核心数据指标 -->
+            <div class="flex items-center justify-center gap-10 md:gap-20 mt-10 pt-4">
+                <div class="text-center">
+                    <div class="text-3xl md:text-4xl font-extrabold text-white tracking-tight">50万+</div>
+                    <div class="text-xs md:text-sm text-blue-100/85 mt-1 font-medium">用户已测评</div>
+                </div>
+                <div class="w-[1px] h-9 bg-white/25"></div>
+                <div class="text-center">
+                    <div class="text-3xl md:text-4xl font-extrabold text-white tracking-tight">98%</div>
+                    <div class="text-xs md:text-sm text-blue-100/85 mt-1 font-medium">测评准确率</div>
+                </div>
+                <div class="w-[1px] h-9 bg-white/25"></div>
+                <div class="text-center">
+                    <div class="text-3xl md:text-4xl font-extrabold text-white tracking-tight">300+</div>
+                    <div class="text-xs md:text-sm text-blue-100/85 mt-1 font-medium">合作学校</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主体内容容器 -->
+    <main class="flex-1 w-full max-w-6xl mx-auto px-6 -mt-16 relative z-20 pb-20">
+
+        <!-- 1. 选择你的考试信息卡片 (核心交互表单) -->
+        <section class="bg-white rounded-3xl p-8 md:p-10 shadow-xl shadow-slate-200/60 border border-slate-100">
+            <!-- 标题栏 -->
+            <div class="border-b border-slate-100 pb-5">
+                <h3 class="text-xl font-bold text-slate-900 tracking-tight">选择你的考试信息</h3>
+                <p class="text-xs md:text-sm text-slate-400 mt-1">我们将根据你的选择生成个性化测评</p>
+            </div>
+
+            <!-- 下拉选择三联排 (考试种类 / 省份 / 科目) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                <!-- 考试种类 -->
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-slate-700 flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px]">
+                            <i class="fas fa-list-ul"></i>
+                        </span>
+                        <span>考试种类</span>
+                    </label>
+                    <div class="relative">
+                        <select id="examTypeSelect" onchange="handleFilterChange()" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm font-semibold rounded-2xl px-4 py-3.5 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all cursor-pointer">
+                            <option value="专升本" selected>专升本</option>
+                            <option value="教师资格证">教师资格证</option>
+                            <option value="考研统考">考研统考</option>
+                            <option value="四六级英语">四六级英语</option>
+                            <option value="事业单位公考">事业单位公考</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 省份 -->
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-slate-700 flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px]">
+                            <i class="fas fa-location-dot"></i>
+                        </span>
+                        <span>省份</span>
+                    </label>
+                    <div class="relative">
+                        <select id="provinceSelect" onchange="handleFilterChange()" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm font-semibold rounded-2xl px-4 py-3.5 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all cursor-pointer">
+                            <option value="河南省" selected>河南省</option>
+                            <option value="山东省">山东省</option>
+                            <option value="河北省">河北省</option>
+                            <option value="江苏省">江苏省</option>
+                            <option value="浙江省">浙江省</option>
+                            <option value="广东省">广东省</option>
+                            <option value="四川省">四川省</option>
+                            <option value="陕西省">陕西省</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 科目 -->
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-slate-700 flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px]">
+                            <i class="fas fa-book-open"></i>
+                        </span>
+                        <span>科目</span>
+                    </label>
+                    <div class="relative">
+                        <select id="subjectSelect" onchange="handleFilterChange()" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm font-semibold rounded-2xl px-4 py-3.5 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all cursor-pointer">
+                            <option value="语文" selected>语文</option>
+                            <option value="高等数学">高等数学</option>
+                            <option value="英语">英语</option>
+                            <option value="教育理论综合">教育理论综合</option>
+                            <option value="专业综合课">专业综合课</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 试卷选择 -->
+            <div class="mt-8 pt-2">
+                <div class="text-xs font-bold text-slate-700 mb-3.5">请选择你要测评的试卷</div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- 试卷选项 1 (默认选中) -->
+                    <div id="paperOption1" onclick="selectPaper(1)" class="paper-box border-2 border-blue-600 bg-blue-50/30 rounded-2xl p-4 flex items-center justify-between cursor-pointer transition-all hover:shadow-xs">
+                        <div class="font-bold text-sm text-slate-900" id="paperTitle1">2024年专升本语文模拟卷一</div>
+                        <div id="paperRadio1" class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs shrink-0 shadow-xs">
+                            <i class="fas fa-check text-[10px]"></i>
+                        </div>
+                    </div>
+
+                    <!-- 试卷选项 2 -->
+                    <div id="paperOption2" onclick="selectPaper(2)" class="paper-box border border-slate-200 bg-white hover:border-slate-300 rounded-2xl p-4 flex items-center justify-between cursor-pointer transition-all">
+                        <div class="font-medium text-sm text-slate-700" id="paperTitle2">2024年专升本语文模拟卷二</div>
+                        <div id="paperRadio2" class="w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center text-xs shrink-0">
+                            <!-- 空 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 居中操作按钮区：“开始免费测评”与“查看报告” -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 pt-2">
+                <button id="startTestBtn" onclick="startAiCeping()" class="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.98] text-white font-bold text-base px-12 py-3.5 rounded-full shadow-lg shadow-blue-500/25 hover:shadow-xl transition-all cursor-pointer text-center">
+                    开始免费测评
+                </button>
+                <button id="viewReportBtn" onclick="goToReport()" class="w-full sm:w-auto border border-blue-600 text-blue-600 hover:bg-blue-50/70 active:scale-[0.98] font-bold text-base px-10 py-3.5 rounded-full shadow-xs hover:shadow-sm transition-all cursor-pointer text-center flex items-center justify-center gap-2">
+                    <i class="fas fa-file-lines text-sm"></i>
+                    <span>查看报告</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- 2. 为什么选择AI智能测评 (四栏卡片) -->
+        <section class="mt-16">
+            <h3 class="text-2xl font-bold text-slate-900 text-center tracking-tight mb-10">
+                为什么选择AI智能测评
+            </h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 特性 1: AI智能分析 -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-11 h-11 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-base mb-4">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4 class="text-base font-bold text-slate-900">AI智能分析</h4>
+                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                        基于大数据算法，精准分析学习能力，定位知识薄弱点
+                    </p>
+                </div>
+
+                <!-- 特性 2: 10分钟快速测评 -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-11 h-11 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-base mb-4">
+                        <i class="far fa-clock"></i>
+                    </div>
+                    <h4 class="text-base font-bold text-slate-900">10 钟快速测评</h4>
+                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                        碎片化时间完成，不耽误学习进度，随时随地测评
+                    </p>
+                </div>
+
+                <!-- 特性 3: 可视化报告 -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-11 h-11 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-base mb-4">
+                        <i class="fas fa-chart-simple"></i>
+                    </div>
+                    <h4 class="text-base font-bold text-slate-900">可视化报告</h4>
+                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                        直观展示能力图谱与提升建议，一目了然掌握学习情况
+                    </p>
+                </div>
+
+                <!-- 特性 4: 专业升学规划 -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-11 h-11 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-base mb-4">
+                        <i class="far fa-compass"></i>
+                    </div>
+                    <h4 class="text-base font-bold text-slate-900">专业升学规划</h4>
+                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                        根据测评结果推荐升学路径，科学规划未来发展方向
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 简单三步，完成测评 (步骤条) -->
+        <section class="mt-20">
+            <h3 class="text-2xl font-bold text-slate-900 text-center tracking-tight mb-12">
+                简单三步，完成测评
+            </h3>
+
+            <div class="max-w-4xl mx-auto relative px-4">
+                <!-- 贯穿连接线 -->
+                <div class="hidden sm:block absolute top-6 left-24 right-24 h-1 bg-blue-100 -z-0"></div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 relative z-10 text-center">
+                    <!-- 第 1 步 -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-12 h-12 rounded-full bg-blue-600 text-white font-extrabold text-lg flex items-center justify-center shadow-md shadow-blue-500/25 ring-4 ring-white">
+                            1
+                        </div>
+                        <div class="text-base font-bold text-slate-800 mt-4">选择测评科目</div>
+                    </div>
+
+                    <!-- 第 2 步 -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-12 h-12 rounded-full bg-blue-600 text-white font-extrabold text-lg flex items-center justify-center shadow-md shadow-blue-500/25 ring-4 ring-white">
+                            2
+                        </div>
+                        <div class="text-base font-bold text-slate-800 mt-4">10分钟答题</div>
+                    </div>
+
+                    <!-- 第 3 步 -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-12 h-12 rounded-full bg-blue-600 text-white font-extrabold text-lg flex items-center justify-center shadow-md shadow-blue-500/25 ring-4 ring-white">
+                            3
+                        </div>
+                        <div class="text-base font-bold text-slate-800 mt-4">获取分析报告</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. 用户怎么说 (评价卡片组) -->
+        <section class="mt-20">
+            <h3 class="text-2xl font-bold text-slate-900 text-center tracking-tight mb-10">
+                用户怎么说
+            </h3>
+
+            <div class="bg-[#f4f7fc] rounded-3xl p-8 md:p-10 border border-slate-100">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- 评价 1 -->
+                    <div class="bg-white rounded-2xl p-6 shadow-xs border border-slate-100/80 flex flex-col justify-between">
+                        <div>
+                            <!-- 五星好评 -->
+                            <div class="flex items-center gap-1 text-amber-400 text-xs mb-3.5">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="text-slate-700 text-xs md:text-[13px] leading-relaxed font-medium">
+                                "AI测评帮我找到了数学薄弱环节，针对性复习后成绩提高了30分，成功考上了理想的大学！"
+                            </p>
+                        </div>
+                        <!-- 用户基本信息 -->
+                        <div class="flex items-center gap-3 mt-6 pt-4 border-t border-slate-50">
+                            <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-sm font-bold shrink-0">
+                                <i class="fas fa-user text-xs"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-800">张同学</div>
+                                <div class="text-[11px] text-slate-400 mt-0.5">2024年专升本考生</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 评价 2 -->
+                    <div class="bg-white rounded-2xl p-6 shadow-xs border border-slate-100/80 flex flex-col justify-between">
+                        <div>
+                            <!-- 五星好评 -->
+                            <div class="flex items-center gap-1 text-amber-400 text-xs mb-3.5">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="text-slate-700 text-xs md:text-[13px] leading-relaxed font-medium">
+                                "测评报告非常详细，不仅指出了我的弱项，还给出了具体的学习计划，让我的备考更有方向感。"
+                            </p>
+                        </div>
+                        <!-- 用户基本信息 -->
+                        <div class="flex items-center gap-3 mt-6 pt-4 border-t border-slate-50">
+                            <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-sm font-bold shrink-0">
+                                <i class="fas fa-user text-xs"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-800">李同学</div>
+                                <div class="text-[11px] text-slate-400 mt-0.5">2025年专升本考生</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 评价 3 -->
+                    <div class="bg-white rounded-2xl p-6 shadow-xs border border-slate-100/80 flex flex-col justify-between">
+                        <div>
+                            <!-- 五星好评 -->
+                            <div class="flex items-center gap-1 text-amber-400 text-xs mb-3.5">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="text-slate-700 text-xs md:text-[13px] leading-relaxed font-medium">
+                                "作为一名在职备考的考生，10分钟的测评非常适合我，利用碎片化时间就能了解自己的学习情况。"
+                            </p>
+                        </div>
+                        <!-- 用户基本信息 -->
+                        <div class="flex items-center gap-3 mt-6 pt-4 border-t border-slate-50">
+                            <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-sm font-bold shrink-0">
+                                <i class="fas fa-user text-xs"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-800">王同学</div>
+                                <div class="text-[11px] text-slate-400 mt-0.5">2025年公考生</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 页脚版权 -->
+    <footer class="bg-slate-50 border-t border-slate-100 py-8 text-center text-xs text-slate-400">
+        <div>© 2026 库课网校 AI智能测评平台 · 版权所有</div>
+    </footer>
+
+    <!-- 轻量 Toast 提示条 -->
+    <div id="toast" class="hidden fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-slate-900/90 backdrop-blur-sm text-white px-5 py-2.5 rounded-full text-xs font-semibold shadow-lg transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-2">
+        <i class="fas fa-check-circle text-green-400"></i>
+        <span id="toastMsg">操作成功</span>
+    </div>
+
+    <script>
+        let selectedPaperIndex = 1;
+
+        // 切换试卷选择
+        function selectPaper(index) {
+            selectedPaperIndex = index;
+            const opt1 = document.getElementById('paperOption1');
+            const opt2 = document.getElementById('paperOption2');
+            const radio1 = document.getElementById('paperRadio1');
+            const radio2 = document.getElementById('paperRadio2');
+            const title1 = document.getElementById('paperTitle1');
+            const title2 = document.getElementById('paperTitle2');
+
+            if (index === 1) {
+                opt1.className = "paper-box border-2 border-blue-600 bg-blue-50/30 rounded-2xl p-4 flex items-center justify-between cursor-pointer transition-all hover:shadow-xs";
+                radio1.className = "w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs shrink-0 shadow-xs";
+                radio1.innerHTML = '<i class="fas fa-check text-[10px]"></i>';
+                title1.className = "font-bold text-sm text-slate-900";
+
+                opt2.className = "paper-box border border-slate-200 bg-white hover:border-slate-300 rounded-2xl p-4 flex items-center justify-between cursor-pointer transition-all";
+                radio2.className = "w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center text-xs shrink-0";
+                radio2.innerHTML = '';
+                title2.className = "font-medium text-sm text-slate-700";
+            } else {
+                opt2.className = "paper-box border-2 border-blue-600 bg-blue-50/30 rounded-2xl p-4 flex items-center justify-between cursor-pointer transition-all hover:shadow-xs";
+                radio2.className = "w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs shrink-0 shadow-xs";
+                radio2.innerHTML = '<i class="fas fa-check text-[10px]"></i>';
+                title2.className = "font-bold text-sm text-slate-900";
+
+                opt1.className = "paper-box border border-slate-200 bg-white hover:border-slate-300 rounded-2xl p-4 flex items-center justify-between cursor-pointer transition-all";
+                radio1.className = "w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center text-xs shrink-0";
+                radio1.innerHTML = '';
+                title1.className = "font-medium text-sm text-slate-700";
+            }
+        }
+
+        // 监听下拉筛选联动更新试卷标题
+        function handleFilterChange() {
+            const exam = document.getElementById('examTypeSelect').value;
+            const subject = document.getElementById('subjectSelect').value;
+            
+            const title1 = document.getElementById('paperTitle1');
+            const title2 = document.getElementById('paperTitle2');
+
+            if (title1) title1.textContent = `2024年${exam}${subject}模拟卷一`;
+            if (title2) title2.textContent = `2024年${exam}${subject}模拟卷二`;
+        }
+
+        // 开始免费测评
+        function startAiCeping() {
+            const exam = document.getElementById('examTypeSelect').value;
+            const province = document.getElementById('provinceSelect').value;
+            const subject = document.getElementById('subjectSelect').value;
+
+            showToast(`正在为您生成【${exam} · ${province} · ${subject}】智能测评试卷...`);
+
+            // 1秒后平滑进入答题页面或测评报告
+            setTimeout(() => {
+                const params = new URLSearchParams({
+                    exam: exam,
+                    province: province,
+                    subject: subject,
+                    paper: selectedPaperIndex === 1 ? '模拟卷一' : '模拟卷二',
+                    mode: 'ai_ceping'
+                });
+                // 跳转至PC答题页面，同时预置AI测评模式
+                window.location.href = `dati_yemian_pc.html?${params.toString()}`;
+            }, 800);
+        }
+
+        // 跳转至测评报告页面
+        function goToReport() {
+            const exam = document.getElementById('examSelect')?.value || '专升本';
+            const province = document.getElementById('provinceSelect')?.value || '河南省';
+            const subject = document.getElementById('subjectSelect')?.value || '语文';
+            const params = new URLSearchParams({
+                exam: exam,
+                province: province,
+                subject: subject
+            });
+            window.location.href = `ceping_baogao_pc.html?${params.toString()}`;
+        }
+
+        // 分享浮窗交互控制
+        let sharePopoverTimer = null;
+        function toggleSharePopover(e) {
+            if (e) e.stopPropagation();
+            const popover = document.getElementById('sharePopover');
+            if (!popover) return;
+            if (popover.classList.contains('hidden')) {
+                openSharePopover();
+            } else {
+                closeSharePopover();
+            }
+        }
+
+        function openSharePopover() {
+            const popover = document.getElementById('sharePopover');
+            if (popover) {
+                popover.classList.remove('hidden');
+            }
+        }
+
+        function closeSharePopover() {
+            const popover = document.getElementById('sharePopover');
+            if (popover) {
+                popover.classList.add('hidden');
+            }
+        }
+
+        function openShareModal() {
+            openSharePopover();
+        }
+
+        function closeShareModal() {
+            closeSharePopover();
+        }
+
+        // 绑定悬停与外部点击事件
+        document.addEventListener('DOMContentLoaded', () => {
+            const wrapper = document.getElementById('shareWrapper');
+            const popover = document.getElementById('sharePopover');
+            if (wrapper && popover) {
+                wrapper.addEventListener('mouseenter', () => {
+                    clearTimeout(sharePopoverTimer);
+                    openSharePopover();
+                });
+                wrapper.addEventListener('mouseleave', () => {
+                    sharePopoverTimer = setTimeout(() => {
+                        closeSharePopover();
+                    }, 250);
+                });
+            }
+
+            document.addEventListener('click', (e) => {
+                if (wrapper && !wrapper.contains(e.target)) {
+                    closeSharePopover();
+                }
+            });
+        });
+
+        // 提示条
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            if (toast && toastMsg) {
+                toastMsg.innerText = msg;
+                toast.classList.remove('hidden');
+                void toast.offsetWidth;
+                toast.classList.remove('opacity-0', 'pointer-events-none');
+                toast.classList.add('opacity-100', 'pointer-events-auto');
+
+                setTimeout(() => {
+                    toast.classList.remove('opacity-100', 'pointer-events-auto');
+                    toast.classList.add('opacity-0', 'pointer-events-none');
+                    setTimeout(() => {
+                        toast.classList.add('hidden');
+                    }, 300);
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>

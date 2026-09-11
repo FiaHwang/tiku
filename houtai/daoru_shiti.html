@@ -641,7 +641,7 @@
                          onclick="document.getElementById('aiFileInput').click()"
                          class="border-2 border-dashed border-slate-200 hover:border-blue-500 bg-slate-50/50 hover:bg-blue-50/30 rounded-xl p-5 text-center cursor-pointer transition-all duration-200 group relative">
                         <input type="file" id="aiFileInput" multiple 
-                               accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.webp" 
+                               accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.webp" 
                                onchange="handleAiFileSelect(event)" 
                                class="hidden">
                         
@@ -654,11 +654,10 @@
                                 <span class="text-slate-400"> 或将文件直接拖拽至此处</span>
                             </div>
                             
-                            <!-- 支持的文件格式徽章: PDF -> Word -> TXT -> 图片 -->
+                            <!-- 支持的文件格式徽章: PDF -> Word -> 图片 -->
                             <div class="flex flex-wrap items-center justify-center gap-1.5 mt-1">
                                 <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-rose-50 text-rose-600 border border-rose-200">PDF (.pdf)</span>
                                 <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-600 border border-blue-200">Word (.doc / .docx)</span>
-                                <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600 border border-slate-200">TXT (.txt)</span>
                                 <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-600 border border-amber-200">图片 (PNG / JPG / JPEG)</span>
                             </div>
                             <p class="text-[10px] text-slate-400 mt-0.5">单个文件最大支持 10MB，可批量上传多个文件</p>
@@ -680,11 +679,11 @@
                 <!-- 自动关联章节与知识点配置 -->
                 <div class="flex items-center gap-6 bg-slate-50 border border-slate-200/80 rounded-xl p-3">
                     <label class="inline-flex items-center gap-2 cursor-pointer select-none">
-                        <input type="checkbox" id="aiAutoLinkChapter" checked class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                        <input type="checkbox" id="aiAutoLinkChapter" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
                         <span class="text-xs font-medium text-slate-700">自动关联章节</span>
                     </label>
                     <label class="inline-flex items-center gap-2 cursor-pointer select-none">
-                        <input type="checkbox" id="aiAutoLinkKnowledge" checked class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                        <input type="checkbox" id="aiAutoLinkKnowledge" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
                         <span class="text-xs font-medium text-slate-700">自动关联知识点</span>
                     </label>
                 </div>

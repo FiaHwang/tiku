@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI智能测评报告 - 智学测评</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        brandBlue: '#3655ea',
+                        brandBg: '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            padding-top: 60px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* 统一顶部导航栏 */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 60px;
+            background-color: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo img {
+            height: 32px;
+            margin-right: 16px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-item {
+            font-size: 14px;
+            color: #333;
+            text-decoration: none;
+            padding: 4px 0;
+            position: relative;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .nav-item:hover {
+            color: #ff4d4f;
+        }
+
+        .nav-item.active {
+            color: #ff4d4f;
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #ff4d4f;
+        }
+
+        .search-user {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            padding: 4px 8px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 4px 8px;
+            font-size: 14px;
+        }
+
+        .search-btn {
+            background-color: #ff4d4f;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 12px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .user-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-link {
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .user-link:hover {
+            color: #ff4d4f;
+        }
+
+        .notification {
+            position: relative;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background-color: #ff4d4f;
+            color: #fff;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#f8fafc]">
+
+    <!-- 顶部统一导航栏 (与其他PC端页面一致) -->
+    <header class="top-nav">
+        <div class="logo" onclick="window.location.href='../index.html'" style="cursor: pointer;">
+            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=red%20background%20with%20white%20chinese%20characters%20%E5%BA%93%E8%AF%BE%20with%20registered%20trademark%20symbol%20simple%20clean%20logo&image_size=square" alt="库课网校">
+            <span style="font-weight: bold; color: #333; font-size: 16px;">库课网校</span>
+        </div>
+        <div class="nav-menu">
+            <a href="tiku_pc.html" class="nav-item">首页</a>
+            <a href="#" class="nav-item">课程中心</a>
+            <a href="tiku_pc.html" class="nav-item active">题库</a>
+            <a href="#" class="nav-item">资讯</a>
+            <a href="#" class="nav-item">直播日历</a>
+            <a href="#" class="nav-item">各地专升本</a>
+        </div>
+        <div class="search-user">
+            <div class="search-box">
+                <input type="text" placeholder="请输入搜索内容">
+                <button class="search-btn">搜索</button>
+            </div>
+            <div class="user-links">
+                <a href="xuexi_zhongxin_pc.html" class="user-link">学习中心</a>
+                <div class="notification" style="cursor: pointer;" onclick="window.location.href='xiaoxi_pc.html'">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="user-avatar" onclick="window.location.href='xuexi_zhongxin_pc.html'">
+                    <i class="fas fa-user" style="font-size: 18px; color: #666;"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. 主体内容区 -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-6">
+
+        <!-- 页面标题 & 分享操作栏 -->
+        <div class="flex items-center justify-between mb-5">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">AI智能测评报告</h1>
+                <p class="text-xs md:text-sm text-slate-500 mt-1">全面分析你的学习水平与提升方向</p>
+            </div>
+            <div class="relative" id="shareWrapper">
+                <button id="shareBtn" onclick="toggleSharePopover(event)" class="flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-200 hover:border-blue-300 text-blue-600 hover:text-blue-700 bg-white hover:bg-blue-50/50 text-xs md:text-sm font-semibold shadow-xs transition-all cursor-pointer">
+                    <i class="fas fa-share-nodes text-xs"></i>
+                    <span>分享</span>
+                </button>
+
+                <!-- 分享浮窗 (匹配 浮窗容器 2.png) -->
+                <div id="sharePopover" class="hidden absolute right-0 top-full mt-2.5 z-50 bg-white rounded-2xl p-4 shadow-[0_16px_40px_rgba(15,23,42,0.18)] border border-slate-100/90 w-[220px] transition-all duration-200">
+                    <!-- 向上小三角形指示针 -->
+                    <div class="absolute -top-1.5 right-6 w-3 h-3 bg-white rotate-45 border-l border-t border-slate-100"></div>
+                    
+                    <!-- 浮窗配图 (紫霞落日古树) -->
+                    <div class="relative overflow-hidden rounded-xl bg-slate-100 aspect-square shadow-xs">
+                        <img src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=600&auto=format&fit=crop&q=80" 
+                             alt="扫描二维码查看" 
+                             class="w-full h-full object-cover select-none">
+                    </div>
+                    
+                    <!-- 浮窗底部文字 -->
+                    <div class="text-center font-bold text-[14px] text-[#24334a] mt-3.5 select-none tracking-tight">
+                        扫描二维码查看
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 总体评分 & 用户基本信息卡片 (顶栏白底大卡片) -->
+        <section class="bg-white rounded-2xl p-5 md:p-6 shadow-xs border border-slate-100 mb-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <!-- 左侧：总体评分蓝底卡片 -->
+                <div class="w-full md:w-[480px] bg-gradient-to-r from-[#2c4fe8] via-[#3755ea] to-[#494ce8] rounded-2xl p-6 text-white shadow-md shadow-blue-500/15 relative overflow-hidden">
+                    <!-- 背景装饰光晕 -->
+                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                    <!-- 顶部元信息 -->
+                    <div class="flex items-center justify-between text-xs text-blue-100/90 font-medium">
+                        <span>总体评分</span>
+                        <span>测评用时: 9分钟</span>
+                    </div>
+
+                    <!-- 大分数与满分标尺 -->
+                    <div class="flex items-baseline gap-1.5 my-2">
+                        <span class="text-5xl md:text-6xl font-black tracking-tight text-white drop-shadow-xs">82</span>
+                        <span class="text-base text-blue-200/90 font-medium">/100</span>
+                        <button onclick="openScoreDetailModal()" class="text-blue-200 hover:text-white transition-colors ml-2 self-center p-1 cursor-pointer" title="查看评分标准">
+                            <i class="far fa-circle-question text-base"></i>
+                        </button>
+                    </div>
+
+                    <!-- 评级标签 -->
+                    <div class="mt-2">
+                        <span class="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-semibold bg-white/20 text-white backdrop-blur-xs">
+                            优秀
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 右侧：考生信息展示 -->
+                <div class="flex items-center gap-4 md:pr-10">
+                    <div class="w-16 h-16 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0">
+                        <i class="fas fa-user-graduate text-2xl text-slate-400"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <h2 class="text-lg font-bold text-slate-900 tracking-tight" id="studentName">张明宇</h2>
+                        <div class="text-xs text-slate-500 font-medium" id="studentExam">专升本 · 河南省 · 语文</div>
+                        <div class="text-xs text-slate-400 font-normal">测评日期: 2023年10月28日</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 主体双栏内容网格 (左侧分析 8列 + 右侧答题卡与预测 4列) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            <!-- ===================== 左侧主分析栏 (8列) ===================== -->
+            <div class="lg:col-span-8 space-y-6">
+
+                <!-- 1. 水平评估卡片 -->
+                <div class="bg-white rounded-2xl p-6 shadow-xs border border-slate-100">
+                    <h3 class="text-base font-bold text-slate-900 tracking-tight mb-4">水平评估</h3>
+
+                    <!-- 分数段位标尺 -->
+                    <div>
+                        <div class="flex items-center justify-between text-xs mb-2.5">
+                            <span class="font-bold text-slate-700">分数段位</span>
+                            <span class="font-bold text-blue-600">超越85%同路人</span>
+                        </div>
+
+                        <!-- 进度刻度槽 -->
+                        <div class="relative w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-1000" style="width: 82%;"></div>
+                        </div>
+
+                        <!-- 刻度数字 -->
+                        <div class="flex justify-between text-[11px] text-slate-400 font-medium mt-2 px-1">
+                            <span>0</span>
+                            <span class="pl-16">60</span>
+                            <span class="pl-8">80</span>
+                            <span>100</span>
+                        </div>
+                    </div>
+
+                    <!-- 评估结论说明框 -->
+                    <div class="mt-5 bg-[#f4f7fc] rounded-xl p-4 text-xs text-slate-600 leading-relaxed font-medium">
+                        你的数学基础扎实，概念理解清晰，解题思路明确。在同龄人中处于优秀水平，具备较强的数学思维能力和问题解决能力。
+                    </div>
+                </div>
+
+                <!-- 2. 薄弱点分析卡片 -->
+                <div class="bg-white rounded-2xl p-6 shadow-xs border border-slate-100">
+                    <div class="flex items-center justify-between mb-5">
+                        <h3 class="text-base font-bold text-slate-900 tracking-tight">薄弱点分析</h3>
+                        <span class="text-xs text-slate-400">基于近20道题目作答智能归因</span>
+                    </div>
+
+                    <!-- 双列薄弱点列表 -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                        
+                        <!-- 1. 立体几何证明 (基础-红色) -->
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between text-xs">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-[11px] font-bold">1</span>
+                                    <span class="font-medium text-slate-800">立体几何证明</span>
+                                </div>
+                                <span class="font-medium text-red-500">掌握度: 基础</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-red-500 rounded-full" style="width: 40%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- 6. 立体几何证明 (基础-红色) -->
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between text-xs">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-[11px] font-bold">6</span>
+                                    <span class="font-medium text-slate-800">立体几何证明</span>
+                                </div>
+                                <span class="font-medium text-red-500">掌握度: 基础</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-red-500 rounded-full" style="width: 40%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- 2. 三角函数应用 (熟练-橙色) -->
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between text-xs">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-[11px] font-bold">2</span>
+                                    <span class="font-medium text-slate-800">三角函数应用</span>
+                                </div>
+                                <span class="font-medium text-amber-500">掌握度: 熟练</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-amber-500 rounded-full" style="width: 75%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- 7. 三角函数应用 (熟练-橙色) -->
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between text-xs">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-[11px] font-bold">7</span>
+                                    <span class="font-medium text-slate-800">三角函数应用</span>
+                                </div>
+                                <span class="font-medium text-amber-500">掌握度: 熟练</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-amber-500 rounded-full" style="width: 75%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- 3. 概率统计计算 (精通-蓝色) -->
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between text-xs">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[11px] font-bold">3</span>
+                                    <span class="font-medium text-slate-800">概率统计计算</span>
+                                </div>
+                                <span class="font-medium text-blue-600">掌握度: 精通</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-blue-600 rounded-full" style="width: 92%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- 8. 概率统计计算 (精通-蓝色) -->
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between text-xs">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[11px] font-bold">8</span>
+                                    <span class="font-medium text-slate-800">概率统计计算</span>
+                                </div>
+                                <span class="font-medium text-blue-600">掌握度: 精通</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-blue-600 rounded-full" style="width: 92%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- 4. 概率统计 (薄弱-灰色) -->
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between text-xs">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[11px] font-bold">4</span>
+                                    <span class="font-medium text-slate-800">概率统计</span>
+                                </div>
+                                <span class="font-medium text-slate-400">掌握度: 薄弱</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-slate-400 rounded-full" style="width: 28%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- 9. 概率统计 (薄弱-灰色) -->
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between text-xs">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[11px] font-bold">9</span>
+                                    <span class="font-medium text-slate-800">概率统计</span>
+                                </div>
+                                <span class="font-medium text-slate-400">掌握度: 薄弱</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-slate-400 rounded-full" style="width: 28%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- 5. 概率统计 (薄弱-灰色) -->
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between text-xs">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[11px] font-bold">5</span>
+                                    <span class="font-medium text-slate-800">概率统计</span>
+                                </div>
+                                <span class="font-medium text-slate-400">掌握度: 薄弱</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-slate-400 rounded-full" style="width: 28%;"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- 可折叠区域 (隐藏附加知识点) -->
+                    <div id="moreWeakPoints" class="hidden grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 pt-4 mt-4 border-t border-slate-100">
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between text-xs">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[11px] font-bold">10</span>
+                                    <span class="font-medium text-slate-800">导数与极值定理</span>
+                                </div>
+                                <span class="font-medium text-amber-500">掌握度: 熟练</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-amber-500 rounded-full" style="width: 68%;"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between text-xs">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[11px] font-bold">11</span>
+                                    <span class="font-medium text-slate-800">圆锥曲线方程</span>
+                                </div>
+                                <span class="font-medium text-red-500">掌握度: 基础</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-red-500 rounded-full" style="width: 35%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 展开更多按钮 -->
+                    <div class="text-center mt-5">
+                        <button id="toggleMoreBtn" onclick="toggleMorePoints()" class="text-xs text-blue-600 hover:text-blue-700 font-semibold inline-flex items-center gap-1 cursor-pointer">
+                            <span id="toggleText">展开更多</span>
+                            <i id="toggleIcon" class="fas fa-chevron-down text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. 个性化提升建议卡片 -->
+                <div class="bg-white rounded-2xl p-6 shadow-xs border border-slate-100">
+                    <h3 class="text-base font-bold text-slate-900 tracking-tight mb-4">个性化提升建议</h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- 建议 1 -->
+                        <div class="p-4 rounded-xl border border-slate-100 bg-white hover:border-blue-200 transition-colors flex items-start gap-3.5">
+                            <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5 text-sm">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-900">立体几何专项训练</h4>
+                                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                                    推荐《立体几何题型全解》，每天完成2道证明题，坚持3周
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 建议 2 -->
+                        <div class="p-4 rounded-xl border border-slate-100 bg-white hover:border-blue-200 transition-colors flex items-start gap-3.5">
+                            <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5 text-sm">
+                                <i class="fas fa-play-circle"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-900">三角函数专题课程</h4>
+                                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                                    观看“三角函数图像变换”系列课程，共6课时，建议1周内完成
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 建议 3 -->
+                        <div class="p-4 rounded-xl border border-slate-100 bg-white hover:border-blue-200 transition-colors flex items-start gap-3.5">
+                            <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5 text-sm">
+                                <i class="fas fa-user-group"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-900">加入几何学习小组</h4>
+                                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                                    与3-5名同学组成学习小组，每周进行一次几何题讨论与讲解
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 建议 4 -->
+                        <div class="p-4 rounded-xl border border-slate-100 bg-white hover:border-blue-200 transition-colors flex items-start gap-3.5">
+                            <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5 text-sm">
+                                <i class="fas fa-chart-column"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-900">制定周学习计划</h4>
+                                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                                    分配每日学习时间，重点突破薄弱知识点，建立学习打卡机制
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ===================== 右侧辅助分析栏 (4列) ===================== -->
+            <div class="lg:col-span-4 space-y-6">
+
+                <!-- 1. 上岸潜力预测卡片 (蓝色高亮) -->
+                <div class="bg-[#f3f7ff] rounded-2xl p-6 border border-blue-100/80 shadow-xs">
+                    <h3 class="text-xs font-bold text-slate-800">上岸潜力预测</h3>
+                    <p class="text-[11px] text-slate-400 mt-0.5">基于当前水平评估</p>
+
+                    <div class="text-4xl font-black text-[#2563eb] tracking-tight my-3.5">
+                        极高
+                    </div>
+
+                    <p class="text-xs text-slate-600 leading-relaxed font-normal">
+                        根据你的数学能力水平和学习潜力，AI预测你有 <strong class="text-blue-600 font-bold">86%</strong> 的概率考入重点大学。若能针对性提升薄弱环节，概率可提升至 <strong class="text-blue-600 font-bold">92%</strong> 以上。
+                    </p>
+                </div>
+
+                <!-- 2. 扫码添加老师微信 卡片 -->
+                <div class="bg-white rounded-2xl p-6 shadow-xs border border-slate-100 text-center">
+                    <h3 class="text-xs font-bold text-slate-800 mb-4">扫码添加老师微信，获取专属学习方案</h3>
+
+                    <!-- 专属配图/二维码区域 -->
+                    <div class="relative w-48 h-48 mx-auto rounded-2xl overflow-hidden shadow-inner border border-slate-100 group cursor-pointer" onclick="showTeacherQrCode()">
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&auto=format&fit=crop&q=80" alt="扫码添加老师" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
+                        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] flex flex-col items-center justify-center text-white p-3 text-center">
+                            <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-xl mb-2">
+                                <i class="fas fa-qrcode"></i>
+                            </div>
+                            <span class="text-xs font-bold">点击扫码对接导师</span>
+                            <span class="text-[10px] text-white/80 mt-0.5">免费获取1对1学情诊断</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. 答题卡卡片 -->
+                <div class="bg-white rounded-2xl p-6 shadow-xs border border-slate-100">
+                    <h3 class="text-xs font-bold text-slate-800 mb-3">答题卡</h3>
+
+                    <!-- 图例说明 -->
+                    <div class="flex items-center flex-wrap gap-x-3 gap-y-2 text-[11px] text-slate-500 pb-3 border-b border-slate-100">
+                        <span class="flex items-center gap-1.5">
+                            <span class="w-3 h-3 rounded-xs bg-emerald-500 inline-block"></span> 正确
+                        </span>
+                        <span class="flex items-center gap-1.5">
+                            <span class="w-3 h-3 rounded-xs bg-red-500 inline-block"></span> 错误
+                        </span>
+                        <span class="flex items-center gap-1.5">
+                            <span class="w-3 h-3 rounded-xs bg-sky-500 inline-block"></span> 半对
+                        </span>
+                        <span class="flex items-center gap-1.5">
+                            <span class="w-3 h-3 rounded-xs border border-amber-400 bg-amber-50 inline-block"></span> 已答
+                        </span>
+                        <span class="flex items-center gap-1.5">
+                            <span class="w-3 h-3 rounded-xs border border-slate-300 bg-slate-50 inline-block"></span> 未答
+                        </span>
+                    </div>
+
+                    <!-- 题目网格 -->
+                    <div class="space-y-4 mt-4">
+                        <!-- 一、单项选择题 -->
+                        <div>
+                            <div class="text-xs font-bold text-slate-700 mb-2">一、单项选择题</div>
+                            <div class="grid grid-cols-5 gap-2 text-center text-xs font-bold">
+                                <div onclick="showQuestionDetail(1, '正确')" class="py-1.5 rounded-lg bg-emerald-500 text-white cursor-pointer hover:opacity-90">1</div>
+                                <div onclick="showQuestionDetail(2, '错误')" class="py-1.5 rounded-lg bg-red-500 text-white cursor-pointer hover:opacity-90">2</div>
+                                <div onclick="showQuestionDetail(3, '正确')" class="py-1.5 rounded-lg bg-emerald-500 text-white cursor-pointer hover:opacity-90">3</div>
+                                <div onclick="showQuestionDetail(4, '正确')" class="py-1.5 rounded-lg bg-emerald-500 text-white cursor-pointer hover:opacity-90">4</div>
+                                <div onclick="showQuestionDetail(5, '正确')" class="py-1.5 rounded-lg bg-emerald-500 text-white cursor-pointer hover:opacity-90">5</div>
+                                <div onclick="showQuestionDetail(6, '正确')" class="py-1.5 rounded-lg bg-emerald-500 text-white cursor-pointer hover:opacity-90">6</div>
+                                <div onclick="showQuestionDetail(7, '正确')" class="py-1.5 rounded-lg bg-emerald-500 text-white cursor-pointer hover:opacity-90">7</div>
+                                <div onclick="showQuestionDetail(8, '已答')" class="py-1.5 rounded-lg border border-amber-400 bg-amber-50 text-amber-600 cursor-pointer hover:bg-amber-100">8</div>
+                                <div onclick="showQuestionDetail(9, '半对')" class="py-1.5 rounded-lg bg-sky-500 text-white cursor-pointer hover:opacity-90">9</div>
+                                <div onclick="showQuestionDetail(10, '未答')" class="py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-400 cursor-pointer hover:bg-slate-100">10</div>
+                            </div>
+                        </div>
+
+                        <!-- 二、多项选择题 -->
+                        <div>
+                            <div class="text-xs font-bold text-slate-700 mb-2">二、多项选择题</div>
+                            <div class="grid grid-cols-5 gap-2 text-center text-xs font-bold">
+                                <div onclick="showQuestionDetail(11, '正确')" class="py-1.5 rounded-lg bg-emerald-500 text-white cursor-pointer hover:opacity-90">11</div>
+                                <div onclick="showQuestionDetail(12, '正确')" class="py-1.5 rounded-lg bg-emerald-500 text-white cursor-pointer hover:opacity-90">12</div>
+                                <div onclick="showQuestionDetail(13, '已答')" class="py-1.5 rounded-lg border border-amber-400 bg-amber-50 text-amber-600 cursor-pointer hover:bg-amber-100">13</div>
+                                <div onclick="showQuestionDetail(14, '未答')" class="py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-400 cursor-pointer hover:bg-slate-100">14</div>
+                                <div onclick="showQuestionDetail(15, '未答')" class="py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-400 cursor-pointer hover:bg-slate-100">15</div>
+                            </div>
+                        </div>
+
+                        <!-- 三、判断题 -->
+                        <div>
+                            <div class="text-xs font-bold text-slate-700 mb-2">三、判断题</div>
+                            <div class="grid grid-cols-5 gap-2 text-center text-xs font-bold">
+                                <div onclick="showQuestionDetail(16, '正确')" class="py-1.5 rounded-lg bg-emerald-500 text-white cursor-pointer hover:opacity-90">16</div>
+                                <div onclick="showQuestionDetail(17, '正确')" class="py-1.5 rounded-lg bg-emerald-500 text-white cursor-pointer hover:opacity-90">17</div>
+                                <div onclick="showQuestionDetail(18, '已答')" class="py-1.5 rounded-lg border border-amber-400 bg-amber-50 text-amber-600 cursor-pointer hover:bg-amber-100">18</div>
+                                <div onclick="showQuestionDetail(19, '已答')" class="py-1.5 rounded-lg border border-amber-400 bg-amber-50 text-amber-600 cursor-pointer hover:bg-amber-100">19</div>
+                                <div onclick="showQuestionDetail(20, '已答')" class="py-1.5 rounded-lg border border-amber-400 bg-amber-50 text-amber-600 cursor-pointer hover:bg-amber-100">20</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 底部操作按钮：试题解析 & 重新测评 -->
+                    <div class="grid grid-cols-2 gap-3 mt-6 pt-2">
+                        <button onclick="window.location.href='shiti_jiexi_pc.html'" class="py-2 px-3 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors cursor-pointer text-center">
+                            试题解析
+                        </button>
+                        <button onclick="window.location.href='ai_ceping_pc.html'" class="py-2 px-3 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors cursor-pointer text-center">
+                            重新测评
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 3. 底部推荐课程模块 (4个课程卡片) -->
+        <section class="mt-12">
+            <div class="flex items-center justify-between mb-5">
+                <h2 class="text-xl font-bold text-slate-900 tracking-tight">推荐课程</h2>
+                <button onclick="openUnlockModal()" class="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline cursor-pointer">
+                    分享好友免费解锁
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <!-- 课程 1: 课程未解锁 (暗黑遮罩覆盖) -->
+                <div id="lockedCourseCard" class="relative rounded-2xl overflow-hidden bg-slate-800 text-white min-h-[260px] flex flex-col justify-between p-6 shadow-sm group cursor-pointer transition-all hover:shadow-md" onclick="openUnlockModal()">
+                    <!-- 背景模糊层 -->
+                    <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-xs -z-0"></div>
+
+                    <!-- 居中锁图标与解锁提示 -->
+                    <div class="relative z-10 flex flex-col items-center justify-center text-center my-auto">
+                        <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-xl mb-3 text-slate-200 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h4 class="text-base font-bold text-white tracking-tight">课程未解锁</h4>
+                        <div class="mt-2.5 flex items-center justify-center gap-1.5 flex-wrap">
+                            <span class="inline-block bg-blue-500/80 text-[10px] font-bold px-2 py-0.5 rounded text-white">
+                                英才班
+                            </span>
+                            <span class="text-xs text-blue-200 font-medium">分享好友即可免费解锁此课程突破</span>
+                        </div>
+                    </div>
+
+                    <!-- 底部规格信息 -->
+                    <div class="relative z-10 text-xs text-slate-400 text-center pt-2 border-t border-white/10">
+                        17套网课/5本图书
+                    </div>
+                </div>
+
+                <!-- 课程 2: 三角函数应用全解 -->
+                <div class="rounded-2xl overflow-hidden bg-white border border-slate-100 shadow-xs hover:shadow-md transition-shadow group cursor-pointer">
+                    <div class="relative h-36 overflow-hidden bg-slate-100">
+                        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&auto=format&fit=crop&q=80" alt="三角函数应用全解" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-4">
+                        <span class="inline-block bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded">
+                            英才班
+                        </span>
+                        <h4 class="text-sm font-bold text-slate-900 mt-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
+                            三角函数应用全解
+                        </h4>
+                        <p class="text-xs text-slate-400 mt-1">23套网课/8本图书</p>
+                    </div>
+                </div>
+
+                <!-- 课程 3: 概率统计实战教程 -->
+                <div class="rounded-2xl overflow-hidden bg-white border border-slate-100 shadow-xs hover:shadow-md transition-shadow group cursor-pointer">
+                    <div class="relative h-36 overflow-hidden bg-slate-100">
+                        <img src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=600&auto=format&fit=crop&q=80" alt="概率统计实战教程" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-4">
+                        <span class="inline-block bg-orange-50 text-orange-600 text-[10px] font-bold px-2 py-0.5 rounded">
+                            进阶班
+                        </span>
+                        <h4 class="text-sm font-bold text-slate-900 mt-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
+                            概率统计实战教程
+                        </h4>
+                        <p class="text-xs text-slate-400 mt-1">15套网课/4本图书</p>
+                    </div>
+                </div>
+
+                <!-- 课程 4: 专升本数学冲刺班 -->
+                <div class="rounded-2xl overflow-hidden bg-white border border-slate-100 shadow-xs hover:shadow-md transition-shadow group cursor-pointer">
+                    <div class="relative h-36 overflow-hidden bg-slate-100">
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&auto=format&fit=crop&q=80" alt="专升本数学冲刺班" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-4">
+                        <span class="inline-block bg-orange-50 text-orange-600 text-[10px] font-bold px-2 py-0.5 rounded">
+                            进阶班
+                        </span>
+                        <h4 class="text-sm font-bold text-slate-900 mt-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
+                            专升本数学冲刺班
+                        </h4>
+                        <p class="text-xs text-slate-400 mt-1">30套网课/10本图书</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 底部版权 -->
+    <footer class="bg-white border-t border-slate-100 py-6 mt-12 text-center text-xs text-slate-400">
+        <div>© 2026 智学测评系统 · 库课网校版权所有</div>
+    </footer>
+
+    <!-- ======================= 弹窗组件 ======================= -->
+
+    <!-- 1. 免费解锁课程弹窗 (与移动端完全一致) -->
+    <div id="unlockModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300 opacity-0 pointer-events-none" onclick="handleModalBackdropClick(event, 'unlockModal')">
+        <div id="unlockModalCard" class="relative bg-white rounded-3xl w-full max-w-[340px] p-6 shadow-2xl text-center transform scale-95 transition-all duration-300" onclick="event.stopPropagation()">
+            <!-- 关闭按钮 -->
+            <button onclick="closeUnlockModal()" class="absolute top-4 right-4 w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-colors cursor-pointer" aria-label="关闭">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <!-- 顶部礼物图标圆环 -->
+            <div class="w-20 h-20 rounded-full mx-auto mt-2 bg-gradient-to-b from-[#fb923c] via-[#f97316] to-[#f43f5e] flex items-center justify-center shadow-lg shadow-orange-500/20">
+                <svg class="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                    <rect x="2" y="7" width="20" height="5" rx="1"></rect>
+                    <line x1="12" y1="22" x2="12" y2="7"></line>
+                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+                </svg>
+            </div>
+
+            <!-- 标题 -->
+            <h3 class="text-xl font-bold text-slate-900 tracking-tight mt-5 mb-4">免费领取精品课程</h3>
+
+            <!-- 课程信息卡片 -->
+            <div class="bg-[#eff4fe] rounded-xl p-3.5 text-left">
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                        <line x1="12" y1="4" x2="12" y2="20"></line>
+                        <line x1="7" y1="9" x2="9" y2="9"></line>
+                        <line x1="7" y1="13" x2="9" y2="13"></line>
+                        <line x1="15" y1="9" x2="17" y2="9"></line>
+                    </svg>
+                    <span id="modalCourseTitle" class="text-sm font-bold text-slate-900 tracking-tight line-clamp-1">《立体几何突破特训课》</span>
+                </div>
+                <div class="flex items-center justify-between mt-2.5">
+                    <span id="modalOriginalPrice" class="text-xs text-slate-400 font-medium">原价 ¥199</span>
+                    <span class="text-[11px] font-semibold text-[#ea580c] bg-[#ffedd5] px-2.5 py-0.5 rounded-full">限时免费</span>
+                </div>
+            </div>
+
+            <!-- 提示文案 -->
+            <p class="text-xs text-slate-500 mt-4 mb-6 text-left leading-relaxed">在测评首页【查看报告】领取课程A</p>
+
+            <!-- 立即分享按钮 -->
+            <button onclick="confirmUnlock()" class="w-full py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.98] text-white font-bold text-sm tracking-wide shadow-lg shadow-blue-500/25 transition-all cursor-pointer">
+                立即分享，免费领取
+            </button>
+        </div>
+    </div>
+
+    <!-- 3. 评分标准说明弹窗 -->
+    <div id="scoreModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs transition-opacity duration-300 opacity-0 pointer-events-none" onclick="handleModalBackdropClick(event, 'scoreModal')">
+        <div id="scoreModalCard" class="relative bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl text-left transform scale-95 transition-all duration-300" onclick="event.stopPropagation()">
+            <button onclick="closeScoreDetailModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-colors cursor-pointer" aria-label="关闭">
+                <i class="fas fa-times text-sm"></i>
+            </button>
+
+            <h3 class="text-base font-bold text-slate-900 mb-2">评分与评级算法</h3>
+            <div class="text-xs text-slate-600 space-y-2.5 leading-relaxed">
+                <p><strong>计算公式：</strong>综合评分基于作答正确率（60%）、难度系数加权（25%）与作答耗时（15%）综合建模得出。</p>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 space-y-1">
+                    <div>🏆 <strong>90 - 100 分：</strong>拔尖卓越（考入概率 &gt;95%）</div>
+                    <div>⭐ <strong>80 - 89 分：</strong>优秀稳健（考入概率 85%-92%）</div>
+                    <div>📈 <strong>60 - 79 分：</strong>良好达标（考入概率 60%-80%）</div>
+                    <div>⚠️ <strong>&lt; 60 分：</strong>基础待夯实（建议专项补差）</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. 题目速览 Toast 提示 -->
+    <div id="toast" class="hidden fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-slate-900/90 backdrop-blur-sm text-white px-5 py-2.5 rounded-full text-xs font-semibold shadow-lg transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-2">
+        <i class="fas fa-circle-info text-blue-400"></i>
+        <span id="toastMsg">提示内容</span>
+    </div>
+
+    <script>
+        // 初始化读取 URL 参数（保持与测评选科联动）
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const exam = urlParams.get('exam') || '专升本';
+            const province = urlParams.get('province') || '河南省';
+            const subject = urlParams.get('subject') || '语文';
+
+            const examEl = document.getElementById('studentExam');
+            if (examEl) {
+                examEl.textContent = `${exam} · ${province} · ${subject}`;
+            }
+        });
+
+        // 展开 / 折叠更多薄弱点
+        function toggleMorePoints() {
+            const moreEl = document.getElementById('moreWeakPoints');
+            const textEl = document.getElementById('toggleText');
+            const iconEl = document.getElementById('toggleIcon');
+
+            if (moreEl.classList.contains('hidden')) {
+                moreEl.classList.remove('hidden');
+                textEl.textContent = '收起';
+                iconEl.className = 'fas fa-chevron-up text-[10px]';
+            } else {
+                moreEl.classList.add('hidden');
+                textEl.textContent = '展开更多';
+                iconEl.className = 'fas fa-chevron-down text-[10px]';
+            }
+        }
+
+        // 答题卡点击事件
+        function showQuestionDetail(index, status) {
+            showToast(`第 ${index} 题 · 状态：${status}，正在载入试题全解...`);
+            setTimeout(() => {
+                window.location.href = `shiti_jiexi_pc.html?question=${index}&status=${encodeURIComponent(status)}`;
+            }, 600);
+        }
+
+        // 扫码添加老师
+        function showTeacherQrCode() {
+            showToast('已为您匹配专属升学导师微信，请扫描二维码联系！');
+            openSharePopover();
+        }
+
+        // 解锁课程
+        function openUnlockModal() {
+            openGenericModal('unlockModal', 'unlockModalCard');
+        }
+
+        function closeUnlockModal() {
+            closeGenericModal('unlockModal', 'unlockModalCard');
+        }
+
+        function confirmUnlock() {
+            closeUnlockModal();
+            const card = document.getElementById('lockedCourseCard');
+            if (card) {
+                card.classList.remove('bg-slate-800');
+                card.classList.add('bg-white', 'border', 'border-blue-200');
+                card.innerHTML = `
+                    <div class="relative h-36 overflow-hidden bg-slate-100 rounded-t-xl -m-6 mb-3">
+                        <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&auto=format&fit=crop&q=80" alt="已解锁几何特训" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <span class="inline-block bg-emerald-50 text-emerald-600 text-[10px] font-bold px-2 py-0.5 rounded">
+                            已解锁免费畅学
+                        </span>
+                        <h4 class="text-sm font-bold text-slate-900 mt-2">
+                            立体几何突破特训课
+                        </h4>
+                        <p class="text-xs text-slate-400 mt-1">17套网课/5本图书 · 随时在线畅看</p>
+                    </div>
+                `;
+            }
+            showToast('🎉 恭喜！课程已成功免费解锁！');
+        }
+
+        // 分享浮窗控制
+        let sharePopoverTimer = null;
+        function toggleSharePopover(e) {
+            if (e) e.stopPropagation();
+            const popover = document.getElementById('sharePopover');
+            if (!popover) return;
+            if (popover.classList.contains('hidden')) {
+                openSharePopover();
+            } else {
+                closeSharePopover();
+            }
+        }
+
+        function openSharePopover() {
+            const popover = document.getElementById('sharePopover');
+            if (popover) {
+                popover.classList.remove('hidden');
+            }
+        }
+
+        function closeSharePopover() {
+            const popover = document.getElementById('sharePopover');
+            if (popover) {
+                popover.classList.add('hidden');
+            }
+        }
+
+        function openShareModal() {
+            openSharePopover();
+        }
+
+        function closeShareModal() {
+            closeSharePopover();
+        }
+
+        // 绑定悬停与外部点击事件
+        document.addEventListener('DOMContentLoaded', () => {
+            const wrapper = document.getElementById('shareWrapper');
+            const popover = document.getElementById('sharePopover');
+            if (wrapper && popover) {
+                wrapper.addEventListener('mouseenter', () => {
+                    clearTimeout(sharePopoverTimer);
+                    openSharePopover();
+                });
+                wrapper.addEventListener('mouseleave', () => {
+                    sharePopoverTimer = setTimeout(() => {
+                        closeSharePopover();
+                    }, 250);
+                });
+            }
+
+            document.addEventListener('click', (e) => {
+                if (wrapper && !wrapper.contains(e.target)) {
+                    closeSharePopover();
+                }
+            });
+        });
+
+        // 评分详情弹窗
+        function openScoreDetailModal() {
+            openGenericModal('scoreModal', 'scoreModalCard');
+        }
+
+        function closeScoreDetailModal() {
+            closeGenericModal('scoreModal', 'scoreModalCard');
+        }
+
+        // 通用模态弹窗控制
+        function openGenericModal(modalId, cardId) {
+            const modal = document.getElementById(modalId);
+            const card = document.getElementById(cardId);
+            if (modal && card) {
+                modal.classList.remove('hidden');
+                void modal.offsetWidth;
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modal.classList.add('opacity-100', 'pointer-events-auto');
+                card.classList.remove('scale-95');
+                card.classList.add('scale-100');
+            }
+        }
+
+        function closeGenericModal(modalId, cardId) {
+            const modal = document.getElementById(modalId);
+            const card = document.getElementById(cardId);
+            if (modal && card) {
+                modal.classList.remove('opacity-100', 'pointer-events-auto');
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                card.classList.remove('scale-100');
+                card.classList.add('scale-95');
+                setTimeout(() => {
+                    if (modal.classList.contains('opacity-0')) {
+                        modal.classList.add('hidden');
+                    }
+                }, 300);
+            }
+        }
+
+        function handleModalBackdropClick(e, modalId) {
+            if (e.target.id === modalId) {
+                if (modalId === 'shareModal') closeShareModal();
+                if (modalId === 'unlockModal') closeUnlockModal();
+                if (modalId === 'scoreModal') closeScoreDetailModal();
+            }
+        }
+
+        // 轻量 Toast 提示
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            if (toast && toastMsg) {
+                toastMsg.innerText = msg;
+                toast.classList.remove('hidden');
+                void toast.offsetWidth;
+                toast.classList.remove('opacity-0', 'pointer-events-none');
+                toast.classList.add('opacity-100', 'pointer-events-auto');
+
+                setTimeout(() => {
+                    toast.classList.remove('opacity-100', 'pointer-events-auto');
+                    toast.classList.add('opacity-0', 'pointer-events-none');
+                    setTimeout(() => {
+                        toast.classList.add('hidden');
+                    }, 300);
+                }, 2200);
+            }
+        }
+    </script>
+</body>
+</html>
