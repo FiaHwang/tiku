@@ -500,6 +500,10 @@
         function viewReport(subject) {
             if (subject === '估分试卷') {
                 window.location.href = 'baogao_gufen_pc.html?title=' + encodeURIComponent(subject);
+            } else if (subject === '大联考') {
+                window.location.href = 'baogao_guda_pc.html?from=daliankao&title=' + encodeURIComponent('2026届卓越联盟联合学业水准测试语文试卷');
+            } else if (subject === '统考试卷') {
+                window.location.href = 'baogao_guda_pc.html?from=tongkao&title=' + encodeURIComponent('2026年普通高等学校招生全国统一考试高三学业诊断（一）');
             } else {
                 window.location.href = 'dati_baogao_pc.html?title=' + encodeURIComponent(subject);
             }

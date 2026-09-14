@@ -437,7 +437,7 @@
 
                         <!-- Tooltip Overlay -->
                         <div class="absolute bg-slate-800 text-white text-xs px-3 py-1.5 rounded-lg shadow-md flex flex-col gap-0.5" style="left: calc(47% - 35px); top: 22%;">
-                            <div class="font-medium whitespace-nowrap">得分：20分</div>
+                            <div class="font-medium whitespace-nowrap">得分：40-60分</div>
                             <div class="font-medium whitespace-nowrap">人数：50人</div>
                             <div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-slate-800"></div>
                         </div>
@@ -850,18 +850,45 @@
 
         (function() {
             const urlParams = new URLSearchParams(window.location.search);
-            const from = urlParams.get('from');
-            const title = urlParams.get('title') || urlParams.get('name');
+            const rawFrom = urlParams.get('from') || '';
+            const from = rawFrom.toLowerCase();
+            const rawMode = urlParams.get('mode') || '';
+            const mode = rawMode.toLowerCase();
+            const rawTitle = urlParams.get('title') || urlParams.get('name') || '';
+            let title = '';
+            try {
+                title = decodeURIComponent(rawTitle);
+            } catch (e) {
+                title = rawTitle;
+            }
 
             if (title) {
                 const titleEl = document.getElementById('paper-title');
                 if (titleEl) {
-                    titleEl.textContent = decodeURIComponent(title);
+                    titleEl.textContent = title;
+                }
+            } else {
+                if (from.includes('tongkao') || rawFrom.includes('统考') || mode.includes('tongkao') || rawMode.includes('统考')) {
+                    const titleEl = document.getElementById('paper-title');
+                    if (titleEl) titleEl.textContent = '2026年普通高等学校招生全国统一考试高三学业诊断（一）';
+                } else if (from.includes('daliankao') || rawFrom.includes('大联考') || mode.includes('daliankao') || rawMode.includes('大联考')) {
+                    const titleEl = document.getElementById('paper-title');
+                    if (titleEl) titleEl.textContent = '2026届卓越联盟联合学业水准测试语文试卷';
                 }
             }
 
+            // 判断是否来源于大联考或统考试卷
+            const isTongkao = from.includes('tongkao') || rawFrom.includes('统考') || mode.includes('tongkao') || rawMode.includes('统考') || title.includes('统考');
+            const isDaliankao = from.includes('daliankao') || rawFrom.includes('大联考') || mode.includes('daliankao') || rawMode.includes('大联考') || title.includes('大联考') || title.includes('卓越联盟');
+
+            // 检查 localStorage 练习模式容错 (index 5: 统考试卷, index 6: 大联考)
+            const lastModeIndex = localStorage.getItem('last_selected_practice_mode_index');
+            const referrer = (document.referrer || '').toLowerCase();
+            const isFromTiku = referrer.includes('tiku');
+            const isSavedTongkaoOrDaliankao = isFromTiku && (lastModeIndex === '5' || lastModeIndex === '6');
+
             // 当来源为大联考、统考试卷时，隐藏最近5次报告与再次答题按钮，与移动端保持完全一致
-            if (from === 'tongkao' || from === 'daliankao' || from === '统考试卷' || from === '大联考') {
+            if (isTongkao || isDaliankao || isSavedTongkaoOrDaliankao) {
                 const card = document.getElementById('recent-reports-card');
                 if (card) {
                     card.style.display = 'none';
