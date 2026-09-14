@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>章节练习报告 - 库课网校</title>
+    <title>固定刷题报告 - 库课网校</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -130,21 +130,21 @@
         }
 
         .user-link {
-            color: #333;
+            font-size: 14px;
+            color: #666;
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 4px;
         }
 
         .notification {
             position: relative;
+            cursor: pointer;
+            color: #666;
         }
 
         .notification-badge {
             position: absolute;
-            top: -4px;
-            right: -4px;
+            top: -6px;
+            right: -6px;
             background-color: #ff4d4f;
             color: #fff;
             border-radius: 50%;
@@ -258,7 +258,7 @@
                 <!-- 1. Exam Header & Dashboard Metrics Card -->
                 <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80 space-y-4">
                     <div>
-                        <h2 id="paper-title" class="text-lg font-bold text-slate-800 leading-snug">章节名称/每日一练名称</h2>
+                        <h2 id="paper-title" class="text-lg font-bold text-slate-800 leading-snug">单元名称</h2>
                         <div class="text-xs text-slate-400 mt-1">交卷时间: 2023.08.28 18:05</div>
                     </div>
 
@@ -343,7 +343,7 @@
 
                     <!-- 一、新一级题型客观题 (3 columns) -->
                     <div class="space-y-2 p-3.5 bg-slate-50 rounded-xl border border-slate-100">
-                        <h5 class="text-xs font-bold text-slate-700">新一级题型客观题</h5>
+                        <h5 class="text-xs font-bold text-slate-700">一、新一级题型客观题</h5>
                         <div class="grid grid-cols-3 gap-2 text-center py-1">
                             <div>
                                 <div class="text-sm font-bold text-slate-800">20.5%</div>
@@ -362,7 +362,7 @@
 
                     <!-- 二、简答题/填空题主观题 (3 columns) -->
                     <div class="space-y-2 p-3.5 bg-slate-50 rounded-xl border border-slate-100">
-                        <h5 class="text-xs font-bold text-slate-700">简答题/填空题主观题</h5>
+                        <h5 class="text-xs font-bold text-slate-700">二、简答题/填空题主观题</h5>
                         <div class="grid grid-cols-3 gap-2 text-center py-1">
                             <div>
                                 <div class="text-sm font-bold text-slate-800">35%</div>
@@ -381,7 +381,7 @@
 
                     <!-- 三、材料题（包含主观题和客观题） (5 columns) -->
                     <div class="space-y-2 p-3.5 bg-slate-50 rounded-xl border border-slate-100">
-                        <h5 class="text-xs font-bold text-slate-700">材料题（包含主观题和客观题）</h5>
+                        <h5 class="text-xs font-bold text-slate-700">三、材料题（包含主观题和客观题）</h5>
                         <div class="grid grid-cols-5 gap-2 text-center py-1">
                             <div>
                                 <div class="text-sm font-bold text-slate-800">20.5%</div>
@@ -408,7 +408,7 @@
 
                     <!-- 四、材料题（只包含客观题） (3 columns) -->
                     <div class="space-y-2 p-3.5 bg-slate-50 rounded-xl border border-slate-100">
-                        <h5 class="text-xs font-bold text-slate-700">材料题（只包含客观题）</h5>
+                        <h5 class="text-xs font-bold text-slate-700">四、材料题（只包含客观题）</h5>
                         <div class="grid grid-cols-3 gap-2 text-center py-1">
                             <div>
                                 <div class="text-sm font-bold text-slate-800">20.5%</div>
@@ -427,7 +427,7 @@
 
                     <!-- 五、材料题（只包含主观题） (3 columns) -->
                     <div class="space-y-2 p-3.5 bg-slate-50 rounded-xl border border-slate-100">
-                        <h5 class="text-xs font-bold text-slate-700">材料题（只包含主观题）</h5>
+                        <h5 class="text-xs font-bold text-slate-700">五、材料题（只包含主观题）</h5>
                         <div class="grid grid-cols-3 gap-2 text-center py-1">
                             <div>
                                 <div class="text-sm font-bold text-slate-800">35%</div>
@@ -448,43 +448,43 @@
             </div>
 
             <!-- Right Side: Answer Sheet & Action Controls (4/12 width) -->
-            <div class="col-span-12 lg:col-span-4 space-y-5">
+            <div class="col-span-12 lg:col-span-4 space-y-5 lg:sticky lg:top-[80px]">
                 
                 <!-- Answer Sheet Card (答题卡) -->
                 <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-4">
-                    <div class="pb-3 border-b border-slate-100 flex justify-between items-center">
+                    
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-100">
                         <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
                             <span class="w-1.5 h-4 bg-indigo-500 rounded-full"></span>
                             <span>答题卡</span>
                         </h3>
-                        <button id="toggle-sheet-btn" onclick="toggleAnswerSheet()" class="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-sky-600 px-2 py-1 rounded-md hover:bg-slate-100 transition-all cursor-pointer font-medium">
+                        <button onclick="toggleAnswerSheet()" class="text-xs text-slate-500 hover:text-slate-800 flex items-center gap-1 cursor-pointer transition-colors select-none">
                             <span id="toggle-sheet-text">收起</span>
                             <i id="toggle-sheet-icon" class="fas fa-chevron-up text-[10px] transition-transform duration-200"></i>
                         </button>
                     </div>
 
-                    <!-- Collapsible Answer Sheet Body -->
                     <div id="answer-sheet-body" class="space-y-4">
                         <!-- Legend Indicators (Matching mobile/baogao_zhangjie.html) -->
-                        <div class="flex flex-wrap gap-x-3 gap-y-1.5 text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                            <div class="flex items-center gap-1">
-                                <div class="w-3 h-3 bg-zinc-500 rounded"></div>
+                        <div class="flex flex-wrap gap-x-3 gap-y-2 text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-3.5 h-3.5 bg-zinc-500 rounded"></div>
                                 <span>正确</span>
                             </div>
-                            <div class="flex items-center gap-1">
-                                <div class="w-3 h-3 bg-zinc-700 rounded"></div>
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-3.5 h-3.5 bg-zinc-700 rounded"></div>
                                 <span>半对</span>
                             </div>
-                            <div class="flex items-center gap-1">
-                                <div class="w-3 h-3 bg-zinc-400 rounded"></div>
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-3.5 h-3.5 bg-zinc-400 rounded"></div>
                                 <span>错误</span>
                             </div>
-                            <div class="flex items-center gap-1">
-                                <div class="w-3 h-3 bg-white border border-slate-400 rounded"></div>
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-3.5 h-3.5 bg-white border border-slate-400 rounded"></div>
                                 <span>已答</span>
                             </div>
-                            <div class="flex items-center gap-1">
-                                <div class="w-3 h-3 bg-white border border-slate-200 rounded"></div>
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-3.5 h-3.5 bg-white border border-slate-200 rounded"></div>
                                 <span>未答</span>
                             </div>
                         </div>
@@ -494,7 +494,7 @@
                             
                             <!-- 新一级题型 (1~15) -->
                             <div class="space-y-2">
-                                <div class="text-xs font-bold text-slate-700">新一级题型</div>
+                                <div class="text-xs font-bold text-slate-700">一、新一级题型</div>
                                 <div class="grid grid-cols-5 gap-2">
                                     <!-- Numbers 1 to 15 (zinc-500 correctly answered) -->
                                     <div onclick="goToQuestion(1)" class="q-card-btn h-9 bg-zinc-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">1</div>
@@ -517,7 +517,7 @@
 
                             <!-- 填空题 (16~19) -->
                             <div class="space-y-2 mt-3">
-                                <div class="text-xs font-bold text-slate-700">填空题</div>
+                                <div class="text-xs font-bold text-slate-700">二、填空题</div>
                                 <div class="grid grid-cols-5 gap-2">
                                     <!-- 16: Answered 100% (green) -->
                                     <div onclick="goToQuestion(16)" class="q-card-btn flex flex-col items-center gap-0.5">
@@ -544,7 +544,7 @@
 
                             <!-- 简答题 (20~24) -->
                             <div class="space-y-2 mt-3">
-                                <div class="text-xs font-bold text-slate-700">简答题</div>
+                                <div class="text-xs font-bold text-slate-700">三、简答题</div>
                                 <div class="grid grid-cols-5 gap-2">
                                     <!-- 20: Answered 40% (amber) -->
                                     <div onclick="goToQuestion(20)" class="q-card-btn flex flex-col items-center gap-0.5">
@@ -573,25 +573,25 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
+
                     </div>
 
-                    <!-- Bottom Controls nested directly inside the Sidebar card (5 buttons vertical stack) -->
-                    <div class="pt-3 border-t border-slate-100 flex flex-col gap-2.5">
-                        <button onclick="window.location.href='shiti_jiexi_pc.html?type=all'" class="w-full h-9 bg-sky-500 hover:bg-sky-600 text-white rounded-lg font-medium text-xs transition-colors shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+                    <!-- Bottom Controls nested directly inside the Sidebar card (5 buttons vertical stack matching reference image) -->
+                    <div class="pt-3.5 border-t border-slate-100 flex flex-col gap-2.5">
+                        <button onclick="window.location.href='shiti_jiexi_pc.html?type=all'" class="w-full h-10 bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white rounded-lg font-medium text-sm transition-colors shadow-xs flex items-center justify-center cursor-pointer">
                             全部解析
                         </button>
-                        <button onclick="window.location.href='shiti_jiexi_pc.html?type=wrong'" class="w-full h-9 border border-sky-500 text-sky-600 hover:bg-sky-50 bg-white rounded-lg font-medium text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
+                        <button onclick="window.location.href='shiti_jiexi_pc.html?type=wrong'" class="w-full h-10 border border-sky-500 text-sky-500 hover:bg-sky-50 active:bg-sky-100 bg-white rounded-lg font-medium text-sm transition-colors flex items-center justify-center cursor-pointer">
                             错题解析
                         </button>
-                        <button onclick="window.location.href='cuotiben_pc.html'" class="w-full h-9 border border-sky-500 text-sky-600 hover:bg-sky-50 bg-white rounded-lg font-medium text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
+                        <button onclick="window.location.href='cuotiben_pc.html'" class="w-full h-10 border border-sky-500 text-sky-500 hover:bg-sky-50 active:bg-sky-100 bg-white rounded-lg font-medium text-sm transition-colors flex items-center justify-center cursor-pointer">
                             查看错题本
                         </button>
-                        <button id="btn-reanswer" onclick="window.location.href='dati_yemian_pc.html'" class="w-full h-9 border border-sky-500 text-sky-600 hover:bg-sky-50 bg-white rounded-lg font-medium text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
+                        <button id="btn-reanswer" onclick="window.location.href='dati_yemian_pc.html'" class="w-full h-10 border border-sky-500 text-sky-500 hover:bg-sky-50 active:bg-sky-100 bg-white rounded-lg font-medium text-sm transition-colors flex items-center justify-center cursor-pointer">
                             再次答题/继续答题
                         </button>
-                        <button onclick="handlePcGoBack()" class="w-full h-9 border border-sky-500 text-sky-600 hover:bg-sky-50 bg-white rounded-lg font-medium text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
+                        <button onclick="handlePcGoBack()" class="w-full h-10 border border-sky-500 text-sky-500 hover:bg-sky-50 active:bg-sky-100 bg-white rounded-lg font-medium text-sm transition-colors flex items-center justify-center cursor-pointer">
                             返回
                         </button>
                     </div>
@@ -649,7 +649,7 @@
                 window.location.replace(from.endsWith('.html') ? from : `${from}.html`);
                 return;
             }
-            if (window.history.length > 1 && document.referrer && !document.referrer.includes('baogao_zhangjie_pc')) {
+            if (window.history.length > 1 && document.referrer && !document.referrer.includes('baogao_gushua')) {
                 window.history.back();
             } else {
                 window.location.replace('shuati_mulu_pc.html');

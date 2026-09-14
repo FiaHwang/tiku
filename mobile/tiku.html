@@ -2894,7 +2894,9 @@
                 const modeName = activeMode ? activeMode.textContent.trim() : '';
                 if (modeName === '估分试卷') {
                     window.location.href = 'baogao_gufen.html';
-                } else if (['统考试卷', '固定刷题', '大联考', '历年真题'].includes(modeName)) {
+                } else if (modeName === '固定刷题') {
+                    window.location.href = 'baogao_gushua.html';
+                } else if (['统考试卷', '大联考', '历年真题'].includes(modeName)) {
                     if (modeName === '统考试卷') {
                         window.location.href = 'baogao_guda.html?from=tongkao';
                     } else if (modeName === '大联考') {
