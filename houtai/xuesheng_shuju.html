@@ -956,6 +956,28 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- 右侧：更新提示与操作 -->
+                    <div class="flex flex-wrap items-center gap-3 text-xs ml-auto">
+                        <!-- 提示：真题试卷有变更请点击更新 -->
+                        <div class="inline-flex items-center gap-1.5 text-amber-700 bg-amber-50/90 border border-amber-200/80 px-2.5 py-1 rounded-md shadow-2xs">
+                            <i class="fas fa-info-circle text-amber-500 text-xs"></i>
+                            <span class="font-medium">真题试卷有变更请点击更新</span>
+                        </div>
+
+                        <!-- 更新按钮 -->
+                        <button type="button" id="btnUpdateHeatData" onclick="handleUpdateHeatData()" 
+                            class="inline-flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-orange-50 active:bg-orange-100 border border-slate-200 hover:border-orange-300 text-slate-700 hover:text-orange-600 rounded-md font-medium text-xs shadow-2xs transition-all cursor-pointer group">
+                            <i class="fas fa-sync-alt text-slate-400 group-hover:text-orange-500 text-[11px] transition-transform" id="heatSyncIcon"></i>
+                            <span id="heatUpdateBtnText">更新</span>
+                        </button>
+
+                        <!-- 上次更新时间 -->
+                        <div class="flex items-center gap-1 text-slate-500 bg-slate-50 border border-slate-200/70 px-2.5 py-1 rounded-md text-xs">
+                            <span class="text-slate-400 select-none">上次更新时间：</span>
+                            <span id="heatLastUpdateTime" class="font-mono text-slate-700 font-medium">2026-09-15 14:30:25</span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- 考点热度 全景表格 -->
@@ -2838,11 +2860,87 @@
             }
         }
 
+        // 考点热度更新交互逻辑
+        function getFormattedCurrentDateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+
+        function initHeatUpdateTime() {
+            const savedTime = localStorage.getItem('heat_last_update_time');
+            const timeEl = document.getElementById('heatLastUpdateTime');
+            if (timeEl) {
+                timeEl.textContent = savedTime || '2026-09-15 14:30:25';
+            }
+        }
+
+        function handleUpdateHeatData() {
+            const btn = document.getElementById('btnUpdateHeatData');
+            const icon = document.getElementById('heatSyncIcon');
+            const btnText = document.getElementById('heatUpdateBtnText');
+            const timeEl = document.getElementById('heatLastUpdateTime');
+
+            if (icon) icon.classList.add('fa-spin');
+            if (btnText) btnText.textContent = '更新中...';
+            if (btn) btn.disabled = true;
+
+            // 模拟拉取最新真题试卷考点热度数据
+            setTimeout(() => {
+                if (icon) icon.classList.remove('fa-spin');
+                if (btnText) btnText.textContent = '已更新';
+                if (btn) btn.disabled = false;
+
+                const newTime = getFormattedCurrentDateTime();
+                if (timeEl) {
+                    timeEl.textContent = newTime;
+                }
+                localStorage.setItem('heat_last_update_time', newTime);
+
+                // 重新渲染热度表格以反映最新状态
+                renderHeatTable();
+
+                // 弹出轻量级反馈提示
+                showHeatUpdateToast('真题考点热度数据已同步更新至最新！');
+
+                setTimeout(() => {
+                    if (btnText) btnText.textContent = '更新';
+                }, 1800);
+            }, 600);
+        }
+
+        function showHeatUpdateToast(msg) {
+            let toast = document.getElementById('heatUpdateToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'heatUpdateToast';
+                toast.className = 'fixed top-5 right-5 z-50 flex items-center gap-2 bg-slate-900/90 text-white text-xs px-4 py-2.5 rounded-lg shadow-xl backdrop-blur-sm transition-all duration-300 opacity-0 pointer-events-none transform translate-y-[-10px]';
+                toast.innerHTML = `<i class="fas fa-check-circle text-emerald-400"></i><span id="heatUpdateToastMsg"></span>`;
+                document.body.appendChild(toast);
+            }
+            const msgEl = document.getElementById('heatUpdateToastMsg');
+            if (msgEl) msgEl.textContent = msg;
+
+            toast.classList.remove('opacity-0', 'translate-y-[-10px]', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-[-10px]', 'pointer-events-none');
+            }, 2500);
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             updateProductLineClearBtn();
             renderWeaknessTable('chapter');
             renderAllRankings();
             setHeatYears(5);
+            initHeatUpdateTime();
             initCharts();
         });
     </script>
