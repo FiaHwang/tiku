@@ -921,38 +921,74 @@
                             <h3 class="font-bold text-slate-800 text-sm md:text-base">真题考点热度</h3>
                         </div>
 
-                        <!-- 手动调整近几年 (默认近5年，最多支持50年) -->
-                        <div class="inline-flex items-center gap-2 bg-slate-100/90 p-1 rounded-lg border border-slate-200/70 text-xs">
-                            <div class="flex items-center bg-white rounded-md border border-slate-200 shadow-2xs pl-2 pr-1 py-0.5">
-                                <span class="text-slate-500 font-medium select-none">近</span>
-                                <input type="number" id="heatYearsInput" min="1" max="50" value="5"
-                                    onchange="handleHeatYearsInputChange(this.value)"
-                                    onkeydown="if(event.key==='Enter') handleHeatYearsInputChange(this.value)"
-                                    class="w-8 text-center font-bold text-orange-600 focus:outline-none text-xs bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
-                                <span class="text-slate-500 font-medium select-none mr-1">年</span>
-                                <div class="flex flex-col border-l border-slate-200 pl-0.5">
-                                    <button type="button" onclick="adjustHeatYears(1)" title="增加1年" class="px-1 text-slate-400 hover:text-orange-600 cursor-pointer text-[9px] leading-tight transition-colors">
-                                        <i class="fas fa-chevron-up"></i>
-                                    </button>
-                                    <button type="button" onclick="adjustHeatYears(-1)" title="减少1年" class="px-1 text-slate-400 hover:text-orange-600 cursor-pointer text-[9px] leading-tight transition-colors">
-                                        <i class="fas fa-chevron-down"></i>
-                                    </button>
-                                </div>
+                        <!-- 起止年份筛选 (支持2001年到今年) -->
+                        <div class="flex items-center bg-white rounded-lg border border-slate-200/90 shadow-2xs px-2.5 py-1 gap-1.5 text-xs">
+                            <i class="far fa-calendar-alt text-orange-500 text-xs"></i>
+                            <span class="text-slate-500 font-medium select-none">年份范围</span>
+                            <div class="relative inline-flex items-center">
+                                <select id="heatStartYear" onchange="handleHeatYearChange()"
+                                    class="appearance-none bg-transparent pl-1 pr-4 py-0.5 font-bold text-orange-600 focus:outline-none cursor-pointer text-xs">
+                                    <option value="2026">2026年</option>
+                                    <option value="2025">2025年</option>
+                                    <option value="2024">2024年</option>
+                                    <option value="2023">2023年</option>
+                                    <option value="2022">2022年</option>
+                                    <option value="2021">2021年</option>
+                                    <option value="2020" selected>2020年</option>
+                                    <option value="2019">2019年</option>
+                                    <option value="2018">2018年</option>
+                                    <option value="2017">2017年</option>
+                                    <option value="2016">2016年</option>
+                                    <option value="2015">2015年</option>
+                                    <option value="2014">2014年</option>
+                                    <option value="2013">2013年</option>
+                                    <option value="2012">2012年</option>
+                                    <option value="2011">2011年</option>
+                                    <option value="2010">2010年</option>
+                                    <option value="2009">2009年</option>
+                                    <option value="2008">2008年</option>
+                                    <option value="2007">2007年</option>
+                                    <option value="2006">2006年</option>
+                                    <option value="2005">2005年</option>
+                                    <option value="2004">2004年</option>
+                                    <option value="2003">2003年</option>
+                                    <option value="2002">2002年</option>
+                                    <option value="2001">2001年</option>
+                                </select>
+                                <i class="fas fa-chevron-down text-[8px] text-slate-400 pointer-events-none absolute right-0.5"></i>
                             </div>
-                            <!-- 快捷选择胶囊 -->
-                            <div class="inline-flex items-center gap-1">
-                                <button type="button" id="heatQuick3" onclick="setHeatYears(3)" 
-                                    class="heat-quick-tab px-2 py-0.5 rounded-md transition-all text-slate-500 hover:text-slate-800 cursor-pointer">
-                                    近3年
-                                </button>
-                                <button type="button" id="heatQuick5" onclick="setHeatYears(5)" 
-                                    class="heat-quick-tab px-2 py-0.5 rounded-md transition-all bg-white text-orange-600 font-semibold shadow-2xs cursor-pointer">
-                                    近5年
-                                </button>
-                                <button type="button" id="heatQuick10" onclick="setHeatYears(10)" 
-                                    class="heat-quick-tab px-2 py-0.5 rounded-md transition-all text-slate-500 hover:text-slate-800 cursor-pointer">
-                                    近10年
-                                </button>
+                            <span class="text-slate-400 font-light select-none">至</span>
+                            <div class="relative inline-flex items-center">
+                                <select id="heatEndYear" onchange="handleHeatYearChange()"
+                                    class="appearance-none bg-transparent pl-1 pr-4 py-0.5 font-bold text-orange-600 focus:outline-none cursor-pointer text-xs">
+                                    <option value="2026">2026年</option>
+                                    <option value="2025">2025年</option>
+                                    <option value="2024" selected>2024年</option>
+                                    <option value="2023">2023年</option>
+                                    <option value="2022">2022年</option>
+                                    <option value="2021">2021年</option>
+                                    <option value="2020">2020年</option>
+                                    <option value="2019">2019年</option>
+                                    <option value="2018">2018年</option>
+                                    <option value="2017">2017年</option>
+                                    <option value="2016">2016年</option>
+                                    <option value="2015">2015年</option>
+                                    <option value="2014">2014年</option>
+                                    <option value="2013">2013年</option>
+                                    <option value="2012">2012年</option>
+                                    <option value="2011">2011年</option>
+                                    <option value="2010">2010年</option>
+                                    <option value="2009">2009年</option>
+                                    <option value="2008">2008年</option>
+                                    <option value="2007">2007年</option>
+                                    <option value="2006">2006年</option>
+                                    <option value="2005">2005年</option>
+                                    <option value="2004">2004年</option>
+                                    <option value="2003">2003年</option>
+                                    <option value="2002">2002年</option>
+                                    <option value="2001">2001年</option>
+                                </select>
+                                <i class="fas fa-chevron-down text-[8px] text-slate-400 pointer-events-none absolute right-0.5"></i>
                             </div>
                         </div>
                     </div>
@@ -2444,70 +2480,105 @@
             { id: 35, name: "反函数与隐函数的求导法则", freqYears: 5, freqYearsTested: [2020, 2022, 2023, 2024], freq10: 9, freq10Tested: [2016, 2018, 2020, 2022, 2023, 2024], difficulty: "中", star: 4, commonTypes: ["单选题", "填空题"], scoreRatio: "4.1%", totalAvgScore: "6.0分", avgScore: "3.9分", accuracy: "64.2%" }
         ];
 
-        let currentHeatPeriod = 5; // 默认近5年 (支持手动调整 1~10 年)
+        let heatStartYear = 2020;
+        let heatEndYear = 2024;
+        let currentHeatPeriod = 5; // 保持兼容
         let heatCurrentPage = 1;
         let heatPageSize = 10;
         let heatSortField = 'freqYears'; // 默认按考频排序
         let heatSortOrder = 'desc'; // 'desc' | 'asc'
 
-        // 动态计算考频与考查年份（基准最新年为 2024，最多支持50年）
-        function getHeatItemFreq(item, period) {
-            if (period === 5) return item.freqYears;
-            if (period === 10) return item.freq10;
-            if (period <= 10) {
-                const startYear = 2025 - period;
-                const tested = (item.freq10Tested || []).filter(y => y >= startYear);
-                if (tested.length === 0) return 0;
-                const totalYearsCount = (item.freq10Tested && item.freq10Tested.length) ? item.freq10Tested.length : 1;
-                const ratio = (item.freq10 || item.freqYears) / totalYearsCount;
-                return Math.max(tested.length, Math.round(tested.length * ratio));
+        // 获取考点自2001年至今的全部历年真题考查记录
+        function getItemAllHistoricalYears(item) {
+            if (item._allHistoricalYears) return item._allHistoricalYears;
+            const yearsSet = new Set(item.freq10Tested || item.freqYearsTested || []);
+            
+            // 补充2025、2026年考查记录（根据考点星级与权重）
+            if (item.star >= 4 || (item.id % 2 === 0)) {
+                yearsSet.add(2025);
             }
-            // period > 10 (最多支持50年)
-            const baseFreq10 = item.freq10 || Math.round(item.freqYears * 1.8);
-            const extraYears = period - 10;
-            const annualRate = baseFreq10 / 10;
-            const extraFreq = Math.round(extraYears * annualRate * 0.85);
-            return baseFreq10 + extraFreq;
-        }
-
-        function getHeatItemTestedYears(item, period) {
-            let years = [];
-            if (period === 5) {
-                years = [...(item.freqYearsTested || [])];
-            } else if (period <= 10) {
-                const startYear = 2025 - period;
-                years = (item.freq10Tested || []).filter(y => y >= startYear);
-            } else {
-                years = [...(item.freq10Tested || [])];
+            if (item.star === 5 || (item.id % 3 === 0 && item.star >= 4)) {
+                yearsSet.add(2026);
             }
-            // 按照由新到旧排序 (降序：2024 -> 2023 -> 2022...)
-            return years.sort((a, b) => b - a);
-        }
 
-        function setHeatYears(years) {
-            let n = parseInt(years, 10);
-            if (isNaN(n) || n < 1) n = 1;
-            if (n > 50) n = 50;
-            currentHeatPeriod = n;
-
-            // 同步输入框
-            const inputEl = document.getElementById('heatYearsInput');
-            if (inputEl) inputEl.value = n;
-
-            // 同步快捷标签高亮状态
-            const quickTabs = [3, 5, 10];
-            quickTabs.forEach(q => {
-                const btn = document.getElementById(`heatQuick${q}`);
-                if (btn) {
-                    if (q === n) {
-                        btn.className = 'heat-quick-tab px-2 py-0.5 rounded-md transition-all bg-white text-orange-600 font-semibold shadow-2xs cursor-pointer';
-                    } else {
-                        btn.className = 'heat-quick-tab px-2 py-0.5 rounded-md transition-all text-slate-500 hover:text-slate-800 cursor-pointer';
-                    }
+            // 补充2001-2014历史真题考查记录
+            for (let y = 2001; y <= 2014; y++) {
+                if (item.star === 5) {
+                    if ((y + item.id) % 6 !== 0) yearsSet.add(y);
+                } else if (item.star === 4) {
+                    if ((y + item.id) % 2 === 0) yearsSet.add(y);
+                } else if (item.star === 3) {
+                    if ((y + item.id) % 3 === 0) yearsSet.add(y);
+                } else {
+                    if ((y + item.id) % 4 === 0) yearsSet.add(y);
                 }
-            });
+            }
 
-            // 保持表头为简洁的“考频”，不加年份后缀
+            item._allHistoricalYears = Array.from(yearsSet).sort((a, b) => b - a);
+            return item._allHistoricalYears;
+        }
+
+        // 初始化起止年份下拉列表（支持2001年至今年）
+        function initHeatYearSelects() {
+            const startEl = document.getElementById('heatStartYear');
+            const endEl = document.getElementById('heatEndYear');
+            if (!startEl || !endEl) return;
+            const currentYear = new Date().getFullYear();
+            const minYear = 2001;
+            
+            let optionsHtml = '';
+            for (let y = currentYear; y >= minYear; y--) {
+                optionsHtml += `<option value="${y}">${y}年</option>`;
+            }
+            startEl.innerHTML = optionsHtml;
+            endEl.innerHTML = optionsHtml;
+            
+            startEl.value = heatStartYear;
+            endEl.value = heatEndYear;
+        }
+
+        // 动态计算起止年份内的考查年份与考频
+        function getHeatItemTestedYears(item, startYear, endYear) {
+            const s = Math.min(startYear, endYear);
+            const e = Math.max(startYear, endYear);
+            const allYears = getItemAllHistoricalYears(item);
+            const matched = allYears.filter(y => y >= s && y <= e);
+            // 按照由新到旧降序排序 (例如: 2026 -> 2024 -> 2020...)
+            return matched.sort((a, b) => b - a);
+        }
+
+        function getHeatItemFreq(item, startYear, endYear) {
+            const s = Math.min(startYear, endYear);
+            const e = Math.max(startYear, endYear);
+            if (s === 2020 && e === 2024) return item.freqYears;
+            if (s === 2015 && e === 2024) return item.freq10;
+
+            const matchedYears = getHeatItemTestedYears(item, s, e);
+            if (matchedYears.length === 0) return 0;
+
+            const multiRatio = (item.freqYears / (item.freqYearsTested?.length || 1)) || 1.35;
+            return Math.max(matchedYears.length, Math.round(matchedYears.length * multiRatio));
+        }
+
+        function setHeatYearRange(startY, endY) {
+            let s = parseInt(startY, 10) || 2020;
+            let e = parseInt(endY, 10) || 2024;
+            if (s > e) {
+                const tmp = s;
+                s = e;
+                e = tmp;
+            }
+            heatStartYear = s;
+            heatEndYear = e;
+            currentHeatPeriod = e - s + 1;
+
+            // 同步下拉框
+            const startEl = document.getElementById('heatStartYear');
+            const endEl = document.getElementById('heatEndYear');
+            if (startEl) startEl.value = s;
+            if (endEl) endEl.value = e;
+
+            // 保持表头为简洁的“考频”
             const thText = document.getElementById('th-freqYears-text');
             if (thText) {
                 thText.textContent = '考频';
@@ -2518,15 +2589,45 @@
             renderHeatTable();
         }
 
+        function handleHeatYearChange() {
+            const startEl = document.getElementById('heatStartYear');
+            const endEl = document.getElementById('heatEndYear');
+            if (!startEl || !endEl) return;
+
+            let s = parseInt(startEl.value, 10);
+            let e = parseInt(endEl.value, 10);
+
+            if (s > e) {
+                // 若起始年份大于截止年份，自动把截止年份调整为相同
+                endEl.value = s;
+                e = s;
+            }
+
+            heatStartYear = s;
+            heatEndYear = e;
+            currentHeatPeriod = e - s + 1;
+
+            heatCurrentPage = 1;
+            renderHeatTable();
+        }
+
+        // 向下兼容旧调用
+        function setHeatYears(years) {
+            let n = parseInt(years, 10);
+            if (isNaN(n) || n < 1) n = 5;
+            const endY = 2024;
+            const startY = Math.max(2015, endY - n + 1);
+            setHeatYearRange(startY, endY);
+        }
+
         function adjustHeatYears(delta) {
-            setHeatYears(currentHeatPeriod + delta);
+            setHeatYearRange(heatStartYear - delta, heatEndYear);
         }
 
         function handleHeatYearsInputChange(val) {
             setHeatYears(val);
         }
 
-        // 向下兼容旧调用
         function switchHeatPeriod(period) {
             setHeatYears(period);
         }
@@ -2563,8 +2664,8 @@
                 let valA = 0;
                 let valB = 0;
 
-                const freqA = getHeatItemFreq(a, currentHeatPeriod);
-                const freqB = getHeatItemFreq(b, currentHeatPeriod);
+                const freqA = getHeatItemFreq(a, heatStartYear, heatEndYear);
+                const freqB = getHeatItemFreq(b, heatStartYear, heatEndYear);
 
                 if (heatSortField === 'freqYears') {
                     valA = freqA;
@@ -2648,8 +2749,8 @@
             tbody.innerHTML = pageData.map((item, idx) => {
                 const rowNum = startIdx + idx + 1;
                 const accNum = parseFloat(item.accuracy.replace('%', ''));
-                const itemFreq = getHeatItemFreq(item, currentHeatPeriod);
-                const itemYearsTested = getHeatItemTestedYears(item, currentHeatPeriod);
+                const itemFreq = getHeatItemFreq(item, heatStartYear, heatEndYear);
+                const itemYearsTested = getHeatItemTestedYears(item, heatStartYear, heatEndYear);
                 
                 // 考频徽章 (考查题数/次数，同一年份可包含多次考查)
                 let freqBadge = '';
@@ -2670,7 +2771,8 @@
                 // 知识点下方年份标签 (超出5个时再省略：<=5个直接显示；>5个展示最新的前5个并提供+N年展开/收起与悬浮全量提示)
                 let yearPills = '';
                 if (itemYearsTested.length === 0) {
-                    yearPills = `<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-50 text-slate-400 font-mono">近${currentHeatPeriod}年未考查</span>`;
+                    const rangeLabel = heatStartYear === heatEndYear ? `${heatStartYear}年` : `${heatStartYear}-${heatEndYear}年`;
+                    yearPills = `<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-50 text-slate-400 font-mono">${rangeLabel}未考查</span>`;
                 } else if (itemYearsTested.length <= 5) {
                     yearPills = itemYearsTested.map(y => `<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 font-mono whitespace-nowrap">${y}</span>`).join('');
                 } else {
@@ -2842,7 +2944,7 @@
             if (startInput) startInput.value = '2026-07-24';
             if (endInput) endInput.value = '2026-07-24';
 
-            setHeatYears(5);
+            setHeatYearRange(2020, 2024);
             heatSortField = 'freqYears';
             heatSortOrder = 'desc';
             heatCurrentPage = 1;
@@ -2936,10 +3038,11 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            initHeatYearSelects();
             updateProductLineClearBtn();
             renderWeaknessTable('chapter');
             renderAllRankings();
-            setHeatYears(5);
+            setHeatYearRange(2020, 2024);
             initHeatUpdateTime();
             initCharts();
         });

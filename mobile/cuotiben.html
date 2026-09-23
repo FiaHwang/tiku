@@ -629,7 +629,6 @@
     <!-- 错题来源切换 -->
     <div class="source-tabs">
         <div class="source-tab active">题型分类</div>
-        <div class="source-tab">难度分类</div>
         <div class="source-tab">知识点分类</div>
         <div class="source-tab">拍错题</div>
     </div>
@@ -677,57 +676,6 @@
             <div class="error-category-card">
                 <div class="error-category-title">判断题</div>
                 <div class="error-category-count">共2道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
-            </div>
-        </div>
-
-        <!-- 难度分类部分 -->
-        <div class="error-category-grid" id="by-difficulty-section" style="display: none;">
-            <!-- 全部 -->
-            <div class="error-category-card">
-                <div class="error-category-title">全部</div>
-                <div class="error-category-count">共109道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
-            </div>
-
-            <!-- 易 -->
-            <div class="error-category-card">
-                <div class="error-category-title">易</div>
-                <div class="error-category-count">共15道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
-            </div>
-
-            <!-- 较易 -->
-            <div class="error-category-card">
-                <div class="error-category-title">较易</div>
-                <div class="error-category-count">共28道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
-            </div>
-
-            <!-- 中 -->
-            <div class="error-category-card">
-                <div class="error-category-title">中</div>
-                <div class="error-category-count">共42道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
-            </div>
-
-            <!-- 较难 -->
-            <div class="error-category-card">
-                <div class="error-category-title">较难</div>
-                <div class="error-category-count">共18道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
-            </div>
-
-            <!-- 难 -->
-            <div class="error-category-card">
-                <div class="error-category-title">难</div>
-                <div class="error-category-count">共6道</div>
                 <button class="view-btn">查看</button>
                 <div class="book-icon"><i class="fas fa-book-open"></i></div>
             </div>
@@ -1120,25 +1068,16 @@
                 
                 if (text === '题型分类') {
                     document.getElementById('by-type-section').style.display = 'grid';
-                    if (document.getElementById('by-difficulty-section')) document.getElementById('by-difficulty-section').style.display = 'none';
                     document.getElementById('by-knowledge-section').style.display = 'none';
                     if (document.getElementById('by-photo-section')) document.getElementById('by-photo-section').style.display = 'none';
                     localStorage.setItem('cuotiben_active_tab', '题型分类');
-                } else if (text === '难度分类') {
-                    document.getElementById('by-type-section').style.display = 'none';
-                    if (document.getElementById('by-difficulty-section')) document.getElementById('by-difficulty-section').style.display = 'grid';
-                    document.getElementById('by-knowledge-section').style.display = 'none';
-                    if (document.getElementById('by-photo-section')) document.getElementById('by-photo-section').style.display = 'none';
-                    localStorage.setItem('cuotiben_active_tab', '难度分类');
                 } else if (text === '知识点分类') {
                     document.getElementById('by-type-section').style.display = 'none';
-                    if (document.getElementById('by-difficulty-section')) document.getElementById('by-difficulty-section').style.display = 'none';
                     document.getElementById('by-knowledge-section').style.display = 'block';
                     if (document.getElementById('by-photo-section')) document.getElementById('by-photo-section').style.display = 'none';
                     localStorage.setItem('cuotiben_active_tab', '知识点分类');
                 } else if (text === '拍错题') {
                     document.getElementById('by-type-section').style.display = 'none';
-                    if (document.getElementById('by-difficulty-section')) document.getElementById('by-difficulty-section').style.display = 'none';
                     document.getElementById('by-knowledge-section').style.display = 'none';
                     if (document.getElementById('by-photo-section')) document.getElementById('by-photo-section').style.display = 'block';
                     localStorage.setItem('cuotiben_active_tab', '拍错题');
@@ -1320,7 +1259,7 @@
             } else {
                 let savedTab = localStorage.getItem('cuotiben_active_tab') || '题型分类';
                 if (savedTab === '按题型') savedTab = '题型分类';
-                if (savedTab === '按难度') savedTab = '难度分类';
+                if (savedTab === '按难度' || savedTab === '难度分类') savedTab = '题型分类';
                 if (savedTab === '按知识点') savedTab = '知识点分类';
                 const matchedTab = Array.from(sourceTabs).find(t => t.textContent.trim() === savedTab);
                 if (matchedTab) {
