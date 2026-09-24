@@ -1152,28 +1152,119 @@
             { id: "k3", name: "病因辨证与六淫邪气特征", level: 1, count: "28,400", accuracy: "58.6%", time: "3分钟", status: "中度薄弱", alert: false }
         ];
 
-        const questionTypeData = [
-            { name: "问答题-综合证明题", struct: "问答题", count: "38,500", accuracy: "27.2%", time: "9分钟", status: "重点薄弱", alert: true },
-            { name: "问答题-算法编程", struct: "问答题", count: "31,200", accuracy: "31.6%", time: "9分钟", status: "重点薄弱", alert: true },
-            { name: "材料题-综合案例分析", struct: "材料题", count: "42,100", accuracy: "35.1%", time: "8分钟", status: "重点薄弱", alert: true },
-            { name: "问答题-长难句翻译与纠错", struct: "问答题", count: "58,600", accuracy: "38.5%", time: "5分钟", status: "重点薄弱", alert: true },
-            { name: "问答题-建模与综合计算", struct: "问答题", count: "52,400", accuracy: "41.8%", time: "7分钟", status: "重点薄弱", alert: true },
-            { name: "问答题-议论文写作", struct: "问答题", count: "46,800", accuracy: "44.3%", time: "12分钟", status: "重点薄弱", alert: true },
-            { name: "问答题-政治与时政论述", struct: "问答题", count: "63,200", accuracy: "47.7%", time: "6分钟", status: "重点薄弱", alert: true },
-            { name: "多选题-多选5项", struct: "多选题", count: "142,500", accuracy: "50.2%", time: "2分钟", status: "中度薄弱", alert: false },
-            { name: "不定项选择题-不定项选择4项", struct: "不定项选择题", count: "98,600", accuracy: "52.4%", time: "2分钟", status: "中度薄弱", alert: false },
-            { name: "问答题-概念要点简答", struct: "问答题", count: "78,900", accuracy: "54.8%", time: "3分钟", status: "中度薄弱", alert: false },
-            { name: "单选题-阅读理解推理", struct: "单选题", count: "168,400", accuracy: "57.9%", time: "2分钟", status: "中度薄弱", alert: false },
-            { name: "单选题-完形填空", struct: "单选题", count: "125,600", accuracy: "61.3%", time: "1分钟", status: "中度薄弱", alert: false },
-            { name: "问答题-应用文书信小作文", struct: "问答题", count: "54,100", accuracy: "64.8%", time: "7分钟", status: "掌握良好", alert: false },
-            { name: "材料题-材料分析解答", struct: "材料题", count: "71,200", accuracy: "67.2%", time: "5分钟", status: "掌握良好", alert: false },
-            { name: "填空题-图表状态追踪", struct: "填空题", count: "49,800", accuracy: "70.5%", time: "2分钟", status: "掌握良好", alert: false },
-            { name: "问答题-名词解释精准定义", struct: "问答题", count: "65,400", accuracy: "73.8%", time: "2分钟", status: "掌握良好", alert: false },
-            { name: "单选题-单选4项", struct: "单选题", count: "385,400", accuracy: "77%", time: "1分钟", status: "掌握良好", alert: false },
-            { name: "填空题-数值计算", struct: "填空题", count: "189,500", accuracy: "79.4%", time: "1分钟", status: "掌握良好", alert: false },
-            { name: "判断题-正误判断", struct: "判断题", count: "156,400", accuracy: "82.8%", time: "1分钟", status: "掌握良好", alert: false },
-            { name: "单选题-阅读理解细节定位", struct: "单选题", count: "214,500", accuracy: "85.5%", time: "2分钟", status: "掌握良好", alert: false }
+        const questionTypeTreeNodes = [
+            {
+                id: "qt-danxuan",
+                name: "单选题",
+                level: 1,
+                count: "893,900",
+                accuracy: "73.2%",
+                open: true,
+                children: [
+                    { id: "qt-danxuan-1", name: "单选4项", level: 2, count: "385,400", accuracy: "77.0%", time: "1分钟" },
+                    { id: "qt-danxuan-2", name: "阅读理解细节定位", level: 2, count: "214,500", accuracy: "85.5%", time: "2分钟" },
+                    { id: "qt-danxuan-3", name: "阅读理解推理", level: 2, count: "168,400", accuracy: "57.9%", time: "2分钟" },
+                    { id: "qt-danxuan-4", name: "完形填空", level: 2, count: "125,600", accuracy: "61.3%", time: "1分钟" }
+                ]
+            },
+            {
+                id: "qt-duoxuan",
+                name: "多选题",
+                level: 1,
+                count: "260,700",
+                accuracy: "49.5%",
+                open: true,
+                children: [
+                    { id: "qt-duoxuan-1", name: "多选5项", level: 2, count: "142,500", accuracy: "50.2%", time: "2分钟" },
+                    { id: "qt-duoxuan-2", name: "多选4项", level: 2, count: "118,200", accuracy: "48.6%", time: "2分钟" }
+                ]
+            },
+            {
+                id: "qt-budingxiang",
+                name: "不定项选择题",
+                level: 1,
+                count: "163,100",
+                accuracy: "50.2%",
+                open: true,
+                children: [
+                    { id: "qt-budingxiang-1", name: "不定项选择4项", level: 2, count: "98,600", accuracy: "52.4%", time: "2分钟" },
+                    { id: "qt-budingxiang-2", name: "案例辨析不定项", level: 2, count: "64,500", accuracy: "46.8%", time: "3分钟" }
+                ]
+            },
+            {
+                id: "qt-tiankong",
+                name: "填空题",
+                level: 1,
+                count: "239,300",
+                accuracy: "77.5%",
+                open: true,
+                children: [
+                    { id: "qt-tiankong-1", name: "数值计算", level: 2, count: "189,500", accuracy: "79.4%", time: "1分钟" },
+                    { id: "qt-tiankong-2", name: "图表状态追踪", level: 2, count: "49,800", accuracy: "70.5%", time: "2分钟" }
+                ]
+            },
+            {
+                id: "qt-panduan",
+                name: "判断题",
+                level: 1,
+                count: "228,600",
+                accuracy: "81.2%",
+                open: true,
+                children: [
+                    { id: "qt-panduan-1", name: "正误判断", level: 2, count: "156,400", accuracy: "82.8%", time: "1分钟" },
+                    { id: "qt-panduan-2", name: "概念辨析改错", level: 2, count: "72,200", accuracy: "77.6%", time: "1分钟" }
+                ]
+            },
+            {
+                id: "qt-wenda",
+                name: "问答题",
+                level: 1,
+                count: "489,100",
+                accuracy: "45.6%",
+                open: true,
+                children: [
+                    { id: "qt-wenda-1", name: "概念要点简答", level: 2, count: "78,900", accuracy: "54.8%", time: "3分钟" },
+                    { id: "qt-wenda-2", name: "名词解释精准定义", level: 2, count: "65,400", accuracy: "73.8%", time: "2分钟" },
+                    { id: "qt-wenda-3", name: "政治与时政论述", level: 2, count: "63,200", accuracy: "47.7%", time: "6分钟" },
+                    { id: "qt-wenda-4", name: "长难句翻译与纠错", level: 2, count: "58,600", accuracy: "38.5%", time: "5分钟" },
+                    { id: "qt-wenda-5", name: "应用文书信小作文", level: 2, count: "54,100", accuracy: "64.8%", time: "7分钟" },
+                    { id: "qt-wenda-6", name: "建模与综合计算", level: 2, count: "52,400", accuracy: "41.8%", time: "7分钟" },
+                    { id: "qt-wenda-7", name: "议论文写作", level: 2, count: "46,800", accuracy: "44.3%", time: "12分钟" },
+                    { id: "qt-wenda-8", name: "综合证明题", level: 2, count: "38,500", accuracy: "27.2%", time: "9分钟" },
+                    { id: "qt-wenda-9", name: "算法编程", level: 2, count: "31,200", accuracy: "31.6%", time: "9分钟" }
+                ]
+            },
+            {
+                id: "qt-cailiao",
+                name: "材料题",
+                level: 1,
+                count: "113,300",
+                accuracy: "55.2%",
+                open: true,
+                children: [
+                    { id: "qt-cailiao-1", name: "材料分析解答", level: 2, count: "71,200", accuracy: "67.2%", time: "5分钟" },
+                    { id: "qt-cailiao-2", name: "综合案例分析", level: 2, count: "42,100", accuracy: "35.1%", time: "8分钟" }
+                ]
+            }
         ];
+
+        // 扁平化兼容别名
+        const questionTypeData = [];
+        questionTypeTreeNodes.forEach(group => {
+            if (group.children) {
+                group.children.forEach(c => {
+                    questionTypeData.push({
+                        name: c.name,
+                        struct: group.name,
+                        count: c.count,
+                        accuracy: c.accuracy,
+                        time: c.time || '2分钟',
+                        status: parseFloat(c.accuracy) < 50 ? '重点薄弱' : (parseFloat(c.accuracy) < 65 ? '中度薄弱' : '掌握良好'),
+                        alert: parseFloat(c.accuracy) < 50
+                    });
+                });
+            }
+        });
 
         // 统一百分比格式化工具（去除末尾无意义的 .0 等）
         function formatPercent(val) {
@@ -1283,7 +1374,7 @@
                             <td class="p-2 ${indentClass}">
                                 <div class="flex items-center">
                                     <span onclick="toggleTreeNode('${node.id}', event)" class="cursor-pointer select-none">${caretIcon}</span>
-                                    <span class="text-xs ${isSelected ? 'text-slate-900 font-semibold' : 'text-slate-700'}">${node.name}</span>
+                                    <span class="text-xs ${isSelected ? 'text-slate-900 font-semibold' : (node.level === 1 ? 'text-slate-800 font-semibold' : 'text-slate-700')}">${node.name}</span>
                                 </div>
                             </td>
                             <td class="p-2 text-slate-600">${String(node.count || '').replace(/次/g, '')}</td>
@@ -1315,72 +1406,31 @@
             }
             const kw = keyword !== undefined ? keyword : (searchInput ? searchInput.value.trim() : '');
 
-            if (type === 'questionType') {
-                if (head) {
-                    head.innerHTML = `
-                        <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
-                            <th class="p-2 font-medium">题型名称</th>
-                            <th class="p-2 font-medium text-center">试题结构</th>
-                            <th class="p-2 font-medium">答题量</th>
-                            <th class="p-2 font-medium text-right">正确率</th>
-                        </tr>
-                    `;
-                }
+            let colName = '章节名称';
+            let nodes = chapterTreeNodes;
+            if (type === 'knowledge') {
+                colName = '知识点名称';
+                nodes = knowledgeTreeNodes;
+            } else if (type === 'questionType') {
+                colName = '题型名称';
+                nodes = questionTypeTreeNodes;
+            }
 
-                const filteredQ = questionTypeData.filter(item => {
-                    const keyMatches = !kw || item.name.toLowerCase().includes(kw.toLowerCase()) || (item.struct && item.struct.toLowerCase().includes(kw.toLowerCase()));
-                    const itemAcc = getAccuracyValue(item.accuracy);
-                    const accMatches = !filterAcc || (itemAcc < threshold);
-                    return keyMatches && accMatches;
-                });
+            if (head) {
+                head.innerHTML = `
+                    <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
+                        <th class="p-2 font-medium">${colName}</th>
+                        <th class="p-2 font-medium">答题量</th>
+                        <th class="p-2 font-medium text-right">正确率</th>
+                    </tr>
+                `;
+            }
 
-                if (filteredQ.length === 0) {
-                    body.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">暂无符合筛选条件的数据</td></tr>`;
-                } else {
-                    const getStructBadge = (struct) => {
-                        switch (struct) {
-                            case '单选题': return '<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-700 border border-blue-200/60">单选题</span>';
-                            case '多选题': return '<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-purple-50 text-purple-700 border border-purple-200/60">多选题</span>';
-                            case '不定项选择题': return '<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-indigo-50 text-indigo-700 border border-indigo-200/60">不定项选择题</span>';
-                            case '填空题': return '<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-cyan-50 text-cyan-700 border border-cyan-200/60">填空题</span>';
-                            case '判断题': return '<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60">判断题</span>';
-                            case '问答题': return '<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-orange-50 text-orange-700 border border-orange-200/60">问答题</span>';
-                            case '材料题': return '<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-rose-50 text-rose-700 border border-rose-200/60">材料题</span>';
-                            default: return `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-700">${struct}</span>`;
-                        }
-                    };
-
-                    body.innerHTML = filteredQ.map(item => {
-                        const itemAcc = getAccuracyValue(item.accuracy);
-                        const structName = item.struct || (item.name.includes('-') ? item.name.split('-')[0] : '其他');
-                        return `
-                            <tr class="hover:bg-slate-50 transition-colors">
-                                <td class="p-2 font-semibold text-slate-800">${item.name}</td>
-                                <td class="p-2 text-center">${getStructBadge(structName)}</td>
-                                <td class="p-2 text-slate-600">${String(item.count || '').replace(/次/g, '')}</td>
-                                <td class="p-2 font-bold text-right ${itemAcc < 50 ? 'text-rose-600' : 'text-slate-800'}">${formatPercent(item.accuracy)}</td>
-                            </tr>
-                        `;
-                    }).join('');
-                }
+            const rowsHtml = generateTreeHtml(nodes, kw, filterAcc, threshold, []);
+            if (rowsHtml.length === 0) {
+                body.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-slate-400">暂无符合筛选条件的数据</td></tr>`;
             } else {
-                if (head) {
-                    head.innerHTML = `
-                        <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
-                            <th class="p-2 font-medium">${type === 'chapter' ? '章节名称' : '知识点名称'}</th>
-                            <th class="p-2 font-medium">答题量</th>
-                            <th class="p-2 font-medium text-right">正确率</th>
-                        </tr>
-                    `;
-                }
-
-                const nodes = type === 'chapter' ? chapterTreeNodes : knowledgeTreeNodes;
-                const rowsHtml = generateTreeHtml(nodes, kw, filterAcc, threshold, []);
-                if (rowsHtml.length === 0) {
-                    body.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-slate-400">暂无符合筛选条件的数据</td></tr>`;
-                } else {
-                    body.innerHTML = rowsHtml.join('');
-                }
+                body.innerHTML = rowsHtml.join('');
             }
         }
 
@@ -1396,7 +1446,7 @@
                 }
                 return false;
             }
-            const nodes = currentWeaknessTab === 'chapter' ? chapterTreeNodes : knowledgeTreeNodes;
+            const nodes = currentWeaknessTab === 'chapter' ? chapterTreeNodes : (currentWeaknessTab === 'knowledge' ? knowledgeTreeNodes : questionTypeTreeNodes);
             findAndToggle(nodes);
             renderWeaknessTable(currentWeaknessTab);
         }
@@ -1404,6 +1454,20 @@
         function selectTreeNode(id, event) {
             if (event) event.stopPropagation();
             activeTreeNodeId = id;
+            function findAndToggle(nodes) {
+                for (let n of nodes) {
+                    if (n.id === id) {
+                        if (n.children && n.children.length > 0) {
+                            n.open = !n.open;
+                        }
+                        return true;
+                    }
+                    if (n.children && findAndToggle(n.children)) return true;
+                }
+                return false;
+            }
+            const nodes = currentWeaknessTab === 'chapter' ? chapterTreeNodes : (currentWeaknessTab === 'knowledge' ? knowledgeTreeNodes : questionTypeTreeNodes);
+            findAndToggle(nodes);
             renderWeaknessTable(currentWeaknessTab);
         }
 
