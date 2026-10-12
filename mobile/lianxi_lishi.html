@@ -471,6 +471,14 @@
             color: #22c55e;
         }
 
+        .status-teacher-reviewing {
+            color: #ea580c;
+        }
+
+        .status-teacher-reviewed {
+            color: #0d9488;
+        }
+
         .card-footer {
             display: flex;
             justify-content: space-between;
@@ -598,7 +606,52 @@
                 </div>
             </div>
 
-            <!-- 5. 估分试卷 -->
+            <!-- 5. 模拟试卷 (老师批改中) -->
+            <div class="history-card" onclick="viewReport('模拟试卷');">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <span class="module-badge" style="color: #ea580c; background-color: #fff7ed; border-color: #fed7aa;">模拟试卷</span>
+                        <span class="card-title">2026届高三年级教学质量诊断性模拟考试（二）语文试卷</span>
+                    </div>
+                    <span class="status-badge status-teacher-reviewing">老师批改中</span>
+                </div>
+                <div class="card-footer">
+                    <span class="card-time">2026年6月08日</span>
+                    <button class="action-btn btn-report" onclick="event.stopPropagation(); viewReport('模拟试卷');">查看报告</button>
+                </div>
+            </div>
+
+            <!-- 6. 月考试卷 (老师批改完成) -->
+            <div class="history-card" onclick="viewReport('月考试卷');">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <span class="module-badge" style="color: #0284c7; background-color: #f0f9ff; border-color: #bae6fd;">月考试卷</span>
+                        <span class="card-title">2026届高三下学期教学阶段质量检测（五月月考）语文试卷</span>
+                    </div>
+                    <span class="status-badge status-teacher-reviewed">老师批改完成</span>
+                </div>
+                <div class="card-footer">
+                    <span class="card-time">2026年6月04日</span>
+                    <button class="action-btn btn-report" onclick="event.stopPropagation(); viewReport('月考试卷');">查看报告</button>
+                </div>
+            </div>
+
+            <!-- 7. 估分试卷 (未完成 - 继续估分) -->
+            <div class="history-card" onclick="continueGufen('2026年高考语文考前押题与估分预测卷（二）');">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <span class="module-badge" style="color: #8b5cf6; background-color: #f5f3ff; border-color: #ddd6fe;">估分试卷</span>
+                        <span class="card-title">2026年高考语文考前押题与估分预测卷（二）</span>
+                    </div>
+                    <span class="status-badge status-uncompleted">未完成</span>
+                </div>
+                <div class="card-footer">
+                    <span class="card-time">2026年6月03日</span>
+                    <button class="action-btn btn-continue" onclick="event.stopPropagation(); continueGufen('2026年高考语文考前押题与估分预测卷（二）');">继续估分</button>
+                </div>
+            </div>
+
+            <!-- 8. 估分试卷 (已完成 - 查看报告) -->
             <div class="history-card" onclick="viewReport('估分试卷');">
                 <div class="card-header">
                     <div class="card-title-group">
@@ -613,7 +666,7 @@
                 </div>
             </div>
 
-            <!-- 6. 统考试卷 -->
+            <!-- 9. 统考试卷 -->
             <div class="history-card" onclick="viewReport('统考试卷');">
                 <div class="card-header">
                     <div class="card-title-group">
@@ -642,8 +695,24 @@
             window.location.href = 'dati_yemian.html?mode=knowledge&title=' + encodeURIComponent(subject);
         }
 
+        function continueGufen(subject) {
+            window.location.href = 'dati_yemian.html?mode=gufen&title=' + encodeURIComponent(subject || '估分试卷');
+        }
+
         function viewReport(subject) {
-            window.location.href = 'zhishidian_lianxi_baogao.html?title=' + encodeURIComponent(subject);
+            if (subject === '大联考') {
+                window.location.href = 'baogao_guda.html?from=daliankao&title=' + encodeURIComponent('2026届卓越联盟联合学业水准测试语文试卷');
+            } else if (subject === '统考试卷') {
+                window.location.href = 'baogao_guda.html?from=tongkao&title=' + encodeURIComponent('2026年普通高等学校招生全国统一考试高三学业诊断（一）');
+            } else if (subject === '模拟试卷') {
+                window.location.href = 'baogao_guda.html?from=moni&status=teacher_reviewing&title=' + encodeURIComponent('2026届高三年级教学质量诊断性模拟考试（二）语文试卷');
+            } else if (subject === '月考试卷') {
+                window.location.href = 'baogao_guda.html?from=yuekao&status=teacher_reviewed&title=' + encodeURIComponent('2026届高三下学期教学阶段质量检测（五月月考）语文试卷');
+            } else if (subject === '估分试卷') {
+                window.location.href = 'baogao_gufen.html?title=' + encodeURIComponent(subject);
+            } else {
+                window.location.href = 'zhishidian_lianxi_baogao.html?title=' + encodeURIComponent(subject);
+            }
         }
 
         function viewAnalysis(subject) {

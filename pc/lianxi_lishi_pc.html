@@ -278,6 +278,18 @@
             border: 1px solid #d3adf7;
         }
 
+        .status-teacher-reviewing {
+            color: #ea580c;
+            background-color: #fff7ed;
+            border: 1px solid #fed7aa;
+        }
+
+        .status-teacher-reviewed {
+            color: #0d9488;
+            background-color: #f0fdfa;
+            border: 1px solid #99f6e4;
+        }
+
         .card-time {
             font-size: 13px;
             color: #999;
@@ -332,6 +344,52 @@
         .action-btn-link.btn-continue:hover {
             background-color: #ff7875;
             border-color: #ff7875;
+        }
+
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 8px;
+            margin-top: 24px;
+            padding-bottom: 20px;
+        }
+
+        .pagination-btn {
+            padding: 6px 14px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            border-color: #ff4d4f;
+            color: #ff4d4f;
+        }
+
+        .pagination-btn.active {
+            background-color: #ff4d4f;
+            color: #fff;
+            border-color: #ff4d4f;
+        }
+
+        .pagination-btn:disabled {
+            color: #bfbfbf;
+            background-color: #f5f5f5;
+            border-color: #d9d9d9;
+            cursor: not-allowed;
+        }
+
+        .pagination-info {
+            font-size: 14px;
+            color: #666;
+            margin-right: 16px;
         }
 
         /* 页脚 */
@@ -454,7 +512,46 @@
                 </div>
             </div>
 
-            <!-- 5. 估分试卷 -->
+            <!-- 5. 模拟试卷 (老师批改中) -->
+            <div class="history-card" onclick="viewReport('模拟试卷');">
+                <div class="card-left">
+                    <span class="module-badge" style="color: #ea580c; background-color: #fff7ed; border-color: #fed7aa;">模拟试卷</span>
+                    <span class="card-title">2026届高三年级教学质量诊断性模拟考试（二）语文试卷</span>
+                </div>
+                <div class="card-right">
+                    <span class="status-badge status-teacher-reviewing">老师批改中</span>
+                    <span class="card-time">2026年6月08日</span>
+                    <button class="action-btn-link btn-report" onclick="event.stopPropagation(); viewReport('模拟试卷');">查看报告</button>
+                </div>
+            </div>
+
+            <!-- 6. 月考试卷 (老师批改完成) -->
+            <div class="history-card" onclick="viewReport('月考试卷');">
+                <div class="card-left">
+                    <span class="module-badge" style="color: #0284c7; background-color: #f0f9ff; border-color: #bae6fd;">月考试卷</span>
+                    <span class="card-title">2026届高三下学期教学阶段质量检测（五月月考）语文试卷</span>
+                </div>
+                <div class="card-right">
+                    <span class="status-badge status-teacher-reviewed">老师批改完成</span>
+                    <span class="card-time">2026年6月04日</span>
+                    <button class="action-btn-link btn-report" onclick="event.stopPropagation(); viewReport('月考试卷');">查看报告</button>
+                </div>
+            </div>
+
+            <!-- 7. 估分试卷 (未完成 - 继续估分) -->
+            <div class="history-card" onclick="continueGufen('2026年高考语文考前押题与估分预测卷（二）');">
+                <div class="card-left">
+                    <span class="module-badge" style="color: #8b5cf6; background-color: #f5f3ff; border-color: #ddd6fe;">估分试卷</span>
+                    <span class="card-title">2026年高考语文考前押题与估分预测卷（二）</span>
+                </div>
+                <div class="card-right">
+                    <span class="status-badge status-uncompleted">未完成</span>
+                    <span class="card-time">2026年6月03日</span>
+                    <button class="action-btn-link btn-continue" onclick="event.stopPropagation(); continueGufen('2026年高考语文考前押题与估分预测卷（二）');">继续估分</button>
+                </div>
+            </div>
+
+            <!-- 8. 估分试卷 (已完成 - 查看报告) -->
             <div class="history-card" onclick="viewReport('估分试卷');">
                 <div class="card-left">
                     <span class="module-badge" style="color: #8b5cf6; background-color: #f5f3ff; border-color: #ddd6fe;">估分试卷</span>
@@ -467,7 +564,7 @@
                 </div>
             </div>
 
-            <!-- 6. 统考试卷 -->
+            <!-- 9. 统考试卷 -->
             <div class="history-card" onclick="viewReport('统考试卷');">
                 <div class="card-left">
                     <span class="module-badge" style="color: #0d9488; background-color: #f0fdfa; border-color: #ccfbf1;">统考试卷</span>
@@ -479,6 +576,56 @@
                     <button class="action-btn-link btn-report" onclick="event.stopPropagation(); viewReport('统考试卷');">查看报告</button>
                 </div>
             </div>
+
+            <!-- 10. 章节练习 -->
+            <div class="history-card" onclick="viewAnalysis('章节练习');">
+                <div class="card-left">
+                    <span class="module-badge" style="color: #3b82f6; background-color: #eff6ff; border-color: #bfdbfe;">章节练习</span>
+                    <span class="card-title">第二章：古代诗歌表达技巧与意境鉴赏专题</span>
+                </div>
+                <div class="card-right">
+                    <span class="status-badge status-completed">已完成</span>
+                    <span class="card-time">2026年5月22日</span>
+                    <button class="action-btn-link btn-report" onclick="event.stopPropagation(); viewAnalysis('章节练习');">查看解析</button>
+                </div>
+            </div>
+
+            <!-- 11. 每日一练 -->
+            <div class="history-card" onclick="viewAnalysis('每日一练');">
+                <div class="card-left">
+                    <span class="module-badge" style="color: #10b981; background-color: #ecfdf5; border-color: #a7f3d0;">每日一练</span>
+                    <span class="card-title">2026年5月18日 语言文字运用核心素养专项突破</span>
+                </div>
+                <div class="card-right">
+                    <span class="status-badge status-completed">已完成</span>
+                    <span class="card-time">2026年5月18日</span>
+                    <button class="action-btn-link btn-report" onclick="event.stopPropagation(); viewAnalysis('每日一练');">查看解析</button>
+                </div>
+            </div>
+
+            <!-- 12. 历年真题 -->
+            <div class="history-card" onclick="startPractice('历年真题');">
+                <div class="card-left">
+                    <span class="module-badge" style="color: #eab308; background-color: #fef9c3; border-color: #fef08a;">历年真题</span>
+                    <span class="card-title">2024年普通高等学校招生全国统一考试高考语文真题</span>
+                </div>
+                <div class="card-right">
+                    <span class="status-badge status-completed">已完成</span>
+                    <span class="card-time">2026年5月12日</span>
+                    <button class="action-btn-link btn-report" onclick="event.stopPropagation(); viewReport('历年真题');">查看报告</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分页 -->
+        <div class="pagination">
+            <span class="pagination-info">共 12 条记录</span>
+            <button class="pagination-btn prev-btn" id="prevPageBtn">上一页</button>
+            <div id="pageNumbers" style="display: flex; gap: 8px;">
+                <button class="pagination-btn page-num active" data-page="1">1</button>
+                <button class="pagination-btn page-num" data-page="2">2</button>
+            </div>
+            <button class="pagination-btn next-btn" id="nextPageBtn">下一页</button>
         </div>
     </div>
 
@@ -510,6 +657,10 @@
             window.location.href = 'dati_yemian_pc.html?mode=knowledge&title=' + encodeURIComponent(subject);
         }
 
+        function continueGufen(subject) {
+            window.location.href = 'dati_yemian_pc.html?mode=gufen&title=' + encodeURIComponent(subject || '估分试卷');
+        }
+
         function viewReport(subject) {
             if (subject === '估分试卷') {
                 window.location.href = 'baogao_gufen_pc.html?title=' + encodeURIComponent(subject);
@@ -517,6 +668,10 @@
                 window.location.href = 'baogao_guda_pc.html?from=daliankao&title=' + encodeURIComponent('2026届卓越联盟联合学业水准测试语文试卷');
             } else if (subject === '统考试卷') {
                 window.location.href = 'baogao_guda_pc.html?from=tongkao&title=' + encodeURIComponent('2026年普通高等学校招生全国统一考试高三学业诊断（一）');
+            } else if (subject === '模拟试卷') {
+                window.location.href = 'baogao_guda_pc.html?from=moni&status=teacher_reviewing&title=' + encodeURIComponent('2026届高三年级教学质量诊断性模拟考试（二）语文试卷');
+            } else if (subject === '月考试卷') {
+                window.location.href = 'baogao_guda_pc.html?from=yuekao&status=teacher_reviewed&title=' + encodeURIComponent('2026届高三下学期教学阶段质量检测（五月月考）语文试卷');
             } else {
                 window.location.href = 'dati_baogao_pc.html?title=' + encodeURIComponent(subject);
             }
@@ -525,6 +680,78 @@
         function viewAnalysis(subject) {
             window.location.href = 'shiti_jiexi_pc.html';
         }
+
+        // 分页逻辑
+        const PAGE_SIZE = 6;
+        let currentPage = 1;
+        const historyCards = Array.from(document.querySelectorAll('.history-list .history-card'));
+        const totalItems = historyCards.length;
+        const totalPages = Math.ceil(totalItems / PAGE_SIZE) || 1;
+
+        function renderPage(page) {
+            currentPage = page;
+            const start = (page - 1) * PAGE_SIZE;
+            const end = start + PAGE_SIZE;
+
+            historyCards.forEach((card, index) => {
+                if (index >= start && index < end) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // 更新页码按钮状态
+            document.querySelectorAll('.pagination-btn.page-num').forEach(btn => {
+                const p = parseInt(btn.dataset.page);
+                if (p === page) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // 更新上一页/下一页禁用状态
+            const prevBtn = document.getElementById('prevPageBtn');
+            const nextBtn = document.getElementById('nextPageBtn');
+            if (prevBtn) prevBtn.disabled = (currentPage === 1);
+            if (nextBtn) nextBtn.disabled = (currentPage === totalPages);
+
+            // 更新提示信息
+            const infoEl = document.querySelector('.pagination-info');
+            if (infoEl) {
+                infoEl.textContent = `共 ${totalItems} 条记录`;
+            }
+        }
+
+        // 绑定上一页/下一页事件
+        document.getElementById('prevPageBtn')?.addEventListener('click', () => {
+            if (currentPage > 1) {
+                renderPage(currentPage - 1);
+                window.scrollTo({ top: 120, behavior: 'smooth' });
+            }
+        });
+
+        document.getElementById('nextPageBtn')?.addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                renderPage(currentPage + 1);
+                window.scrollTo({ top: 120, behavior: 'smooth' });
+            }
+        });
+
+        // 绑定数字页码事件
+        document.querySelectorAll('.pagination-btn.page-num').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const p = parseInt(btn.dataset.page);
+                if (p && p !== currentPage) {
+                    renderPage(p);
+                    window.scrollTo({ top: 120, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // 初始化加载第1页
+        renderPage(1);
     </script>
 </body>
 </html>

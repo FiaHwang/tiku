@@ -1080,23 +1080,40 @@
             border: 1px solid #d9d9d9;
         }
 
-        /* 重测按钮 */
+        /* 重做/重置按钮 */
         .retest-btn {
             width: 100%;
             padding: 12px;
             background-color: #ff4d4f;
             color: #fff;
-            border: none;
+            border: 1px solid #ff4d4f;
             border-radius: 4px;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
             margin-bottom: 12px;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .retest-btn:hover {
             background-color: #ff7875;
+            border-color: #ff7875;
+        }
+
+        .retest-btn.is-reset {
+            background-color: #fff;
+            color: #ff4d4f;
+            border: 1px solid #ff4d4f;
+        }
+
+        .retest-btn.is-reset:hover {
+            background-color: #fff1f0;
+            border-color: #ff4d4f;
+            color: #ff4d4f;
         }
 
         /* 返回按钮 */
@@ -2565,9 +2582,9 @@
                             <span>半对</span>
                         </div>
                     </div>
-                    <button class="retest-btn">
-                        <i class="fas fa-redo"></i>
-                        <span>重新刷题</span>
+                    <button class="retest-btn" id="retest-action-btn">
+                        <i class="fas fa-redo-alt"></i>
+                        <span class="btn-text">重做</span>
                     </button>
                     <button class="return-btn">
                         <i class="fas fa-arrow-left"></i>
@@ -3300,13 +3317,59 @@
             });
         }
 
-        // 重刷试题按钮点击事件
-        const retestBtn = document.querySelector('.retest-btn');
+        // 重做/重置功能逻辑
+        let isRedoState = false; // false: 显示"重做", true: 显示"重置"
+        const retestBtn = document.getElementById('retest-action-btn') || document.querySelector('.retest-btn');
         if (retestBtn) {
             retestBtn.addEventListener('click', () => {
-                console.log('重刷试题');
-                // 这里可以添加重刷试题的功能
+                if (!isRedoState) {
+                    // 点击重做：按钮变为重置
+                    isRedoState = true;
+                    retestBtn.classList.add('is-reset');
+                    const icon = retestBtn.querySelector('i');
+                    const text = retestBtn.querySelector('.btn-text') || retestBtn.querySelector('span');
+                    if (icon) icon.className = 'fas fa-undo-alt';
+                    if (text) text.textContent = '重置';
+                    showPcToast('已切换至重做答题模式');
+                } else {
+                    // 点击重置：弹出清空/重置确认弹窗
+                    openResetConfirmModal();
+                }
             });
+        }
+
+        // 打开重置确认弹窗
+        function openResetConfirmModal() {
+            const modal = document.getElementById('pc-reset-confirm-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+            }
+        }
+
+        // 关闭重置确认弹窗
+        function closeResetConfirmModal() {
+            const modal = document.getElementById('pc-reset-confirm-modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // 确认重置操作
+        function confirmResetAction() {
+            closeResetConfirmModal();
+            isRedoState = false;
+            if (retestBtn) {
+                retestBtn.classList.remove('is-reset');
+                const icon = retestBtn.querySelector('i');
+                const text = retestBtn.querySelector('.btn-text') || retestBtn.querySelector('span');
+                if (icon) icon.className = 'fas fa-redo-alt';
+                if (text) text.textContent = '重做';
+            }
+            // 清理已答选项状态，恢复初始状态
+            document.querySelectorAll('.question-options .option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            showPcToast('作答记录已清空，已恢复重做状态');
         }
 
         // 返回按钮点击事件
@@ -3756,6 +3819,29 @@
 
             <div style="padding: 12px 20px 20px 20px; display: flex; justify-content: flex-end;">
                 <button onclick="confirmPcSettings()" style="padding: 7px 24px; background-color: #ff4d4f; color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 6px rgba(255, 77, 79, 0.3);" onmouseover="this.style.backgroundColor='#ff7875'" onmouseout="this.style.backgroundColor='#ff4d4f'">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 重置确认弹窗 (PC端) -->
+    <div id="pc-reset-confirm-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.45); z-index: 2000; align-items: center; justify-content: center;" onclick="if(event.target === this) closeResetConfirmModal();">
+        <div style="width: 400px; background: #fff; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.18); overflow: hidden; animation: pcModalFadeIn 0.25s ease;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid #f0f0f0;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-exclamation-circle" style="color: #faad14; font-size: 18px;"></i>
+                    <span style="font-size: 16px; font-weight: 600; color: #333;">提示</span>
+                </div>
+                <i class="fas fa-times" onclick="closeResetConfirmModal()" style="color: #999; font-size: 16px; cursor: pointer; padding: 4px; border-radius: 4px; transition: color 0.2s;" onmouseover="this.style.color='#333'" onmouseout="this.style.color='#999'"></i>
+            </div>
+            
+            <div style="padding: 24px 20px; color: #333; font-size: 14px; line-height: 1.6;">
+                <p style="margin: 0 0 6px 0; font-size: 15px; font-weight: 500; color: #333;">重置后将清空做题记录，是否确认重置？</p>
+                <p style="margin: 0; color: #888; font-size: 13px;">重置后将清除当前作答记录与答题卡标记，恢复为初始做题状态。</p>
+            </div>
+
+            <div style="padding: 12px 20px 16px 20px; display: flex; justify-content: flex-end; gap: 12px; background: #fafafa; border-top: 1px solid #f0f0f0;">
+                <button onclick="closeResetConfirmModal()" style="padding: 6px 18px; background-color: #fff; color: #595959; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#ff4d4f'; this.style.color='#ff4d4f';" onmouseout="this.style.borderColor='#d9d9d9'; this.style.color='#595959';">取消</button>
+                <button onclick="confirmResetAction()" style="padding: 6px 22px; background-color: #ff4d4f; color: #fff; border: 1px solid #ff4d4f; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 4px rgba(255, 77, 79, 0.2);" onmouseover="this.style.backgroundColor='#ff7875'" onmouseout="this.style.backgroundColor='#ff4d4f'">确定</button>
             </div>
         </div>
     </div>
