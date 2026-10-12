@@ -175,40 +175,95 @@
             color: #ff4d4f;
         }
 
-        /* 题型标签 */
+        .settings-btn-pc {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background-color: #fff;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            color: #555;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .settings-btn-pc:hover {
+            border-color: #ff4d4f;
+            color: #ff4d4f;
+            background-color: #fff1f0;
+        }
+
+        .pc-switch input:checked + .pc-slider {
+            background-color: #ff4d4f !important;
+        }
+        .pc-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        .pc-switch input:checked + .pc-slider:before {
+            transform: translateX(20px);
+        }
+        @keyframes pcModalFadeIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* 题型标签栏 (支持多行自动换行展示全部题型) */
         .question-type-tabs {
             background-color: #fff;
             border-bottom: 1px solid #e8e8e8;
             display: flex;
             align-items: center;
+            flex-wrap: wrap;
             padding: 12px 24px;
-            gap: 24px;
+            gap: 10px 12px;
         }
 
         .question-type-tab {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
+            gap: 6px;
+            padding: 6px 14px;
             border-radius: 20px;
-            font-size: 14px;
-            color: #666;
+            font-size: 13px;
+            color: #555;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            user-select: none;
         }
 
         .question-type-tab:hover {
-            background-color: #f5f5f5;
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+            color: #1e293b;
         }
 
         .question-type-tab.active {
             background-color: #fff1f0;
             color: #ff4d4f;
+            border-color: #ffccc7;
+            font-weight: 500;
+        }
+
+        .question-type-tab.active .question-count {
+            color: #ff4d4f;
+            font-weight: 600;
         }
 
         .question-count {
             font-size: 12px;
-            color: #999;
+            color: #94a3b8;
         }
 
         /* 错题来源导航 */
@@ -1266,6 +1321,12 @@
         <div class="sub-nav-item">收藏本</div>
         <div class="sub-nav-item">练习历史</div>
         <div class="sub-nav-item" style="margin-left: 20px; color: #999; font-size: 12px;">仅展示所选目标下近一年的数据</div>
+        <div style="margin-left: auto; display: flex; align-items: center;">
+            <button class="settings-btn-pc" onclick="openPcSettingsModal()">
+                <i class="fas fa-cog"></i>
+                <span>错题本设置</span>
+            </button>
+        </div>
     </div>
 
     <!-- 错题来源导航 -->
@@ -1275,35 +1336,94 @@
         <div class="error-source-item">拍错题</div>
     </div>
 
-    <!-- 题型标签 -->
+    <!-- 题型标签栏 (全量22种题型直接展示，支持自动换行) -->
     <div class="question-type-tabs">
-        <div class="question-type-tab active">
+        <div class="question-type-tab active" data-type="新一级题型" onclick="selectQuestionType('新一级题型')">
             <span>新一级题型</span>
             <span class="question-count">(10)</span>
         </div>
-        <div class="question-type-tab">
+        <div class="question-type-tab" data-type="单选题" onclick="selectQuestionType('单选题')">
             <span>单选题</span>
             <span class="question-count">(5)</span>
         </div>
-        <div class="question-type-tab">
+        <div class="question-type-tab" data-type="多选题" onclick="selectQuestionType('多选题')">
             <span>多选题</span>
             <span class="question-count">(2)</span>
         </div>
-        <div class="question-type-tab">
+        <div class="question-type-tab" data-type="不定项选择题" onclick="selectQuestionType('不定项选择题')">
             <span>不定项选择题</span>
             <span class="question-count">(2)</span>
         </div>
-        <div class="question-type-tab">
+        <div class="question-type-tab" data-type="填空题" onclick="selectQuestionType('填空题')">
             <span>填空题</span>
             <span class="question-count">(3)</span>
         </div>
-        <div class="question-type-tab">
+        <div class="question-type-tab" data-type="判断题" onclick="selectQuestionType('判断题')">
             <span>判断题</span>
             <span class="question-count">(1)</span>
         </div>
-
-        <div class="question-type-tab">
+        <div class="question-type-tab" data-type="材料题" onclick="selectQuestionType('材料题')">
             <span>材料题</span>
+            <span class="question-count">(2)</span>
+        </div>
+        <div class="question-type-tab" data-type="名词解释" onclick="selectQuestionType('名词解释')">
+            <span>名词解释</span>
+            <span class="question-count">(4)</span>
+        </div>
+        <div class="question-type-tab" data-type="简答题" onclick="selectQuestionType('简答题')">
+            <span>简答题</span>
+            <span class="question-count">(6)</span>
+        </div>
+        <div class="question-type-tab" data-type="辨析题" onclick="selectQuestionType('辨析题')">
+            <span>辨析题</span>
+            <span class="question-count">(2)</span>
+        </div>
+        <div class="question-type-tab" data-type="论述题" onclick="selectQuestionType('论述题')">
+            <span>论述题</span>
+            <span class="question-count">(3)</span>
+        </div>
+        <div class="question-type-tab" data-type="翻译题" onclick="selectQuestionType('翻译题')">
+            <span>翻译题</span>
+            <span class="question-count">(2)</span>
+        </div>
+        <div class="question-type-tab" data-type="案例分析题" onclick="selectQuestionType('案例分析题')">
+            <span>案例分析题</span>
+            <span class="question-count">(4)</span>
+        </div>
+        <div class="question-type-tab" data-type="计算分析题" onclick="selectQuestionType('计算分析题')">
+            <span>计算分析题</span>
+            <span class="question-count">(3)</span>
+        </div>
+        <div class="question-type-tab" data-type="证明题" onclick="selectQuestionType('证明题')">
+            <span>证明题</span>
+            <span class="question-count">(1)</span>
+        </div>
+        <div class="question-type-tab" data-type="实验设计题" onclick="selectQuestionType('实验设计题')">
+            <span>实验设计题</span>
+            <span class="question-count">(2)</span>
+        </div>
+        <div class="question-type-tab" data-type="综合应用题" onclick="selectQuestionType('综合应用题')">
+            <span>综合应用题</span>
+            <span class="question-count">(5)</span>
+        </div>
+        <div class="question-type-tab" data-type="连线匹配题" onclick="selectQuestionType('连线匹配题')">
+            <span>连线匹配题</span>
+            <span class="question-count">(2)</span>
+        </div>
+        <div class="question-type-tab" data-type="排序归纳题" onclick="selectQuestionType('排序归纳题')">
+            <span>排序归纳题</span>
+            <span class="question-count">(1)</span>
+        </div>
+        <div class="question-type-tab" data-type="情境阅读题" onclick="selectQuestionType('情境阅读题')">
+            <span>情境阅读题</span>
+            <span class="question-count">(3)</span>
+        </div>
+        <div class="question-type-tab" data-type="完形填空" onclick="selectQuestionType('完形填空')">
+            <span>完形填空</span>
+            <span class="question-count">(4)</span>
+        </div>
+        <div class="question-type-tab" data-type="写作表达题" onclick="selectQuestionType('写作表达题')">
+            <span>写作表达题</span>
             <span class="question-count">(2)</span>
         </div>
     </div>
@@ -2387,44 +2507,72 @@
             });
         });
 
-        // 题型标签点击事件
-        document.querySelectorAll('.question-type-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                // 移除所有active类
-                document.querySelectorAll('.question-type-tab').forEach(t => {
-                    t.classList.remove('active');
-                });
-                // 添加active类到当前点击的项
-                tab.classList.add('active');
-                
-                // 获取当前点击的题型
-                const type = tab.querySelector('span').textContent;
-                console.log('切换到:', type);
-                
-                // 隐藏所有题型内容
-                document.querySelectorAll('.question-content-tab').forEach(content => {
-                    content.style.display = 'none';
-                });
-                
-                // 根据点击的题型显示对应内容
-                if (type === '新一级题型') {
-                    document.getElementById('new-level-type-content').style.display = 'block';
-                } else if (type === '单选题') {
-                    document.getElementById('single-choice-content').style.display = 'block';
-                } else if (type === '多选题') {
-                    document.getElementById('multiple-choice-content').style.display = 'block';
-                } else if (type === '不定项选择题') {
-                    document.getElementById('indefinite-choice-content').style.display = 'block';
-                } else if (type === '填空题') {
-                    document.getElementById('fill-blank-content').style.display = 'block';
-                } else if (type === '判断题') {
-                    document.getElementById('judgment-content').style.display = 'block';
+        // 题型数据字典映射 (包含错题数量与对应详情模板)
+        const QUESTION_TYPE_CONFIG = {
+            '新一级题型': { count: 10, targetId: 'new-level-type-content' },
+            '单选题': { count: 5, targetId: 'single-choice-content' },
+            '多选题': { count: 2, targetId: 'multiple-choice-content' },
+            '不定项选择题': { count: 2, targetId: 'indefinite-choice-content' },
+            '填空题': { count: 3, targetId: 'fill-blank-content' },
+            '判断题': { count: 1, targetId: 'judgment-content' },
+            '材料题': { count: 2, targetId: 'material-content' },
+            '名词解释': { count: 4, targetId: 'new-level-type-content', desc: '用于考核核心术语、基础定义的精准记忆与规范阐述' },
+            '简答题': { count: 6, targetId: 'new-level-type-content', desc: '重点考查知识要点的概括提炼与条理化要点作答' },
+            '辨析题': { count: 2, targetId: 'new-level-type-content', desc: '考查对核心概念、观点的正误辨别与深入逻辑剖析' },
+            '论述题': { count: 3, targetId: 'new-level-type-content', desc: '综合性深度论述，要求观点明确、论据充分、逻辑严密' },
+            '翻译题': { count: 2, targetId: 'new-level-type-content', desc: '考查文言文或外语语篇的准确翻译与词法句法掌握' },
+            '案例分析题': { count: 4, targetId: 'material-content', desc: '结合实际业务与情境案例的综合分析推导' },
+            '计算分析题': { count: 3, targetId: 'new-level-type-content', desc: '考查公式运用、数值计算与解题步骤的完整性' },
+            '证明题': { count: 1, targetId: 'new-level-type-content', desc: '考查严谨的数学推导与逻辑证明链条' },
+            '实验设计题': { count: 2, targetId: 'material-content', desc: '考查科学实验原理、控制变量法与实验步骤设计' },
+            '综合应用题': { count: 5, targetId: 'material-content', desc: '跨章节、跨知识点的综合应用型大题' },
+            '连线匹配题': { count: 2, targetId: 'new-level-type-content', desc: '创新题型：考查概念与实例的对应关联' },
+            '排序归纳题': { count: 1, targetId: 'new-level-type-content', desc: '创新题型：考查流程步骤、时间演进的正确逻辑顺序' },
+            '情境阅读题': { count: 3, targetId: 'material-content', desc: '创新题型：基于真实任务情境的阅读理解与信息提取' },
+            '完形填空': { count: 4, targetId: 'single-choice-content', desc: '语篇语义连贯与词汇语法的综合测试' },
+            '写作表达题': { count: 2, targetId: 'new-level-type-content', desc: '综合考查书面表达、结构布局与语言运用能力' }
+        };
 
-                } else if (type === '材料题') {
-                    document.getElementById('material-content').style.display = 'block';
+        const DEFAULT_TOP_TYPES = ['新一级题型', '单选题', '多选题', '不定项选择题', '填空题', '判断题', '材料题'];
+
+        // 统一题型选择入口函数
+        function selectQuestionType(typeName) {
+            console.log('选择题型:', typeName);
+            const conf = QUESTION_TYPE_CONFIG[typeName] || { count: 1, targetId: 'new-level-type-content' };
+
+            // 1. 同步题型标签高亮状态
+            document.querySelectorAll('.question-type-tab').forEach(tab => {
+                if (tab.dataset.type === typeName) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
                 }
             });
-        });
+
+            // 2. 隐藏所有题型内容，展示对应内容
+            document.querySelectorAll('.question-content-tab').forEach(content => {
+                content.style.display = 'none';
+            });
+
+            const targetElement = document.getElementById(conf.targetId);
+            if (targetElement) {
+                targetElement.style.display = 'block';
+                
+                if (!DEFAULT_TOP_TYPES.includes(typeName)) {
+                    const qContent = targetElement.querySelector('.question-content');
+                    if (qContent) {
+                        qContent.innerHTML = `【${typeName}】这是当前分类下的精选题型示例 (${typeName})。${conf.desc || ''}`;
+                    }
+                    const qAnalysis = targetElement.querySelector('.analysis-content p:nth-child(1)');
+                    if (qAnalysis) {
+                        qAnalysis.innerHTML = `<strong>文字解析：</strong>本题是【${typeName}】的重点错题解析，需掌握核心考点与解题技巧。`;
+                    }
+                }
+            }
+
+            // 3. 轻量提示
+            showPcToast(`已切换至：${typeName}（共 ${conf.count} 题）`);
+        }
 
         // 错题来源导航点击事件
         document.querySelectorAll('.error-source-item').forEach(item => {
@@ -2444,14 +2592,16 @@
                     localStorage.setItem('cuotiben_active_tab_pc', text);
                 }
                 
+                const qTypeTabs = document.querySelector('.question-type-tabs');
+                
                 // 根据切换的标签显示不同的内容
                 if (text === '题型分类') {
                     // 显示题库错题内容，隐藏拍错题 and 知识点内容
                     document.querySelector('.question-bank-content').style.display = 'block';
                     document.querySelector('.photo-error-content').style.display = 'none';
                     document.querySelector('.knowledge-point-content').style.display = 'none';
-                    // 显示题型标签
-                    document.querySelector('.question-type-tabs').style.display = 'flex';
+                    // 显示题型导航标签栏
+                    if (qTypeTabs) qTypeTabs.style.display = 'flex';
                     // 显示右侧边栏（包含答题卡）
                     document.querySelector('.right-sidebar').style.display = 'block';
                 } else if (text === '拍错题') {
@@ -2459,8 +2609,8 @@
                     document.querySelector('.question-bank-content').style.display = 'none';
                     document.querySelector('.photo-error-content').style.display = 'block';
                     document.querySelector('.knowledge-point-content').style.display = 'none';
-                    // 隐藏题型标签
-                    document.querySelector('.question-type-tabs').style.display = 'none';
+                    // 隐藏题型导航标签栏
+                    if (qTypeTabs) qTypeTabs.style.display = 'none';
                     // 隐藏右侧边栏（包含答题卡）
                     document.querySelector('.right-sidebar').style.display = 'none';
                 } else if (text === '知识点分类') {
@@ -2468,8 +2618,8 @@
                     document.querySelector('.question-bank-content').style.display = 'none';
                     document.querySelector('.photo-error-content').style.display = 'none';
                     document.querySelector('.knowledge-point-content').style.display = 'block';
-                    // 隐藏题型标签
-                    document.querySelector('.question-type-tabs').style.display = 'none';
+                    // 隐藏题型导航标签栏
+                    if (qTypeTabs) qTypeTabs.style.display = 'none';
                     // 隐藏右侧边栏（包含答题卡）
                     document.querySelector('.right-sidebar').style.display = 'none';
                 }
@@ -3414,6 +3564,70 @@
                 sendHumanMessage();
             }
         });
+
+        // PC 错题本设置相关逻辑
+        function openPcSettingsModal() {
+            const modal = document.getElementById('pc-settings-modal');
+            const autoRemove = localStorage.getItem('cuotiben_auto_remove') !== 'false';
+            document.getElementById('pc-auto-remove-switch').checked = autoRemove;
+            modal.style.display = 'flex';
+        }
+
+        function closePcSettingsModal() {
+            const modal = document.getElementById('pc-settings-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function confirmPcSettings() {
+            const checked = document.getElementById('pc-auto-remove-switch').checked;
+            localStorage.setItem('cuotiben_auto_remove', checked ? 'true' : 'false');
+            closePcSettingsModal();
+            showPcToast('错题本设置已保存！');
+        }
+
+        function showPcToast(msg) {
+            let toast = document.getElementById('pc-toast-msg');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'pc-toast-msg';
+                toast.style.cssText = 'position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.75); color: #fff; padding: 10px 24px; border-radius: 6px; font-size: 14px; z-index: 3000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: opacity 0.3s;';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = msg;
+            toast.style.display = 'block';
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => { toast.style.display = 'none'; }, 300);
+            }, 2000);
+        }
+
+        // 点击背景遮罩关闭
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closePcSettingsModal();
+        });
     </script>
+
+    <!-- 错题本设置弹窗 (PC端) -->
+    <div id="pc-settings-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.45); z-index: 2000; align-items: center; justify-content: center;" onclick="if(event.target === this) closePcSettingsModal();">
+        <div style="width: 380px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); overflow: hidden; animation: pcModalFadeIn 0.25s ease;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid #f0f0f0;">
+                <span style="font-size: 16px; font-weight: 600; color: #333;">错题本设置</span>
+                <i class="fas fa-times" onclick="closePcSettingsModal()" style="color: #999; font-size: 16px; cursor: pointer; padding: 4px; border-radius: 4px; transition: color 0.2s;" onmouseover="this.style.color='#333'" onmouseout="this.style.color='#999'"></i>
+            </div>
+            
+            <div style="padding: 24px 20px 20px 20px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 15px; color: #333;">答对错题自动移除</span>
+                <label class="pc-switch" style="position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; margin-left: 16px;">
+                    <input type="checkbox" id="pc-auto-remove-switch" style="opacity: 0; width: 0; height: 0;">
+                    <span class="pc-slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .3s; border-radius: 24px;"></span>
+                </label>
+            </div>
+
+            <div style="padding: 12px 20px 20px 20px; display: flex; justify-content: flex-end;">
+                <button onclick="confirmPcSettings()" style="padding: 7px 24px; background-color: #ff4d4f; color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 6px rgba(255, 77, 79, 0.3);" onmouseover="this.style.backgroundColor='#ff7875'" onmouseout="this.style.backgroundColor='#ff4d4f'">确定</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

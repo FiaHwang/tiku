@@ -80,6 +80,8 @@
             justify-content: center;
             align-items: center;
             width: 100%;
+            max-width: calc(100% - 80px);
+            margin: 0 auto;
             overflow-x: auto;
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
@@ -570,7 +572,11 @@
     <!-- 顶部导航栏 -->
     <header class="header">
         <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
-        <div class="page-title" style="font-size: 17px; font-weight: 600; color: #1a1a1a;">收藏本</div>
+        <div class="nav-tabs">
+            <div class="nav-tab">错题本</div>
+            <div class="nav-tab active">收藏本</div>
+            <div class="nav-tab">练习历史</div>
+        </div>
     </header>
 
 
@@ -692,14 +698,20 @@
         // 导航切换功能
         navTabs.forEach(tab => {
             tab.addEventListener('click', () => {
-                navTabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                if (tab.textContent === '错题本') {
+                const targetText = tab.textContent.trim();
+                if (targetText === '错题本') {
                     window.location.href = 'cuotiben.html';
-                } else if (tab.textContent === '练习历史') {
+                } else if (targetText === '收藏本') {
+                    // 当前页
+                } else if (targetText === '练习历史') {
                     window.location.href = 'lianxi_lishi.html';
                 }
             });
+
+            tab.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                tab.click();
+            }, { passive: false });
         });
 
         // 错题来源切换功能
@@ -724,7 +736,11 @@
 
         // 返回按钮功能
         backBtn.addEventListener('click', () => {
-            window.location.href = 'tiku.html';
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = 'tiku.html';
+            }
         });
 
 // 知识点体系数据 (最多支持展开5层)

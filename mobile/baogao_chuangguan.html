@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>整体报告 - AI闯关练</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+            background-color: #f1f5f9;
+            color: #1e293b;
+            min-height: 100vh;
+        }
+
+        /* 隐藏原生滚动条 */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        /* 雷达图容器 */
+        .radar-box {
+            position: relative;
+            width: 100%;
+            height: 310px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 维度标签药丸样式 */
+        .dimension-tag {
+            position: absolute;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 9999px;
+            padding: 3px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #0f172a;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            z-index: 20;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+
+        .dimension-tag:hover {
+            transform: scale(1.04);
+            border-color: #93c5fd;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.12);
+        }
+
+        .tag-dot {
+            width: 3.5px;
+            height: 11px;
+            background-color: #0284c7;
+            border-radius: 2px;
+        }
+
+        /* 知识点项微交互 */
+        .kp-item {
+            transition: background-color 0.15s ease, transform 0.15s ease;
+        }
+        .kp-item:active {
+            background-color: #f8fafc;
+            transform: scale(0.99);
+        }
+    </style>
+</head>
+<body class="flex justify-center">
+
+    <!-- 主容器，限定移动端宽度，桌面端居中自适应 -->
+    <div class="w-full max-w-md min-h-screen bg-[#f3f6fa] flex flex-col pb-8 shadow-sm">
+
+        <!-- 顶部导航栏 -->
+        <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md px-4 h-12 flex items-center justify-between border-b border-slate-100">
+            <button type="button" onclick="handleBack()" class="w-10 h-10 -ml-2 flex items-center justify-center text-slate-800 text-lg hover:text-blue-600 active:opacity-60 transition-colors cursor-pointer" aria-label="返回">
+                <i class="fas fa-chevron-left text-base pointer-events-none"></i>
+            </button>
+            <h1 class="text-base font-bold text-slate-900 tracking-wide">整体报告</h1>
+            <div class="w-8"></div> <!-- 占位保持居中 -->
+        </header>
+
+        <!-- 主内容区域 -->
+        <main class="flex-1 px-3.5 pt-3.5 space-y-3.5">
+
+            <!-- 1. 做题能力图谱卡片 -->
+            <section class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100">
+                <!-- 顶部彩色横幅 -->
+                <div class="relative bg-gradient-to-r from-[#3b82f6] via-[#60a5fa] to-[#93c5fd] px-4 pt-4 pb-8 overflow-hidden">
+                    <!-- 背景字母水印 -->
+                    <div class="absolute -top-3 left-10 text-white/[0.12] text-5xl font-black tracking-widest pointer-events-none select-none">
+                        BAOGAO
+                    </div>
+
+                    <div class="relative flex items-center justify-between z-10">
+                        <!-- 左侧：3D小机器人 + 问候语 -->
+                        <div class="flex items-center gap-2.5">
+                            <!-- 3D 萌系机器人头像 -->
+                            <div class="w-12 h-12 relative flex-shrink-0 flex items-center justify-center">
+                                <svg viewBox="0 0 100 100" class="w-12 h-12 filter drop-shadow-md">
+                                    <defs>
+                                        <radialGradient id="headGrad" cx="40%" cy="35%" r="65%">
+                                            <stop offset="0%" stop-color="#ffffff"/>
+                                            <stop offset="70%" stop-color="#e2e8f0"/>
+                                            <stop offset="100%" stop-color="#cbd5e1"/>
+                                        </radialGradient>
+                                        <linearGradient id="visorGrad" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="#0284c7"/>
+                                            <stop offset="100%" stop-color="#0369a1"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- 机器人天线 -->
+                                    <rect x="47" y="10" width="6" height="12" rx="3" fill="#cbd5e1"/>
+                                    <circle cx="50" cy="10" r="5" fill="#38bdf8"/>
+                                    <!-- 机器人头部外壳 -->
+                                    <rect x="18" y="20" width="64" height="52" rx="24" fill="url(#headGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
+                                    <!-- 左右耳塞微型装饰 -->
+                                    <rect x="13" y="38" width="6" height="16" rx="3" fill="#94a3b8"/>
+                                    <rect x="81" y="38" width="6" height="16" rx="3" fill="#94a3b8"/>
+                                    <!-- 深蓝高光面罩视窗 -->
+                                    <rect x="25" y="28" width="50" height="36" rx="16" fill="url(#visorGrad)"/>
+                                    <!-- 护目镜反光光斑 -->
+                                    <ellipse cx="38" cy="34" rx="7" ry="2.5" fill="#ffffff" opacity="0.3" transform="rotate(-15 38 34)"/>
+                                    <!-- 萌系青色荧光微笑眼 -->
+                                    <path d="M 33 46 Q 38 41 43 46" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+                                    <path d="M 57 46 Q 62 41 67 46" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+                                    <!-- 挥手的小胳膊 -->
+                                    <path d="M 16 65 Q 8 55 12 45 Q 16 43 20 48 Q 18 56 22 64 Z" fill="url(#headGrad)" stroke="#cbd5e1" stroke-width="1"/>
+                                    <!-- 身体底座 -->
+                                    <path d="M 30 72 L 70 72 C 70 82 60 88 50 88 C 40 88 30 82 30 72 Z" fill="#e2e8f0"/>
+                                    <circle cx="50" cy="79" r="3" fill="#38bdf8"/>
+                                </svg>
+                            </div>
+                            <span class="text-white font-bold text-sm sm:text-base tracking-wide drop-shadow-sm">
+                                Hi，帮您生成做题能力图谱～
+                            </span>
+                        </div>
+
+                        <!-- 右侧：绿色星星奖杯徽章 -->
+                        <div class="relative flex-shrink-0 w-12 h-12 flex items-center justify-center">
+                            <svg viewBox="0 0 100 100" class="w-12 h-12 filter drop-shadow">
+                                <defs>
+                                    <linearGradient id="starGrad" x1="0" y1="0" x2="1" y2="1">
+                                        <stop offset="0%" stop-color="#4ade80"/>
+                                        <stop offset="100%" stop-color="#22c55e"/>
+                                    </linearGradient>
+                                </defs>
+                                <!-- 多芒绿色爆炸星形徽章 -->
+                                <polygon points="50,5 62,24 84,18 80,41 98,53 82,68 88,91 66,86 52,100 36,87 14,93 18,70 2,56 19,42 14,19 36,23" fill="url(#starGrad)" stroke="#ffffff" stroke-width="3"/>
+                                <!-- 快乐的卡通眼睛与微笑 -->
+                                <ellipse cx="40" cy="48" rx="3.5" ry="5.5" fill="#0f172a"/>
+                                <circle cx="41.5" cy="46" r="1.5" fill="#ffffff"/>
+                                <ellipse cx="60" cy="48" rx="3.5" ry="5.5" fill="#0f172a"/>
+                                <circle cx="61.5" cy="46" r="1.5" fill="#ffffff"/>
+                                <path d="M 43 60 Q 50 67 57 60" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
+                                <!-- 头顶小金杯 -->
+                                <g transform="translate(62, 5) scale(0.65) rotate(15)">
+                                    <path d="M 10 5 L 30 5 L 25 22 Q 20 28 15 22 Z" fill="#fbbf24" stroke="#d97706" stroke-width="1.5"/>
+                                    <path d="M 18 25 L 22 25 L 23 32 L 17 32 Z" fill="#fbbf24"/>
+                                    <rect x="13" y="32" width="14" height="4" rx="1.5" fill="#d97706"/>
+                                    <!-- 耳柄 -->
+                                    <path d="M 10 9 Q 3 13 12 19" fill="none" stroke="#d97706" stroke-width="1.5"/>
+                                    <path d="M 30 9 Q 37 13 28 19" fill="none" stroke="#d97706" stroke-width="1.5"/>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- 底部波浪弧线过渡 -->
+                    <div class="absolute -bottom-1 left-0 right-0 w-full overflow-hidden leading-none z-10 pointer-events-none">
+                        <svg viewBox="0 0 400 24" preserveAspectRatio="none" class="w-full h-5 text-white fill-current">
+                            <path d="M0,0 C150,24 250,24 400,0 L400,24 L0,24 Z"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 雷达图展示区域 -->
+                <div class="radar-box px-2 pt-2 pb-4">
+                    <!-- 5个维度的药丸标签定位 -->
+                    <!-- 1. 顶部：毅力 -->
+                    <div class="dimension-tag" style="top: 14px; left: 50%; transform: translateX(-50%);">
+                        <span class="tag-dot"></span>
+                        <span>毅力</span>
+                    </div>
+
+                    <!-- 2. 右上：正确率 -->
+                    <div class="dimension-tag" style="top: 86px; right: 18px;">
+                        <span class="tag-dot"></span>
+                        <span>正确率</span>
+                    </div>
+
+                    <!-- 3. 右下：掌握速度 -->
+                    <div class="dimension-tag" style="bottom: 22px; right: 46px;">
+                        <span class="tag-dot"></span>
+                        <span>掌握速度</span>
+                    </div>
+
+                    <!-- 4. 左下：答题速度 -->
+                    <div class="dimension-tag" style="bottom: 22px; left: 46px;">
+                        <span class="tag-dot"></span>
+                        <span>答题速度</span>
+                    </div>
+
+                    <!-- 5. 左上：答题量 -->
+                    <div class="dimension-tag" style="top: 86px; left: 18px;">
+                        <span class="tag-dot"></span>
+                        <span>答题量</span>
+                    </div>
+
+                    <!-- SVG 高保真雷达画布 -->
+                    <svg viewBox="0 0 320 280" class="w-full h-full max-w-[320px] max-h-[280px]">
+                        <defs>
+                            <!-- 柔和的星系光晕辐射渐变 -->
+                            <radialGradient id="radarAura" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#93c5fd" stop-opacity="0.45"/>
+                                <stop offset="50%" stop-color="#c7d2fe" stop-opacity="0.32"/>
+                                <stop offset="78%" stop-color="#e0e7ff" stop-opacity="0.12"/>
+                                <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+                            </radialGradient>
+
+                            <!-- 雷达多边形填充渐变 -->
+                            <radialGradient id="polyGrad" cx="50%" cy="50%" r="55%">
+                                <stop offset="0%" stop-color="#a855f7" stop-opacity="0.35"/>
+                                <stop offset="100%" stop-color="#6366f1" stop-opacity="0.18"/>
+                            </radialGradient>
+
+                            <!-- 虚线圆外圈滤镜 -->
+                            <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="3" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
+                        </defs>
+
+                        <!-- 背景虚线同心圆环 -->
+                        <circle cx="160" cy="140" r="115" fill="none" stroke="#bae6fd" stroke-width="1" stroke-dasharray="3 4" opacity="0.6"/>
+                        <circle cx="160" cy="140" r="98" fill="none" stroke="#e0f2fe" stroke-width="1" stroke-dasharray="3 3" opacity="0.7"/>
+
+                        <!-- 中心光晕背景圆形 -->
+                        <circle cx="160" cy="140" r="86" fill="url(#radarAura)"/>
+
+                        <!-- 4层规则五边形同心网格 (中心(160, 140)，半径分别为 22, 44, 66, 88) -->
+                        <!-- 角度: -90, -18, 54, 126, 198 -->
+                        <!-- Level 1 (r=22) -->
+                        <polygon points="160,118 180.9,124.8 172.9,149.6 147.1,149.6 139.1,124.8" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.9"/>
+                        <!-- Level 2 (r=44) -->
+                        <polygon points="160,96 201.8,109.6 185.9,159.2 134.1,159.2 118.2,109.6" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.9"/>
+                        <!-- Level 3 (r=66) -->
+                        <polygon points="160,74 222.8,94.4 198.8,168.8 121.2,168.8 97.2,94.4" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.95"/>
+                        <!-- Level 4 (r=88，最外层五边形网格) -->
+                        <polygon points="160,52 243.7,79.2 211.7,178.4 108.3,178.4 76.3,79.2" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="1"/>
+
+                        <!-- 5条从中心辐射至5个顶点的白色连线 -->
+                        <line x1="160" y1="140" x2="160" y2="52" stroke="#ffffff" stroke-width="1.2" opacity="0.8"/>
+                        <line x1="160" y1="140" x2="243.7" y2="79.2" stroke="#ffffff" stroke-width="1.2" opacity="0.8"/>
+                        <line x1="160" y1="140" x2="211.7" y2="178.4" stroke="#ffffff" stroke-width="1.2" opacity="0.8"/>
+                        <line x1="160" y1="140" x2="108.3" y2="178.4" stroke="#ffffff" stroke-width="1.2" opacity="0.8"/>
+                        <line x1="160" y1="140" x2="76.3" y2="79.2" stroke="#ffffff" stroke-width="1.2" opacity="0.8"/>
+
+                        <!-- 能力雷达数据多边形 (对应真实图谱形状：毅力:72, 正确率:80, 掌握速度:70, 答题速度:66, 答题量:75) -->
+                        <!-- 坐标计算：
+                             P1(毅力: 72) => (160, 140 - 72) = (160, 68)
+                             P2(正确率: 80) => (160 + 80*cos(18°), 140 - 80*sin(18°)) = (160 + 76.1, 140 - 24.7) = (236.1, 115.3)
+                             P3(掌握速度: 70) => (160 + 70*cos(54°), 140 + 70*sin(54°)) = (160 + 41.1, 140 + 56.6) = (201.1, 196.6)
+                             P4(答题速度: 66) => (160 - 66*cos(54°), 140 + 66*sin(54°)) = (160 - 38.8, 140 + 53.4) = (121.2, 193.4)
+                             P5(答题量: 75) => (160 - 75*cos(18°), 140 - 75*sin(18°)) = (160 - 71.3, 140 - 23.2) = (88.7, 116.8)
+                        -->
+                        <polygon points="160,68 236.1,115.3 201.1,196.6 121.2,193.4 88.7,116.8" 
+                                 fill="url(#polyGrad)" 
+                                 stroke="#ffffff" 
+                                 stroke-width="2" 
+                                 filter="drop-shadow(0 2px 4px rgba(124, 58, 237, 0.15))"/>
+
+                        <!-- 中心紫色箭头/三角标识 (贴合原图中轴心的紫色三角标记) -->
+                        <polygon points="160,132 174,142 163,149 160,143" fill="#8b5cf6" stroke="#ffffff" stroke-width="1.5"/>
+                    </svg>
+                </div>
+            </section>
+
+
+            <!-- 2. 需要加强的知识点卡片 -->
+            <section class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-100 relative overflow-hidden">
+                <!-- 顶部标题徽章 -->
+                <div class="flex items-center gap-2 mb-3">
+                    <!-- 可爱紫色小怪兽/星星图标 -->
+                    <div class="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center relative flex-shrink-0">
+                        <svg viewBox="0 0 100 100" class="w-7 h-7">
+                            <!-- 渐变蓝紫色小软泥/星星脸 -->
+                            <path d="M 50 15 C 65 15 85 25 85 48 C 85 70 70 85 50 85 C 30 85 15 70 15 48 C 15 25 35 15 50 15 Z" fill="#6366f1"/>
+                            <!-- 萌眼 -->
+                            <ellipse cx="38" cy="46" rx="4" ry="6" fill="#ffffff"/>
+                            <circle cx="39" cy="46" r="2.5" fill="#0f172a"/>
+                            <ellipse cx="62" cy="46" rx="4" ry="6" fill="#ffffff"/>
+                            <circle cx="63" cy="46" r="2.5" fill="#0f172a"/>
+                            <!-- 微笑 -->
+                            <path d="M 44 58 Q 50 63 56 58" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+                            <!-- 左上方小触角/闪光 -->
+                            <circle cx="24" cy="22" r="3.5" fill="#818cf8"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-1">
+                        <span>需要加强的知识点</span>
+                        <span class="text-indigo-400 text-sm">✦</span>
+                    </h2>
+                </div>
+
+                <!-- 知识点列表 (原图10条数据) -->
+                <div class="space-y-4 pt-1">
+                    <!-- 1. 修辞手法 (18.2% | 答错：9次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('修辞手法')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#10b981]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">修辞手法</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <!-- 进度条 -->
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 18.2%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">18.2%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答错：9次</span>
+                        </div>
+                    </div>
+
+                    <!-- 2. 语言基础知识 (16.7% | 答错：5次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('语言基础知识')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#f97316]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">语言基础知识</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 16.7%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">16.7%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答错：5次</span>
+                        </div>
+                    </div>
+
+                    <!-- 3. 先秦诗歌 (0% | 答错：2次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('先秦诗歌')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#3b82f6]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">先秦诗歌</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 0%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">0%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答错：2次</span>
+                        </div>
+                    </div>
+
+                    <!-- 4. 句子排序 (0% | 答错：1次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('句子排序')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#f97316]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">句子排序</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 0%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">0%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答错：1次</span>
+                        </div>
+                    </div>
+
+                    <!-- 5. 明代小说 (0% | 答错：1次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('明代小说')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#10b981]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">明代小说</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 0%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">0%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答错：1次</span>
+                        </div>
+                    </div>
+
+                    <!-- 6. 字音字形 (0% | 答错：1次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('字音字形')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#f97316]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">字音字形</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 0%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">0%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答错：1次</span>
+                        </div>
+                    </div>
+
+                    <!-- 7. 词汇 (0% | 答错：1次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('词汇')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#3b82f6]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">词汇</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 0%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">0%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答错：1次</span>
+                        </div>
+                    </div>
+
+                    <!-- 8. 长恨歌 (0% | 答错：1次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('长恨歌')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#f97316]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">长恨歌</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 0%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">0%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答错：1次</span>
+                        </div>
+                    </div>
+
+                    <!-- 9. 文学常识 (0% | 答错：1次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('文学常识')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#10b981]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">文学常识</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 0%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">0%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答错：1次</span>
+                        </div>
+                    </div>
+
+                    <!-- 10. 饮酒（其五） (0% | 答错：1次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('饮酒（其五）')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#f97316]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">饮酒（其五）</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 0%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">0%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答错：1次</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- 3. 掌握较好的知识点卡片 -->
+            <section class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-100 relative overflow-hidden">
+                <!-- 顶部标题徽章 -->
+                <div class="flex items-center gap-2 mb-3">
+                    <!-- 可爱绿色小星星/小怪兽头像 -->
+                    <div class="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center relative flex-shrink-0">
+                        <svg viewBox="0 0 100 100" class="w-7 h-7">
+                            <!-- 渐变翡翠绿小软泥/笑脸 -->
+                            <path d="M 50 15 C 68 15 85 28 85 50 C 85 72 68 85 50 85 C 32 85 15 72 15 50 C 15 28 32 15 50 15 Z" fill="#22c55e"/>
+                            <!-- 萌眼 (幸福弯弯笑眼) -->
+                            <path d="M 33 46 Q 38 40 43 46" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M 57 46 Q 62 40 67 46" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+                            <!-- 开心微笑 -->
+                            <path d="M 43 56 Q 50 64 57 56" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+                            <!-- 小萌触角 -->
+                            <circle cx="26" cy="24" r="3.5" fill="#86efac"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-1">
+                        <span>掌握较好的知识点</span>
+                        <span class="text-emerald-400 text-sm">✦</span>
+                    </h2>
+                </div>
+
+                <!-- 知识点列表 (原图8条数据) -->
+                <div class="space-y-4 pt-1">
+                    <!-- 1. 秋水 (66.7% | 答对：2次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('秋水')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#10b981]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">秋水</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 66.7%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">66.7%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答对：2次</span>
+                        </div>
+                    </div>
+
+                    <!-- 2. 成语出处 (100% | 答对：1次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('成语出处')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#f97316]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">成语出处</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 100%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">100%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答对：1次</span>
+                        </div>
+                    </div>
+
+                    <!-- 3. 前赤壁赋 (100% | 答对：1次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('前赤壁赋')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#3b82f6]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">前赤壁赋</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 100%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">100%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答对：1次</span>
+                        </div>
+                    </div>
+
+                    <!-- 4. 文体知识 (100% | 答对：1次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('文体知识')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#f97316]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">文体知识</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 100%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">100%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答对：1次</span>
+                        </div>
+                    </div>
+
+                    <!-- 5. 《诗经》 (100% | 答对：1次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('《诗经》')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#10b981]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">《诗经》</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 100%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">100%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答对：1次</span>
+                        </div>
+                    </div>
+
+                    <!-- 6. 寡人之于国也 (50% | 答对：1次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('寡人之于国也')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#f97316]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">寡人之于国也</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 50%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">50%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答对：1次</span>
+                        </div>
+                    </div>
+
+                    <!-- 7. 清代文学 (50% | 答对：1次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('清代文学')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#3b82f6]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">清代文学</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 50%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">50%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答对：1次</span>
+                        </div>
+                    </div>
+
+                    <!-- 8. 谏逐客书 (50% | 答对：1次) -->
+                    <div class="kp-item rounded-xl p-1 cursor-pointer" onclick="handleKpClick('谏逐客书')">
+                        <div class="flex items-center gap-1.5 mb-1.5">
+                            <span class="w-1.5 h-3.5 rounded-full bg-[#f97316]"></span>
+                            <span class="font-bold text-slate-800 text-sm sm:text-base">谏逐客书</span>
+                        </div>
+                        <div class="flex items-center text-xs sm:text-sm">
+                            <span class="text-slate-700 font-normal w-12 flex-shrink-0">正确率</span>
+                            <div class="w-36 sm:w-44 h-2 bg-slate-100 rounded-full overflow-hidden mr-3">
+                                <div class="bg-[#f59e0b] h-full rounded-full" style="width: 50%;"></div>
+                            </div>
+                            <span class="font-bold text-slate-900 ml-auto mr-2">50%</span>
+                            <span class="text-slate-300 mr-2 font-light">|</span>
+                            <span class="text-slate-400 text-xs font-normal">答对：1次</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 交互提示脚本 -->
+    <script>
+        function handleBack() {
+            // 优先尝试历史记录后退
+            const currentHref = window.location.href;
+            if (window.history.length > 1) {
+                window.history.back();
+            }
+            // 若 200ms 后仍留在当前页面（例如在 iframe 或直接刷新无上一页），则兜底跳转回 ai_chuangguan.html
+            setTimeout(function() {
+                if (window.location.href === currentHref) {
+                    window.location.href = 'ai_chuangguan.html';
+                }
+            }, 200);
+        }
+
+        function handleKpClick(kpName) {
+            // 点击知识点可跳转至该知识点练习或专项突破
+            window.location.href = `dati_yemian.html?mode=knowledge&title=${encodeURIComponent(kpName)}`;
+        }
+    </script>
+</body>
+</html>

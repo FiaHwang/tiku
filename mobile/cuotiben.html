@@ -80,6 +80,8 @@
             justify-content: center;
             align-items: center;
             width: 100%;
+            max-width: calc(100% - 80px);
+            margin: 0 auto;
             overflow-x: auto;
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
@@ -620,10 +622,11 @@
     <!-- 顶部导航栏 -->
     <header class="header">
         <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
-        <div class="header-right-actions">
-            <button class="action-icon-btn" onclick="showSettingsModal()"><i class="fas fa-cog"></i></button>
+        <div class="nav-tabs">
+            <div class="nav-tab active">错题本</div>
+            <div class="nav-tab">收藏本</div>
+            <div class="nav-tab">练习历史</div>
         </div>
-        <div class="page-title" style="font-size: 17px; font-weight: 600; color: #1a1a1a;">错题本</div>
     </header>
 
     <!-- 错题来源切换 -->
@@ -633,8 +636,13 @@
         <div class="source-tab">拍错题</div>
     </div>
 
-    <!-- 提示信息 -->
-    <div class="tip">*仅展示所选目标下的数据</div>
+    <!-- 提示与设置信息 -->
+    <div class="tip" style="display: flex; justify-content: space-between; align-items: center;">
+        <span>*仅展示所选目标下的数据</span>
+        <button type="button" onclick="showSettingsModal()" style="display: inline-flex; align-items: center; gap: 4px; border: none; background: transparent; color: #666; font-size: 12px; cursor: pointer; padding: 2px 4px; -webkit-tap-highlight-color: transparent;">
+            <i class="fas fa-cog" style="color: #888;"></i> 设置
+        </button>
+    </div>
 
     <!-- 错题分类容器 -->
     <div class="error-category-container">
@@ -1036,11 +1044,13 @@
                 // 为当前点击的标签添加active类
                 tab.classList.add('active');
                 
-                // 这里可以根据标签切换显示不同的内容
-                console.log('切换到:', tab.textContent);
-                if (tab.textContent === '练习历史') {
+                const targetText = tab.textContent.trim();
+                console.log('切换到:', targetText);
+                if (targetText === '错题本') {
+                    // 当前页
+                } else if (targetText === '练习历史') {
                     window.location.href = 'lianxi_lishi.html';
-                } else if (tab.textContent === '收藏本') {
+                } else if (targetText === '收藏本') {
                     window.location.href = 'shoucangben.html';
                 }
             });
@@ -1147,8 +1157,11 @@
         // 返回按钮功能
         backBtn.addEventListener('click', () => {
             console.log('返回');
-            // 返回到题库页面
-            window.location.href = 'tiku.html';
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = 'tiku.html';
+            }
         });
 
         // 触摸事件（移动端优化）

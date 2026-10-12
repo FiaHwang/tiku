@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>练习历史 - AI闯关练</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            min-height: 100vh;
+        }
+
+        /* 隐藏原生滚动条 */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        /* 笔记本活页圈圈效果 */
+        .spiral-coil {
+            width: 14px;
+            height: 18px;
+            border: 2px solid #cbd5e1;
+            border-right: none;
+            border-radius: 9px 0 0 9px;
+            position: relative;
+            transform: rotate(-10deg);
+            background: linear-gradient(90deg, #f8fafc, #ffffff);
+            box-shadow: -1px 1px 2px rgba(0,0,0,0.06);
+        }
+
+        /* 历史卡片微交互 */
+        .history-card {
+            background: linear-gradient(180deg, #f0f7ff 0%, #f8fbff 100%);
+            border: 1.5px solid #bfdbfe;
+            border-radius: 16px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .history-card:active {
+            transform: scale(0.99);
+        }
+
+        /* 实体蓝按钮 */
+        .btn-report {
+            background-color: #0284c7;
+            color: #ffffff;
+            transition: background-color 0.15s ease, transform 0.1s ease;
+        }
+
+        .btn-report:hover {
+            background-color: #0369a1;
+        }
+
+        .btn-report:active {
+            transform: scale(0.96);
+        }
+
+        /* 浅蓝继续答题按钮 */
+        .btn-continue {
+            background-color: #e0f2fe;
+            color: #0284c7;
+            border: 1px solid #bae6fd;
+            transition: background-color 0.15s ease, transform 0.1s ease;
+        }
+
+        .btn-continue:hover {
+            background-color: #bae6fd;
+        }
+
+        .btn-continue:active {
+            transform: scale(0.96);
+        }
+    </style>
+</head>
+<body class="flex justify-center">
+
+    <!-- 主容器，限定移动端宽度，桌面端居中自适应 -->
+    <div class="w-full max-w-md min-h-screen bg-[#ffffff] flex flex-col shadow-sm">
+
+        <!-- 顶部导航栏 -->
+        <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md px-4 h-12 flex items-center justify-between border-b border-slate-100">
+            <button type="button" onclick="handleBack()" class="w-10 h-10 -ml-2 flex items-center justify-center text-slate-800 text-lg hover:text-blue-600 active:opacity-60 transition-colors cursor-pointer" aria-label="返回">
+                <i class="fas fa-chevron-left text-base pointer-events-none"></i>
+            </button>
+            <h1 class="text-base font-bold text-slate-900 tracking-wide">练习历史</h1>
+            <div class="w-8"></div> <!-- 占位保持居中 -->
+        </header>
+
+        <!-- 顶部活页笔记本装饰栏与徽章 -->
+        <div class="px-4 pt-3 pb-1 flex items-center justify-between select-none">
+            <!-- 活页线圈组 -->
+            <div class="flex items-center gap-1.5 sm:gap-2">
+                <div class="spiral-coil"></div>
+                <div class="spiral-coil"></div>
+                <div class="spiral-coil"></div>
+                <div class="spiral-coil"></div>
+                <div class="spiral-coil"></div>
+                <div class="spiral-coil"></div>
+                <div class="spiral-coil"></div>
+                <div class="spiral-coil"></div>
+                <div class="spiral-coil"></div>
+                <div class="spiral-coil"></div>
+                <div class="spiral-coil"></div>
+                <div class="spiral-coil"></div>
+                <div class="spiral-coil"></div>
+            </div>
+
+            <!-- 右侧潮流 LIANXI 徽标 -->
+            <div class="relative flex-shrink-0 flex items-center">
+                <svg viewBox="0 0 130 50" class="w-24 h-10 filter drop-shadow-sm">
+                    <defs>
+                        <!-- 鲜亮柠檬绿底色 -->
+                        <linearGradient id="badgeGrad" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#bef264"/>
+                            <stop offset="100%" stop-color="#84cc16"/>
+                        </linearGradient>
+                    </defs>
+                    <!-- 胶囊外壳 -->
+                    <rect x="5" y="10" width="118" height="34" rx="17" fill="url(#badgeGrad)" stroke="#ffffff" stroke-width="2"/>
+                    
+                    <!-- 黑色LIANXI英文粗体 -->
+                    <text x="32" y="34" font-family="Arial, sans-serif" font-weight="900" font-size="19" fill="#0f172a" letter-spacing="1">LIANXI</text>
+                    
+                    <!-- 右侧黑白棋盘格装饰 -->
+                    <g transform="translate(100, 18) scale(0.7)">
+                        <rect x="0" y="0" width="8" height="8" fill="#0f172a"/>
+                        <rect x="8" y="0" width="8" height="8" fill="#ecfccb"/>
+                        <rect x="16" y="0" width="8" height="8" fill="#0f172a"/>
+                        <rect x="0" y="8" width="8" height="8" fill="#ecfccb"/>
+                        <rect x="8" y="8" width="8" height="8" fill="#0f172a"/>
+                        <rect x="16" y="8" width="8" height="8" fill="#ecfccb"/>
+                    </g>
+
+                    <!-- 顶部探头的小怪兽与蓝色飞旋箭头 -->
+                    <g transform="translate(42, -2) scale(0.65)">
+                        <!-- 蓝色飞行动势箭头 -->
+                        <path d="M 25 15 Q 40 5 60 12 L 60 4 L 72 16 L 58 26 L 59 18 Q 42 12 28 22 Z" fill="#0284c7" stroke="#ffffff" stroke-width="1.5"/>
+                        <!-- 绿色萌头 -->
+                        <circle cx="28" cy="18" r="10" fill="#22c55e" stroke="#ffffff" stroke-width="1.5"/>
+                        <ellipse cx="26" cy="17" rx="1.5" ry="2" fill="#0f172a"/>
+                        <ellipse cx="31" cy="17" rx="1.5" ry="2" fill="#0f172a"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <!-- 历史练习列表区域 -->
+        <main class="flex-1 px-4 py-2 space-y-3.5">
+
+            <!-- 卡片 1: 语言基础知识 (2026.09.28 16:58 查看报告) -->
+            <div class="history-card p-4">
+                <h2 class="font-bold text-slate-800 text-[15px] mb-3">语言基础知识</h2>
+                <div class="flex items-center justify-between">
+                    <span class="text-slate-500 text-xs font-normal">2026.09.28 16:58</span>
+                    <button onclick="viewReport('语言基础知识')" class="btn-report px-3.5 py-1.5 rounded-md text-xs font-medium">
+                        查看报告
+                    </button>
+                </div>
+            </div>
+
+            <!-- 卡片 2: 应用文相关知识 (2026.07.13 10:47 继续答题) -->
+            <div class="history-card p-4">
+                <h2 class="font-bold text-slate-800 text-[15px] mb-3">应用文相关知识</h2>
+                <div class="flex items-center justify-between">
+                    <span class="text-slate-500 text-xs font-normal">2026.07.13 10:47</span>
+                    <button onclick="continuePractice('应用文相关知识')" class="btn-continue px-3.5 py-1.5 rounded-md text-xs font-medium">
+                        继续答题
+                    </button>
+                </div>
+            </div>
+
+            <!-- 卡片 3: 文学常识 (2026.07.06 10:31 查看报告) -->
+            <div class="history-card p-4">
+                <h2 class="font-bold text-slate-800 text-[15px] mb-3">文学常识</h2>
+                <div class="flex items-center justify-between">
+                    <span class="text-slate-500 text-xs font-normal">2026.07.06 10:31</span>
+                    <button onclick="viewReport('文学常识')" class="btn-report px-3.5 py-1.5 rounded-md text-xs font-medium">
+                        查看报告
+                    </button>
+                </div>
+            </div>
+
+            <!-- 卡片 4: 语言基础知识 (2026.07.06 10:30 查看报告) -->
+            <div class="history-card p-4">
+                <h2 class="font-bold text-slate-800 text-[15px] mb-3">语言基础知识</h2>
+                <div class="flex items-center justify-between">
+                    <span class="text-slate-500 text-xs font-normal">2026.07.06 10:30</span>
+                    <button onclick="viewReport('语言基础知识')" class="btn-report px-3.5 py-1.5 rounded-md text-xs font-medium">
+                        查看报告
+                    </button>
+                </div>
+            </div>
+
+            <!-- 卡片 5: 语言基础知识 (2026.07.06 10:30 查看报告) -->
+            <div class="history-card p-4">
+                <h2 class="font-bold text-slate-800 text-[15px] mb-3">语言基础知识</h2>
+                <div class="flex items-center justify-between">
+                    <span class="text-slate-500 text-xs font-normal">2026.07.06 10:30</span>
+                    <button onclick="viewReport('语言基础知识')" class="btn-report px-3.5 py-1.5 rounded-md text-xs font-medium">
+                        查看报告
+                    </button>
+                </div>
+            </div>
+
+            <!-- 卡片 6: 语言基础知识 (2026.07.06 10:29 查看报告) -->
+            <div class="history-card p-4">
+                <h2 class="font-bold text-slate-800 text-[15px] mb-3">语言基础知识</h2>
+                <div class="flex items-center justify-between">
+                    <span class="text-slate-500 text-xs font-normal">2026.07.06 10:29</span>
+                    <button onclick="viewReport('语言基础知识')" class="btn-report px-3.5 py-1.5 rounded-md text-xs font-medium">
+                        查看报告
+                    </button>
+                </div>
+            </div>
+
+            <!-- 卡片 7: AI通关练 (2026.07.06 10:25 查看报告) -->
+            <div class="history-card p-4 mb-6">
+                <h2 class="font-bold text-slate-800 text-[15px] mb-3">AI通关练</h2>
+                <div class="flex items-center justify-between">
+                    <span class="text-slate-500 text-xs font-normal">2026.07.06 10:25</span>
+                    <button onclick="viewReport('AI通关练')" class="btn-report px-3.5 py-1.5 rounded-md text-xs font-medium">
+                        查看报告
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 交互脚本 -->
+    <script>
+        function handleBack() {
+            // 优先尝试历史记录后退
+            const currentHref = window.location.href;
+            if (window.history.length > 1) {
+                window.history.back();
+            }
+            // 若 200ms 后仍留在当前页面（例如在 iframe 或直接刷新无上一页），则兜底跳转回 ai_chuangguan.html
+            setTimeout(function() {
+                if (window.location.href === currentHref) {
+                    window.location.href = 'ai_chuangguan.html';
+                }
+            }, 200);
+        }
+
+        function viewReport(title) {
+            // 查看报告跳转至闯关整体报告
+            window.location.href = `baogao_chuangguan.html?title=${encodeURIComponent(title)}`;
+        }
+
+        function continuePractice(title) {
+            // 继续答题跳转至答题页面
+            window.location.href = `dati_yemian.html?mode=ai_level&title=${encodeURIComponent(title)}`;
+        }
+    </script>
+</body>
+</html>
