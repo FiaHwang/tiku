@@ -154,6 +154,16 @@
             border-bottom: 1px solid #e8e8e8;
             display: flex;
             align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .sub-nav-content {
+            width: 100%;
+            max-width: 1200px;
+            height: 100%;
+            display: flex;
+            align-items: center;
             padding: 0 24px;
             gap: 16px;
         }
@@ -180,6 +190,15 @@
         .error-source-nav {
             background-color: #fff;
             border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .error-source-content {
+            width: 100%;
+            max-width: 1200px;
             display: flex;
             align-items: center;
             padding: 12px 24px;
@@ -214,15 +233,37 @@
             gap: 12px;
         }
 
-        /* 题型标签栏 (全量展示，支持多行自动换行) */
+        /* 题型标签栏 (最多展示2行，超出展示展开/收起按钮) */
         .question-type-tabs {
             background-color: #fff;
             border-bottom: 1px solid #e8e8e8;
             display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .question-type-tabs-container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 12px 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .question-type-list {
+            display: flex;
             align-items: center;
             flex-wrap: wrap;
-            padding: 12px 24px;
             gap: 10px 12px;
+            flex: 1;
+            max-height: 74px;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .question-type-list.expanded {
+            max-height: 500px;
         }
 
         .question-type-tab {
@@ -232,6 +273,8 @@
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 13px;
+            height: 32px;
+            box-sizing: border-box;
             color: #555;
             background-color: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -263,12 +306,50 @@
             color: #94a3b8;
         }
 
+        .question-type-toggle-wrap {
+            display: flex;
+            align-items: center;
+            padding-top: 1px;
+            flex-shrink: 0;
+        }
+
+        .question-type-toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 12px;
+            height: 30px;
+            font-size: 13px;
+            color: #666;
+            background: #fff;
+            border: 1px solid #d9d9d9;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .question-type-toggle-btn:hover {
+            color: #ff4d4f;
+            border-color: #ff4d4f;
+            background-color: #fff1f0;
+        }
+
+        .question-type-toggle-btn i {
+            font-size: 11px;
+            transition: transform 0.2s ease;
+        }
+
         /* 主内容区域 */
         .main-container {
             display: flex;
             padding: 24px;
             gap: 24px;
             min-height: calc(100vh - 184px);
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         /* 左侧内容 */
@@ -1155,107 +1236,121 @@
 
     <!-- 二级导航栏 -->
     <div class="sub-nav">
-        <div class="sub-nav-item">错题本</div>
-        <div class="sub-nav-item active">收藏本</div>
-        <div class="sub-nav-item">练习历史</div>
-        <div class="sub-nav-item" style="margin-left: 20px; color: #999; font-size: 12px;">仅展示所选目标下近一年的数据</div>
+        <div class="sub-nav-content">
+            <div class="sub-nav-item">错题本</div>
+            <div class="sub-nav-item active">收藏本</div>
+            <div class="sub-nav-item">练习历史</div>
+            <div class="sub-nav-item" style="margin-left: 20px; color: #999; font-size: 12px; pointer-events: none;">仅展示所选目标下近一年的数据</div>
+        </div>
     </div>
 
     <!-- 错题来源导航 -->
     <div class="error-source-nav">
-        <div class="error-source-item active">题型分类</div>
-        <div class="error-source-item">知识点分类</div>
+        <div class="error-source-content">
+            <div class="error-source-item active">题型分类</div>
+            <div class="error-source-item">知识点分类</div>
+        </div>
     </div>
 
-    <!-- 题型标签栏 (全量22种题型直接展示，支持自动换行) -->
+    <!-- 题型标签栏 (最多展示2行，超出展示展开/收起按钮) -->
     <div class="question-type-tabs">
-        <div class="question-type-tab active" data-type="新一级题型" onclick="selectQuestionType('新一级题型')">
-            <span>新一级题型</span>
-            <span class="question-count">(10)</span>
-        </div>
-        <div class="question-type-tab" data-type="单选题" onclick="selectQuestionType('单选题')">
-            <span>单选题</span>
-            <span class="question-count">(12)</span>
-        </div>
-        <div class="question-type-tab" data-type="多选题" onclick="selectQuestionType('多选题')">
-            <span>多选题</span>
-            <span class="question-count">(8)</span>
-        </div>
-        <div class="question-type-tab" data-type="不定项选择题" onclick="selectQuestionType('不定项选择题')">
-            <span>不定项选择题</span>
-            <span class="question-count">(2)</span>
-        </div>
-        <div class="question-type-tab" data-type="填空题" onclick="selectQuestionType('填空题')">
-            <span>填空题</span>
-            <span class="question-count">(5)</span>
-        </div>
-        <div class="question-type-tab" data-type="判断题" onclick="selectQuestionType('判断题')">
-            <span>判断题</span>
-            <span class="question-count">(6)</span>
-        </div>
-        <div class="question-type-tab" data-type="材料题" onclick="selectQuestionType('材料题')">
-            <span>材料题</span>
-            <span class="question-count">(2)</span>
-        </div>
-        <div class="question-type-tab" data-type="名词解释" onclick="selectQuestionType('名词解释')">
-            <span>名词解释</span>
-            <span class="question-count">(4)</span>
-        </div>
-        <div class="question-type-tab" data-type="简答题" onclick="selectQuestionType('简答题')">
-            <span>简答题</span>
-            <span class="question-count">(3)</span>
-        </div>
-        <div class="question-type-tab" data-type="辨析题" onclick="selectQuestionType('辨析题')">
-            <span>辨析题</span>
-            <span class="question-count">(2)</span>
-        </div>
-        <div class="question-type-tab" data-type="论述题" onclick="selectQuestionType('论述题')">
-            <span>论述题</span>
-            <span class="question-count">(3)</span>
-        </div>
-        <div class="question-type-tab" data-type="翻译题" onclick="selectQuestionType('翻译题')">
-            <span>翻译题</span>
-            <span class="question-count">(2)</span>
-        </div>
-        <div class="question-type-tab" data-type="案例分析题" onclick="selectQuestionType('案例分析题')">
-            <span>案例分析题</span>
-            <span class="question-count">(4)</span>
-        </div>
-        <div class="question-type-tab" data-type="计算分析题" onclick="selectQuestionType('计算分析题')">
-            <span>计算分析题</span>
-            <span class="question-count">(3)</span>
-        </div>
-        <div class="question-type-tab" data-type="证明题" onclick="selectQuestionType('证明题')">
-            <span>证明题</span>
-            <span class="question-count">(1)</span>
-        </div>
-        <div class="question-type-tab" data-type="实验设计题" onclick="selectQuestionType('实验设计题')">
-            <span>实验设计题</span>
-            <span class="question-count">(2)</span>
-        </div>
-        <div class="question-type-tab" data-type="综合应用题" onclick="selectQuestionType('综合应用题')">
-            <span>综合应用题</span>
-            <span class="question-count">(5)</span>
-        </div>
-        <div class="question-type-tab" data-type="连线匹配题" onclick="selectQuestionType('连线匹配题')">
-            <span>连线匹配题</span>
-            <span class="question-count">(2)</span>
-        </div>
-        <div class="question-type-tab" data-type="排序归纳题" onclick="selectQuestionType('排序归纳题')">
-            <span>排序归纳题</span>
-            <span class="question-count">(1)</span>
-        </div>
-        <div class="question-type-tab" data-type="情境阅读题" onclick="selectQuestionType('情境阅读题')">
-            <span>情境阅读题</span>
-            <span class="question-count">(3)</span>
-        </div>
-        <div class="question-type-tab" data-type="完形填空" onclick="selectQuestionType('完形填空')">
-            <span>完形填空</span>
-            <span class="question-count">(4)</span>
-        </div>
-        <div class="question-type-tab" data-type="写作表达题" onclick="selectQuestionType('写作表达题')">
-            <span>写作表达题</span>
-            <span class="question-count">(2)</span>
+        <div class="question-type-tabs-container">
+            <div class="question-type-list" id="question-type-list">
+                <div class="question-type-tab active" data-type="新一级题型" onclick="selectQuestionType('新一级题型')">
+                    <span>新一级题型</span>
+                    <span class="question-count">(10)</span>
+                </div>
+                <div class="question-type-tab" data-type="单选题" onclick="selectQuestionType('单选题')">
+                    <span>单选题</span>
+                    <span class="question-count">(12)</span>
+                </div>
+                <div class="question-type-tab" data-type="多选题" onclick="selectQuestionType('多选题')">
+                    <span>多选题</span>
+                    <span class="question-count">(8)</span>
+                </div>
+                <div class="question-type-tab" data-type="不定项选择题" onclick="selectQuestionType('不定项选择题')">
+                    <span>不定项选择题</span>
+                    <span class="question-count">(2)</span>
+                </div>
+                <div class="question-type-tab" data-type="填空题" onclick="selectQuestionType('填空题')">
+                    <span>填空题</span>
+                    <span class="question-count">(5)</span>
+                </div>
+                <div class="question-type-tab" data-type="判断题" onclick="selectQuestionType('判断题')">
+                    <span>判断题</span>
+                    <span class="question-count">(6)</span>
+                </div>
+                <div class="question-type-tab" data-type="材料题" onclick="selectQuestionType('材料题')">
+                    <span>材料题</span>
+                    <span class="question-count">(2)</span>
+                </div>
+                <div class="question-type-tab" data-type="名词解释" onclick="selectQuestionType('名词解释')">
+                    <span>名词解释</span>
+                    <span class="question-count">(4)</span>
+                </div>
+                <div class="question-type-tab" data-type="简答题" onclick="selectQuestionType('简答题')">
+                    <span>简答题</span>
+                    <span class="question-count">(3)</span>
+                </div>
+                <div class="question-type-tab" data-type="辨析题" onclick="selectQuestionType('辨析题')">
+                    <span>辨析题</span>
+                    <span class="question-count">(2)</span>
+                </div>
+                <div class="question-type-tab" data-type="论述题" onclick="selectQuestionType('论述题')">
+                    <span>论述题</span>
+                    <span class="question-count">(3)</span>
+                </div>
+                <div class="question-type-tab" data-type="翻译题" onclick="selectQuestionType('翻译题')">
+                    <span>翻译题</span>
+                    <span class="question-count">(2)</span>
+                </div>
+                <div class="question-type-tab" data-type="案例分析题" onclick="selectQuestionType('案例分析题')">
+                    <span>案例分析题</span>
+                    <span class="question-count">(4)</span>
+                </div>
+                <div class="question-type-tab" data-type="计算分析题" onclick="selectQuestionType('计算分析题')">
+                    <span>计算分析题</span>
+                    <span class="question-count">(3)</span>
+                </div>
+                <div class="question-type-tab" data-type="证明题" onclick="selectQuestionType('证明题')">
+                    <span>证明题</span>
+                    <span class="question-count">(1)</span>
+                </div>
+                <div class="question-type-tab" data-type="实验设计题" onclick="selectQuestionType('实验设计题')">
+                    <span>实验设计题</span>
+                    <span class="question-count">(2)</span>
+                </div>
+                <div class="question-type-tab" data-type="综合应用题" onclick="selectQuestionType('综合应用题')">
+                    <span>综合应用题</span>
+                    <span class="question-count">(5)</span>
+                </div>
+                <div class="question-type-tab" data-type="连线匹配题" onclick="selectQuestionType('连线匹配题')">
+                    <span>连线匹配题</span>
+                    <span class="question-count">(2)</span>
+                </div>
+                <div class="question-type-tab" data-type="排序归纳题" onclick="selectQuestionType('排序归纳题')">
+                    <span>排序归纳题</span>
+                    <span class="question-count">(1)</span>
+                </div>
+                <div class="question-type-tab" data-type="情境阅读题" onclick="selectQuestionType('情境阅读题')">
+                    <span>情境阅读题</span>
+                    <span class="question-count">(3)</span>
+                </div>
+                <div class="question-type-tab" data-type="完形填空" onclick="selectQuestionType('完形填空')">
+                    <span>完形填空</span>
+                    <span class="question-count">(4)</span>
+                </div>
+                <div class="question-type-tab" data-type="写作表达题" onclick="selectQuestionType('写作表达题')">
+                    <span>写作表达题</span>
+                    <span class="question-count">(2)</span>
+                </div>
+            </div>
+            <div class="question-type-toggle-wrap" id="question-type-toggle-wrap">
+                <button class="question-type-toggle-btn" id="question-type-toggle-btn" onclick="toggleQuestionTypes(event)">
+                    <span id="question-type-toggle-text">展开</span>
+                    <i class="fas fa-chevron-down" id="question-type-toggle-icon"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -2509,6 +2604,42 @@
             // 3. 轻量提示
             showPcToast(`已切换至：${typeName}（共 ${conf.count} 题）`);
         }
+
+        // 题型展开/收起切换 (最多展示2行)
+        function toggleQuestionTypes(event) {
+            if (event) event.stopPropagation();
+            const list = document.getElementById('question-type-list');
+            const text = document.getElementById('question-type-toggle-text');
+            const icon = document.getElementById('question-type-toggle-icon');
+            if (!list) return;
+
+            const isExpanded = list.classList.toggle('expanded');
+            if (isExpanded) {
+                if (text) text.textContent = '收起';
+                if (icon) icon.className = 'fas fa-chevron-up';
+            } else {
+                if (text) text.textContent = '展开';
+                if (icon) icon.className = 'fas fa-chevron-down';
+            }
+        }
+
+        // 检测题型是否超出2行，决定是否展示展开/收起按钮
+        function checkQuestionTypesOverflow() {
+            const list = document.getElementById('question-type-list');
+            const toggleWrap = document.getElementById('question-type-toggle-wrap');
+            if (!list || !toggleWrap) return;
+            
+            // 74px 是刚好2行的高度 (32px * 2 + 10px gap)
+            if (list.scrollHeight > 78) {
+                toggleWrap.style.display = 'flex';
+            } else if (!list.classList.contains('expanded')) {
+                toggleWrap.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('load', checkQuestionTypesOverflow);
+        window.addEventListener('resize', checkQuestionTypesOverflow);
+        setTimeout(checkQuestionTypesOverflow, 100);
 
         function showPcToast(msg) {
             let toast = document.getElementById('pc-toast-msg');
