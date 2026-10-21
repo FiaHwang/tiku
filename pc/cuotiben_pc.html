@@ -1419,7 +1419,7 @@
             <div class="sub-nav-item">收藏本</div>
             <div class="sub-nav-item">练习历史</div>
             <div class="sub-nav-item" style="margin-left: 20px; color: #999; font-size: 12px; pointer-events: none;">仅展示所选目标下近一年的数据</div>
-            <div style="margin-left: auto; display: flex; align-items: center;">
+            <div style="margin-left: auto; display: flex; align-items: center;" id="pc-settings-btn-container">
                 <button class="settings-btn-pc" onclick="openPcSettingsModal()">
                     <i class="fas fa-cog"></i>
                     <span>错题本设置</span>
@@ -2741,6 +2741,7 @@
                 
                 const qTypeTabs = document.querySelector('.question-type-tabs');
                 
+                const pcSettings = document.getElementById('pc-settings-btn-container');
                 // 根据切换的标签显示不同的内容
                 if (text === '题型分类') {
                     // 显示题库错题内容，隐藏拍错题 and 知识点内容
@@ -2751,6 +2752,7 @@
                     if (qTypeTabs) qTypeTabs.style.display = 'flex';
                     // 显示右侧边栏（包含答题卡）
                     document.querySelector('.right-sidebar').style.display = 'block';
+                    if (pcSettings) pcSettings.style.display = 'flex';
                 } else if (text === '拍错题') {
                     // 显示拍错题内容，隐藏题库错题 and 知识点内容
                     document.querySelector('.question-bank-content').style.display = 'none';
@@ -2760,6 +2762,7 @@
                     if (qTypeTabs) qTypeTabs.style.display = 'none';
                     // 隐藏右侧边栏（包含答题卡）
                     document.querySelector('.right-sidebar').style.display = 'none';
+                    if (pcSettings) pcSettings.style.display = 'none';
                 } else if (text === '知识点分类') {
                     // 显示知识点内容，隐藏题库错题 and 拍错题内容
                     document.querySelector('.question-bank-content').style.display = 'none';
@@ -2769,6 +2772,7 @@
                     if (qTypeTabs) qTypeTabs.style.display = 'none';
                     // 隐藏右侧边栏（包含答题卡）
                     document.querySelector('.right-sidebar').style.display = 'none';
+                    if (pcSettings) pcSettings.style.display = 'flex';
                 }
             });
         });
