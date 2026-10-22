@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>刷题排行榜</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+            background: linear-gradient(180deg, #eaf4ed 0%, #f7f9fc 30%, #f7f9fc 100%);
+            -webkit-font-smoothing: antialiased;
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.08);
+            padding-bottom: 40px;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 48px;
+            padding: 0 16px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            font-size: 18px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .page-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .header-right {
+            width: 36px;
+        }
+
+        /* 榜单说明悬浮标签 */
+        .rules-badge {
+            position: fixed;
+            right: 0;
+            top: 130px;
+            background: #52c41a;
+            color: #fff;
+            font-size: 12px;
+            padding: 6px 4px 6px 8px;
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+            writing-mode: vertical-lr;
+            letter-spacing: 2px;
+            cursor: pointer;
+            box-shadow: -2px 2px 8px rgba(82, 196, 26, 0.3);
+            z-index: 99;
+            transition: opacity 0.2s;
+        }
+        .rules-badge:active {
+            opacity: 0.85;
+        }
+
+        /* 顶部选项卡：日榜、周榜、月榜、总榜 */
+        .tabs-container {
+            padding: 12px 16px 16px 16px;
+        }
+
+        .ranking-tabs {
+            display: flex;
+            background: #fff;
+            padding: 4px;
+            border-radius: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        }
+
+        .ranking-tab {
+            flex: 1;
+            text-align: center;
+            padding: 8px 0;
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .ranking-tab.active {
+            background: #ff4d4f;
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(255, 77, 79, 0.3);
+        }
+
+        /* 冠亚季军领奖台区域 */
+        .podium-section {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 20px 16px 10px 16px;
+            gap: 12px;
+        }
+
+        .podium-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            flex: 1;
+        }
+
+        /* 第一名居中且最高 */
+        .podium-item.first {
+            margin-bottom: 12px;
+            z-index: 3;
+        }
+        .podium-item.second {
+            z-index: 2;
+        }
+        .podium-item.third {
+            z-index: 1;
+        }
+
+        /* 头像与皇冠/奖牌 */
+        .avatar-box {
+            position: relative;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 6px;
+        }
+        .podium-item.first .avatar-box {
+            width: 68px;
+            height: 68px;
+            border-color: #faad14;
+        }
+
+        .avatar-box img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .medal-badge {
+            position: absolute;
+            bottom: -4px;
+            right: 50%;
+            transform: translateX(50%);
+            background: #faad14;
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #fff;
+        }
+        .podium-item.first .medal-badge {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            width: 22px;
+            height: 22px;
+            font-size: 12px;
+        }
+        .podium-item.second .medal-badge {
+            background: linear-gradient(135deg, #e0e0e0, #9e9e9e);
+        }
+        .podium-item.third .medal-badge {
+            background: linear-gradient(135deg, #ffb347, #d2691e);
+        }
+
+        .user-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            max-width: 90px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
+        }
+
+        .user-score {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ff4d4f;
+        }
+        .podium-item.second .user-score {
+            color: #1890ff;
+        }
+        .podium-item.third .user-score {
+            color: #fa8c16;
+        }
+
+        /* 台基样式 */
+        .podium-block {
+            width: 100%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.6));
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            text-align: center;
+            padding-top: 8px;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.03);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-bottom: none;
+        }
+        .podium-item.first .podium-block {
+            height: 70px;
+            background: linear-gradient(180deg, #fffbe6, #fff1b8);
+            border-color: #ffe58f;
+        }
+        .podium-item.second .podium-block {
+            height: 52px;
+            background: linear-gradient(180deg, #f0f5ff, #adc6ff);
+            border-color: #d6e4ff;
+        }
+        .podium-item.third .podium-block {
+            height: 40px;
+            background: linear-gradient(180deg, #fff7e6, #ffd591);
+            border-color: #ffe7ba;
+        }
+
+        /* 列表区域 */
+        .list-section {
+            padding: 0 16px;
+        }
+
+        .list-header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #8c8c8c;
+            font-size: 12px;
+            padding: 10px 4px;
+        }
+
+        .ranking-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .rank-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            transition: transform 0.1s;
+        }
+        .rank-card:active {
+            transform: scale(0.99);
+        }
+
+        .rank-card.my-card {
+            background: linear-gradient(135deg, #fff1f0, #fff);
+            border: 1px solid #ffccc7;
+        }
+
+        .rank-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .rank-num {
+            font-size: 15px;
+            font-weight: bold;
+            color: #595959;
+            width: 24px;
+            text-align: center;
+        }
+
+        .rank-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #f0f0f0;
+            flex-shrink: 0;
+        }
+        .rank-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .rank-user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .rank-username {
+            font-size: 14px;
+            font-weight: 600;
+            color: #262626;
+        }
+
+        .rank-score {
+            font-size: 15px;
+            font-weight: bold;
+            color: #ff4d4f;
+        }
+
+        /* 说明弹窗 */
+        .modal-mask {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: #fff;
+            width: 85%;
+            max-width: 360px;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            animation: modalIn 0.2s ease-out;
+        }
+        @keyframes modalIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal-title {
+            font-size: 17px;
+            font-weight: bold;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .modal-body {
+            font-size: 13px;
+            color: #595959;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .modal-body p {
+            margin-bottom: 8px;
+        }
+        .modal-btn {
+            width: 100%;
+            padding: 10px;
+            background: #1890ff;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航 -->
+    <header class="header">
+        <button class="back-btn" onclick="history.back()">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <h1 class="page-title">刷题排行榜</h1>
+        <div class="header-right"></div>
+    </header>
+
+    <!-- 榜单说明悬浮标签 -->
+    <div class="rules-badge" onclick="openRulesModal()">榜单说明</div>
+
+    <!-- 顶部选项卡 -->
+    <div class="tabs-container">
+        <div class="ranking-tabs">
+            <div class="ranking-tab" onclick="switchTab('day', this)">日榜</div>
+            <div class="ranking-tab active" onclick="switchTab('week', this)">周榜</div>
+            <div class="ranking-tab" onclick="switchTab('month', this)">月榜</div>
+            <div class="ranking-tab" onclick="switchTab('total', this)">总榜</div>
+        </div>
+    </div>
+
+    <!-- 冠亚季军领奖台 -->
+    <div class="podium-section" id="podiumContainer">
+        <!-- 动态渲染 -->
+    </div>
+
+    <!-- 列表区域 -->
+    <div class="list-section">
+        <div class="list-header-info">
+            <span id="updateTimeText">排行榜每日更新</span>
+            <span>刷题量</span>
+        </div>
+        <div class="ranking-list" id="rankingListContainer">
+            <!-- 动态渲染 -->
+        </div>
+    </div>
+
+    <!-- 榜单说明弹窗 -->
+    <div class="modal-mask" id="rulesModal" onclick="closeRulesModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-title">排行榜规则说明</div>
+            <div class="modal-body">
+                <p>1. <strong>统计范围</strong>：平台内所有正规练习模式、章节练习、真题与每日一练的有效作答题目数。</p>
+                <p>2. <strong>更新频率</strong>：日榜每日凌晨0点结算，周榜每周一更新，月榜每月1号更新，总榜实时更新。</p>
+                <p>3. <strong>计分规则</strong>：每正确完成或提交一道试题计1分（重复刷同一题合理去重），作答越积极排名越高。</p>
+            </div>
+            <button class="modal-btn" onclick="closeRulesModal()">我知道了</button>
+        </div>
+    </div>
+
+    <script>
+        // 模拟排行榜数据
+        const rankingData = {
+            day: {
+                podium: [
+                    { rank: 2, name: '用户2059', score: '45道', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 1, name: '嘎嘎嘎嘎嘎', score: '62道', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 3, name: '°', score: '38道', avatar: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80' }
+                ],
+                myRank: { rank: 50, name: '技术-黄飞亚(我)', score: '0道', avatar: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=red%20logo%20brand%20icon%2C%20minimalist&image_size=square' },
+                list: [
+                    { rank: 4, name: '用户2855', score: '35道', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 5, name: '库课用户7658', score: '31道', avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 6, name: '用户2785', score: '26道', avatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 7, name: 'TandA', score: '22道', avatar: 'https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 8, name: '用户5596', score: '19道', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80' }
+                ]
+            },
+            week: {
+                podium: [
+                    { rank: 2, name: '用户2059', score: '217道', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 1, name: '嘎嘎嘎嘎嘎', score: '247道', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 3, name: '°', score: '204道', avatar: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80' }
+                ],
+                myRank: { rank: 50, name: '技术-黄飞亚(我)', score: '0道', avatar: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=red%20logo%20brand%20icon%2C%20minimalist&image_size=square' },
+                list: [
+                    { rank: 4, name: '用户2855', score: '165道', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 5, name: '库课用户7658', score: '153道', avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 6, name: '用户2785', score: '118道', avatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 7, name: 'TandA', score: '104道', avatar: 'https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 8, name: '用户5596', score: '102道', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80' }
+                ]
+            },
+            month: {
+                podium: [
+                    { rank: 2, name: '用户2059', score: '980道', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 1, name: '嘎嘎嘎嘎嘎', score: '1150道', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 3, name: '°', score: '920道', avatar: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80' }
+                ],
+                myRank: { rank: 42, name: '技术-黄飞亚(我)', score: '45道', avatar: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=red%20logo%20brand%20icon%2C%20minimalist&image_size=square' },
+                list: [
+                    { rank: 4, name: '用户2855', score: '880道', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 5, name: '库课用户7658', score: '810道', avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 6, name: '用户2785', score: '750道', avatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 7, name: 'TandA', score: '690道', avatar: 'https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 8, name: '用户5596', score: '620道', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80' }
+                ]
+            },
+            total: {
+                podium: [
+                    { rank: 2, name: '用户2059', score: '4,520道', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 1, name: '嘎嘎嘎嘎嘎', score: '5,180道', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 3, name: '°', score: '4,100道', avatar: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80' }
+                ],
+                myRank: { rank: 35, name: '技术-黄飞亚(我)', score: '320道', avatar: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=red%20logo%20brand%20icon%2C%20minimalist&image_size=square' },
+                list: [
+                    { rank: 4, name: '用户2855', score: '3,890道', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 5, name: '库课用户7658', score: '3,650道', avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 6, name: '用户2785', score: '3,420道', avatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 7, name: 'TandA', score: '3,100道', avatar: 'https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=150&auto=format&fit=crop&q=80' },
+                    { rank: 8, name: '用户5596', score: '2,950道', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80' }
+                ]
+            }
+        };
+
+        function maskName(name) {
+            if (!name) return '';
+            if (name.includes('(我)') || name.includes('(self)')) return name;
+            if (name.length <= 1) return name;
+            if (name.length === 2) return name[0] + '*';
+            return name[0] + '***' + name[name.length - 1];
+        }
+
+        function switchTab(type, el) {
+            document.querySelectorAll('.ranking-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+
+            const data = rankingData[type];
+            if (!data) return;
+
+            // 渲染领奖台 (顺序：第2名, 第1名, 第3名)
+            const p = data.podium;
+            const podiumContainer = document.getElementById('podiumContainer');
+            podiumContainer.innerHTML = `
+                <div class="podium-item second">
+                    <div class="avatar-box">
+                        <img src="${p[0].avatar}" alt="${p[0].name}">
+                        <div class="medal-badge">2</div>
+                    </div>
+                    <div class="user-name">${maskName(p[0].name)}</div>
+                    <div class="user-score">${p[0].score}</div>
+                    <div class="podium-block"></div>
+                </div>
+                <div class="podium-item first">
+                    <div class="avatar-box">
+                        <img src="${p[1].avatar}" alt="${p[1].name}">
+                        <div class="medal-badge">1</div>
+                    </div>
+                    <div class="user-name">${maskName(p[1].name)}</div>
+                    <div class="user-score">${p[1].score}</div>
+                    <div class="podium-block"></div>
+                </div>
+                <div class="podium-item third">
+                    <div class="avatar-box">
+                        <img src="${p[2].avatar}" alt="${p[2].name}">
+                        <div class="medal-badge">3</div>
+                    </div>
+                    <div class="user-name">${maskName(p[2].name)}</div>
+                    <div class="user-score">${p[2].score}</div>
+                    <div class="podium-block"></div>
+                </div>
+            `;
+
+            // 渲染列表 (包含我方卡片 + 其他排名)
+            const listContainer = document.getElementById('rankingListContainer');
+            let listHtml = `
+                <div class="rank-card my-card">
+                    <div class="rank-left">
+                        <div class="rank-num" style="color: #ff4d4f;">${data.myRank.rank}</div>
+                        <div class="rank-avatar">
+                            <img src="${data.myRank.avatar}" alt="我">
+                        </div>
+                        <div class="rank-user-info">
+                            <div class="rank-username">${data.myRank.name}</div>
+                        </div>
+                    </div>
+                    <div class="rank-score">${data.myRank.score}</div>
+                </div>
+            `;
+
+            data.list.forEach(item => {
+                listHtml += `
+                    <div class="rank-card">
+                        <div class="rank-left">
+                            <div class="rank-num">${item.rank}</div>
+                            <div class="rank-avatar">
+                                <img src="${item.avatar}" alt="${item.name}">
+                            </div>
+                            <div class="rank-user-info">
+                                <div class="rank-username">${maskName(item.name)}</div>
+                            </div>
+                        </div>
+                        <div class="rank-score">${item.score}</div>
+                    </div>
+                `;
+            });
+
+            listContainer.innerHTML = listHtml;
+        }
+
+        function openRulesModal() {
+            document.getElementById('rulesModal').style.display = 'flex';
+        }
+
+        function closeRulesModal(e) {
+            if (!e || e.target.id === 'rulesModal' || e.target.classList.contains('modal-btn')) {
+                document.getElementById('rulesModal').style.display = 'none';
+            }
+        }
+
+        // 初始化加载默认周榜
+        window.addEventListener('load', () => {
+            const activeTabEl = document.querySelector('.ranking-tab.active');
+            if (activeTabEl) {
+                switchTab('week', activeTabEl);
+            }
+        });
+    </script>
+</body>
+</html>

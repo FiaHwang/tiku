@@ -1399,7 +1399,7 @@
             <div class="feature-icon"><i class="fas fa-history"></i></div>
             <div class="feature-label">练习历史</div>
         </div>
-        <div class="feature-tab">
+        <div class="feature-tab" onclick="location.href='dati_paihang.html'">
             <div class="feature-icon"><i class="fas fa-trophy"></i></div>
             <div class="feature-label">答题排行</div>
         </div>
@@ -2715,7 +2715,7 @@
             tab.addEventListener('click', () => {
                 console.log('点击功能标签:', ['错题本', '收藏本', '笔记本', '练习历史', '答题排行', '答题报告', '试题榜单'][index]);
                 // 跳转到对应页面
-                const pages = ['cuotiben.html', 'shoucangben.html', 'bijiben.html', 'lianxi_lishi.html', '#', 'dati_baogao.html', 'shiti_bangdan.html'];
+                const pages = ['cuotiben.html', 'shoucangben.html', 'bijiben.html', 'lianxi_lishi.html', 'dati_paihang.html', 'dati_baogao.html', 'shiti_bangdan.html'];
                 if (pages[index] && pages[index] !== '#') {
                     window.location.href = pages[index];
                 }
@@ -2974,7 +2974,7 @@
                     <div class="toolbox-icon"><i class="fas fa-history"></i></div>
                     <div class="toolbox-label">练习历史</div>
                 </div>
-                <div class="toolbox-item" onclick="location.href='paihang.html'">
+                <div class="toolbox-item" onclick="location.href='dati_paihang.html'">
                     <div class="toolbox-icon"><i class="fas fa-trophy"></i></div>
                     <div class="toolbox-label">答题排行</div>
                 </div>
