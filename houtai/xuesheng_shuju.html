@@ -1032,31 +1032,41 @@
                                     <div class="flex items-center gap-1">
                                         <span id="th-freqYears-text">考频</span>
                                         <span id="sort-icon-freqYears"><i class="fas fa-sort-down text-orange-500 text-[10px]"></i></span>
+                                        <i class="fas fa-question-circle text-slate-400 hover:text-orange-500 text-xs ml-0.5 cursor-pointer" onclick="toggleTip(event, '所选年份内该知识点在真题中考到的题数，一题算 1 次')" onmouseenter="showTip(event, '所选年份内该知识点在真题中考到的题数，一题算 1 次')" onmouseleave="hideTip()"></i>
                                     </div>
                                 </th>
-                                <th class="p-2.5 font-semibold min-w-[120px]">常考题型</th>
+                                <th class="p-2.5 font-semibold min-w-[120px]">
+                                    <div class="flex items-center gap-1">
+                                        <span>常考题型</span>
+                                        <i class="fas fa-question-circle text-slate-400 hover:text-orange-500 text-xs ml-0.5 cursor-pointer" onclick="toggleTip(event, '该知识点真题中出现次数最多的 2 个一级题型')" onmouseenter="showTip(event, '该知识点真题中出现次数最多的 2 个一级题型')" onmouseleave="hideTip()"></i>
+                                    </div>
+                                </th>
                                 <th class="p-2.5 font-semibold min-w-[105px] cursor-pointer hover:text-orange-600 transition-colors" onclick="toggleHeatSort('scoreRatio')" id="th-scoreRatio">
                                     <div class="flex items-center gap-1">
                                         <span>真题分值占比</span>
                                         <span id="sort-icon-scoreRatio"><i class="fas fa-sort text-slate-300 text-[10px]"></i></span>
+                                        <i class="fas fa-question-circle text-slate-400 hover:text-orange-500 text-xs ml-0.5 cursor-pointer" onclick="toggleTip(event, '该知识点平均每套真题的分值占整卷总分的比例')" onmouseenter="showTip(event, '该知识点平均每套真题的分值占整卷总分的比例')" onmouseleave="hideTip()"></i>
                                     </div>
                                 </th>
                                 <th class="p-2.5 font-semibold min-w-[105px] cursor-pointer hover:text-orange-600 transition-colors" onclick="toggleHeatSort('totalAvgScore')" id="th-totalAvgScore">
                                     <div class="flex items-center gap-1">
                                         <span>真题平均分值</span>
                                         <span id="sort-icon-totalAvgScore"><i class="fas fa-sort text-slate-300 text-[10px]"></i></span>
+                                        <i class="fas fa-question-circle text-slate-400 hover:text-orange-500 text-xs ml-0.5 cursor-pointer" onclick="toggleTip(event, '该知识点平均每套真题考到的分值')" onmouseenter="showTip(event, '该知识点平均每套真题考到的分值')" onmouseleave="hideTip()"></i>
                                     </div>
                                 </th>
                                 <th class="p-2.5 font-semibold min-w-[105px] cursor-pointer hover:text-orange-600 transition-colors" onclick="toggleHeatSort('avgScore')" id="th-avgScore">
                                     <div class="flex items-center gap-1">
                                         <span>真题平均得分</span>
                                         <span id="sort-icon-avgScore"><i class="fas fa-sort text-slate-300 text-[10px]"></i></span>
+                                        <i class="fas fa-question-circle text-slate-400 hover:text-orange-500 text-xs ml-0.5 cursor-pointer" onclick="toggleTip(event, '学员在该知识点真题上的平均得分')" onmouseenter="showTip(event, '学员在该知识点真题上的平均得分')" onmouseleave="hideTip()"></i>
                                     </div>
                                 </th>
                                 <th class="p-2.5 font-semibold min-w-[110px] text-right pr-4 cursor-pointer hover:text-orange-600 transition-colors" onclick="toggleHeatSort('accuracy')" id="th-accuracy">
                                     <div class="flex items-center justify-end gap-1">
                                         <span>真题正确率</span>
                                         <span id="sort-icon-accuracy"><i class="fas fa-sort text-slate-300 text-[10px]"></i></span>
+                                        <i class="fas fa-question-circle text-slate-400 hover:text-orange-500 text-xs ml-0.5 cursor-pointer" onclick="toggleTip(event, '学员在该知识点真题上的答对题数占比')" onmouseenter="showTip(event, '学员在该知识点真题上的答对题数占比')" onmouseleave="hideTip()"></i>
                                     </div>
                                 </th>
                             </tr>
@@ -3171,6 +3181,48 @@
             initHeatUpdateTime();
             initCharts();
         });
+
+        function showTip(event, text) {
+            const tip = document.getElementById('globalTooltip');
+            if (!tip) return;
+            tip.textContent = text;
+            tip.style.display = 'block';
+            const rect = event.currentTarget.getBoundingClientRect();
+            tip.style.left = (rect.left + rect.width / 2 - tip.offsetWidth / 2) + 'px';
+            tip.style.top = (rect.top - tip.offsetHeight - 8) + 'px';
+        }
+
+        function hideTip() {
+            const tip = document.getElementById('globalTooltip');
+            if (tip) tip.style.display = 'none';
+        }
+
+        function toggleTip(event, text) {
+            event.stopPropagation();
+            const tip = document.getElementById('globalTooltip');
+            if (!tip) return;
+            if (tip.style.display === 'block' && tip.dataset.text === text) {
+                tip.style.display = 'none';
+                tip.dataset.text = '';
+            } else {
+                tip.textContent = text;
+                tip.dataset.text = text;
+                tip.style.display = 'block';
+                const rect = event.currentTarget.getBoundingClientRect();
+                tip.style.left = (rect.left + rect.width / 2 - tip.offsetWidth / 2) + 'px';
+                tip.style.top = (rect.top - tip.offsetHeight - 8) + 'px';
+            }
+        }
+
+        document.addEventListener('click', () => {
+            const tip = document.getElementById('globalTooltip');
+            if (tip) {
+                tip.style.display = 'none';
+                tip.dataset.text = '';
+            }
+        });
     </script>
+    <!-- 全局提示气泡 (Tooltip) -->
+    <div id="globalTooltip" style="display: none; position: fixed; z-index: 9999; background: rgba(0,0,0,0.85); color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 12px; max-width: 260px; line-height: 1.4; box-shadow: 0 4px 12px rgba(0,0,0,0.15); pointer-events: none; transition: opacity 0.15s ease;"></div>
 </body>
 </html>
