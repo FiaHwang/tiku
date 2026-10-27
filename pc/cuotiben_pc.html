@@ -3552,6 +3552,12 @@
                                 <p>D选项《战国策》是记载战国时期各国政治、军事、外交等活动的史书，也不包含这个成语。</p>
                                 <p>因此，正确答案是C选项《左传》。</p>
                             </div>
+                            <div class="suggestion-box" style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed #e8e8e8; font-size: 13px; color: #666; display: flex; align-items: center; gap: 4px;">
+                                <span style="color: #8c8c8c;">你可能想问：</span>
+                                <span class="suggestion-link" style="color: #1890ff; cursor: pointer; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 2px;" onclick="sendPCSuggestion('举一反三，出一道类似的题目。')">
+                                    <i class="fas fa-lightbulb" style="font-size: 12px;"></i> 举一反三，出一道类似的题目。
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3641,17 +3647,52 @@
             messageDiv.style.display = 'flex';
             messageDiv.style.justifyContent = 'flex-start';
             messageDiv.style.marginBottom = '20px';
+            
+            const showSuggestion = !text.includes('唇亡齿寒');
+            let suggestionHtml = '';
+            if (showSuggestion) {
+                suggestionHtml = `
+                    <div class="suggestion-box" style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed #e8e8e8; font-size: 13px; color: #666; display: flex; align-items: center; gap: 4px;">
+                        <span style="color: #8c8c8c;">你可能想问：</span>
+                        <span class="suggestion-link" style="color: #1890ff; cursor: pointer; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 2px;" onclick="sendPCSuggestion('举一反三，出一道类似的题目。')">
+                            <i class="fas fa-lightbulb" style="font-size: 12px;"></i> 举一反三，出一道类似的题目。
+                        </span>
+                    </div>
+                `;
+            }
+            
             messageDiv.innerHTML = `
                 <div style="max-width: 80%; padding: 12px 16px; border-radius: 18px; background-color: #fff; color: #333; border: 1px solid #e8e8e8; border-bottom-left-radius: 4px;">
                     <div style="font-size: 14px; line-height: 1.5; color: #333;">
-                        <p>${text}</p>
+                        ${text.includes('<p>') || text.includes('<div>') ? text : `<p>${text}</p>`}
                     </div>
+                    ${suggestionHtml}
                 </div>
             `;
             aiChatContainer.appendChild(messageDiv);
             // 滚动到底部
             aiChatContainer.scrollTop = aiChatContainer.scrollHeight;
         }
+
+        window.sendPCSuggestion = function(text) {
+            addUserMessage(text);
+            
+            // 模拟AI回复举一反三的题目
+            setTimeout(() => {
+                const similarQuestion = `
+                    <div style="margin-bottom: 12px; font-weight: 500;">
+                        下列经典成语中，同样出自《左传》的是 ( )
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 6px; font-size: 14px;">
+                        <div>A. 唇亡齿寒</div>
+                        <div>B. 完璧归赵</div>
+                        <div>C. 纸上谈兵</div>
+                        <div>D. 负荆请罪</div>
+                    </div>
+                `;
+                addAIMessage(similarQuestion);
+            }, 1000);
+        };
 
         // 发送按钮点击事件
         aiSendBtn.addEventListener('click', sendAIMessage);
