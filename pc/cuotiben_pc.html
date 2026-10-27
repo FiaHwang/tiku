@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>错题本PC端</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
         /* 重置样式 */
         * {
             margin: 0;
@@ -2551,7 +2555,7 @@
         <!-- 右侧边栏 -->
         <div class="right-sidebar">
             <!-- 答题卡 -->
-            <div class="answer-card">
+            <div class="answer-card" id="pc-answer-card">
                 <div class="answer-card-header">
                     <span>答题卡</span>
                     <button class="collapse-btn">
@@ -2590,6 +2594,45 @@
                         <i class="fas fa-arrow-left"></i>
                         <span>返回</span>
                     </button>
+                </div>
+            </div>
+
+            <!-- AI 智能提分与建议 (放在右侧竖列，样式参考 zhangjie_zhengti_baogao_pc) -->
+            <div class="ai-suggestions-container space-y-4" id="pc-ai-suggestions" style="margin-top: 16px;">
+                <!-- 提分攻略 -->
+                <div class="bg-white rounded-2xl p-5 card-shadow border border-indigo-50/50" id="ai-improvement-card">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h2 class="text-base font-bold text-gray-800">提分攻略</h2>
+                            <span class="px-1.5 py-0.5 text-[10px] font-normal text-amber-600 bg-amber-50 rounded-md flex items-center gap-1 border border-amber-100/50"><span class="w-1 h-1 rounded-full bg-amber-500 animate-pulse"></span>更新中</span>
+                        </div>
+                        <span class="text-xs text-gray-400">内容由AI生成</span>
+                    </div>
+                    <div class="bg-indigo-50/40 rounded-xl p-4 text-sm leading-relaxed text-gray-600 space-y-3" id="ai-improvement-content">
+                        <p><strong class="text-indigo-600">1. 夯实核心考点：</strong>本分类中失分较多的薄弱模块进行针对性专项突破。</p>
+                        <p><strong class="text-indigo-600">2. 进行限时专项练习：</strong>针对常考易错题型，尝试设定练习闹钟，训练在考场压力下的解题速度。</p>
+                        <p><strong class="text-indigo-600">3. 建立错题本复盘逻辑：</strong>将概念混淆与审题粗心导致的错题分层归纳，定期回顾重做，避免在同类陷阱中再次失分。</p>
+                    </div>
+                </div>
+
+                <!-- 学习建议 -->
+                <div class="bg-white rounded-2xl p-5 card-shadow border border-orange-50/50" id="ai-suggestion-card">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-orange-50 text-orange-600 rounded-lg flex items-center justify-center">
+                                <i class="far fa-lightbulb"></i>
+                            </div>
+                            <h2 class="text-base font-bold text-gray-800">学习建议</h2>
+                            <span class="px-1.5 py-0.5 text-[10px] font-normal text-amber-600 bg-amber-50 rounded-md flex items-center gap-1 border border-amber-100/50"><span class="w-1 h-1 rounded-full bg-amber-500 animate-pulse"></span>更新中</span>
+                        </div>
+                        <span class="text-xs text-gray-400">内容由AI生成</span>
+                    </div>
+                    <div class="bg-orange-50/40 rounded-xl p-5 text-sm leading-relaxed text-orange-900 border border-orange-100/50" id="ai-suggestion-content">
+                        你在基础知识上掌握相对稳健，整体完成度良好。接下来的任务是攻克弱项章节内的“深水区”知识点，通过精读解析与反思总结来提升思维深度。
+                    </div>
                 </div>
             </div>
         </div>
@@ -2721,6 +2764,33 @@
         window.addEventListener('resize', checkQuestionTypesOverflow);
         setTimeout(checkQuestionTypesOverflow, 100);
 
+        // 动态更新 AI 提分攻略与学习建议内容 (参考 zhangjie_zhengti_baogao_pc 样式)
+        function updateAiSuggestions(mode) {
+            const impContent = document.getElementById('ai-improvement-content');
+            const sugContent = document.getElementById('ai-suggestion-content');
+            if (!impContent || !sugContent) return;
+
+            if (mode === 'knowledge') {
+                impContent.innerHTML = `
+                    <p><strong class="text-indigo-600">1. 夯实知识点核心考点：</strong>重点梳理薄弱模块与高频考点，针对公式推导、概念辨析进行专项突破。</p>
+                    <p><strong class="text-indigo-600">2. 进行限时专项练习：</strong>按知识点章节设定专项练习时限，训练在模拟压力下的知识点调取速度。</p>
+                    <p><strong class="text-indigo-600">3. 构建知识脉络逻辑：</strong>将章节中易混淆知识点建立思维导图，定期复盘，避免同类知识盲区再次失分。</p>
+                `;
+                sugContent.innerHTML = `
+                    你在各知识点章节的基础概念上表现稳健。接下来的核心任务是攻克知识点体系中的“深水区”难点，通过多层级穿透与精读错题解析来提升综合解题思维深度。
+                `;
+            } else {
+                impContent.innerHTML = `
+                    <p><strong class="text-indigo-600">1. 夯实题型核心考点：</strong>本分类中失分较多的薄弱模块进行针对性专项突破。</p>
+                    <p><strong class="text-indigo-600">2. 进行限时专项练习：</strong>针对常考易错题型，尝试设定练习闹钟，训练在考场压力下的解题速度。</p>
+                    <p><strong class="text-indigo-600">3. 建立错题本复盘逻辑：</strong>将概念混淆与审题粗心导致的错题分层归纳，定期回顾重做，避免在同类陷阱中再次失分。</p>
+                `;
+                sugContent.innerHTML = `
+                    你在基础知识上掌握相对稳健，整体完成度良好。接下来的任务是攻克弱项章节内的“深水区”知识点，通过精读解析与反思总结来提升思维深度。
+                `;
+            }
+        }
+
         // 错题来源导航点击事件
         document.querySelectorAll('.error-source-item').forEach(item => {
             item.addEventListener('click', () => {
@@ -2740,8 +2810,11 @@
                 }
                 
                 const qTypeTabs = document.querySelector('.question-type-tabs');
-                
                 const pcSettings = document.getElementById('pc-settings-btn-container');
+                const rightSidebar = document.querySelector('.right-sidebar');
+                const answerCard = document.getElementById('pc-answer-card');
+                const aiSuggestions = document.getElementById('pc-ai-suggestions');
+
                 // 根据切换的标签显示不同的内容
                 if (text === '题型分类') {
                     // 显示题库错题内容，隐藏拍错题 and 知识点内容
@@ -2750,8 +2823,14 @@
                     document.querySelector('.knowledge-point-content').style.display = 'none';
                     // 显示题型导航标签栏
                     if (qTypeTabs) qTypeTabs.style.display = 'flex';
-                    // 显示右侧边栏（包含答题卡）
-                    document.querySelector('.right-sidebar').style.display = 'block';
+                    // 显示右侧边栏（包含答题卡和AI建议）
+                    if (rightSidebar) rightSidebar.style.display = 'block';
+                    if (answerCard) answerCard.style.display = 'block';
+                    if (aiSuggestions) {
+                        aiSuggestions.style.display = 'block';
+                        aiSuggestions.style.marginTop = '16px';
+                        updateAiSuggestions('type');
+                    }
                     if (pcSettings) pcSettings.style.display = 'flex';
                 } else if (text === '拍错题') {
                     // 显示拍错题内容，隐藏题库错题 and 知识点内容
@@ -2760,8 +2839,8 @@
                     document.querySelector('.knowledge-point-content').style.display = 'none';
                     // 隐藏题型导航标签栏
                     if (qTypeTabs) qTypeTabs.style.display = 'none';
-                    // 隐藏右侧边栏（包含答题卡）
-                    document.querySelector('.right-sidebar').style.display = 'none';
+                    // 隐藏右侧边栏
+                    if (rightSidebar) rightSidebar.style.display = 'none';
                     if (pcSettings) pcSettings.style.display = 'none';
                 } else if (text === '知识点分类') {
                     // 显示知识点内容，隐藏题库错题 and 拍错题内容
@@ -2770,8 +2849,14 @@
                     document.querySelector('.knowledge-point-content').style.display = 'block';
                     // 隐藏题型导航标签栏
                     if (qTypeTabs) qTypeTabs.style.display = 'none';
-                    // 隐藏右侧边栏（包含答题卡）
-                    document.querySelector('.right-sidebar').style.display = 'none';
+                    // 显示右侧边栏，隐藏答题卡，展示AI提分攻略与学习建议在右侧竖列
+                    if (rightSidebar) rightSidebar.style.display = 'block';
+                    if (answerCard) answerCard.style.display = 'none';
+                    if (aiSuggestions) {
+                        aiSuggestions.style.display = 'block';
+                        aiSuggestions.style.marginTop = '0px';
+                        updateAiSuggestions('knowledge');
+                    }
                     if (pcSettings) pcSettings.style.display = 'flex';
                 }
             });

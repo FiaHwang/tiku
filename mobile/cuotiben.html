@@ -244,6 +244,55 @@
             }
         }
 
+        /* AI Strategy & Suggestions */
+        .ai-card {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 16px;
+        }
+        .ai-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .ai-title-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ai-icon-bg {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        .bg-indigo { background-color: #e0e7ff; color: #4f46e5; }
+        .bg-orange { background-color: #ffedd5; color: #f97316; }
+        .ai-badge {
+            font-size: 10px;
+            background-color: #f3f4f6;
+            color: #9ca3af;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .ai-content-box {
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .box-indigo { background-color: #f5f7ff; color: #4b5563; }
+        .box-orange { background-color: #fff9f0; color: #9a3412; border: 1px solid #ffe8cc; }
+        .ai-content-box p { margin-bottom: 8px; }
+        .ai-content-box p:last-child { margin-bottom: 0; }
+        .text-bold-indigo { color: #4f46e5; font-weight: 600; }
+
         .error-category-card {
             animation: fadeIn 0.3s ease forwards;
         }
@@ -647,49 +696,89 @@
     <!-- 错题分类容器 -->
     <div class="error-category-container">
         <!-- 题型分类部分 -->
-        <div class="error-category-grid" id="by-type-section">
-            <!-- 新一级题型 -->
-            <div class="error-category-card">
-                <div class="error-category-title">新一级题型</div>
-                <div class="error-category-count">共10道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
+        <div id="by-type-section">
+            <div class="error-category-grid">
+                <!-- 新一级题型 -->
+                <div class="error-category-card">
+                    <div class="error-category-title">新一级题型</div>
+                    <div class="error-category-count">共10道</div>
+                    <button class="view-btn">查看</button>
+                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
+                </div>
+
+                <!-- 单选题 -->
+                <div class="error-category-card">
+                    <div class="error-category-title">单选题</div>
+                    <div class="error-category-count">共135道</div>
+                    <button class="view-btn">查看</button>
+                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
+                </div>
+
+                <!-- 多选题 -->
+                <div class="error-category-card">
+                    <div class="error-category-title">多选题</div>
+                    <div class="error-category-count">共3道</div>
+                    <button class="view-btn">查看</button>
+                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
+                </div>
+
+                <!-- 填空题 -->
+                <div class="error-category-card">
+                    <div class="error-category-title">填空题</div>
+                    <div class="error-category-count">共19道</div>
+                    <button class="view-btn">查看</button>
+                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
+                </div>
+
+                <!-- 判断题 -->
+                <div class="error-category-card">
+                    <div class="error-category-title">判断题</div>
+                    <div class="error-category-count">共2道</div>
+                    <button class="view-btn">查看</button>
+                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
+                </div>
             </div>
 
-            <!-- 单选题 -->
-            <div class="error-category-card">
-                <div class="error-category-title">单选题</div>
-                <div class="error-category-count">共135道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
-            </div>
+            <!-- AI 提分攻略与学习建议 (在题型数据下方) -->
+            <div style="margin-top: 16px;">
+                <!-- 提分攻略 -->
+                <div class="ai-card">
+                    <div class="ai-header">
+                        <div class="ai-title-group">
+                            <div class="ai-icon-bg bg-indigo">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h2 style="font-size: 15px; font-weight: 600; color: #1a1a1a; margin-bottom: 0;">提分攻略</h2>
+                            <span style="font-size: 10px; color: #d97706; background-color: #fef3c7; padding: 2px 6px; border-radius: 9999px; margin-left: 6px; display: inline-flex; align-items: center; gap: 4px; font-weight: normal;"><span style="width: 5px; height: 5px; background-color: #f59e0b; border-radius: 50%;"></span>更新中</span>
+                        </div>
+                        <span class="ai-badge">内容由AI生成</span>
+                    </div>
+                    <div class="ai-content-box box-indigo">
+                        <p><strong class="text-bold-indigo">1. 夯实核心考点：</strong>错题本中失分较多的题型，建议针对性地进行专项突破训练。</p>
+                        <p><strong class="text-bold-indigo">2. 进行限时重做：</strong>定期对错题进行限时滚动重做，训练在压力下的审题与解题速度。</p>
+                    </div>
+                </div>
 
-            <!-- 多选题 -->
-            <div class="error-category-card">
-                <div class="error-category-title">多选题</div>
-                <div class="error-category-count">共3道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
-            </div>
-
-            <!-- 填空题 -->
-            <div class="error-category-card">
-                <div class="error-category-title">填空题</div>
-                <div class="error-category-count">共19道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
-            </div>
-
-            <!-- 判断题 -->
-            <div class="error-category-card">
-                <div class="error-category-title">判断题</div>
-                <div class="error-category-count">共2道</div>
-                <button class="view-btn">查看</button>
-                <div class="book-icon"><i class="fas fa-book-open"></i></div>
+                <!-- 学习建议 -->
+                <div class="ai-card" style="margin-bottom: 0;">
+                    <div class="ai-header">
+                        <div class="ai-title-group">
+                            <div class="ai-icon-bg bg-orange">
+                                <i class="far fa-lightbulb"></i>
+                            </div>
+                            <h2 style="font-size: 15px; font-weight: 600; color: #1a1a1a; margin-bottom: 0;">学习建议</h2>
+                            <span style="font-size: 10px; color: #d97706; background-color: #fef3c7; padding: 2px 6px; border-radius: 9999px; margin-left: 6px; display: inline-flex; align-items: center; gap: 4px; font-weight: normal;"><span style="width: 5px; height: 5px; background-color: #f59e0b; border-radius: 50%;"></span>更新中</span>
+                        </div>
+                        <span class="ai-badge">内容由AI生成</span>
+                    </div>
+                    <div class="ai-content-box box-orange">
+                        你在错题本中的错题主要集中在部分核心题型上。建议每周固定两次进行错题重做与复盘，逐步将错题清零。
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- 知识点分类部分 (类似知识点练习中的列表) -->
+        <!-- 知识点分类部分 -->
         <div id="by-knowledge-section" style="display: none;">
             <!-- 折叠式知识点体系选择器 -->
             <div class="knowledge-selector-trigger" onclick="openSystemSelector()" style="display: flex; justify-content: space-between; align-items: center; background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.02); -webkit-tap-highlight-color: transparent;">
@@ -702,8 +791,46 @@
                 </div>
             </div>
             <!-- 知识点单元列表 -->
-            <div id="knowledge-units-list">
+            <div id="knowledge-units-list" style="margin-bottom: 16px;">
                 <!-- 动态渲染 -->
+            </div>
+
+            <!-- AI 提分攻略与学习建议 (在知识点数据下方) -->
+            <div>
+                <!-- 提分攻略 -->
+                <div class="ai-card">
+                    <div class="ai-header">
+                        <div class="ai-title-group">
+                            <div class="ai-icon-bg bg-indigo">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h2 style="font-size: 15px; font-weight: 600; color: #1a1a1a; margin-bottom: 0;">提分攻略</h2>
+                            <span style="font-size: 10px; color: #d97706; background-color: #fef3c7; padding: 2px 6px; border-radius: 9999px; margin-left: 6px; display: inline-flex; align-items: center; gap: 4px; font-weight: normal;"><span style="width: 5px; height: 5px; background-color: #f59e0b; border-radius: 50%;"></span>更新中</span>
+                        </div>
+                        <span class="ai-badge">内容由AI生成</span>
+                    </div>
+                    <div class="ai-content-box box-indigo">
+                        <p><strong class="text-bold-indigo">1. 攻克薄弱知识点单元：</strong>针对知识点分类中掌握率较低的单元，进行重点突破与回顾。</p>
+                        <p><strong class="text-bold-indigo">2. 建立知识体系网络：</strong>将零散的知识点错题串联起来，形成完整的学科逻辑闭环。</p>
+                    </div>
+                </div>
+
+                <!-- 学习建议 -->
+                <div class="ai-card" style="margin-bottom: 0;">
+                    <div class="ai-header">
+                        <div class="ai-title-group">
+                            <div class="ai-icon-bg bg-orange">
+                                <i class="far fa-lightbulb"></i>
+                            </div>
+                            <h2 style="font-size: 15px; font-weight: 600; color: #1a1a1a; margin-bottom: 0;">学习建议</h2>
+                            <span style="font-size: 10px; color: #d97706; background-color: #fef3c7; padding: 2px 6px; border-radius: 9999px; margin-left: 6px; display: inline-flex; align-items: center; gap: 4px; font-weight: normal;"><span style="width: 5px; height: 5px; background-color: #f59e0b; border-radius: 50%;"></span>更新中</span>
+                        </div>
+                        <span class="ai-badge">内容由AI生成</span>
+                    </div>
+                    <div class="ai-content-box box-orange">
+                        通过对知识点错题的梳理，建议重点攻克掌握率较低的薄弱知识点单元，加深底层原理理解，稳步提升综合得分率。
+                    </div>
+                </div>
             </div>
         </div>
 
