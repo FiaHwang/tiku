@@ -776,6 +776,23 @@
             margin-bottom: 24px;
         }
 
+        /* 章节名称 */
+        .chapter-name {
+            font-size: 16px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        /* 试题题型 */
+        .question-type {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            padding-top: 0;
+        }
+
         /* 题目头部 */
         .question-header {
             font-size: 16px;
@@ -832,6 +849,14 @@
             justify-content: center;
             font-weight: 500;
             color: #666;
+        }
+
+        .multi-option .option-label {
+            border-radius: 4px;
+        }
+
+        .indefinite-option .option-label {
+            border-radius: 4px;
         }
 
         .option.correct .option-label {
@@ -1453,7 +1478,7 @@
         <div class="error-source-content">
             <div class="error-source-item active">题型分类</div>
             <div class="error-source-item">知识点分类</div>
-            <div class="error-source-item">拍错题</div>
+            <div class="error-source-item" id="photo-error-source-tab">拍错题</div>
         </div>
     </div>
 
@@ -1569,6 +1594,12 @@
                 <div class="question-content-tab" id="new-level-type-content" style="display: block;">
                     <!-- 错题详情 -->
                     <div class="error-detail">
+                        <!-- 章节名称 -->
+                        <div class="chapter-name">【错题本】郑伯克段于鄢《左传》</div>
+                        
+                        <!-- 试题题型 -->
+                        <div class="question-type">新一级题型</div>
+
                         <!-- 题目编号和内容 -->
                         <div class="question-header">
                             <span class="question-number">1、</span>
@@ -1646,9 +1677,40 @@
                                     <span>正确率 85%，易错项 B，作答次数 50 次，作答时长3秒</span>
                                 </div>
                                 <div class="analysis-content">
+                                    <div class="video-analysis" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff; cursor: pointer;">
+                                        <div style="display: flex; align-items: center;">
+                                            <i class="fas fa-play-circle" style="font-size: 24px; color: #1890ff; margin-right: 12px;"></i>
+                                            <span style="font-weight: 500;">视频解析<span style="font-size: 12px; color: #999; font-weight: normal; margin-left: 8px;">（内容由AI生成）</span></span>
+                                        </div>
+                                        <div style="display: flex; gap: 8px;">
+                                            <span style="font-size: 12px; padding: 2px 8px; background-color: #fff1f0; color: #f5222d; border-radius: 2px; border: 1px solid #ffa39e;">会员专享</span>
+                                            <span style="font-size: 12px; padding: 2px 8px; background-color: #e6f7ff; color: #1890ff; border-radius: 2px; border: 1px solid #91d5ff;">支持试看</span>
+                                        </div>
+                                    </div>
                                     <p><strong>文字解析：</strong>本题是新增一级题型的示例题目，用于展示全新的一级题型功能。</p>
+                                    <div class="juyifansan-card" style="margin-top: 14px; margin-bottom: 14px; padding: 12px 18px; background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%); border: 1px solid #91d5ff; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.boxShadow='0 4px 12px rgba(24, 144, 255, 0.15)'" onmouseout="this.style.boxShadow='none'" onclick="window.location.href='dati_yemian_pc.html?mode=knowledge&title=新一级题型'">
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <div style="width: 36px; height: 36px; background-color: #1890ff; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 2px 6px rgba(24, 144, 255, 0.3);">
+                                                <i class="fas fa-lightbulb"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-size: 15px; font-weight: 600; color: #0050b3; line-height: 1.3;">举一反三</div>
+                                                <div style="font-size: 12px; color: #0050b3; opacity: 0.85; margin-top: 2px;">发现相似考题，去练一练吧</div>
+                                            </div>
+                                        </div>
+                                        <button style="padding: 6px 16px; font-size: 13px; font-weight: 500; background-color: #1890ff; color: #fff; border: none; border-radius: 20px; display: flex; align-items: center; gap: 6px; cursor: pointer; pointer-events: none;">
+                                            <span>去练习</span>
+                                            <i class="fas fa-chevron-right" style="font-size: 11px;"></i>
+                                        </button>
+                                    </div>
                                     <p><strong>知识点：</strong>新一级题型、功能测试</p>
+                                    <p><strong>试题来源：</strong>2023年河南考生回忆版</p>
                                     <p><strong>试题难度：</strong>易</p>
+                                    <p><strong>试题类型：</strong>2023河南</p>
+                                    <div class="question-tags" style="margin-top: 12px;">
+                                        <span class="tag" style="display: inline-block; padding: 2px 8px; background-color: #fff2e8; color: #fa8c16; border-radius: 10px; font-size: 12px; margin-right: 8px;">易错题</span>
+                                        <span class="tag" style="display: inline-block; padding: 2px 8px; background-color: #e6f7ff; color: #1890ff; border-radius: 10px; font-size: 12px;">真题</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1671,6 +1733,12 @@
                 <div class="question-content-tab" id="single-choice-content" style="display: none;">
                     <!-- 错题详情 -->
                     <div class="error-detail">
+                        <!-- 章节名称 -->
+                        <div class="chapter-name">【错题本】郑伯克段于鄢《左传》</div>
+                        
+                        <!-- 试题题型 -->
+                        <div class="question-type">单选题</div>
+
                         <!-- 题目编号和内容 -->
                         <div class="question-header">
                             <span class="question-number">1、</span>
@@ -1751,7 +1819,7 @@
                                     <div class="video-analysis" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff; cursor: pointer;">
                                         <div style="display: flex; align-items: center;">
                                             <i class="fas fa-play-circle" style="font-size: 24px; color: #1890ff; margin-right: 12px;"></i>
-                                            <span style="font-weight: 500;">视频解析</span>
+                                            <span style="font-weight: 500;">视频解析<span style="font-size: 12px; color: #999; font-weight: normal; margin-left: 8px;">（内容由AI生成）</span></span>
                                         </div>
                                         <div style="display: flex; gap: 8px;">
                                             <span style="font-size: 12px; padding: 2px 8px; background-color: #fff1f0; color: #f5222d; border-radius: 2px; border: 1px solid #ffa39e;">会员专享</span>
@@ -1759,6 +1827,21 @@
                                         </div>
                                     </div>
                                     <p><strong>文字解析：</strong>"多行不义必自毙"出自《左传·郑伯克段于鄢》，是郑庄公评价共叔段的话。</p>
+                                    <div class="juyifansan-card" style="margin-top: 14px; margin-bottom: 14px; padding: 12px 18px; background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%); border: 1px solid #91d5ff; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.boxShadow='0 4px 12px rgba(24, 144, 255, 0.15)'" onmouseout="this.style.boxShadow='none'" onclick="window.location.href='dati_yemian_pc.html?mode=knowledge&title=成语出处'">
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <div style="width: 36px; height: 36px; background-color: #1890ff; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 2px 6px rgba(24, 144, 255, 0.3);">
+                                                <i class="fas fa-lightbulb"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-size: 15px; font-weight: 600; color: #0050b3; line-height: 1.3;">举一反三</div>
+                                                <div style="font-size: 12px; color: #0050b3; opacity: 0.85; margin-top: 2px;">发现相似考题，去练一练吧</div>
+                                            </div>
+                                        </div>
+                                        <button style="padding: 6px 16px; font-size: 13px; font-weight: 500; background-color: #1890ff; color: #fff; border: none; border-radius: 20px; display: flex; align-items: center; gap: 6px; cursor: pointer; pointer-events: none;">
+                                            <span>去练习</span>
+                                            <i class="fas fa-chevron-right" style="font-size: 11px;"></i>
+                                        </button>
+                                    </div>
                                     <p><strong>知识点：</strong>成语出处、古代文学、春秋左传</p>
                                     <p><strong>试题来源：</strong>2023年河南考生回忆版</p>
                                     <p><strong>试题难度：</strong>中</p>
@@ -1789,27 +1872,33 @@
                 <div class="question-content-tab" id="multiple-choice-content" style="display: none;">
                     <!-- 错题详情 -->
                     <div class="error-detail">
+                        <!-- 章节名称 -->
+                        <div class="chapter-name">【错题本】郑伯克段于鄢《左传》</div>
+                        
+                        <!-- 试题题型 -->
+                        <div class="question-type">多选题</div>
+
                         <!-- 题目编号和内容 -->
                         <div class="question-header">
-                            <span class="question-number">1、</span>
+                            <span class="question-number">2、</span>
                             <span class="question-content">下列属于《左传》中的典故有哪些 ( )</span>
                         </div>
 
                         <!-- 选项 -->
                         <div class="question-options">
-                            <div class="option correct">
+                            <div class="option multi-option correct">
                                 <span class="option-label">A</span>
                                 <span class="option-content">多行不义必自毙</span>
                             </div>
-                            <div class="option correct">
+                            <div class="option multi-option correct">
                                 <span class="option-label">B</span>
                                 <span class="option-content">退避三舍</span>
                             </div>
-                            <div class="option">
+                            <div class="option multi-option">
                                 <span class="option-label">C</span>
                                 <span class="option-content">卧薪尝胆</span>
                             </div>
-                            <div class="option wrong">
+                            <div class="option multi-option wrong">
                                 <span class="option-label">D</span>
                                 <span class="option-content">纸上谈兵</span>
                             </div>
@@ -1869,7 +1958,7 @@
                                     <div class="video-analysis" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff; cursor: pointer;">
                                         <div style="display: flex; align-items: center;">
                                             <i class="fas fa-play-circle" style="font-size: 24px; color: #1890ff; margin-right: 12px;"></i>
-                                            <span style="font-weight: 500;">视频解析</span>
+                                            <span style="font-weight: 500;">视频解析<span style="font-size: 12px; color: #999; font-weight: normal; margin-left: 8px;">（内容由AI生成）</span></span>
                                         </div>
                                         <div style="display: flex; gap: 8px;">
                                             <span style="font-size: 12px; padding: 2px 8px; background-color: #fff1f0; color: #f5222d; border-radius: 2px; border: 1px solid #ffa39e;">会员专享</span>
@@ -1877,6 +1966,21 @@
                                         </div>
                                     </div>
                                     <p><strong>文字解析：</strong>"多行不义必自毙"和"退避三舍"均出自《左传》，"卧薪尝胆"出自《史记》，"纸上谈兵"出自《史记·廉颇蔺相如列传》。</p>
+                                    <div class="juyifansan-card" style="margin-top: 14px; margin-bottom: 14px; padding: 12px 18px; background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%); border: 1px solid #91d5ff; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.boxShadow='0 4px 12px rgba(24, 144, 255, 0.15)'" onmouseout="this.style.boxShadow='none'" onclick="window.location.href='dati_yemian_pc.html?mode=knowledge&title=古代文学'">
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <div style="width: 36px; height: 36px; background-color: #1890ff; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 2px 6px rgba(24, 144, 255, 0.3);">
+                                                <i class="fas fa-lightbulb"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-size: 15px; font-weight: 600; color: #0050b3; line-height: 1.3;">举一反三</div>
+                                                <div style="font-size: 12px; color: #0050b3; opacity: 0.85; margin-top: 2px;">发现相似考题，去练一练吧</div>
+                                            </div>
+                                        </div>
+                                        <button style="padding: 6px 16px; font-size: 13px; font-weight: 500; background-color: #1890ff; color: #fff; border: none; border-radius: 20px; display: flex; align-items: center; gap: 6px; cursor: pointer; pointer-events: none;">
+                                            <span>去练习</span>
+                                            <i class="fas fa-chevron-right" style="font-size: 11px;"></i>
+                                        </button>
+                                    </div>
                                     <p><strong>知识点：</strong>古代文学、春秋左传、历史典故</p>
                                     <p><strong>试题来源：</strong>2023年河南考生回忆版</p>
                                     <p><strong>试题难度：</strong>中</p>
@@ -1907,27 +2011,33 @@
                 <div class="question-content-tab" id="indefinite-choice-content" style="display: none;">
                     <!-- 错题详情 -->
                     <div class="error-detail">
+                        <!-- 章节名称 -->
+                        <div class="chapter-name">【错题本】郑伯克段于鄢《左传》</div>
+                        
+                        <!-- 试题题型 -->
+                        <div class="question-type">不定项选择题</div>
+
                         <!-- 题目编号和内容 -->
                         <div class="question-header">
-                            <span class="question-number">1、</span>
+                            <span class="question-number">3、</span>
                             <span class="question-content">下列关于《左传》的说法正确的是 ( )</span>
                         </div>
 
                         <!-- 选项 -->
                         <div class="question-options">
-                            <div class="option correct">
+                            <div class="option indefinite-option correct">
                                 <span class="option-label">A</span>
                                 <span class="option-content">是编年体史书</span>
                             </div>
-                            <div class="option correct">
+                            <div class="option indefinite-option correct">
                                 <span class="option-label">B</span>
                                 <span class="option-content">作者是左丘明</span>
                             </div>
-                            <div class="option correct">
+                            <div class="option indefinite-option correct">
                                 <span class="option-label">C</span>
                                 <span class="option-content">记载了春秋时期的历史</span>
                             </div>
-                            <div class="option wrong">
+                            <div class="option indefinite-option wrong">
                                 <span class="option-label">D</span>
                                 <span class="option-content">是第一部纪传体史书</span>
                             </div>
@@ -1987,7 +2097,7 @@
                                     <div class="video-analysis" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff; cursor: pointer;">
                                         <div style="display: flex; align-items: center;">
                                             <i class="fas fa-play-circle" style="font-size: 24px; color: #1890ff; margin-right: 12px;"></i>
-                                            <span style="font-weight: 500;">视频解析</span>
+                                            <span style="font-weight: 500;">视频解析<span style="font-size: 12px; color: #999; font-weight: normal; margin-left: 8px;">（内容由AI生成）</span></span>
                                         </div>
                                         <div style="display: flex; gap: 8px;">
                                             <span style="font-size: 12px; padding: 2px 8px; background-color: #fff1f0; color: #f5222d; border-radius: 2px; border: 1px solid #ffa39e;">会员专享</span>
@@ -1995,6 +2105,21 @@
                                         </div>
                                     </div>
                                     <p><strong>文字解析：</strong>《左传》是编年体史书，作者是左丘明，记载了春秋时期的历史。第一部纪传体史书是《史记》。</p>
+                                    <div class="juyifansan-card" style="margin-top: 14px; margin-bottom: 14px; padding: 12px 18px; background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%); border: 1px solid #91d5ff; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.boxShadow='0 4px 12px rgba(24, 144, 255, 0.15)'" onmouseout="this.style.boxShadow='none'" onclick="window.location.href='dati_yemian_pc.html?mode=knowledge&title=左传内容'">
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <div style="width: 36px; height: 36px; background-color: #1890ff; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 2px 6px rgba(24, 144, 255, 0.3);">
+                                                <i class="fas fa-lightbulb"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-size: 15px; font-weight: 600; color: #0050b3; line-height: 1.3;">举一反三</div>
+                                                <div style="font-size: 12px; color: #0050b3; opacity: 0.85; margin-top: 2px;">发现相似考题，去练一练吧</div>
+                                            </div>
+                                        </div>
+                                        <button style="padding: 6px 16px; font-size: 13px; font-weight: 500; background-color: #1890ff; color: #fff; border: none; border-radius: 20px; display: flex; align-items: center; gap: 6px; cursor: pointer; pointer-events: none;">
+                                            <span>去练习</span>
+                                            <i class="fas fa-chevron-right" style="font-size: 11px;"></i>
+                                        </button>
+                                    </div>
                                     <p><strong>知识点：</strong>古代文学、春秋左传、史书体例</p>
                                     <p><strong>试题来源：</strong>2023年河南考生回忆版</p>
                                     <p><strong>试题难度：</strong>中</p>
@@ -2025,9 +2150,15 @@
                 <div class="question-content-tab" id="fill-blank-content" style="display: none;">
                     <!-- 错题详情 -->
                     <div class="error-detail">
+                        <!-- 章节名称 -->
+                        <div class="chapter-name">【错题本】郑伯克段于鄢《左传》</div>
+                        
+                        <!-- 试题题型 -->
+                        <div class="question-type">填空题</div>
+
                         <!-- 题目编号和内容 -->
                         <div class="question-header">
-                            <span class="question-number">15、</span>
+                            <span class="question-number">4、</span>
                             <span class="question-content">合抱之木，生于毫末；九层之台，起于累土；______，______。</span>
                         </div>
 
@@ -2035,7 +2166,7 @@
                         <div class="question-answer">
                             <div class="answer-input" style="margin-bottom: 12px;">
                                 <span style="display: inline-block; width: 20px;">1</span>
-                                <input type="text" value="千里之行" disabled style="padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; width: calc(100% - 30px); background-color: #f5f5f5;">
+                                <input type="text" value="拭目以待" disabled style="padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; width: calc(100% - 30px); background-color: #f5f5f5; color: #333;">
                             </div>
                             <div class="answer-image-upload" style="margin-left: 20px; margin-bottom: 24px;">
                                 <div class="photo-thumbnail-grid" onclick="viewImage(this)" style="width: 120px; height: 90px; border-radius: 4px; overflow: hidden; cursor: pointer;">
@@ -2044,7 +2175,7 @@
                             </div>
                             <div class="answer-input" style="margin-bottom: 12px;">
                                 <span style="display: inline-block; width: 20px;">2</span>
-                                <input type="text" value="始于足下" disabled style="padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; width: calc(100% - 30px); background-color: #f5f5f5;">
+                                <input type="text" value="未答" disabled style="padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; width: calc(100% - 30px); background-color: #f5f5f5; color: #999;">
                             </div>
                             <div class="answer-image-upload" style="margin-left: 20px;">
                                 <div class="photo-thumbnail-grid" onclick="viewImage(this)" style="width: 120px; height: 90px; border-radius: 4px; overflow: hidden; cursor: pointer;">
@@ -2088,6 +2219,14 @@
                         <!-- 答案和解析 -->
                         <div class="answer-analysis">
                             <div class="analysis-section" style="border-top: none;">
+                                <div class="ai-correction" style="margin-bottom: 20px;">
+                                    <div style="font-size: 14px; font-weight: 500; color: #333; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                                        <i class="fas fa-robot" style="color: #1890ff;"></i>
+                                        <span>AI批改：10%得分率</span>
+                                        <span style="font-size: 12px; font-weight: normal; color: #999;">(内容由AI生成，分数仅供参考)</span>
+                                    </div>
+                                    <div style="width: 100%; padding: 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; color: #333; line-height: 1.5; background-color: #fafafa;">AI评语：第一空作答错误，填写的“拭目以待”并非古诗文原文，此处应填“千里之行”；第二空未作答，此处应填“始于足下”。整句话出自《老子》第六十四章，建议加强经典古诗文的背诵与识记，避免张冠黎戴。</div>
+                                </div>
                                 <div class="correct-answer" style="margin-bottom: 16px;">
                                     <span>参考答案：</span>
                                     <div style="color: #52c41a; margin-left: 8px; margin-top: 8px; padding: 8px; background-color: #f6ffed; border-radius: 4px;">
@@ -2097,13 +2236,13 @@
                                 </div>
                                 <div class="analysis-header">
                                     <span>试题统计：</span>
-                                    <span>正确率 43%，作答次数 76 次，作答时长3秒</span>
+                                    <span>作答次数 76 次，作答时长3秒</span>
                                 </div>
                                 <div class="analysis-content">
                                     <div class="video-analysis" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff; cursor: pointer;">
                                         <div style="display: flex; align-items: center;">
                                             <i class="fas fa-play-circle" style="font-size: 24px; color: #1890ff; margin-right: 12px;"></i>
-                                            <span style="font-weight: 500;">视频解析</span>
+                                            <span style="font-weight: 500;">视频解析<span style="font-size: 12px; color: #999; font-weight: normal; margin-left: 8px;">（内容由AI生成）</span></span>
                                         </div>
                                         <div style="display: flex; gap: 8px;">
                                             <span style="font-size: 12px; padding: 2px 8px; background-color: #fff1f0; color: #f5222d; border-radius: 2px; border: 1px solid #ffa39e;">会员专享</span>
@@ -2111,6 +2250,21 @@
                                         </div>
                                     </div>
                                     <p><strong>文字解析：</strong>出自《老子》第六十四章，意思是合抱的大树，生长于细小的萌芽；九层的高台，筑起于每一堆泥土；千里的远行，是从脚下第一步开始走出来的。</p>
+                                    <div class="juyifansan-card" style="margin-top: 14px; margin-bottom: 14px; padding: 12px 18px; background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%); border: 1px solid #91d5ff; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.boxShadow='0 4px 12px rgba(24, 144, 255, 0.15)'" onmouseout="this.style.boxShadow='none'" onclick="window.location.href='dati_yemian_pc.html?mode=knowledge&title=名言警句'">
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <div style="width: 36px; height: 36px; background-color: #1890ff; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 2px 6px rgba(24, 144, 255, 0.3);">
+                                                <i class="fas fa-lightbulb"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-size: 15px; font-weight: 600; color: #0050b3; line-height: 1.3;">举一反三</div>
+                                                <div style="font-size: 12px; color: #0050b3; opacity: 0.85; margin-top: 2px;">发现相似考题，去练一练吧</div>
+                                            </div>
+                                        </div>
+                                        <button style="padding: 6px 16px; font-size: 13px; font-weight: 500; background-color: #1890ff; color: #fff; border: none; border-radius: 20px; display: flex; align-items: center; gap: 6px; cursor: pointer; pointer-events: none;">
+                                            <span>去练习</span>
+                                            <i class="fas fa-chevron-right" style="font-size: 11px;"></i>
+                                        </button>
+                                    </div>
                                     <p><strong>知识点：</strong>古代文学、老子、名言警句</p>
                                     <p><strong>试题来源：</strong>2023年河南考生回忆版</p>
                                     <p><strong>试题难度：</strong>中</p>
@@ -2141,9 +2295,15 @@
                 <div class="question-content-tab" id="judgment-content" style="display: none;">
                     <!-- 错题详情 -->
                     <div class="error-detail">
+                        <!-- 章节名称 -->
+                        <div class="chapter-name">【错题本】郑伯克段于鄢《左传》</div>
+                        
+                        <!-- 试题题型 -->
+                        <div class="question-type">判断题</div>
+
                         <!-- 题目编号和内容 -->
                         <div class="question-header">
-                            <span class="question-number">1、</span>
+                            <span class="question-number">5、</span>
                             <span class="question-content">"多行不义必自毙"出自《论语》。</span>
                         </div>
 
@@ -2213,7 +2373,7 @@
                                     <div class="video-analysis" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff; cursor: pointer;">
                                         <div style="display: flex; align-items: center;">
                                             <i class="fas fa-play-circle" style="font-size: 24px; color: #1890ff; margin-right: 12px;"></i>
-                                            <span style="font-weight: 500;">视频解析</span>
+                                            <span style="font-weight: 500;">视频解析<span style="font-size: 12px; color: #999; font-weight: normal; margin-left: 8px;">（内容由AI生成）</span></span>
                                         </div>
                                         <div style="display: flex; gap: 8px;">
                                             <span style="font-size: 12px; padding: 2px 8px; background-color: #fff1f0; color: #f5222d; border-radius: 2px; border: 1px solid #ffa39e;">会员专享</span>
@@ -2221,6 +2381,21 @@
                                         </div>
                                     </div>
                                     <p><strong>文字解析：</strong>"多行不义必自毙"出自《左传·郑伯克段于鄢》，不是《论语》。</p>
+                                    <div class="juyifansan-card" style="margin-top: 14px; margin-bottom: 14px; padding: 12px 18px; background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%); border: 1px solid #91d5ff; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.boxShadow='0 4px 12px rgba(24, 144, 255, 0.15)'" onmouseout="this.style.boxShadow='none'" onclick="window.location.href='dati_yemian_pc.html?mode=knowledge&title=文学背景'">
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <div style="width: 36px; height: 36px; background-color: #1890ff; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 2px 6px rgba(24, 144, 255, 0.3);">
+                                                <i class="fas fa-lightbulb"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-size: 15px; font-weight: 600; color: #0050b3; line-height: 1.3;">举一反三</div>
+                                                <div style="font-size: 12px; color: #0050b3; opacity: 0.85; margin-top: 2px;">发现相似考题，去练一练吧</div>
+                                            </div>
+                                        </div>
+                                        <button style="padding: 6px 16px; font-size: 13px; font-weight: 500; background-color: #1890ff; color: #fff; border: none; border-radius: 20px; display: flex; align-items: center; gap: 6px; cursor: pointer; pointer-events: none;">
+                                            <span>去练习</span>
+                                            <i class="fas fa-chevron-right" style="font-size: 11px;"></i>
+                                        </button>
+                                    </div>
                                     <p><strong>知识点：</strong>成语出处、古代文学</p>
                                     <p><strong>试题来源：</strong>2023年河南考生回忆版</p>
                                     <p><strong>试题难度：</strong>易</p>
@@ -2247,16 +2422,15 @@
                     </div>
                 </div>
 
-
-
                 <!-- 材料题内容 -->
                 <div class="question-content-tab" id="material-content" style="display: none;">
                     <!-- 错题详情 -->
                     <div class="error-detail">
-                        <!-- 题目编号和内容 -->
-                        <div class="question-header">
-                            <span class="question-content">材料</span>
-                        </div>
+                        <!-- 章节名称 -->
+                        <div class="chapter-name">【错题本】郑伯克段于鄢《左传》</div>
+                        
+                        <!-- 试题题型 -->
+                        <div class="question-type">材料题</div>
 
                         <!-- 材料内容 -->
                         <div class="material-content" style="margin-bottom: 24px;">
@@ -2269,7 +2443,7 @@
                                 <span>简答题</span>
                                 <span>1/5</span>
                             </div>
-                            <p><strong>1、</strong>"多行不义必自毙"的含义是什么？</p>
+                            <p><strong>7、</strong>"多行不义必自毙"的含义是什么？</p>
                             <div class="answer-input">
                                 <span>你的答案：</span>
                                 <textarea disabled style="margin-left: 8px; margin-top: 8px; padding: 8px; border: 1px solid #d9d9d9; border-radius: 4px; width: 100%; height: 80px;">做坏事多了一定会受到惩罚。</textarea>
@@ -2314,7 +2488,7 @@
                                 <div class="correct-answer" style="margin-bottom: 16px;">
                                     <span>参考答案：</span>
                                     <div style="color: #52c41a; margin-left: 8px; margin-top: 8px; padding: 8px; background-color: #f6ffed; border-radius: 4px;">
-                                        做坏事多了一定会受到惩罚。
+                                        做多了不义的事情，必然会自取灭亡。
                                     </div>
                                 </div>
                                 <div class="analysis-header">
@@ -2322,12 +2496,54 @@
                                     <span>正确率 82%，作答次数 120 次，作答时长 5 秒</span>
                                 </div>
                                 <div class="analysis-content">
+                                    <div class="video-analysis" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff; cursor: pointer;">
+                                        <div style="display: flex; align-items: center;">
+                                            <i class="fas fa-play-circle" style="font-size: 24px; color: #1890ff; margin-right: 12px;"></i>
+                                            <span style="font-weight: 500;">视频解析<span style="font-size: 12px; color: #999; font-weight: normal; margin-left: 8px;">（内容由AI生成）</span></span>
+                                        </div>
+                                        <div style="display: flex; gap: 8px;">
+                                            <span style="font-size: 12px; padding: 2px 8px; background-color: #fff1f0; color: #f5222d; border-radius: 2px; border: 1px solid #ffa39e;">会员专享</span>
+                                            <span style="font-size: 12px; padding: 2px 8px; background-color: #e6f7ff; color: #1890ff; border-radius: 2px; border: 1px solid #91d5ff;">支持试看</span>
+                                        </div>
+                                    </div>
                                     <p><strong>文字解析：</strong>《左传·郑伯克段于鄢》：“多行不义必自毙，子姑待之。” 意思是做坏事多了，一定会自食其果，自己招致灭亡。</p>
+                                    <div class="juyifansan-card" style="margin-top: 14px; margin-bottom: 14px; padding: 12px 18px; background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%); border: 1px solid #91d5ff; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.boxShadow='0 4px 12px rgba(24, 144, 255, 0.15)'" onmouseout="this.style.boxShadow='none'" onclick="window.location.href='dati_yemian_pc.html?mode=knowledge&title=成语出处'">
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <div style="width: 36px; height: 36px; background-color: #1890ff; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 2px 6px rgba(24, 144, 255, 0.3);">
+                                                <i class="fas fa-lightbulb"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-size: 15px; font-weight: 600; color: #0050b3; line-height: 1.3;">举一反三</div>
+                                                <div style="font-size: 12px; color: #0050b3; opacity: 0.85; margin-top: 2px;">发现相似考题，去练一练吧</div>
+                                            </div>
+                                        </div>
+                                        <button style="padding: 6px 16px; font-size: 13px; font-weight: 500; background-color: #1890ff; color: #fff; border: none; border-radius: 20px; display: flex; align-items: center; gap: 6px; cursor: pointer; pointer-events: none;">
+                                            <span>去练习</span>
+                                            <i class="fas fa-chevron-right" style="font-size: 11px;"></i>
+                                        </button>
+                                    </div>
                                     <p><strong>知识点：</strong>古代文学、左传、名言警句</p>
                                     <p><strong>试题来源：</strong>经典阅读理解</p>
-                                    <p><strong>试题难度：</strong>易</p>
+                                    <p><strong>试题难度：</strong>难</p>
+                                    <p><strong>试题类型：</strong>2021河南</p>
+                                    <div class="question-tags" style="margin-top: 12px;">
+                                        <span class="tag" style="display: inline-block; padding: 2px 8px; background-color: #fff2e8; color: #fa8c16; border-radius: 10px; font-size: 12px; margin-right: 8px;">易错题</span>
+                                        <span class="tag" style="display: inline-block; padding: 2px 8px; background-color: #e6f7ff; color: #1890ff; border-radius: 10px; font-size: 12px;">真题</span>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- 上下题导航 -->
+                        <div class="question-navigation">
+                            <button class="nav-btn prev">
+                                <i class="fas fa-chevron-left"></i>
+                                <span>上一题</span>
+                            </button>
+                            <button class="nav-btn next">
+                                <span>下一题</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -2693,6 +2909,22 @@
                 settingsSpan.textContent = name === '收藏本' ? '收藏本设置' : '错题本设置';
             }
             document.title = name === '收藏本' ? '收藏本PC端' : '错题本PC端';
+
+            // 同步试题中的章节名称前缀
+            document.querySelectorAll('.chapter-name').forEach(el => {
+                el.textContent = name === '收藏本' ? '【收藏本】郑伯克段于鄢《左传》' : '【错题本】郑伯克段于鄢《左传》';
+            });
+
+            const photoTab = document.getElementById('photo-error-source-tab');
+            if (photoTab) {
+                photoTab.style.display = name === '收藏本' ? 'none' : 'block';
+            }
+
+            const settingsContainer = document.getElementById('pc-settings-btn-container');
+            if (settingsContainer) {
+                settingsContainer.style.display = name === '收藏本' ? 'none' : 'flex';
+            }
+
             const url = new URL(window.location);
             if (name === '收藏本') {
                 url.searchParams.set('sub', 'shoucang');
@@ -2769,6 +3001,12 @@
             const targetElement = document.getElementById(conf.targetId);
             if (targetElement) {
                 targetElement.style.display = 'block';
+
+                // 同步试题中的题型字段
+                const qTypeEl = targetElement.querySelector('.question-type');
+                if (qTypeEl) {
+                    qTypeEl.textContent = typeName;
+                }
                 
                 if (!DEFAULT_TOP_TYPES.includes(typeName)) {
                     const qContent = targetElement.querySelector('.question-content');
@@ -3218,6 +3456,10 @@
             const subParam = urlParams.get('sub');
             if (subParam === 'shoucang' || subParam === 'shoucangben' || subParam === '收藏本') {
                 switchSubNav('收藏本');
+                const photoTab = document.getElementById('photo-error-source-tab');
+                if (photoTab) photoTab.style.display = 'none';
+                const settingsContainer = document.getElementById('pc-settings-btn-container');
+                if (settingsContainer) settingsContainer.style.display = 'none';
             } else if (subParam === 'cuotiben' || subParam === '错题本') {
                 switchSubNav('错题本');
             }

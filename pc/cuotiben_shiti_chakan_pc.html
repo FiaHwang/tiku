@@ -776,6 +776,23 @@
             margin-bottom: 24px;
         }
 
+        /* 章节名称 */
+        .chapter-name {
+            font-size: 16px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        /* 试题题型 */
+        .question-type {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            padding-top: 0;
+        }
+
         /* 题目头部 */
         .question-header {
             font-size: 16px;
@@ -832,6 +849,14 @@
             justify-content: center;
             font-weight: 500;
             color: #666;
+        }
+
+        .multi-option .option-label {
+            border-radius: 4px;
+        }
+
+        .indefinite-option .option-label {
+            border-radius: 4px;
         }
 
         .option.correct .option-label {
@@ -1453,7 +1478,7 @@
         <div class="error-source-content">
             <div class="error-source-item">题型分类</div>
             <div class="error-source-item active">知识点分类</div>
-            <div class="error-source-item">拍错题</div>
+            <div class="error-source-item" id="photo-error-source-tab">拍错题</div>
         </div>
     </div>
 
@@ -2591,6 +2616,22 @@
                 settingsSpan.textContent = name === '收藏本' ? '收藏本设置' : '错题本设置';
             }
             document.title = name === '收藏本' ? '收藏本PC端' : '错题本PC端';
+
+            // 同步试题中的章节名称前缀
+            document.querySelectorAll('.chapter-name').forEach(el => {
+                el.textContent = name === '收藏本' ? '【收藏本】郑伯克段于鄢《左传》' : '【错题本】郑伯克段于鄢《左传》';
+            });
+
+            const photoTab = document.getElementById('photo-error-source-tab');
+            if (photoTab) {
+                photoTab.style.display = name === '收藏本' ? 'none' : 'block';
+            }
+
+            const settingsContainer = document.getElementById('pc-settings-btn-container');
+            if (settingsContainer) {
+                settingsContainer.style.display = name === '收藏本' ? 'none' : 'flex';
+            }
+
             const url = new URL(window.location);
             if (name === '收藏本') {
                 url.searchParams.set('sub', 'shoucang');
@@ -2667,6 +2708,12 @@
             const targetElement = document.getElementById(conf.targetId);
             if (targetElement) {
                 targetElement.style.display = 'block';
+
+                // 同步试题中的题型字段
+                const qTypeEl = targetElement.querySelector('.question-type');
+                if (qTypeEl) {
+                    qTypeEl.textContent = typeName;
+                }
                 
                 if (!DEFAULT_TOP_TYPES.includes(typeName)) {
                     const qContent = targetElement.querySelector('.question-content');
@@ -3074,6 +3121,10 @@
             const subParam = urlParams.get('sub') || urlParams.get('tab');
             if (subParam === 'shoucang' || subParam === 'shoucangben' || subParam === '收藏本') {
                 switchSubNav('收藏本');
+                const photoTab = document.getElementById('photo-error-source-tab');
+                if (photoTab) photoTab.style.display = 'none';
+                const settingsContainer = document.getElementById('pc-settings-btn-container');
+                if (settingsContainer) settingsContainer.style.display = 'none';
             }
 
             const typeParam = urlParams.get('type');
