@@ -888,6 +888,22 @@
             color: #ff4d4f;
         }
 
+        .action-btn.collect.collected {
+            color: #faad14;
+            border-color: #ffd591;
+            background-color: #fffbe6;
+        }
+
+        .action-btn.collect.collected i {
+            color: #faad14;
+        }
+
+        .action-btn.collect.collected:hover {
+            color: #d48806;
+            border-color: #faad14;
+            background-color: #fff1b8;
+        }
+
         /* 答案和解析 */
         .answer-analysis {
             margin-bottom: 24px;
@@ -1604,9 +1620,9 @@
                                     <i class="fas fa-flag"></i>
                                     <span>纠错</span>
                                 </button>
-                                <button class="action-btn collect">
-                                    <i class="fas fa-star"></i>
-                                    <span>收藏</span>
+                                <button class="action-btn collect collected">
+                                    <i class="fas fa-star" style="color: #faad14;"></i>
+                                    <span>取消收藏</span>
                                 </button>
                             </div>
                         </div>
@@ -1706,9 +1722,9 @@
                                     <i class="fas fa-flag"></i>
                                     <span>纠错</span>
                                 </button>
-                                <button class="action-btn collect">
-                                    <i class="fas fa-star"></i>
-                                    <span>收藏</span>
+                                <button class="action-btn collect collected">
+                                    <i class="fas fa-star" style="color: #faad14;"></i>
+                                    <span>取消收藏</span>
                                 </button>
                             </div>
                         </div>
@@ -1824,9 +1840,9 @@
                                     <i class="fas fa-flag"></i>
                                     <span>纠错</span>
                                 </button>
-                                <button class="action-btn collect">
-                                    <i class="fas fa-star"></i>
-                                    <span>收藏</span>
+                                <button class="action-btn collect collected">
+                                    <i class="fas fa-star" style="color: #faad14;"></i>
+                                    <span>取消收藏</span>
                                 </button>
                             </div>
                         </div>
@@ -1942,9 +1958,9 @@
                                     <i class="fas fa-flag"></i>
                                     <span>纠错</span>
                                 </button>
-                                <button class="action-btn collect">
-                                    <i class="fas fa-star"></i>
-                                    <span>收藏</span>
+                                <button class="action-btn collect collected">
+                                    <i class="fas fa-star" style="color: #faad14;"></i>
+                                    <span>取消收藏</span>
                                 </button>
                             </div>
                         </div>
@@ -2062,9 +2078,9 @@
                                     <i class="fas fa-flag"></i>
                                     <span>纠错</span>
                                 </button>
-                                <button class="action-btn collect">
-                                    <i class="fas fa-star"></i>
-                                    <span>收藏</span>
+                                <button class="action-btn collect collected">
+                                    <i class="fas fa-star" style="color: #faad14;"></i>
+                                    <span>取消收藏</span>
                                 </button>
                             </div>
                         </div>
@@ -2168,9 +2184,9 @@
                                     <i class="fas fa-flag"></i>
                                     <span>纠错</span>
                                 </button>
-                                <button class="action-btn collect">
-                                    <i class="fas fa-star"></i>
-                                    <span>收藏</span>
+                                <button class="action-btn collect collected">
+                                    <i class="fas fa-star" style="color: #faad14;"></i>
+                                    <span>取消收藏</span>
                                 </button>
                             </div>
                         </div>
@@ -2285,9 +2301,9 @@
                                     <i class="fas fa-flag"></i>
                                     <span>纠错</span>
                                 </button>
-                                <button class="action-btn collect">
-                                    <i class="fas fa-star"></i>
-                                    <span>收藏</span>
+                                <button class="action-btn collect collected">
+                                    <i class="fas fa-star" style="color: #faad14;"></i>
+                                    <span>取消收藏</span>
                                 </button>
                             </div>
                         </div>
@@ -2380,6 +2396,24 @@
                 <!-- 知识点单元列表 -->
                 <div id="pc-knowledge-units-list" style="background: transparent; border: none; box-shadow: none; overflow: visible;">
                     <!-- 动态渲染 -->
+                </div>
+
+                <!-- 未关联知识点分类 (PC端) -->
+                <div class="pc-practice-unit pc-unassociated-knowledge-card" style="background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; margin-top: 4px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                    <div style="padding: 18px 24px; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 14px;">
+                            <div style="width: 36px; height: 36px; border-radius: 8px; background-color: #fff7e6; color: #fa8c16; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;">
+                                <i class="fas fa-link-slash"></i>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <span style="font-size: 15px; font-weight: 600; color: #333;">未关联知识点</span>
+                                <span style="font-size: 13px; color: #999; font-weight: 500;">共 8 道试题</span>
+                            </div>
+                        </div>
+                        <div>
+                            <button style="background: #fff; border: 1px solid #ff4d4f; color: #ff4d4f; border-radius: 4px; padding: 6px 18px; font-size: 13px; cursor: pointer; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#fff1f0'" onmouseout="this.style.backgroundColor='#fff'" onclick="showKnowledgeCategory('未关联知识点', 8)">查看</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -2644,6 +2678,30 @@
     </footer>
 
     <script>
+        function switchSubNav(name) {
+            const subNavItems = document.querySelectorAll('.sub-nav-item');
+            subNavItems.forEach(item => {
+                const text = item.textContent.trim();
+                if (text === name) {
+                    item.classList.add('active');
+                } else if (text === '错题本' || text === '收藏本') {
+                    item.classList.remove('active');
+                }
+            });
+            const settingsSpan = document.querySelector('.settings-btn-pc span');
+            if (settingsSpan) {
+                settingsSpan.textContent = name === '收藏本' ? '收藏本设置' : '错题本设置';
+            }
+            document.title = name === '收藏本' ? '收藏本PC端' : '错题本PC端';
+            const url = new URL(window.location);
+            if (name === '收藏本') {
+                url.searchParams.set('sub', 'shoucang');
+            } else {
+                url.searchParams.delete('sub');
+            }
+            window.history.replaceState({}, '', url);
+        }
+
         // 二级导航点击事件
         document.querySelectorAll('.sub-nav-item').forEach(item => {
             item.addEventListener('click', () => {
@@ -2652,9 +2710,9 @@
                 if (label === '题库') {
                     window.location.href = 'tiku_pc.html';
                 } else if (label === '错题本') {
-                    window.location.href = 'cuotiben_pc.html';
+                    switchSubNav('错题本');
                 } else if (label === '收藏本') {
-                    window.location.href = 'shoucangben_pc.html';
+                    switchSubNav('收藏本');
                 } else if (label === '练习历史') {
                     window.location.href = 'lianxi_lishi_pc.html';
                 }
@@ -3154,9 +3212,21 @@
         // 初始化渲染
         document.addEventListener('DOMContentLoaded', () => {
             renderPcKnowledgeSystem();
+
+            // 检查URL是否指定选中收藏本或错题本
+            const urlParams = new URLSearchParams(window.location.search);
+            const subParam = urlParams.get('sub');
+            if (subParam === 'shoucang' || subParam === 'shoucangben' || subParam === '收藏本') {
+                switchSubNav('收藏本');
+            } else if (subParam === 'cuotiben' || subParam === '错题本') {
+                switchSubNav('错题本');
+            }
             
-            // 恢复上次选择的 tab
-            let savedTab = localStorage.getItem('cuotiben_active_tab_pc') || '题型分类';
+            // 恢复上次选择的 tab (优先使用 URL 参数 tab)
+            const tabParam = urlParams.get('tab');
+            let savedTab = (tabParam === '知识点分类' || tabParam === '题型分类' || tabParam === '拍错题' || tabParam === '按题型' || tabParam === '按知识点')
+                ? tabParam
+                : (localStorage.getItem('cuotiben_active_tab_pc') || '题型分类');
             if (savedTab === '按题型') savedTab = '题型分类';
             if (savedTab === '按知识点') savedTab = '知识点分类';
             const items = document.querySelectorAll('.error-source-item');
@@ -3205,13 +3275,16 @@
             }, 2000);
         }
 
-        // 知识点点击查看跳转至试题解析
+        // 知识点点击查看跳转至试题查看页面
         function showKnowledgeCategory(name, count) {
             if (count === 0) {
                 showPcToast('该知识点目前没有错题哦！');
                 return;
             }
-            window.location.href = 'shiti_jiexi_pc.html?type=' + encodeURIComponent(name);
+            const isShoucang = document.querySelector('.sub-nav-item.active')?.textContent.trim() === '收藏本' ||
+                               new URLSearchParams(window.location.search).get('sub') === 'shoucang';
+            const subQuery = isShoucang ? '&sub=shoucang' : '';
+            window.location.href = 'cuotiben_shiti_chakan_pc.html?type=' + encodeURIComponent(name) + subQuery;
         }
 
 
@@ -3351,12 +3424,34 @@
             btn.addEventListener('click', () => {
                 if (btn.classList.contains('share')) {
                     console.log('分享题目');
+                    showPcToast('已生成试题分享链接');
                 } else if (btn.classList.contains('report')) {
                     console.log('纠错');
+                    showPcToast('感谢您的反馈，已提交纠错信息');
                 } else if (btn.classList.contains('move')) {
                     console.log('移除题目');
+                    showPcToast('已移除该错题');
                 } else if (btn.classList.contains('collect')) {
-                    console.log('收藏题目');
+                    const icon = btn.querySelector('i');
+                    const span = btn.querySelector('span');
+                    const isCollected = btn.classList.contains('collected') || (span && span.textContent.trim() === '取消收藏');
+                    if (isCollected) {
+                        btn.classList.remove('collected');
+                        if (span) span.textContent = '收藏';
+                        if (icon) {
+                            icon.className = 'far fa-star';
+                            icon.style.color = '#666';
+                        }
+                        showPcToast('已取消收藏');
+                    } else {
+                        btn.classList.add('collected');
+                        if (span) span.textContent = '取消收藏';
+                        if (icon) {
+                            icon.className = 'fas fa-star';
+                            icon.style.color = '#faad14';
+                        }
+                        showPcToast('已收藏');
+                    }
                 }
             });
         });

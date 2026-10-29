@@ -2353,7 +2353,7 @@
                 }
                 // 收藏本标签点击跳转到收藏本PC端页面
                 else if (label === '收藏本') {
-                    window.location.href = 'shoucangben_pc.html';
+                    window.location.href = 'cuotiben_pc.html?sub=shoucang';
                 }
                 // 练习历史标签点击跳转到练习历史PC端页面
                 else if (label === '练习历史') {
@@ -2541,7 +2541,7 @@
                 }
                 // 收藏本标签点击跳转到收藏本PC端页面
                 else if (label === '收藏本') {
-                    window.location.href = 'shoucangben_pc.html';
+                    window.location.href = 'cuotiben_pc.html?sub=shoucang';
                 }
                 // 练习历史标签点击跳转到练习历史页面
                 else if (label === '练习历史') {
@@ -2823,6 +2823,22 @@
         humanInputField.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 sendHumanMessage();
+            }
+        });
+
+        // 页面参数解析
+        window.addEventListener('load', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const typeParam = urlParams.get('type');
+            if (typeParam === '未关联知识点') {
+                document.querySelectorAll('.chapter-name').forEach(el => {
+                    el.textContent = '【未关联知识点】试题解析';
+                });
+                document.querySelectorAll('.analysis-content p').forEach(p => {
+                    if (p.textContent.includes('知识点：')) {
+                        p.innerHTML = '<strong>知识点：</strong>未关联（待归类）';
+                    }
+                });
             }
         });
     </script>

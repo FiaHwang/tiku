@@ -104,6 +104,15 @@
             opacity: 0.7;
         }
 
+        .header-btn.collected,
+        .header-btn.collected i {
+            color: #faad14 !important;
+        }
+
+        .header-btn .fa-star {
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
         /* 主内容区域 */
         .main-container {
             padding: 16px;
@@ -1088,7 +1097,7 @@
             <button class="header-btn" title="重做"><i class="fas fa-redo"></i></button>
             <button class="header-btn" title="分享"><i class="fas fa-share-alt"></i></button>
             <button class="header-btn" title="纠错"><i class="fas fa-exclamation-circle"></i></button>
-            <button class="header-btn" title="收藏"><i class="fas fa-star"></i></button>
+            <button class="header-btn collect-btn collected" id="collectBtn" title="已收藏"><i class="fas fa-star" style="color: #faad14;"></i></button>
             <button class="header-btn" title="答题卡"><i class="fas fa-list"></i></button>
         </div>
     </header>
@@ -1098,7 +1107,7 @@
 
         <!-- 章节名称和做题进度 -->
         <div class="chapter-progress-container">
-            <div class="chapter-name">郑伯克段于鄢 《左传》</div>
+            <div class="chapter-name">错题本</div>
             <div class="progress-text">1/15</div>
         </div>
         
@@ -1435,8 +1444,16 @@
         // 返回按钮功能
         backBtn.addEventListener('click', () => {
             console.log('返回');
-            // 返回上一页
-            window.history.back();
+            const urlParams = new URLSearchParams(window.location.search);
+            const fromParam = urlParams.get('from') || urlParams.get('source');
+            const referrer = document.referrer || '';
+            const isShoucang = fromParam === 'shoucangben' || fromParam === '收藏本' || referrer.includes('shoucangben');
+
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = isShoucang ? 'shoucangben.html' : 'cuotiben.html';
+            }
         });
 
         // 触摸事件（移动端优化）
@@ -1445,9 +1462,82 @@
             backBtn.click();
         }, { passive: false });
 
+        // 收藏状态管理与切换
+        let isCollected = true;
+        const collectBtn = document.getElementById('collectBtn');
+
+        function showToast(message) {
+            let toast = document.getElementById('custom-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'custom-toast';
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(0, 0, 0, 0.78);
+                    color: #fff;
+                    padding: 10px 20px;
+                    border-radius: 8px;
+                    font-size: 14px;
+                    z-index: 10000;
+                    pointer-events: none;
+                    transition: opacity 0.3s ease, transform 0.3s ease;
+                    opacity: 0;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                `;
+                document.body.appendChild(toast);
+            }
+            toast.innerHTML = message;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translate(-50%, -50%) scale(1)';
+            
+            if (toast.timeoutId) {
+                clearTimeout(toast.timeoutId);
+            }
+            toast.timeoutId = setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, -50%) scale(0.95)';
+            }, 1800);
+        }
+
+        function toggleCollect() {
+            isCollected = !isCollected;
+            const starIcon = collectBtn ? collectBtn.querySelector('i') : null;
+            if (isCollected) {
+                if (collectBtn) {
+                    collectBtn.classList.add('collected');
+                    collectBtn.setAttribute('title', '已收藏');
+                }
+                if (starIcon) {
+                    starIcon.className = 'fas fa-star';
+                    starIcon.style.color = '#faad14';
+                }
+                showToast('<i class="fas fa-star" style="color: #faad14;"></i> 已收藏');
+            } else {
+                if (collectBtn) {
+                    collectBtn.classList.remove('collected');
+                    collectBtn.setAttribute('title', '收藏');
+                }
+                if (starIcon) {
+                    starIcon.className = 'far fa-star';
+                    starIcon.style.color = '#666';
+                }
+                showToast('<i class="far fa-star"></i> 已取消收藏');
+            }
+        }
+
         // 顶部按钮功能
         headerBtns.forEach((btn, index) => {
             btn.addEventListener('click', () => {
+                if (btn.id === 'collectBtn' || index === 4) {
+                    toggleCollect();
+                    return;
+                }
                 const actions = ['移除', '重做', '分享', '纠错', '收藏', '答题卡'];
                 const action = actions[index];
                 console.log(action);
@@ -1459,8 +1549,6 @@
                     alert('分享');
                 } else if (action === '纠错') {
                     alert('纠错');
-                } else if (action === '收藏') {
-                    alert('收藏');
                 } else if (action === '答题卡') {
                     alert('答题卡');
                 }
@@ -1670,6 +1758,26 @@
         window.addEventListener('load', () => {
             console.log('页面加载完成');
             const urlParams = new URLSearchParams(window.location.search);
+            const fromParam = urlParams.get('from') || urlParams.get('source');
+            const referrer = document.referrer || '';
+            
+            // 判断来源：从收藏本进入还是错题本进入
+            let sourceName = '错题本';
+            if (fromParam === 'shoucangben' || fromParam === '收藏本' || referrer.includes('shoucangben')) {
+                sourceName = '收藏本';
+            } else if (fromParam === 'cuotiben' || fromParam === '错题本' || referrer.includes('cuotiben')) {
+                sourceName = '错题本';
+            }
+
+            // 更新章节名称区域（从错题本进入的显示错题本，从收藏本进入的显示收藏本）
+            const chapterElem = document.querySelector('.chapter-name');
+            if (chapterElem) {
+                chapterElem.textContent = sourceName;
+            }
+
+            // 更新网页标题
+            document.title = sourceName + '试题查看';
+
             const typeParam = urlParams.get('type');
             if (typeParam) {
                 // 如果是支持的题型，才修改显示。否则（如为知识点名称）保留原来的默认题型
@@ -1679,6 +1787,21 @@
                     if (questionTypeElem) {
                         questionTypeElem.textContent = typeParam;
                     }
+                } else if (typeParam === '未关联知识点') {
+                    const progressElem = document.querySelector('.progress-text');
+                    if (progressElem) {
+                        progressElem.textContent = sourceName === '收藏本' ? '1/5' : '1/8';
+                    }
+                    const questionTypeElem = document.querySelector('.question-type');
+                    if (questionTypeElem) {
+                        questionTypeElem.textContent = '未关联知识点';
+                    }
+                    // update knowledge point text if available
+                    document.querySelectorAll('.analysis-content p').forEach(p => {
+                        if (p.textContent.includes('知识点：')) {
+                            p.innerHTML = '<strong>知识点：</strong>未关联（待归类）';
+                        }
+                    });
                 }
             }
         });

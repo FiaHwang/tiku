@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>收藏本PC端</title>
+    <title>错题本试题查看PC端</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
         /* 重置样式 */
         * {
             margin: 0;
@@ -185,57 +189,46 @@
             color: #ff4d4f;
         }
 
-        
-        /* 错题来源导航 */
-        .error-source-nav {
+        .settings-btn-pc {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
             background-color: #fff;
-            border-bottom: 1px solid #e8e8e8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-        }
-
-        .error-source-content {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            align-items: center;
-            padding: 12px 24px;
-            gap: 24px;
-        }
-
-        .error-source-item {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            color: #666;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            color: #555;
+            font-size: 13px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s;
         }
 
-        .error-source-item:hover {
-            background-color: #f5f5f5;
-        }
-
-        .error-source-item.active {
-            background-color: #fff1f0;
+        .settings-btn-pc:hover {
+            border-color: #ff4d4f;
             color: #ff4d4f;
+            background-color: #fff1f0;
         }
 
+        .pc-switch input:checked + .pc-slider {
+            background-color: #ff4d4f !important;
+        }
+        .pc-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        .pc-switch input:checked + .pc-slider:before {
+            transform: translateX(20px);
+        }
         @keyframes pcModalFadeIn {
             from { opacity: 0; transform: scale(0.96); }
             to { opacity: 1; transform: scale(1); }
-        }
-        
-        .left-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        .right-actions {
-            display: flex;
-            gap: 12px;
         }
 
         /* 题型标签栏 (最多展示2行，超出展示展开/收起按钮) */
@@ -332,7 +325,6 @@
             cursor: pointer;
             transition: all 0.2s ease;
             user-select: none;
-            white-space: nowrap;
         }
 
         .question-type-toggle-btn:hover {
@@ -344,6 +336,43 @@
         .question-type-toggle-btn i {
             font-size: 11px;
             transition: transform 0.2s ease;
+        }
+
+        /* 错题来源导航 */
+        .error-source-nav {
+            background-color: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .error-source-content {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            gap: 24px;
+        }
+
+        .error-source-item {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .error-source-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .error-source-item.active {
+            background-color: #fff1f0;
+            color: #ff4d4f;
         }
 
         /* 主内容区域 */
@@ -580,232 +609,6 @@
             border: 1px solid #d9d9d9;
         }
 
-        /* 错题详情 */
-        .error-detail {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-
-        /* 题目头部 */
-        .question-header {
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .question-number {
-            font-weight: 500;
-        }
-
-        .question-content {
-            font-weight: 400;
-        }
-
-        /* 选项 */
-        .question-options {
-            margin-bottom: 24px;
-        }
-
-        .option {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            margin-bottom: 12px;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-            transition: all 0.3s ease;
-        }
-
-        .option:hover {
-            background-color: #f0f0f0;
-        }
-
-        .option.correct {
-            background-color: #f6ffed;
-            border-left: 4px solid #52c41a;
-        }
-
-        .option.wrong {
-            background-color: #fff1f0;
-            border-left: 4px solid #ff4d4f;
-        }
-
-        .option-label {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background-color: #e8e8e8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 500;
-            color: #666;
-        }
-
-        .option.correct .option-label {
-            background-color: #52c41a;
-            color: #fff;
-        }
-
-        .option.wrong .option-label {
-            background-color: #ff4d4f;
-            color: #fff;
-        }
-
-        .option-content {
-            font-size: 14px;
-            color: #333;
-        }
-
-        /* 题目操作 */
-        .question-actions {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
-            padding: 16px;
-            background-color: #fafafa;
-            border-radius: 4px;
-        }
-
-        .action-btn {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border: 1px solid #d9d9d9;
-            border-radius: 4px;
-            background-color: #fff;
-            color: #666;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .action-btn:hover {
-            border-color: #ff4d4f;
-            color: #ff4d4f;
-        }
-
-        /* 答案和解析 */
-        .answer-analysis {
-            margin-bottom: 24px;
-            padding: 16px;
-            background-color: #fafafa;
-            border-radius: 4px;
-        }
-
-        .answer-info {
-            margin-bottom: 16px;
-        }
-
-        .answer-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            color: #ff4d4f;
-            margin-bottom: 8px;
-        }
-
-        .answer-detail {
-            font-size: 14px;
-            color: #666;
-            display: flex;
-            gap: 16px;
-        }
-
-        .analysis-section {
-            border-top: 1px solid #e8e8e8;
-            padding-top: 16px;
-        }
-
-        .analysis-header {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 12px;
-        }
-
-        .analysis-content {
-            font-size: 14px;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        .analysis-content p {
-            margin-bottom: 8px;
-        }
-
-        /* 上下题导航 */
-        .question-navigation {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 16px;
-            border-top: 1px solid #e8e8e8;
-        }
-
-        .nav-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            border: 1px solid #d9d9d9;
-            border-radius: 4px;
-            background-color: #fff;
-            color: #666;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .nav-btn:hover {
-            border-color: #ff4d4f;
-            color: #ff4d4f;
-        }
-
-        /* 图片查看弹窗 */
-        .image-viewer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .image-viewer.active {
-            display: flex;
-        }
-
-        .image-viewer-content {
-            max-width: 90%;
-            max-height: 90%;
-            position: relative;
-        }
-
-        .image-viewer img {
-            max-width: 100%;
-            max-height: 100%;
-        }
-
-        .image-viewer-close {
-            position: absolute;
-            top: -40px;
-            right: 0;
-            color: #fff;
-            font-size: 30px;
-            cursor: pointer;
-        }
-
         /* 分页 */
         .pagination {
             display: flex;
@@ -848,7 +651,7 @@
             min-width: 320px;
         }
 
-        /* 收藏统计 */
+        /* 错题统计 */
         .stats-container {
             background-color: #fff;
             border-radius: 8px;
@@ -964,6 +767,220 @@
             text-align: center;
         }
 
+        /* 错题详情 */
+        .error-detail {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        /* 题目头部 */
+        .question-header {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .question-number {
+            font-weight: 500;
+        }
+
+        .question-content {
+            font-weight: 400;
+        }
+
+        /* 选项 */
+        .question-options {
+            margin-bottom: 24px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background-color: #f0f0f0;
+        }
+
+        .option.correct {
+            background-color: #f6ffed;
+            border-left: 4px solid #52c41a;
+        }
+
+        .option.wrong {
+            background-color: #fff1f0;
+            border-left: 4px solid #ff4d4f;
+        }
+
+        .option-label {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .option.correct .option-label {
+            background-color: #52c41a;
+            color: #fff;
+        }
+
+        .option.wrong .option-label {
+            background-color: #ff4d4f;
+            color: #fff;
+        }
+
+        .option-content {
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* 题目操作 */
+        .question-actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding: 16px;
+            background-color: #fafafa;
+            border-radius: 4px;
+        }
+
+        .left-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .right-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #666;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            border-color: #ff4d4f;
+            color: #ff4d4f;
+        }
+
+        .action-btn.collect.collected {
+            color: #faad14;
+            border-color: #ffd591;
+            background-color: #fffbe6;
+        }
+
+        .action-btn.collect.collected i {
+            color: #faad14;
+        }
+
+        .action-btn.collect.collected:hover {
+            color: #d48806;
+            border-color: #faad14;
+            background-color: #fff1b8;
+        }
+
+        /* 答案和解析 */
+        .answer-analysis {
+            margin-bottom: 24px;
+            padding: 16px;
+            background-color: #fafafa;
+            border-radius: 4px;
+        }
+
+        .answer-info {
+            margin-bottom: 16px;
+        }
+
+        .answer-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #ff4d4f;
+            margin-bottom: 8px;
+        }
+
+        .answer-detail {
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            gap: 16px;
+        }
+
+        .analysis-section {
+            border-top: 1px solid #e8e8e8;
+            padding-top: 16px;
+        }
+
+        .analysis-header {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .analysis-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .analysis-content p {
+            margin-bottom: 8px;
+        }
+
+        /* 上下题导航 */
+        .question-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid #e8e8e8;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            border-color: #ff4d4f;
+            color: #ff4d4f;
+        }
+
         /* 答题卡 */
         .answer-card {
             background-color: #fff;
@@ -1049,17 +1066,6 @@
             border: 1px solid #d9d9d9;
         }
 
-        .answer-item.answered {
-            background-color: #fa8c16;
-            color: #fff;
-        }
-
-        .answer-item.unanswered {
-            background-color: #f0f0f0;
-            color: #666;
-            border: 1px solid #d9d9d9;
-        }
-
         /* 答题卡统计 */
         .answer-card-stats {
             display: flex;
@@ -1091,15 +1097,6 @@
 
         .stat-dot.half-correct {
             background: linear-gradient(to right, #52c41a 50%, #fff 50%);
-            border: 1px solid #d9d9d9;
-        }
-
-        .stat-dot.answered {
-            background-color: #fa8c16;
-        }
-
-        .stat-dot.unanswered {
-            background-color: #f0f0f0;
             border: 1px solid #d9d9d9;
         }
 
@@ -1169,19 +1166,171 @@
             color: #999;
         }
 
+        /* 拍错题列表样式 - PC端专用 */
+        .photo-error-content {
+            display: none;
+        }
+
+        .photo-error-content.active {
+            display: block;
+        }
+
+        .photo-error-list-pc {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 24px;
+            padding: 20px;
+        }
+
+        /* 拍错题网格布局 */
+        .photo-error-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .photo-error-item-grid {
+            display: flex;
+            flex-direction: column;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .photo-error-item-grid:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .photo-thumbnail-grid {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .photo-thumbnail-grid img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .photo-thumbnail-grid:hover img {
+            transform: scale(1.05);
+        }
+
+        .photo-error-date-grid {
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #666;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .photo-error-action-grid {
+            padding: 0 16px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .photo-error-action-left {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .photo-error-action-right {
+            display: flex;
+            gap: 12px;
+        }
+
+        .photo-error-action-btn {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            border: 1px solid #d9d9d9;
+            background-color: #fff;
+            color: #666;
+        }
+
+        .photo-error-action-btn:hover {
+            border-color: #ff4d4f;
+            color: #ff4d4f;
+        }
+
+        /* 图片查看弹窗 */
+        .image-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-viewer.active {
+            display: flex;
+        }
+
+        .image-viewer-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .image-viewer img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .image-viewer-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: #fff;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1400px) {
+            .photo-error-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .photo-error-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .photo-error-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+
         /* 响应式设计 */
         @media (max-width: 1200px) {
-            .main-container {
-                flex-direction: column;
-            }
-
-            .right-sidebar {
-                width: 100%;
-                min-width: 0;
-            }
-
             .feature-grid {
                 grid-template-columns: repeat(6, 1fr);
+            }
+
+            .photo-error-list-header,
+            .photo-error-item-pc {
+                grid-template-columns: 40px 2fr 1fr 1fr;
             }
         }
 
@@ -1199,26 +1348,53 @@
                 gap: 8px;
             }
 
-            .question-type-tabs {
-                padding: 12px 16px;
-                gap: 12px;
-            }
-
             .main-container {
                 padding: 16px;
                 gap: 16px;
             }
 
-            .list-header {
-                grid-template-columns: 40px 2fr 1fr 1fr;
+            .filter-section {
+                flex-direction: column;
+                gap: 12px;
             }
 
-            .collection-item {
-                grid-template-columns: 40px 2fr 1fr 1fr;
+            .batch-operations {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .error-item {
+                grid-template-columns: 40px 1fr;
+                gap: 12px;
+            }
+
+            .error-stats,
+            .error-actions {
+                display: none;
             }
 
             .feature-grid {
                 grid-template-columns: repeat(3, 1fr);
+            }
+
+            .photo-error-list-header,
+            .photo-error-item-pc {
+                grid-template-columns: 40px 1fr;
+                gap: 12px;
+            }
+
+            .photo-error-list-header-item:nth-child(3),
+            .photo-error-list-header-item:nth-child(4),
+            .photo-error-date-pc,
+            .photo-error-actions-pc {
+                display: none;
+            }
+
+            .photo-actions-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
             }
         }
     </style>
@@ -1259,120 +1435,25 @@
     <!-- 二级导航栏 -->
     <div class="sub-nav">
         <div class="sub-nav-content">
-            <div class="sub-nav-item">错题本</div>
-            <div class="sub-nav-item active">收藏本</div>
+            <div class="sub-nav-item active">错题本</div>
+            <div class="sub-nav-item">收藏本</div>
             <div class="sub-nav-item">练习历史</div>
             <div class="sub-nav-item" style="margin-left: 20px; color: #999; font-size: 12px; pointer-events: none;">仅展示所选目标下近三年的数据</div>
+            <div style="margin-left: auto; display: flex; align-items: center;" id="pc-settings-btn-container">
+                <button class="settings-btn-pc" onclick="openPcSettingsModal()">
+                    <i class="fas fa-cog"></i>
+                    <span>错题本设置</span>
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- 错题来源导航 -->
     <div class="error-source-nav">
         <div class="error-source-content">
-            <div class="error-source-item active">题型分类</div>
-            <div class="error-source-item">知识点分类</div>
-        </div>
-    </div>
-
-    <!-- 题型标签栏 (最多展示2行，超出展示展开/收起按钮) -->
-    <div class="question-type-tabs">
-        <div class="question-type-tabs-container">
-            <div class="question-type-list" id="question-type-list">
-                <div class="question-type-tab active" data-type="新一级题型" onclick="selectQuestionType('新一级题型')">
-                    <span>新一级题型</span>
-                    <span class="question-count">(10)</span>
-                </div>
-                <div class="question-type-tab" data-type="单选题" onclick="selectQuestionType('单选题')">
-                    <span>单选题</span>
-                    <span class="question-count">(12)</span>
-                </div>
-                <div class="question-type-tab" data-type="多选题" onclick="selectQuestionType('多选题')">
-                    <span>多选题</span>
-                    <span class="question-count">(8)</span>
-                </div>
-                <div class="question-type-tab" data-type="不定项选择题" onclick="selectQuestionType('不定项选择题')">
-                    <span>不定项选择题</span>
-                    <span class="question-count">(2)</span>
-                </div>
-                <div class="question-type-tab" data-type="填空题" onclick="selectQuestionType('填空题')">
-                    <span>填空题</span>
-                    <span class="question-count">(5)</span>
-                </div>
-                <div class="question-type-tab" data-type="判断题" onclick="selectQuestionType('判断题')">
-                    <span>判断题</span>
-                    <span class="question-count">(6)</span>
-                </div>
-                <div class="question-type-tab" data-type="材料题" onclick="selectQuestionType('材料题')">
-                    <span>材料题</span>
-                    <span class="question-count">(2)</span>
-                </div>
-                <div class="question-type-tab" data-type="名词解释" onclick="selectQuestionType('名词解释')">
-                    <span>名词解释</span>
-                    <span class="question-count">(4)</span>
-                </div>
-                <div class="question-type-tab" data-type="简答题" onclick="selectQuestionType('简答题')">
-                    <span>简答题</span>
-                    <span class="question-count">(3)</span>
-                </div>
-                <div class="question-type-tab" data-type="辨析题" onclick="selectQuestionType('辨析题')">
-                    <span>辨析题</span>
-                    <span class="question-count">(2)</span>
-                </div>
-                <div class="question-type-tab" data-type="论述题" onclick="selectQuestionType('论述题')">
-                    <span>论述题</span>
-                    <span class="question-count">(3)</span>
-                </div>
-                <div class="question-type-tab" data-type="翻译题" onclick="selectQuestionType('翻译题')">
-                    <span>翻译题</span>
-                    <span class="question-count">(2)</span>
-                </div>
-                <div class="question-type-tab" data-type="案例分析题" onclick="selectQuestionType('案例分析题')">
-                    <span>案例分析题</span>
-                    <span class="question-count">(4)</span>
-                </div>
-                <div class="question-type-tab" data-type="计算分析题" onclick="selectQuestionType('计算分析题')">
-                    <span>计算分析题</span>
-                    <span class="question-count">(3)</span>
-                </div>
-                <div class="question-type-tab" data-type="证明题" onclick="selectQuestionType('证明题')">
-                    <span>证明题</span>
-                    <span class="question-count">(1)</span>
-                </div>
-                <div class="question-type-tab" data-type="实验设计题" onclick="selectQuestionType('实验设计题')">
-                    <span>实验设计题</span>
-                    <span class="question-count">(2)</span>
-                </div>
-                <div class="question-type-tab" data-type="综合应用题" onclick="selectQuestionType('综合应用题')">
-                    <span>综合应用题</span>
-                    <span class="question-count">(5)</span>
-                </div>
-                <div class="question-type-tab" data-type="连线匹配题" onclick="selectQuestionType('连线匹配题')">
-                    <span>连线匹配题</span>
-                    <span class="question-count">(2)</span>
-                </div>
-                <div class="question-type-tab" data-type="排序归纳题" onclick="selectQuestionType('排序归纳题')">
-                    <span>排序归纳题</span>
-                    <span class="question-count">(1)</span>
-                </div>
-                <div class="question-type-tab" data-type="情境阅读题" onclick="selectQuestionType('情境阅读题')">
-                    <span>情境阅读题</span>
-                    <span class="question-count">(3)</span>
-                </div>
-                <div class="question-type-tab" data-type="完形填空" onclick="selectQuestionType('完形填空')">
-                    <span>完形填空</span>
-                    <span class="question-count">(4)</span>
-                </div>
-                <div class="question-type-tab" data-type="写作表达题" onclick="selectQuestionType('写作表达题')">
-                    <span>写作表达题</span>
-                    <span class="question-count">(2)</span>
-                </div>
-            </div>
-            <div class="question-type-toggle-wrap" id="question-type-toggle-wrap">
-                <button class="question-type-toggle-btn" id="question-type-toggle-btn" onclick="toggleQuestionTypes(event)">
-                    <span id="question-type-toggle-text">展开</span>
-                    <i class="fas fa-chevron-down" id="question-type-toggle-icon"></i>
-                </button>
-            </div>
+            <div class="error-source-item">题型分类</div>
+            <div class="error-source-item active">知识点分类</div>
+            <div class="error-source-item">拍错题</div>
         </div>
     </div>
 
@@ -1380,14 +1461,8 @@
     <div class="main-container">
         <!-- 左侧内容 -->
         <div class="left-content">
-
-
-
-
-
-
-            <!-- 收藏内容 -->
-            <div class="question-bank-content">
+            <!-- 题库错题内容 -->
+            <div class="question-bank-content" style="display: block;">
                 <!-- 新一级题型内容 -->
                 <div class="question-content-tab" id="new-level-type-content" style="display: block;">
                     <!-- 错题详情 -->
@@ -1443,9 +1518,9 @@
                                     <i class="fas fa-flag"></i>
                                     <span>纠错</span>
                                 </button>
-                                <button class="action-btn collect">
-                                    <i class="fas fa-star"></i>
-                                    <span>收藏</span>
+                                <button class="action-btn collect collected">
+                                    <i class="fas fa-star" style="color: #faad14;"></i>
+                                    <span>取消收藏</span>
                                 </button>
                             </div>
                         </div>
@@ -1522,7 +1597,7 @@
 
                         <!-- 题目操作 -->
                         <div class="question-actions" style="margin-top: 36px; display: flex; justify-content: space-between; align-items: center;">
-                            <div style="display: flex; gap: 12px;">
+                            <div class="left-actions">
                                 <button class="action-btn ai-help">
                                     <i class="fas fa-robot"></i>
                                     <span>AI答疑</span>
@@ -1532,7 +1607,7 @@
                                     <span>人工答疑</span>
                                 </button>
                             </div>
-                            <div style="display: flex; gap: 12px;">
+                            <div class="right-actions">
                                 <button class="action-btn move">
                                     <i class="fas fa-arrows-alt"></i>
                                     <span>移除</span>
@@ -1545,8 +1620,8 @@
                                     <i class="fas fa-flag"></i>
                                     <span>纠错</span>
                                 </button>
-                                <button class="action-btn collect">
-                                    <i class="fas fa-star"></i>
+                                <button class="action-btn collect collected">
+                                    <i class="fas fa-star" style="color: #faad14;"></i>
                                     <span>取消收藏</span>
                                 </button>
                             </div>
@@ -1571,10 +1646,14 @@
                                     <span>正确率 63%，易错项 D，作答次数 112 次，作答时长2秒</span>
                                 </div>
                                 <div class="analysis-content">
-                                    <div class="video-analysis" style="margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff;">
-                                        <div style="display: flex; align-items: center; cursor: pointer;">
+                                    <div class="video-analysis" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff; cursor: pointer;">
+                                        <div style="display: flex; align-items: center;">
                                             <i class="fas fa-play-circle" style="font-size: 24px; color: #1890ff; margin-right: 12px;"></i>
                                             <span style="font-weight: 500;">视频解析</span>
+                                        </div>
+                                        <div style="display: flex; gap: 8px;">
+                                            <span style="font-size: 12px; padding: 2px 8px; background-color: #fff1f0; color: #f5222d; border-radius: 2px; border: 1px solid #ffa39e;">会员专享</span>
+                                            <span style="font-size: 12px; padding: 2px 8px; background-color: #e6f7ff; color: #1890ff; border-radius: 2px; border: 1px solid #91d5ff;">支持试看</span>
                                         </div>
                                     </div>
                                     <p><strong>文字解析：</strong>"多行不义必自毙"出自《左传·郑伯克段于鄢》，是郑庄公评价共叔段的话。</p>
@@ -1602,8 +1681,6 @@
                             </button>
                         </div>
                     </div>
-
-
                 </div>
 
                 <!-- 多选题内容 -->
@@ -1638,7 +1715,7 @@
 
                         <!-- 题目操作 -->
                         <div class="question-actions" style="margin-top: 36px; display: flex; justify-content: space-between; align-items: center;">
-                            <div style="display: flex; gap: 12px;">
+                            <div class="left-actions">
                                 <button class="action-btn ai-help">
                                     <i class="fas fa-robot"></i>
                                     <span>AI答疑</span>
@@ -1648,7 +1725,7 @@
                                     <span>人工答疑</span>
                                 </button>
                             </div>
-                            <div style="display: flex; gap: 12px;">
+                            <div class="right-actions">
                                 <button class="action-btn move">
                                     <i class="fas fa-arrows-alt"></i>
                                     <span>移除</span>
@@ -1661,8 +1738,8 @@
                                     <i class="fas fa-flag"></i>
                                     <span>纠错</span>
                                 </button>
-                                <button class="action-btn collect">
-                                    <i class="fas fa-star"></i>
+                                <button class="action-btn collect collected">
+                                    <i class="fas fa-star" style="color: #faad14;"></i>
                                     <span>取消收藏</span>
                                 </button>
                             </div>
@@ -1687,10 +1764,14 @@
                                     <span>正确率 45%，易错项 D，作答次数 89 次，作答时长3秒</span>
                                 </div>
                                 <div class="analysis-content">
-                                    <div class="video-analysis" style="margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff;">
-                                        <div style="display: flex; align-items: center; cursor: pointer;">
+                                    <div class="video-analysis" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff; cursor: pointer;">
+                                        <div style="display: flex; align-items: center;">
                                             <i class="fas fa-play-circle" style="font-size: 24px; color: #1890ff; margin-right: 12px;"></i>
                                             <span style="font-weight: 500;">视频解析</span>
+                                        </div>
+                                        <div style="display: flex; gap: 8px;">
+                                            <span style="font-size: 12px; padding: 2px 8px; background-color: #fff1f0; color: #f5222d; border-radius: 2px; border: 1px solid #ffa39e;">会员专享</span>
+                                            <span style="font-size: 12px; padding: 2px 8px; background-color: #e6f7ff; color: #1890ff; border-radius: 2px; border: 1px solid #91d5ff;">支持试看</span>
                                         </div>
                                     </div>
                                     <p><strong>文字解析：</strong>"多行不义必自毙"和"退避三舍"均出自《左传》，"卧薪尝胆"出自《史记》，"纸上谈兵"出自《史记·廉颇蔺相如列传》。</p>
@@ -1718,8 +1799,6 @@
                             </button>
                         </div>
                     </div>
-
-
                 </div>
 
                 <!-- 不定项选择题内容 -->
@@ -1754,7 +1833,7 @@
 
                         <!-- 题目操作 -->
                         <div class="question-actions" style="margin-top: 36px; display: flex; justify-content: space-between; align-items: center;">
-                            <div style="display: flex; gap: 12px;">
+                            <div class="left-actions">
                                 <button class="action-btn ai-help">
                                     <i class="fas fa-robot"></i>
                                     <span>AI答疑</span>
@@ -1764,7 +1843,7 @@
                                     <span>人工答疑</span>
                                 </button>
                             </div>
-                            <div style="display: flex; gap: 12px;">
+                            <div class="right-actions">
                                 <button class="action-btn move">
                                     <i class="fas fa-arrows-alt"></i>
                                     <span>移除</span>
@@ -1777,8 +1856,8 @@
                                     <i class="fas fa-flag"></i>
                                     <span>纠错</span>
                                 </button>
-                                <button class="action-btn collect">
-                                    <i class="fas fa-star"></i>
+                                <button class="action-btn collect collected">
+                                    <i class="fas fa-star" style="color: #faad14;"></i>
                                     <span>取消收藏</span>
                                 </button>
                             </div>
@@ -1803,10 +1882,14 @@
                                     <span>正确率 39%，易错项 C，作答次数 76 次，作答时长4秒</span>
                                 </div>
                                 <div class="analysis-content">
-                                    <div class="video-analysis" style="margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff;">
-                                        <div style="display: flex; align-items: center; cursor: pointer;">
+                                    <div class="video-analysis" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff; cursor: pointer;">
+                                        <div style="display: flex; align-items: center;">
                                             <i class="fas fa-play-circle" style="font-size: 24px; color: #1890ff; margin-right: 12px;"></i>
                                             <span style="font-weight: 500;">视频解析</span>
+                                        </div>
+                                        <div style="display: flex; gap: 8px;">
+                                            <span style="font-size: 12px; padding: 2px 8px; background-color: #fff1f0; color: #f5222d; border-radius: 2px; border: 1px solid #ffa39e;">会员专享</span>
+                                            <span style="font-size: 12px; padding: 2px 8px; background-color: #e6f7ff; color: #1890ff; border-radius: 2px; border: 1px solid #91d5ff;">支持试看</span>
                                         </div>
                                     </div>
                                     <p><strong>文字解析：</strong>《左传》是编年体史书，作者是左丘明，记载了春秋时期的历史。第一部纪传体史书是《史记》。</p>
@@ -1834,8 +1917,6 @@
                             </button>
                         </div>
                     </div>
-
-
                 </div>
 
                 <!-- 填空题内容 -->
@@ -1872,7 +1953,7 @@
 
                         <!-- 题目操作 -->
                         <div class="question-actions" style="margin-top: 36px; display: flex; justify-content: space-between; align-items: center;">
-                            <div style="display: flex; gap: 12px;">
+                            <div class="left-actions">
                                 <button class="action-btn ai-help">
                                     <i class="fas fa-robot"></i>
                                     <span>AI答疑</span>
@@ -1882,7 +1963,7 @@
                                     <span>人工答疑</span>
                                 </button>
                             </div>
-                            <div style="display: flex; gap: 12px;">
+                            <div class="right-actions">
                                 <button class="action-btn move">
                                     <i class="fas fa-arrows-alt"></i>
                                     <span>移除</span>
@@ -1895,8 +1976,8 @@
                                     <i class="fas fa-flag"></i>
                                     <span>纠错</span>
                                 </button>
-                                <button class="action-btn collect">
-                                    <i class="fas fa-star"></i>
+                                <button class="action-btn collect collected">
+                                    <i class="fas fa-star" style="color: #faad14;"></i>
                                     <span>取消收藏</span>
                                 </button>
                             </div>
@@ -1917,10 +1998,14 @@
                                     <span>正确率 43%，作答次数 76 次，作答时长3秒</span>
                                 </div>
                                 <div class="analysis-content">
-                                    <div class="video-analysis" style="margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff;">
-                                        <div style="display: flex; align-items: center; cursor: pointer;">
+                                    <div class="video-analysis" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff; cursor: pointer;">
+                                        <div style="display: flex; align-items: center;">
                                             <i class="fas fa-play-circle" style="font-size: 24px; color: #1890ff; margin-right: 12px;"></i>
                                             <span style="font-weight: 500;">视频解析</span>
+                                        </div>
+                                        <div style="display: flex; gap: 8px;">
+                                            <span style="font-size: 12px; padding: 2px 8px; background-color: #fff1f0; color: #f5222d; border-radius: 2px; border: 1px solid #ffa39e;">会员专享</span>
+                                            <span style="font-size: 12px; padding: 2px 8px; background-color: #e6f7ff; color: #1890ff; border-radius: 2px; border: 1px solid #91d5ff;">支持试看</span>
                                         </div>
                                     </div>
                                     <p><strong>文字解析：</strong>出自《老子》第六十四章，意思是合抱的大树，生长于细小的萌芽；九层的高台，筑起于每一堆泥土；千里的远行，是从脚下第一步开始走出来的。</p>
@@ -1974,7 +2059,7 @@
 
                         <!-- 题目操作 -->
                         <div class="question-actions" style="margin-top: 36px; display: flex; justify-content: space-between; align-items: center;">
-                            <div style="display: flex; gap: 12px;">
+                            <div class="left-actions">
                                 <button class="action-btn ai-help">
                                     <i class="fas fa-robot"></i>
                                     <span>AI答疑</span>
@@ -1984,7 +2069,7 @@
                                     <span>人工答疑</span>
                                 </button>
                             </div>
-                            <div style="display: flex; gap: 12px;">
+                            <div class="right-actions">
                                 <button class="action-btn move">
                                     <i class="fas fa-arrows-alt"></i>
                                     <span>移除</span>
@@ -1997,8 +2082,8 @@
                                     <i class="fas fa-flag"></i>
                                     <span>纠错</span>
                                 </button>
-                                <button class="action-btn collect">
-                                    <i class="fas fa-star"></i>
+                                <button class="action-btn collect collected">
+                                    <i class="fas fa-star" style="color: #faad14;"></i>
                                     <span>取消收藏</span>
                                 </button>
                             </div>
@@ -2023,10 +2108,14 @@
                                     <span>正确率 69%，作答次数 54 次，作答时长1秒</span>
                                 </div>
                                 <div class="analysis-content">
-                                    <div class="video-analysis" style="margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff;">
-                                        <div style="display: flex; align-items: center; cursor: pointer;">
+                                    <div class="video-analysis" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff; cursor: pointer;">
+                                        <div style="display: flex; align-items: center;">
                                             <i class="fas fa-play-circle" style="font-size: 24px; color: #1890ff; margin-right: 12px;"></i>
                                             <span style="font-weight: 500;">视频解析</span>
+                                        </div>
+                                        <div style="display: flex; gap: 8px;">
+                                            <span style="font-size: 12px; padding: 2px 8px; background-color: #fff1f0; color: #f5222d; border-radius: 2px; border: 1px solid #ffa39e;">会员专享</span>
+                                            <span style="font-size: 12px; padding: 2px 8px; background-color: #e6f7ff; color: #1890ff; border-radius: 2px; border: 1px solid #91d5ff;">支持试看</span>
                                         </div>
                                     </div>
                                     <p><strong>文字解析：</strong>"多行不义必自毙"出自《左传·郑伯克段于鄢》，不是《论语》。</p>
@@ -2056,102 +2145,7 @@
                     </div>
                 </div>
 
-                <!-- 简答题内容 -->
-                <div class="question-content-tab" id="short-answer-content" style="display: none;">
-                    <!-- 错题详情 -->
-                    <div class="error-detail">
-                        <!-- 题目编号和内容 -->
-                        <div class="question-header">
-                            <span class="question-number">1、</span>
-                            <span class="question-content">简述"多行不义必自毙"的出处和含义。</span>
-                        </div>
 
-                        <!-- 答案区域 -->
-                        <div class="question-answer">
-                            <div class="answer-input">
-                                <span>你的答案：</span>
-                                <textarea disabled style="margin-left: 8px; margin-top: 8px; padding: 8px; border: 1px solid #d9d9d9; border-radius: 4px; width: 100%; height: 100px;">出自《论语》，意思是做坏事多了一定会自取灭亡。</textarea>
-                            </div>
-                            <div class="correct-answer">
-                                <span>参考答案：</span>
-                                <div style="color: #52c41a; margin-left: 8px; margin-top: 8px; padding: 8px; background-color: #f6ffed; border-radius: 4px;">
-                                    出自《左传·郑伯克段于鄢》，意思是做多了不义的事情，必然会自取灭亡。
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 题目操作 -->
-                        <div class="question-actions" style="margin-top: 36px; display: flex; justify-content: space-between; align-items: center;">
-                            <div style="display: flex; gap: 12px;">
-                                <button class="action-btn ai-help">
-                                    <i class="fas fa-robot"></i>
-                                    <span>AI答疑</span>
-                                </button>
-                                <button class="action-btn human-help">
-                                    <i class="fas fa-user"></i>
-                                    <span>人工答疑</span>
-                                </button>
-                            </div>
-                            <div style="display: flex; gap: 12px;">
-                                <button class="action-btn move">
-                                    <i class="fas fa-arrows-alt"></i>
-                                    <span>移除</span>
-                                </button>
-                                <button class="action-btn share">
-                                    <i class="fas fa-share-alt"></i>
-                                    <span>分享</span>
-                                </button>
-                                <button class="action-btn report">
-                                    <i class="fas fa-flag"></i>
-                                    <span>纠错</span>
-                                </button>
-                                <button class="action-btn collect">
-                                    <i class="fas fa-star"></i>
-                                    <span>取消收藏</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- 答案和解析 -->
-                        <div class="answer-analysis">
-                            <div class="analysis-section" style="border-top: none;">
-                                <div class="analysis-header">
-                                    <span>试题统计：</span>
-                                    <span>作答次数 42 次，作答时长6秒</span>
-                                </div>
-                                <div class="analysis-content">
-                                    <div class="video-analysis" style="margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff;">
-                                        <div style="display: flex; align-items: center; cursor: pointer;">
-                                            <i class="fas fa-play-circle" style="font-size: 24px; color: #1890ff; margin-right: 12px;"></i>
-                                            <span style="font-weight: 500;">视频解析</span>
-                                        </div>
-                                    </div>
-                                    <p><strong>文字解析：</strong>"多行不义必自毙"出自《左传·郑伯克段于鄢》，是郑庄公评价共叔段的话，意思是做多了不义的事情，必然会自取灭亡。</p>
-                                    <p><strong>知识点：</strong>成语出处、古代文学、春秋左传</p>
-                                    <p><strong>试题来源：</strong>2023年河南考生回忆版</p>
-                                    <p><strong>试题难度：</strong>中</p>
-                                    <p><strong>试题类型：</strong>2020河南</p>
-                                    <div class="question-tags" style="margin-top: 12px;">
-                                        <span class="tag" style="display: inline-block; padding: 2px 8px; background-color: #fff2e8; color: #fa8c16; border-radius: 10px; font-size: 12px; margin-right: 8px;">易错题</span>
-                                        <span class="tag" style="display: inline-block; padding: 2px 8px; background-color: #e6f7ff; color: #1890ff; border-radius: 10px; font-size: 12px;">真题</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 上下题导航 -->
-                        <div class="question-navigation">
-                            <button class="nav-btn prev">
-                                <i class="fas fa-chevron-left"></i>
-                                <span>上一题</span>
-                            </button>
-                            <button class="nav-btn next">
-                                <span>下一题</span>
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- 材料题内容 -->
                 <div class="question-content-tab" id="material-content" style="display: none;">
@@ -2182,7 +2176,7 @@
 
                         <!-- 题目操作 -->
                         <div class="question-actions" style="margin-top: 36px; display: flex; justify-content: space-between; align-items: center;">
-                            <div style="display: flex; gap: 12px;">
+                            <div class="left-actions">
                                 <button class="action-btn ai-help">
                                     <i class="fas fa-robot"></i>
                                     <span>AI答疑</span>
@@ -2192,7 +2186,7 @@
                                     <span>人工答疑</span>
                                 </button>
                             </div>
-                            <div style="display: flex; gap: 12px;">
+                            <div class="right-actions">
                                 <button class="action-btn move">
                                     <i class="fas fa-arrows-alt"></i>
                                     <span>移除</span>
@@ -2205,8 +2199,8 @@
                                     <i class="fas fa-flag"></i>
                                     <span>纠错</span>
                                 </button>
-                                <button class="action-btn collect">
-                                    <i class="fas fa-star"></i>
+                                <button class="action-btn collect collected">
+                                    <i class="fas fa-star" style="color: #faad14;"></i>
                                     <span>取消收藏</span>
                                 </button>
                             </div>
@@ -2218,49 +2212,26 @@
                                 <div class="correct-answer" style="margin-bottom: 16px;">
                                     <span>参考答案：</span>
                                     <div style="color: #52c41a; margin-left: 8px; margin-top: 8px; padding: 8px; background-color: #f6ffed; border-radius: 4px;">
-                                        做多了不义的事情，必然会自取灭亡。
+                                        做坏事多了一定会受到惩罚。
                                     </div>
                                 </div>
                                 <div class="analysis-header">
                                     <span>试题统计：</span>
-                                    <span>作答次数 38 次，作答时长8秒</span>
+                                    <span>正确率 82%，作答次数 120 次，作答时长 5 秒</span>
                                 </div>
                                 <div class="analysis-content">
-                                    <div class="video-analysis" style="margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #1890ff;">
-                                        <div style="display: flex; align-items: center; cursor: pointer;">
-                                            <i class="fas fa-play-circle" style="font-size: 24px; color: #1890ff; margin-right: 12px;"></i>
-                                            <span style="font-weight: 500;">视频解析</span>
-                                        </div>
-                                    </div>
-                                    <p><strong>文字解析：</strong>"多行不义必自毙"出自《左传·郑伯克段于鄢》，是郑庄公评价共叔段的话，意思是做多了不义的事情，必然会自取灭亡。</p>
-                                    <p><strong>知识点：</strong>成语出处、古代文学、春秋左传</p>
-                                    <p><strong>试题来源：</strong>2023年河南考生回忆版</p>
-                                    <p><strong>试题难度：</strong>难</p>
-                                    <p><strong>试题类型：</strong>2021河南</p>
-                                    <div class="question-tags" style="margin-top: 12px;">
-                                        <span class="tag" style="display: inline-block; padding: 2px 8px; background-color: #fff2e8; color: #fa8c16; border-radius: 10px; font-size: 12px; margin-right: 8px;">易错题</span>
-                                        <span class="tag" style="display: inline-block; padding: 2px 8px; background-color: #e6f7ff; color: #1890ff; border-radius: 10px; font-size: 12px;">真题</span>
-                                    </div>
+                                    <p><strong>文字解析：</strong>《左传·郑伯克段于鄢》：“多行不义必自毙，子姑待之。” 意思是做坏事多了，一定会自食其果，自己招致灭亡。</p>
+                                    <p><strong>知识点：</strong>古代文学、左传、名言警句</p>
+                                    <p><strong>试题来源：</strong>经典阅读理解</p>
+                                    <p><strong>试题难度：</strong>易</p>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- 上下题导航 -->
-                        <div class="question-navigation">
-                            <button class="nav-btn prev">
-                                <i class="fas fa-chevron-left"></i>
-                                <span>上一题</span>
-                            </button>
-                            <button class="nav-btn next">
-                                <span>下一题</span>
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-<!-- 知识点分类内容 -->
+            <!-- 知识点分类内容 -->
             <div class="knowledge-point-content" style="display: none; padding: 24px;">
                 <!-- 内部样式 -->
                 <style>
@@ -2324,14 +2295,199 @@
                 <div id="pc-knowledge-units-list" style="background: transparent; border: none; box-shadow: none; overflow: visible;">
                     <!-- 动态渲染 -->
                 </div>
+
+                <!-- 未关联知识点分类 (PC端) -->
+                <div class="pc-practice-unit pc-unassociated-knowledge-card" style="background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; margin-top: 4px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                    <div style="padding: 18px 24px; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 14px;">
+                            <div style="width: 36px; height: 36px; border-radius: 8px; background-color: #fff7e6; color: #fa8c16; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;">
+                                <i class="fas fa-link-slash"></i>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <span style="font-size: 15px; font-weight: 600; color: #333;">未关联知识点</span>
+                                <span style="font-size: 13px; color: #999; font-weight: 500;">共 8 道试题</span>
+                            </div>
+                        </div>
+                        <div>
+                            <button style="background: #fff; border: 1px solid #ff4d4f; color: #ff4d4f; border-radius: 4px; padding: 6px 18px; font-size: 13px; cursor: pointer; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#fff1f0'" onmouseout="this.style.backgroundColor='#fff'" onclick="showKnowledgeCategory('未关联知识点', 8)">查看</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 拍错题内容 -->
+            <div class="photo-error-content" style="display: none;">
+
+                <!-- 上传图片按钮 -->
+                <div class="batch-operations" style="margin-bottom: 24px;">
+                    <div class="batch-actions">
+                        <button class="batch-btn primary upload-btn">
+                            <i class="fas fa-image"></i>
+                            <span>上传图片</span>
+                        </button>
+                    </div>
+                </div>
+
+
+                <!-- 拍错题列表 -->
+                <div class="photo-error-list-pc">
+                    <!-- 拍错题网格 -->
+                    <div class="photo-error-grid">
+                        <!-- 拍错题项 1 -->
+                        <div class="photo-error-item-grid">
+                            <div class="photo-thumbnail-grid" onclick="viewImage(this)">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=math%20problem%20on%20paper%2C%20handwritten%20calculation%2C%20student%20exercise%2C%20white%20background&image_size=portrait_4_3" alt="错题图片">
+                            </div>
+                            <div class="photo-error-date-grid">2026-02-04 14:30</div>
+                            <div class="photo-error-action-grid">
+                                <div class="photo-error-action-left">
+                                    <button class="photo-error-action-btn ai-help">
+                                        <i class="fas fa-robot"></i>
+                                        <span>AI答疑</span>
+                                    </button>
+                                    <button class="photo-error-action-btn human-help">
+                                        <i class="fas fa-user"></i>
+                                        <span>人工答疑</span>
+                                    </button>
+                                </div>
+                                <div class="photo-error-action-right">
+                                    <button class="photo-error-action-btn">移除</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 拍错题项 2 -->
+                        <div class="photo-error-item-grid">
+                            <div class="photo-thumbnail-grid" onclick="viewImage(this)">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=geometry%20proof%20problem%20on%20paper%2C%20handwritten%20student%20work%2C%20white%20background&image_size=portrait_4_3" alt="错题图片">
+                            </div>
+                            <div class="photo-error-date-grid">2026-02-03 16:45</div>
+                            <div class="photo-error-action-grid">
+                                <div class="photo-error-action-left">
+                                    <button class="photo-error-action-btn ai-help">
+                                        <i class="fas fa-robot"></i>
+                                        <span>AI答疑</span>
+                                    </button>
+                                    <button class="photo-error-action-btn human-help">
+                                        <i class="fas fa-user"></i>
+                                        <span>人工答疑</span>
+                                    </button>
+                                </div>
+                                <div class="photo-error-action-right">
+                                    <button class="photo-error-action-btn">移除</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 拍错题项 3 -->
+                        <div class="photo-error-item-grid">
+                            <div class="photo-thumbnail-grid" onclick="viewImage(this)">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=physics%20mechanics%20problem%20on%20paper%2C%20handwritten%20student%20work%2C%20white%20background&image_size=portrait_4_3" alt="错题图片">
+                            </div>
+                            <div class="photo-error-date-grid">2026-02-02 09:15</div>
+                            <div class="photo-error-action-grid">
+                                <div class="photo-error-action-left">
+                                    <button class="photo-error-action-btn ai-help">
+                                        <i class="fas fa-robot"></i>
+                                        <span>AI答疑</span>
+                                    </button>
+                                    <button class="photo-error-action-btn human-help">
+                                        <i class="fas fa-user"></i>
+                                        <span>人工答疑</span>
+                                    </button>
+                                </div>
+                                <div class="photo-error-action-right">
+                                    <button class="photo-error-action-btn">移除</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 拍错题项 4 -->
+                        <div class="photo-error-item-grid">
+                            <div class="photo-thumbnail-grid" onclick="viewImage(this)">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=chemistry%20problem%20on%20paper%2C%20handwritten%20student%20work%2C%20white%20background&image_size=portrait_4_3" alt="错题图片">
+                            </div>
+                            <div class="photo-error-date-grid">2026-02-01 10:45</div>
+                            <div class="photo-error-action-grid">
+                                <div class="photo-error-action-left">
+                                    <button class="photo-error-action-btn ai-help">
+                                        <i class="fas fa-robot"></i>
+                                        <span>AI答疑</span>
+                                    </button>
+                                    <button class="photo-error-action-btn human-help">
+                                        <i class="fas fa-user"></i>
+                                        <span>人工答疑</span>
+                                    </button>
+                                </div>
+                                <div class="photo-error-action-right">
+                                    <button class="photo-error-action-btn">移除</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 拍错题项 5 -->
+                        <div class="photo-error-item-grid">
+                            <div class="photo-thumbnail-grid" onclick="viewImage(this)">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=biology%20problem%20on%20paper%2C%20handwritten%20student%20work%2C%20white%20background&image_size=portrait_4_3" alt="错题图片">
+                            </div>
+                            <div class="photo-error-date-grid">2026-01-31 15:20</div>
+                            <div class="photo-error-action-grid">
+                                <div class="photo-error-action-left">
+                                    <button class="photo-error-action-btn ai-help">
+                                        <i class="fas fa-robot"></i>
+                                        <span>AI答疑</span>
+                                    </button>
+                                    <button class="photo-error-action-btn human-help">
+                                        <i class="fas fa-user"></i>
+                                        <span>人工答疑</span>
+                                    </button>
+                                </div>
+                                <div class="photo-error-action-right">
+                                    <button class="photo-error-action-btn">移除</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 拍错题项 6 -->
+                        <div class="photo-error-item-grid">
+                            <div class="photo-thumbnail-grid" onclick="viewImage(this)">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=english%20grammar%20exercise%20on%20paper%2C%20handwritten%20student%20work%2C%20white%20background&image_size=portrait_4_3" alt="错题图片">
+                            </div>
+                            <div class="photo-error-date-grid">2026-01-30 09:30</div>
+                            <div class="photo-error-action-grid">
+                                <div class="photo-error-action-left">
+                                    <button class="photo-error-action-btn ai-help">
+                                        <i class="fas fa-robot"></i>
+                                        <span>AI答疑</span>
+                                    </button>
+                                    <button class="photo-error-action-btn human-help">
+                                        <i class="fas fa-user"></i>
+                                        <span>人工答疑</span>
+                                    </button>
+                                </div>
+                                <div class="photo-error-action-right">
+                                    <button class="photo-error-action-btn">移除</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 分页 -->
+                <div class="pagination">
+                    <span class="pagination-info">共 6 条记录</span>
+                    <button class="pagination-btn">上一页</button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">下一页</button>
+                </div>
             </div>
         </div>
 
-            
         <!-- 右侧边栏 -->
         <div class="right-sidebar">
             <!-- 答题卡 -->
-            <div class="answer-card">
+            <div class="answer-card" id="pc-answer-card" style="display: block;">
                 <div class="answer-card-header">
                     <span>答题卡</span>
                     <button class="collapse-btn">
@@ -2343,20 +2499,16 @@
                     <div class="answer-grid">
                         <div class="answer-item wrong">1</div>
                         <div class="answer-item wrong">2</div>
-                        <div class="answer-item correct">3</div>
+                        <div class="answer-item half-correct">3</div>
                         <div class="answer-item wrong">4</div>
-                        <div class="answer-item correct">5</div>
+                        <div class="answer-item half-correct">5</div>
                         <div class="answer-item wrong">6</div>
-                        <div class="answer-item correct">7</div>
+                        <div class="answer-item half-correct">7</div>
                         <div class="answer-item wrong">8</div>
-                        <div class="answer-item correct">9</div>
-                        <div class="answer-item correct">10</div>
+                        <div class="answer-item half-correct">9</div>
+                        <div class="answer-item half-correct">10</div>
                     </div>
                     <div class="answer-card-stats">
-                        <div class="stat-item">
-                            <div class="stat-dot correct"></div>
-                            <span>正确</span>
-                        </div>
                         <div class="stat-item">
                             <div class="stat-dot wrong"></div>
                             <span>错误</span>
@@ -2364,14 +2516,6 @@
                         <div class="stat-item">
                             <div class="stat-dot half-correct"></div>
                             <span>半对</span>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-dot answered"></div>
-                            <span>已答</span>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-dot unanswered"></div>
-                            <span>未答</span>
                         </div>
                     </div>
                     <button class="retest-btn" id="retest-action-btn">
@@ -2384,6 +2528,45 @@
                     </button>
                 </div>
             </div>
+
+            <!-- AI 智能提分与建议 (放在右侧竖列，样式参考 zhangjie_zhengti_baogao_pc) -->
+            <div class="ai-suggestions-container space-y-4" id="pc-ai-suggestions" style="margin-top: 16px;">
+                <!-- 提分攻略 -->
+                <div class="bg-white rounded-2xl p-5 card-shadow border border-indigo-50/50" id="ai-improvement-card">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h2 class="text-base font-bold text-gray-800">提分攻略</h2>
+                            <span class="px-1.5 py-0.5 text-[10px] font-normal text-amber-600 bg-amber-50 rounded-md flex items-center gap-1 border border-amber-100/50"><span class="w-1 h-1 rounded-full bg-amber-500 animate-pulse"></span>更新中</span>
+                        </div>
+                        <span class="text-xs text-gray-400">内容由AI生成</span>
+                    </div>
+                    <div class="bg-indigo-50/40 rounded-xl p-4 text-sm leading-relaxed text-gray-600 space-y-3" id="ai-improvement-content">
+                        <p><strong class="text-indigo-600">1. 夯实核心考点：</strong>本分类中失分较多的薄弱模块进行针对性专项突破。</p>
+                        <p><strong class="text-indigo-600">2. 进行限时专项练习：</strong>针对常考易错题型，尝试设定练习闹钟，训练在考场压力下的解题速度。</p>
+                        <p><strong class="text-indigo-600">3. 建立错题本复盘逻辑：</strong>将概念混淆与审题粗心导致的错题分层归纳，定期回顾重做，避免在同类陷阱中再次失分。</p>
+                    </div>
+                </div>
+
+                <!-- 学习建议 -->
+                <div class="bg-white rounded-2xl p-5 card-shadow border border-orange-50/50" id="ai-suggestion-card">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-orange-50 text-orange-600 rounded-lg flex items-center justify-center">
+                                <i class="far fa-lightbulb"></i>
+                            </div>
+                            <h2 class="text-base font-bold text-gray-800">学习建议</h2>
+                            <span class="px-1.5 py-0.5 text-[10px] font-normal text-amber-600 bg-amber-50 rounded-md flex items-center gap-1 border border-amber-100/50"><span class="w-1 h-1 rounded-full bg-amber-500 animate-pulse"></span>更新中</span>
+                        </div>
+                        <span class="text-xs text-gray-400">内容由AI生成</span>
+                    </div>
+                    <div class="bg-orange-50/40 rounded-xl p-5 text-sm leading-relaxed text-orange-900 border border-orange-100/50" id="ai-suggestion-content">
+                        你在基础知识上掌握相对稳健，整体完成度良好。接下来的任务是攻克弱项章节内的“深水区”知识点，通过精读解析与反思总结来提升思维深度。
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -2393,6 +2576,30 @@
     </footer>
 
     <script>
+        function switchSubNav(name) {
+            const subNavItems = document.querySelectorAll('.sub-nav-item');
+            subNavItems.forEach(item => {
+                const text = item.textContent.trim();
+                if (text === name) {
+                    item.classList.add('active');
+                } else if (text === '错题本' || text === '收藏本') {
+                    item.classList.remove('active');
+                }
+            });
+            const settingsSpan = document.querySelector('.settings-btn-pc span');
+            if (settingsSpan) {
+                settingsSpan.textContent = name === '收藏本' ? '收藏本设置' : '错题本设置';
+            }
+            document.title = name === '收藏本' ? '收藏本PC端' : '错题本PC端';
+            const url = new URL(window.location);
+            if (name === '收藏本') {
+                url.searchParams.set('sub', 'shoucang');
+            } else {
+                url.searchParams.delete('sub');
+            }
+            window.history.replaceState({}, '', url);
+        }
+
         // 二级导航点击事件
         document.querySelectorAll('.sub-nav-item').forEach(item => {
             item.addEventListener('click', () => {
@@ -2401,176 +2608,26 @@
                 if (label === '题库') {
                     window.location.href = 'tiku_pc.html';
                 } else if (label === '错题本') {
-                    window.location.href = 'cuotiben_pc.html';
+                    window.location.href = 'cuotiben_pc.html?sub=cuotiben';
                 } else if (label === '收藏本') {
-                    window.location.href = 'shoucangben_pc.html';
+                    window.location.href = 'cuotiben_pc.html?sub=shoucang';
                 } else if (label === '练习历史') {
                     window.location.href = 'lianxi_lishi_pc.html';
                 }
             });
         });
 
-        
-        // 错题来源切换事件
-        document.querySelectorAll('.error-source-item').forEach(item => {
-            item.addEventListener('click', () => {
-                document.querySelectorAll('.error-source-item').forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-                
-                const text = item.textContent.trim();
-                
-                if (text === '题型分类' || text === '知识点分类') {
-                    localStorage.setItem('shoucangben_active_tab_pc', text);
-                }
-                
-                if (text === '题型分类') {
-                    document.querySelector('.question-bank-content').style.display = 'block';
-                    if (document.querySelector('.knowledge-point-content')) {
-                        document.querySelector('.knowledge-point-content').style.display = 'none';
-                    }
-                    document.querySelector('.question-type-tabs').style.display = 'flex';
-                    if (document.querySelector('.right-sidebar')) document.querySelector('.right-sidebar').style.display = 'block';
-                } else if (text === '知识点分类') {
-                    document.querySelector('.question-bank-content').style.display = 'none';
-                    if (document.querySelector('.knowledge-point-content')) {
-                        document.querySelector('.knowledge-point-content').style.display = 'block';
-                    }
-                    document.querySelector('.question-type-tabs').style.display = 'none';
-                    if (document.querySelector('.right-sidebar')) document.querySelector('.right-sidebar').style.display = 'none';
-                }
-            });
-        });
-        
-        // 页面加载完成后，恢复 tab
-        window.addEventListener('load', () => {
-            if(typeof renderPcKnowledgeSystem === 'function') renderPcKnowledgeSystem();
-            let savedTab = localStorage.getItem('shoucangben_active_tab_pc') || '题型分类';
-            if (savedTab === '按题型') savedTab = '题型分类';
-            if (savedTab === '按知识点') savedTab = '知识点分类';
-            const items = document.querySelectorAll('.error-source-item');
-            let matchedTab = null;
-            items.forEach(item => {
-                if (item.textContent.trim() === savedTab) {
-                    matchedTab = item;
-                }
-            });
-            if (matchedTab) {
-                matchedTab.click();
-            }
-        });
-        
-        function toggleKnowledgeUnit(header) {
-            const icon = header.querySelector('.fa-chevron-right') || header.querySelector('.fa-chevron-down');
-            const content = header.parentElement.querySelector('.unit-content');
-            
-            if (content.style.display === 'none' || !content.style.display) {
-                content.style.display = 'block';
-                if (icon) {
-                    icon.classList.remove('fa-chevron-right');
-                    icon.classList.add('fa-chevron-down');
-                }
-            } else {
-                content.style.display = 'none';
-                if (icon) {
-                    icon.classList.remove('fa-chevron-down');
-                    icon.classList.add('fa-chevron-right');
-                }
-            }
-        }
-
-        function showKnowledgeCategory(name, count) {
-            if (count === 0) {
-                alert('该知识点目前没有收藏哦！');
-                return;
-            }
-            window.location.href = 'cuotiben_shiti_chakan_pc.html?type=' + encodeURIComponent(name);
-        }
-        
-        // 错题来源切换事件
-        document.querySelectorAll('.error-source-item').forEach(item => {
-            item.addEventListener('click', () => {
-                document.querySelectorAll('.error-source-item').forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-                
-                const text = item.textContent.trim();
-                
-                if (text === '题型分类' || text === '知识点分类') {
-                    localStorage.setItem('shoucangben_active_tab_pc', text);
-                }
-                
-                if (text === '题型分类') {
-                    document.querySelector('.question-bank-content').style.display = 'block';
-                    if (document.querySelector('.knowledge-point-content')) {
-                        document.querySelector('.knowledge-point-content').style.display = 'none';
-                    }
-                    document.querySelector('.question-type-tabs').style.display = 'flex';
-                    if (document.querySelector('.right-sidebar')) document.querySelector('.right-sidebar').style.display = 'block';
-                } else if (text === '知识点分类') {
-                    document.querySelector('.question-bank-content').style.display = 'none';
-                    if (document.querySelector('.knowledge-point-content')) {
-                        document.querySelector('.knowledge-point-content').style.display = 'block';
-                    }
-                    document.querySelector('.question-type-tabs').style.display = 'none';
-                    if (document.querySelector('.right-sidebar')) document.querySelector('.right-sidebar').style.display = 'none';
-                }
-            });
-        });
-        
-        // 页面加载完成后，恢复 tab
-        window.addEventListener('load', () => {
-            if(typeof renderPcKnowledgeSystem === 'function') renderPcKnowledgeSystem();
-            let savedTab = localStorage.getItem('shoucangben_active_tab_pc') || '题型分类';
-            if (savedTab === '按题型') savedTab = '题型分类';
-            if (savedTab === '按知识点') savedTab = '知识点分类';
-            const items = document.querySelectorAll('.error-source-item');
-            let matchedTab = null;
-            items.forEach(item => {
-                if (item.textContent.trim() === savedTab) {
-                    matchedTab = item;
-                }
-            });
-            if (matchedTab) {
-                matchedTab.click();
-            }
-        });
-        
-        function toggleKnowledgeUnit(header) {
-            const icon = header.querySelector('.fa-chevron-right') || header.querySelector('.fa-chevron-down');
-            const content = header.parentElement.querySelector('.unit-content');
-            
-            if (content.style.display === 'none' || !content.style.display) {
-                content.style.display = 'block';
-                if (icon) {
-                    icon.classList.remove('fa-chevron-right');
-                    icon.classList.add('fa-chevron-down');
-                }
-            } else {
-                content.style.display = 'none';
-                if (icon) {
-                    icon.classList.remove('fa-chevron-down');
-                    icon.classList.add('fa-chevron-right');
-                }
-            }
-        }
-
-        function showKnowledgeCategory(name, count) {
-            if (count === 0) {
-                alert('该知识点目前没有收藏哦！');
-                return;
-            }
-            window.location.href = 'cuotiben_shiti_chakan_pc.html?type=' + encodeURIComponent(name);
-        }
-        // 收藏本题型数据字典映射
+        // 题型数据字典映射 (包含错题数量与对应详情模板)
         const QUESTION_TYPE_CONFIG = {
             '新一级题型': { count: 10, targetId: 'new-level-type-content' },
-            '单选题': { count: 12, targetId: 'single-choice-content' },
-            '多选题': { count: 8, targetId: 'multiple-choice-content' },
+            '单选题': { count: 5, targetId: 'single-choice-content' },
+            '多选题': { count: 2, targetId: 'multiple-choice-content' },
             '不定项选择题': { count: 2, targetId: 'indefinite-choice-content' },
-            '填空题': { count: 5, targetId: 'fill-blank-content' },
-            '判断题': { count: 6, targetId: 'judgment-content' },
+            '填空题': { count: 3, targetId: 'fill-blank-content' },
+            '判断题': { count: 1, targetId: 'judgment-content' },
             '材料题': { count: 2, targetId: 'material-content' },
-            '简答题': { count: 3, targetId: 'short-answer-content', desc: '重点考查知识要点的概括提炼与条理化要点作答' },
             '名词解释': { count: 4, targetId: 'new-level-type-content', desc: '用于考核核心术语、基础定义的精准记忆与规范阐述' },
+            '简答题': { count: 6, targetId: 'new-level-type-content', desc: '重点考查知识要点的概括提炼与条理化要点作答' },
             '辨析题': { count: 2, targetId: 'new-level-type-content', desc: '考查对核心概念、观点的正误辨别与深入逻辑剖析' },
             '论述题': { count: 3, targetId: 'new-level-type-content', desc: '综合性深度论述，要求观点明确、论据充分、逻辑严密' },
             '翻译题': { count: 2, targetId: 'new-level-type-content', desc: '考查文言文或外语语篇的准确翻译与词法句法掌握' },
@@ -2586,11 +2643,11 @@
             '写作表达题': { count: 2, targetId: 'new-level-type-content', desc: '综合考查书面表达、结构布局与语言运用能力' }
         };
 
-        const DEFAULT_TOP_TYPES = ['新一级题型', '单选题', '多选题', '不定项选择题', '填空题', '判断题', '简答题', '材料题'];
+        const DEFAULT_TOP_TYPES = ['新一级题型', '单选题', '多选题', '不定项选择题', '填空题', '判断题', '材料题'];
 
         // 统一题型选择入口函数
         function selectQuestionType(typeName) {
-            console.log('选择收藏题型:', typeName);
+            console.log('选择题型:', typeName);
             const conf = QUESTION_TYPE_CONFIG[typeName] || { count: 1, targetId: 'new-level-type-content' };
 
             // 1. 同步题型标签高亮状态
@@ -2614,11 +2671,11 @@
                 if (!DEFAULT_TOP_TYPES.includes(typeName)) {
                     const qContent = targetElement.querySelector('.question-content');
                     if (qContent) {
-                        qContent.innerHTML = `【${typeName}】这是当前收藏分类下的精选题型示例 (${typeName})。${conf.desc || ''}`;
+                        qContent.innerHTML = `【${typeName}】这是当前分类下的精选题型示例 (${typeName})。${conf.desc || ''}`;
                     }
                     const qAnalysis = targetElement.querySelector('.analysis-content p:nth-child(1)');
                     if (qAnalysis) {
-                        qAnalysis.innerHTML = `<strong>文字解析：</strong>本题是【${typeName}】的重点收藏解析，需掌握核心考点与解题技巧。`;
+                        qAnalysis.innerHTML = `<strong>文字解析：</strong>本题是【${typeName}】的重点错题解析，需掌握核心考点与解题技巧。`;
                     }
                 }
             }
@@ -2663,37 +2720,62 @@
         window.addEventListener('resize', checkQuestionTypesOverflow);
         setTimeout(checkQuestionTypesOverflow, 100);
 
-        function showPcToast(msg) {
-            let toast = document.getElementById('pc-toast-msg');
-            if (!toast) {
-                toast = document.createElement('div');
-                toast.id = 'pc-toast-msg';
-                toast.style.cssText = 'position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.75); color: #fff; padding: 10px 24px; border-radius: 6px; font-size: 14px; z-index: 3000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: opacity 0.3s;';
-                document.body.appendChild(toast);
+        // 动态更新 AI 提分攻略与学习建议内容 (参考 zhangjie_zhengti_baogao_pc 样式)
+        function updateAiSuggestions(mode) {
+            const impContent = document.getElementById('ai-improvement-content');
+            const sugContent = document.getElementById('ai-suggestion-content');
+            if (!impContent || !sugContent) return;
+
+            if (mode === 'knowledge') {
+                impContent.innerHTML = `
+                    <p><strong class="text-indigo-600">1. 夯实知识点核心考点：</strong>重点梳理薄弱模块与高频考点，针对公式推导、概念辨析进行专项突破。</p>
+                    <p><strong class="text-indigo-600">2. 进行限时专项练习：</strong>按知识点章节设定专项练习时限，训练在模拟压力下的知识点调取速度。</p>
+                    <p><strong class="text-indigo-600">3. 构建知识脉络逻辑：</strong>将章节中易混淆知识点建立思维导图，定期复盘，避免同类知识盲区再次失分。</p>
+                `;
+                sugContent.innerHTML = `
+                    你在各知识点章节的基础概念上表现稳健。接下来的核心任务是攻克知识点体系中的“深水区”难点，通过多层级穿透与精读错题解析来提升综合解题思维深度。
+                `;
+            } else {
+                impContent.innerHTML = `
+                    <p><strong class="text-indigo-600">1. 夯实题型核心考点：</strong>本分类中失分较多的薄弱模块进行针对性专项突破。</p>
+                    <p><strong class="text-indigo-600">2. 进行限时专项练习：</strong>针对常考易错题型，尝试设定练习闹钟，训练在考场压力下的解题速度。</p>
+                    <p><strong class="text-indigo-600">3. 建立错题本复盘逻辑：</strong>将概念混淆与审题粗心导致的错题分层归纳，定期回顾重做，避免在同类陷阱中再次失分。</p>
+                `;
+                sugContent.innerHTML = `
+                    你在基础知识上掌握相对稳健，整体完成度良好。接下来的任务是攻克弱项章节内的“深水区”知识点，通过精读解析与反思总结来提升思维深度。
+                `;
             }
-            toast.textContent = msg;
-            toast.style.display = 'block';
-            toast.style.opacity = '1';
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => { toast.style.display = 'none'; }, 300);
-            }, 2000);
         }
 
-        // 添加图片查看弹窗
-        function addImageViewer() {
-            const viewer = document.createElement('div');
-            viewer.className = 'image-viewer';
-            viewer.innerHTML = `
-                <div class="image-viewer-content">
-                    <img src="" alt="大图">
-                    <div class="image-viewer-close" onclick="closeImageViewer()">&times;</div>
-                </div>
-            `;
-            document.body.appendChild(viewer);
-        }
+        // 错题来源导航点击事件
+        document.querySelectorAll('.error-source-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const text = item.textContent.trim();
+                console.log('点击错题来源:', text);
+                
+                // 判断当前是在错题本还是收藏本
+                const urlParams = new URLSearchParams(window.location.search);
+                const isShoucang = urlParams.get('sub') === 'shoucang' ||
+                                   document.querySelector('.sub-nav-item.active')?.textContent.trim() === '收藏本';
+                const subQuery = isShoucang ? '&sub=shoucang' : '';
+                
+                if (text === '题型分类') {
+                    localStorage.setItem('cuotiben_active_tab_pc', '题型分类');
+                    window.location.href = 'cuotiben_pc.html?tab=' + encodeURIComponent('题型分类') + subQuery;
+                    return;
+                } else if (text === '知识点分类') {
+                    localStorage.setItem('cuotiben_active_tab_pc', '知识点分类');
+                    window.location.href = 'cuotiben_pc.html?tab=' + encodeURIComponent('知识点分类') + subQuery;
+                    return;
+                } else if (text === '拍错题') {
+                    localStorage.setItem('cuotiben_active_tab_pc', '拍错题');
+                    window.location.href = 'cuotiben_pc.html?tab=' + encodeURIComponent('拍错题') + subQuery;
+                    return;
+                }
+            });
+        });
 
-// 知识点体系数据 (最多支持展开5层)
+        // 知识点体系数据 (最多支持展开5层)
         const KNOWLEDGE_SYSTEMS = [
             {
                 name: "高考人教A版",
@@ -2982,14 +3064,104 @@
             }
         }
 
-        
-        function showKnowledgeCategory(name, count) {
-            if (count === 0) {
-                showPcToast('该知识点目前没有收藏哦！');
+        // 初始化渲染
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPcKnowledgeSystem();
+            updateAiSuggestions('knowledge');
+
+            // 检查URL是否指定选中收藏本
+            const urlParams = new URLSearchParams(window.location.search);
+            const subParam = urlParams.get('sub') || urlParams.get('tab');
+            if (subParam === 'shoucang' || subParam === 'shoucangben' || subParam === '收藏本') {
+                switchSubNav('收藏本');
+            }
+
+            const typeParam = urlParams.get('type');
+            if (typeParam && typeof selectQuestionType === 'function') {
+                selectQuestionType(typeParam);
+            }
+
+            // 默认选中知识点分类
+            const items = document.querySelectorAll('.error-source-item');
+            items.forEach(item => {
+                if (item.textContent.trim() === '知识点分类') {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        });
+
+        // 提示框工具
+        function showPcToast(message) {
+            if (document.querySelector('.pc-custom-alert')) {
                 return;
             }
-            window.location.href = 'shiti_jiexi_pc.html?type=' + encodeURIComponent(name);
+            const alertContainer = document.createElement('div');
+            alertContainer.className = 'pc-custom-alert';
+            alertContainer.style.position = 'fixed';
+            alertContainer.style.top = '50%';
+            alertContainer.style.left = '50%';
+            alertContainer.style.transform = 'translate(-50%, -50%)';
+            alertContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
+            alertContainer.style.color = '#fff';
+            alertContainer.style.padding = '16px 32px';
+            alertContainer.style.borderRadius = '8px';
+            alertContainer.style.fontSize = '14px';
+            alertContainer.style.zIndex = '9999';
+            alertContainer.style.textAlign = 'center';
+            alertContainer.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+            alertContainer.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            alertContainer.style.opacity = '1';
+            alertContainer.textContent = message;
+
+            document.body.appendChild(alertContainer);
+
+            setTimeout(() => {
+                alertContainer.style.opacity = '0';
+                alertContainer.style.transform = 'translate(-50%, -50%) scale(0.9)';
+                setTimeout(() => {
+                    document.body.removeChild(alertContainer);
+                }, 300);
+            }, 2000);
         }
+
+        // 知识点点击查看跳转至试题查看页面
+        function showKnowledgeCategory(name, count) {
+            if (count === 0) {
+                showPcToast('该知识点目前没有错题哦！');
+                return;
+            }
+            window.location.href = 'cuotiben_shiti_chakan_pc.html?type=' + encodeURIComponent(name);
+        }
+
+
+
+        // 添加图片查看弹窗
+        function addImageViewer() {
+            const viewer = document.createElement('div');
+            viewer.className = 'image-viewer';
+            viewer.innerHTML = `
+                <div class="image-viewer-content" style="display: flex; flex-direction: row; max-width: 90%; max-height: 90%;">
+                    <div style="flex: 1; margin-right: 20px;">
+                        <img src="" alt="大图" style="max-width: 100%; max-height: 80vh;">
+                    </div>
+                    <div style="flex: 1; background-color: #fff; border-radius: 8px; padding: 20px; overflow-y: auto; max-width: 400px;">
+                        <h3 style="margin-top: 0; margin-bottom: 16px; color: #333;">解析 <span style="font-size: 12px; color: #999; font-style: italic; margin-left: 8px;">(内容由AI生成)</span></h3>
+                        <div class="image-viewer-analysis"></div>
+                    </div>
+                    <div class="image-viewer-close" onclick="closeImageViewer()" style="position: absolute; top: -40px; right: 0; color: #fff; font-size: 30px; cursor: pointer;">&times;</div>
+                </div>
+            `;
+            document.body.appendChild(viewer);
+        }
+
+        // 返回按钮功能
+        document.querySelectorAll('.return-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                window.history.back();
+            });
+        });
 
         // 初始化图片查看弹窗
         addImageViewer();
@@ -2999,7 +3171,52 @@
             const img = element.querySelector('img');
             const viewer = document.querySelector('.image-viewer');
             const viewerImg = viewer.querySelector('img');
+            const analysisContainer = viewer.querySelector('.image-viewer-analysis');
+            
+            // 设置图片源
             viewerImg.src = img.src;
+            
+            // 根据图片内容生成对应的解析
+            let analysis = '';
+            if (img.src.includes('math')) {
+                analysis = `
+                    <p style="margin-bottom: 12px; line-height: 1.5;">这是一道关于三角函数的计算题，主要考查了正弦定理的应用。根据正弦定理，a/sinA = b/sinB = c/sinC，代入已知数值，计算出未知角度，利用三角形内角和为180度，求出第三个角度，再次应用正弦定理，求出未知边长。</p>
+                    <p style="margin-bottom: 12px; line-height: 1.5;">答案：选项C</p>
+                `;
+            } else if (img.src.includes('geometry')) {
+                analysis = `
+                    <p style="margin-bottom: 12px; line-height: 1.5;">这是一道关于三角形全等的证明题，主要考查了全等三角形的判定定理。根据已知条件，AB = CD，BC = DA，公共边 AC = CA，根据SSS（边边边）判定定理，△ABC ≌ △CDA，因此，∠BAC = ∠DCA，即内错角相等，所以，AB ∥ CD。</p>
+                `;
+            } else if (img.src.includes('physics')) {
+                analysis = `
+                    <p style="margin-bottom: 12px; line-height: 1.5;">这是一道关于牛顿第二定律的应用题，主要考查了力的合成与分解。对物体进行受力分析，确定重力、支持力和摩擦力，将重力分解为平行于斜面和垂直于斜面的分力，根据牛顿第二定律，F = ma，计算加速度，利用运动学公式，计算物体的位移和速度。</p>
+                    <p style="margin-bottom: 12px; line-height: 1.5;">答案：4.9 m/s²</p>
+                `;
+            } else if (img.src.includes('chemistry')) {
+                analysis = `
+                    <p style="margin-bottom: 12px; line-height: 1.5;">这是一道关于化学反应方程式配平的题目，主要考查了氧化还原反应的配平方法。确定氧化态的变化，找出氧化剂和还原剂，计算电子转移的数目，根据电子守恒，配平氧化剂和还原剂的系数，根据原子守恒，配平其他物质的系数。</p>
+                    <p style="margin-bottom: 12px; line-height: 1.5;">答案：2KMnO₄ + 16HCl = 2KCl + 2MnCl₂ + 5Cl₂↑ + 8H₂O</p>
+                `;
+            } else if (img.src.includes('biology')) {
+                analysis = `
+                    <p style="margin-bottom: 12px; line-height: 1.5;">这是一道关于细胞呼吸的题目，主要考查了有氧呼吸和无氧呼吸的过程。有氧呼吸分为三个阶段：第一阶段在细胞质基质中，葡萄糖分解为丙酮酸和少量ATP；第二阶段在线粒体基质中，丙酮酸分解为CO₂和[H]；第三阶段在线粒体内膜上，[H]与O₂结合生成H₂O和大量ATP。</p>
+                    <p style="margin-bottom: 12px; line-height: 1.5;">答案：选项B</p>
+                `;
+            } else if (img.src.includes('english')) {
+                analysis = `
+                    <p style="margin-bottom: 12px; line-height: 1.5;">这是一道关于英语语法的题目，主要考查了时态的使用。根据句子的时间状语"since 2010"，我们需要使用现在完成时，表示从过去开始一直持续到现在的动作。现在完成时的结构是：have/has + 过去分词。</p>
+                    <p style="margin-bottom: 12px; line-height: 1.5;">答案：has been working</p>
+                `;
+            } else {
+                analysis = `
+                    <p style="margin-bottom: 12px; line-height: 1.5;">暂无解析内容</p>
+                `;
+            }
+            
+            // 设置解析内容
+            analysisContainer.innerHTML = analysis;
+            
+            // 显示弹窗
             viewer.classList.add('active');
         }
 
@@ -3016,17 +3233,73 @@
             }
         });
 
+        // 拍错题项操作按钮点击事件
+        document.querySelectorAll('.photo-error-action-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.textContent.trim() === '移除') {
+                    // 实现移除功能
+                    if (confirm('确定要移除这道错题吗？')) {
+                        // 这里可以添加移除逻辑
+                        console.log('移除错题');
+                        // 模拟移除效果
+                        btn.closest('.photo-error-item-grid').style.display = 'none';
+                    }
+                }
+            });
+        });
+
+        // 分页按钮点击事件
+        document.querySelectorAll('.pagination-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const text = btn.textContent.trim();
+                
+                if (text === '上一页' || text === '下一页') {
+                    console.log('切换到:', text);
+                } else {
+                    // 移除所有active类
+                    document.querySelectorAll('.pagination-btn').forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    // 添加active类到当前点击的项
+                    btn.classList.add('active');
+                    console.log('切换到第', text, '页');
+                }
+            });
+        });
+
         // 题目操作按钮点击事件
         document.querySelectorAll('.action-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 if (btn.classList.contains('share')) {
                     console.log('分享题目');
+                    showPcToast('已生成试题分享链接');
                 } else if (btn.classList.contains('report')) {
                     console.log('纠错');
+                    showPcToast('感谢您的反馈，已提交纠错信息');
                 } else if (btn.classList.contains('move')) {
                     console.log('移除题目');
+                    showPcToast('已移除该错题');
                 } else if (btn.classList.contains('collect')) {
-                    console.log('收藏题目');
+                    const icon = btn.querySelector('i');
+                    const span = btn.querySelector('span');
+                    const isCollected = btn.classList.contains('collected') || (span && span.textContent.trim() === '取消收藏');
+                    if (isCollected) {
+                        btn.classList.remove('collected');
+                        if (span) span.textContent = '收藏';
+                        if (icon) {
+                            icon.className = 'far fa-star';
+                            icon.style.color = '#666';
+                        }
+                        showPcToast('已取消收藏');
+                    } else {
+                        btn.classList.add('collected');
+                        if (span) span.textContent = '取消收藏';
+                        if (icon) {
+                            icon.className = 'fas fa-star';
+                            icon.style.color = '#faad14';
+                        }
+                        showPcToast('已收藏');
+                    }
                 }
             });
         });
@@ -3045,11 +3318,34 @@
             });
         }
 
-        // 返回按钮点击事件
-        const returnBtn = document.querySelector('.return-btn');
-        if (returnBtn) {
-            returnBtn.addEventListener('click', () => {
-                window.location.href = 'tiku_pc.html';
+        // 收起按钮点击事件
+        const collapseBtn = document.querySelector('.collapse-btn');
+        if (collapseBtn) {
+            collapseBtn.addEventListener('click', () => {
+                const answerCardContent = document.querySelector('.answer-card-content');
+                const icon = collapseBtn.querySelector('i');
+                const text = collapseBtn.querySelector('span');
+                
+                if (answerCardContent.style.display === 'none') {
+                    answerCardContent.style.display = 'block';
+                    icon.className = 'fas fa-chevron-up';
+                    text.textContent = '收起';
+                } else {
+                    answerCardContent.style.display = 'none';
+                    icon.className = 'fas fa-chevron-down';
+                    text.textContent = '展开';
+                }
+            });
+        }
+
+        // 答题卡题目点击事件
+        const answerItems = document.querySelectorAll('.answer-item');
+        if (answerItems.length > 0) {
+            answerItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    console.log('点击题目:', item.textContent);
+                    // 这里可以根据点击的题目编号跳转到相应题目
+                });
             });
         }
 
@@ -3107,7 +3403,7 @@
             });
             // 重置答题卡状态
             document.querySelectorAll('.answer-grid .answer-item').forEach(item => {
-                item.className = 'answer-item unanswered';
+                item.className = 'answer-item';
             });
             // 返回第一题
             const firstItem = document.querySelector('.answer-grid .answer-item');
@@ -3119,6 +3415,43 @@
                 firstQuestion.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
             showPcToast('作答记录已清空，已返回第一题');
+        }
+
+        // 返回按钮点击事件
+        const returnBtn = document.querySelector('.return-btn');
+        if (returnBtn) {
+            returnBtn.addEventListener('click', () => {
+                const urlParams = new URLSearchParams(window.location.search);
+                const isShoucang = urlParams.get('sub') === 'shoucang' ||
+                                   document.querySelector('.sub-nav-item.active')?.textContent.trim() === '收藏本';
+                window.location.href = isShoucang ? 'cuotiben_pc.html?sub=shoucang' : 'cuotiben_pc.html';
+            });
+        }
+
+        // 上传图片按钮点击事件
+        const uploadBtn = document.querySelector('.upload-btn');
+        if (uploadBtn) {
+            uploadBtn.addEventListener('click', () => {
+                console.log('上传图片');
+                // 创建一个隐藏的文件输入元素
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*';
+                fileInput.multiple = true;
+                
+                // 监听文件选择事件
+                fileInput.addEventListener('change', (e) => {
+                    const files = e.target.files;
+                    if (files.length > 0) {
+                        console.log('选择了', files.length, '个文件');
+                        // 这里可以添加文件上传逻辑
+                        // 例如：上传文件到服务器，然后更新拍错题列表
+                    }
+                });
+                
+                // 触发文件选择对话框
+                fileInput.click();
+            });
         }
 
         // AI答疑弹窗功能
@@ -3162,6 +3495,12 @@
                                 <p>C选项《左传》是中国第一部编年体史书，详细记载了春秋时期的历史事件。"多行不义必自毙"出自《左传·郑伯克段于鄢》，是郑庄公评价共叔段的话，意思是做多了不义的事情，必然会自取灭亡。</p>
                                 <p>D选项《战国策》是记载战国时期各国政治、军事、外交等活动的史书，也不包含这个成语。</p>
                                 <p>因此，正确答案是C选项《左传》。</p>
+                            </div>
+                            <div class="suggestion-box" style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed #e8e8e8; font-size: 13px; color: #666; display: flex; align-items: center; gap: 4px;">
+                                <span style="color: #8c8c8c;">你可能想问：</span>
+                                <span class="suggestion-link" style="color: #1890ff; cursor: pointer; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 2px;" onclick="sendPCSuggestion('举一反三，出一道类似的题目。')">
+                                    <i class="fas fa-lightbulb" style="font-size: 12px;"></i> 举一反三，出一道类似的题目。
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -3252,17 +3591,52 @@
             messageDiv.style.display = 'flex';
             messageDiv.style.justifyContent = 'flex-start';
             messageDiv.style.marginBottom = '20px';
+            
+            const showSuggestion = !text.includes('唇亡齿寒');
+            let suggestionHtml = '';
+            if (showSuggestion) {
+                suggestionHtml = `
+                    <div class="suggestion-box" style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed #e8e8e8; font-size: 13px; color: #666; display: flex; align-items: center; gap: 4px;">
+                        <span style="color: #8c8c8c;">你可能想问：</span>
+                        <span class="suggestion-link" style="color: #1890ff; cursor: pointer; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 2px;" onclick="sendPCSuggestion('举一反三，出一道类似的题目。')">
+                            <i class="fas fa-lightbulb" style="font-size: 12px;"></i> 举一反三，出一道类似的题目。
+                        </span>
+                    </div>
+                `;
+            }
+            
             messageDiv.innerHTML = `
                 <div style="max-width: 80%; padding: 12px 16px; border-radius: 18px; background-color: #fff; color: #333; border: 1px solid #e8e8e8; border-bottom-left-radius: 4px;">
                     <div style="font-size: 14px; line-height: 1.5; color: #333;">
-                        <p>${text}</p>
+                        ${text.includes('<p>') || text.includes('<div>') ? text : `<p>${text}</p>`}
                     </div>
+                    ${suggestionHtml}
                 </div>
             `;
             aiChatContainer.appendChild(messageDiv);
             // 滚动到底部
             aiChatContainer.scrollTop = aiChatContainer.scrollHeight;
         }
+
+        window.sendPCSuggestion = function(text) {
+            addUserMessage(text);
+            
+            // 模拟AI回复举一反三的题目
+            setTimeout(() => {
+                const similarQuestion = `
+                    <div style="margin-bottom: 12px; font-weight: 500;">
+                        下列经典成语中，同样出自《左传》的是 ( )
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 6px; font-size: 14px;">
+                        <div>A. 唇亡齿寒</div>
+                        <div>B. 完璧归赵</div>
+                        <div>C. 纸上谈兵</div>
+                        <div>D. 负荆请罪</div>
+                    </div>
+                `;
+                addAIMessage(similarQuestion);
+            }, 1000);
+        };
 
         // 发送按钮点击事件
         aiSendBtn.addEventListener('click', sendAIMessage);
@@ -3470,7 +3844,71 @@
                 sendHumanMessage();
             }
         });
+
+        // PC 错题本设置相关逻辑
+        function openPcSettingsModal() {
+            const modal = document.getElementById('pc-settings-modal');
+            const autoRemove = localStorage.getItem('cuotiben_auto_remove') !== 'false';
+            document.getElementById('pc-auto-remove-switch').checked = autoRemove;
+            modal.style.display = 'flex';
+        }
+
+        function closePcSettingsModal() {
+            const modal = document.getElementById('pc-settings-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function confirmPcSettings() {
+            const checked = document.getElementById('pc-auto-remove-switch').checked;
+            localStorage.setItem('cuotiben_auto_remove', checked ? 'true' : 'false');
+            closePcSettingsModal();
+            showPcToast('错题本设置已保存！');
+        }
+
+        function showPcToast(msg) {
+            let toast = document.getElementById('pc-toast-msg');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'pc-toast-msg';
+                toast.style.cssText = 'position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.75); color: #fff; padding: 10px 24px; border-radius: 6px; font-size: 14px; z-index: 3000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: opacity 0.3s;';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = msg;
+            toast.style.display = 'block';
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => { toast.style.display = 'none'; }, 300);
+            }, 2000);
+        }
+
+        // 点击背景遮罩关闭
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closePcSettingsModal();
+        });
     </script>
+
+    <!-- 错题本设置弹窗 (PC端) -->
+    <div id="pc-settings-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.45); z-index: 2000; align-items: center; justify-content: center;" onclick="if(event.target === this) closePcSettingsModal();">
+        <div style="width: 380px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); overflow: hidden; animation: pcModalFadeIn 0.25s ease;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid #f0f0f0;">
+                <span style="font-size: 16px; font-weight: 600; color: #333;">错题本设置</span>
+                <i class="fas fa-times" onclick="closePcSettingsModal()" style="color: #999; font-size: 16px; cursor: pointer; padding: 4px; border-radius: 4px; transition: color 0.2s;" onmouseover="this.style.color='#333'" onmouseout="this.style.color='#999'"></i>
+            </div>
+            
+            <div style="padding: 24px 20px 20px 20px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 15px; color: #333;">答对错题自动移除</span>
+                <label class="pc-switch" style="position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; margin-left: 16px;">
+                    <input type="checkbox" id="pc-auto-remove-switch" style="opacity: 0; width: 0; height: 0;">
+                    <span class="pc-slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .3s; border-radius: 24px;"></span>
+                </label>
+            </div>
+
+            <div style="padding: 12px 20px 20px 20px; display: flex; justify-content: flex-end;">
+                <button onclick="confirmPcSettings()" style="padding: 7px 24px; background-color: #ff4d4f; color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 6px rgba(255, 77, 79, 0.3);" onmouseover="this.style.backgroundColor='#ff7875'" onmouseout="this.style.backgroundColor='#ff4d4f'">确定</button>
+            </div>
+        </div>
+    </div>
 
     <!-- 重置确认弹窗 (PC端) -->
     <div id="pc-reset-confirm-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.45); z-index: 2000; align-items: center; justify-content: center;" onclick="if(event.target === this) closeResetConfirmModal();">
