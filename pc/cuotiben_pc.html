@@ -2614,23 +2614,6 @@
                     <!-- 动态渲染 -->
                 </div>
 
-                <!-- 未关联知识点分类 (PC端) -->
-                <div class="pc-practice-unit pc-unassociated-knowledge-card" style="background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; margin-top: 4px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
-                    <div style="padding: 18px 24px; display: flex; justify-content: space-between; align-items: center;">
-                        <div style="display: flex; align-items: center; gap: 14px;">
-                            <div style="width: 36px; height: 36px; border-radius: 8px; background-color: #fff7e6; color: #fa8c16; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;">
-                                <i class="fas fa-link-slash"></i>
-                            </div>
-                            <div style="display: flex; flex-direction: column; gap: 4px;">
-                                <span style="font-size: 15px; font-weight: 600; color: #333;">未关联知识点</span>
-                                <span style="font-size: 13px; color: #999; font-weight: 500;">共 8 道试题</span>
-                            </div>
-                        </div>
-                        <div>
-                            <button style="background: #fff; border: 1px solid #ff4d4f; color: #ff4d4f; border-radius: 4px; padding: 6px 18px; font-size: 13px; cursor: pointer; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#fff1f0'" onmouseout="this.style.backgroundColor='#fff'" onclick="showKnowledgeCategory('未关联知识点', 8)">查看</button>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- 拍错题内容 -->
@@ -2915,14 +2898,35 @@
                 el.textContent = name === '收藏本' ? '【收藏本】郑伯克段于鄢《左传》' : '【错题本】郑伯克段于鄢《左传》';
             });
 
+            const isShoucang = (name === '收藏本');
+
             const photoTab = document.getElementById('photo-error-source-tab');
             if (photoTab) {
-                photoTab.style.display = name === '收藏本' ? 'none' : 'block';
+                photoTab.style.display = isShoucang ? 'none' : 'block';
             }
 
             const settingsContainer = document.getElementById('pc-settings-btn-container');
             if (settingsContainer) {
-                settingsContainer.style.display = name === '收藏本' ? 'none' : 'flex';
+                settingsContainer.style.display = isShoucang ? 'none' : 'flex';
+            }
+
+            const aiSuggestions = document.getElementById('pc-ai-suggestions');
+            if (aiSuggestions) {
+                aiSuggestions.style.display = isShoucang ? 'none' : 'block';
+            }
+            const aiImprovementCard = document.getElementById('ai-improvement-card');
+            if (aiImprovementCard) {
+                aiImprovementCard.style.display = isShoucang ? 'none' : 'block';
+            }
+            const aiSuggestionCard = document.getElementById('ai-suggestion-card');
+            if (aiSuggestionCard) {
+                aiSuggestionCard.style.display = isShoucang ? 'none' : 'block';
+            }
+
+            const isPaicuoti = document.querySelector('.error-source-item.active')?.textContent.trim() === '拍错题';
+            const rightSidebar = document.querySelector('.right-sidebar');
+            if (rightSidebar) {
+                rightSidebar.style.display = isPaicuoti ? 'none' : 'block';
             }
 
             const url = new URL(window.location);
@@ -3111,6 +3115,9 @@
                 const answerCard = document.getElementById('pc-answer-card');
                 const aiSuggestions = document.getElementById('pc-ai-suggestions');
 
+                const isShoucang = document.querySelector('.sub-nav-item.active')?.textContent.trim() === '收藏本' ||
+                                   new URLSearchParams(window.location.search).get('sub') === 'shoucang';
+
                 // 根据切换的标签显示不同的内容
                 if (text === '题型分类') {
                     // 显示题库错题内容，隐藏拍错题 and 知识点内容
@@ -3123,11 +3130,11 @@
                     if (rightSidebar) rightSidebar.style.display = 'block';
                     if (answerCard) answerCard.style.display = 'block';
                     if (aiSuggestions) {
-                        aiSuggestions.style.display = 'block';
+                        aiSuggestions.style.display = isShoucang ? 'none' : 'block';
                         aiSuggestions.style.marginTop = '16px';
-                        updateAiSuggestions('type');
+                        if (!isShoucang) updateAiSuggestions('type');
                     }
-                    if (pcSettings) pcSettings.style.display = 'flex';
+                    if (pcSettings) pcSettings.style.display = isShoucang ? 'none' : 'flex';
                 } else if (text === '拍错题') {
                     // 显示拍错题内容，隐藏题库错题 and 知识点内容
                     document.querySelector('.question-bank-content').style.display = 'none';
@@ -3145,15 +3152,15 @@
                     document.querySelector('.knowledge-point-content').style.display = 'block';
                     // 隐藏题型导航标签栏
                     if (qTypeTabs) qTypeTabs.style.display = 'none';
-                    // 显示右侧边栏，隐藏答题卡，展示AI提分攻略与学习建议在右侧竖列
+                    // 保持右侧边栏占位(width: 320px)，确保知识点列表的宽度和错题本中的完全一致
                     if (rightSidebar) rightSidebar.style.display = 'block';
                     if (answerCard) answerCard.style.display = 'none';
                     if (aiSuggestions) {
-                        aiSuggestions.style.display = 'block';
+                        aiSuggestions.style.display = isShoucang ? 'none' : 'block';
                         aiSuggestions.style.marginTop = '0px';
-                        updateAiSuggestions('knowledge');
+                        if (!isShoucang) updateAiSuggestions('knowledge');
                     }
-                    if (pcSettings) pcSettings.style.display = 'flex';
+                    if (pcSettings) pcSettings.style.display = isShoucang ? 'none' : 'flex';
                 }
             });
         });
@@ -3460,6 +3467,12 @@
                 if (photoTab) photoTab.style.display = 'none';
                 const settingsContainer = document.getElementById('pc-settings-btn-container');
                 if (settingsContainer) settingsContainer.style.display = 'none';
+                const aiSuggestions = document.getElementById('pc-ai-suggestions');
+                if (aiSuggestions) aiSuggestions.style.display = 'none';
+                const aiImprovementCard = document.getElementById('ai-improvement-card');
+                if (aiImprovementCard) aiImprovementCard.style.display = 'none';
+                const aiSuggestionCard = document.getElementById('ai-suggestion-card');
+                if (aiSuggestionCard) aiSuggestionCard.style.display = 'none';
             } else if (subParam === 'cuotiben' || subParam === '错题本') {
                 switchSubNav('错题本');
             }
